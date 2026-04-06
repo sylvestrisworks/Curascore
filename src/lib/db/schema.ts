@@ -190,6 +190,7 @@ export const gameScores = pgTable('game_scores', {
   socialRisk: real('social_risk'),                   // R3 normalized
   contentRisk: real('content_risk'),                 // R4 normalized
   ris: real('ris'),                                  // Risk Intensity Score
+  curascore: integer('curascore'),                   // harmonic mean of BDS + Safety, 0–100
 
   // Time recommendation output
   timeRecommendationMinutes: integer('time_rec_minutes'), // 15, 30, 60, 90, 120

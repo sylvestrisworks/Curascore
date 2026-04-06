@@ -74,6 +74,7 @@ export async function GET(_req: NextRequest, { params }: { params: { slug: strin
     monetizationRisk:          score.monetizationRisk,
     socialRisk:                score.socialRisk,
     contentRisk:               score.contentRisk,
+    curascore:                 score.curascore ?? null,
     timeRecommendationMinutes: score.timeRecommendationMinutes,
     timeRecommendationLabel:   score.timeRecommendationLabel,
     timeRecommendationReasoning: score.timeRecommendationReasoning,

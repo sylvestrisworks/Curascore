@@ -82,6 +82,7 @@ async function fetchGameData(slug: string): Promise<GameCardProps | null> {
         monetizationRisk:         score.monetizationRisk,
         socialRisk:               score.socialRisk,
         contentRisk:              score.contentRisk,
+        curascore:                score.curascore ?? null,
         timeRecommendationMinutes:score.timeRecommendationMinutes,
         timeRecommendationLabel:  score.timeRecommendationLabel,
         timeRecommendationReasoning: score.timeRecommendationReasoning,
@@ -244,14 +245,14 @@ export default async function GamePage({ params }: Props) {
             <a href="/" className="text-lg font-bold text-indigo-700 tracking-tight">
               PlaySmart
             </a>
-            {scores?.timeRecommendationMinutes != null && (
+            {scores?.curascore != null && (
               <div className="flex items-center gap-2 text-sm">
-                <span className="text-slate-500">Recommended:</span>
-                <span className={`font-bold px-2 py-0.5 rounded-full text-white text-xs
-                  ${scores.timeRecommendationColor === 'green' ? 'bg-emerald-600'
-                  : scores.timeRecommendationColor === 'amber' ? 'bg-amber-500'
+                <span className="text-slate-500">Curascore</span>
+                <span className={`font-black px-2.5 py-0.5 rounded-full text-white text-sm
+                  ${scores.curascore >= 70 ? 'bg-emerald-600'
+                  : scores.curascore >= 40 ? 'bg-amber-500'
                   : 'bg-red-600'}`}>
-                  {scores.timeRecommendationMinutes} min/day
+                  {scores.curascore}
                 </span>
               </div>
             )}

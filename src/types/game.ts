@@ -48,6 +48,7 @@ export type SerializedScores = {
   monetizationRisk: number | null
   socialRisk: number | null
   contentRisk: number | null
+  curascore: number | null
   timeRecommendationMinutes: number | null
   timeRecommendationLabel: string | null
   timeRecommendationReasoning: string | null

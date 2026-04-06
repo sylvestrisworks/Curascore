@@ -17,6 +17,14 @@ export function calculateGameScores(review: ReviewInput): GameScoresResult {
   )
   const topBenefits = getTopBenefits(review)
 
+  // Curascore: harmonic mean of Benefit (BDS) and Safety (1 - RIS), scaled 0–100.
+  // Penalises games that are high-risk OR low-benefit — both must be good to score well.
+  const safety = 1 - risks.ris
+  const denom = benefits.bds + safety
+  const curascore = denom > 0
+    ? Math.round((2 * benefits.bds * safety) / denom * 100)
+    : 0
+
   return {
     cognitiveScore:      benefits.cognitive,
     socialEmotionalScore: benefits.socialEmotional,
@@ -27,6 +35,7 @@ export function calculateGameScores(review: ReviewInput): GameScoresResult {
     socialRisk:          risks.social,
     contentRisk:         risks.contentRisk,
     ris:                 risks.ris,
+    curascore,
     timeRecommendation,
     topBenefits,
   }

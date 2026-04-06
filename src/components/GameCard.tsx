@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import type { DarkPattern, GameCardProps, SerializedReview, SerializedScores } from '@/types/game'
 import DarkPatternPills from './DarkPatternPills'
-import RiskRadarChart from './RiskRadarChart'
 import ComplianceBadges from './ComplianceBadges'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -43,13 +42,11 @@ function esrbColors(rating: string | null): string {
   }
 }
 
-function timeBoxColors(color: 'green' | 'amber' | 'red' | null): string {
-  switch (color) {
-    case 'green': return 'bg-emerald-600 text-white'
-    case 'amber': return 'bg-amber-500 text-white'
-    case 'red':   return 'bg-red-600 text-white'
-    default:      return 'bg-slate-400 text-white'
-  }
+function curascoreColors(score: number | null): string {
+  const s = score ?? 0
+  if (s >= 70) return 'bg-emerald-600 text-white'
+  if (s >= 40) return 'bg-amber-500 text-white'
+  return 'bg-red-600 text-white'
 }
 
 function riskBarColor(value: number | null): string {
@@ -384,9 +381,6 @@ function FullScoresTab({
         </div>
       </div>
 
-      {/* Radar chart */}
-      <RiskRadarChart scores={scores} review={review} />
-
       {/* Risk breakdown */}
       <div>
         <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">
@@ -565,31 +559,38 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
         </p>
       )}
 
-      {/* ── Time recommendation ───────────────────────────────────────────────── */}
-      {hasReview && scores.timeRecommendationMinutes != null ? (
-        <div className={`mx-5 mb-4 rounded-xl px-5 py-4 ${timeBoxColors(scores.timeRecommendationColor)}`}>
+      {/* ── Curascore hero ───────────────────────────────────────────────────── */}
+      {hasReview && scores.curascore != null ? (
+        <div className={`mx-5 mb-4 rounded-xl px-5 py-4 ${curascoreColors(scores.curascore)}`}>
           <div className="flex items-center justify-between gap-4">
+            {/* Score */}
             <div>
-              <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-black">
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-5xl font-black leading-none">{scores.curascore}</span>
+                <span className="text-xl font-bold opacity-60">/100</span>
+              </div>
+              <p className="text-sm font-semibold opacity-80 mt-0.5 tracking-wide uppercase">
+                Curascore
+              </p>
+            </div>
+            {/* Secondary: time recommendation */}
+            {scores.timeRecommendationMinutes != null && (
+              <div className="text-right">
+                <p className="text-2xl font-black opacity-90">
                   {scores.timeRecommendationMinutes >= 120
                     ? '120+'
                     : scores.timeRecommendationMinutes}
-                </span>
-                {scores.timeRecommendationMinutes < 120 && (
-                  <span className="text-lg font-semibold opacity-80">min/day</span>
-                )}
+                  <span className="text-sm font-semibold opacity-70 ml-1">min/day</span>
+                </p>
+                <p className="text-xs opacity-70 mt-0.5">{scores.timeRecommendationLabel}</p>
               </div>
-              <p className="text-sm font-semibold opacity-90 mt-0.5">
-                {scores.timeRecommendationLabel}
-              </p>
-            </div>
-            {scores.timeRecommendationReasoning && (
-              <p className="text-xs opacity-80 max-w-xs text-right leading-snug">
-                {scores.timeRecommendationReasoning}
-              </p>
             )}
           </div>
+          {scores.timeRecommendationReasoning && (
+            <p className="text-xs opacity-70 mt-2 leading-snug border-t border-white/20 pt-2">
+              {scores.timeRecommendationReasoning}
+            </p>
+          )}
         </div>
       ) : (
         <div className="mx-5 mb-4 rounded-xl px-5 py-3 bg-slate-100 border border-slate-200">

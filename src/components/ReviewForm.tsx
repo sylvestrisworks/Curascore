@@ -194,6 +194,7 @@ function makeSerializedScores(computed: ReturnType<typeof calculateGameScores>):
     monetizationRisk:          computed.monetizationRisk,
     socialRisk:                computed.socialRisk,
     contentRisk:               computed.contentRisk,
+    curascore:                 computed.curascore,
     timeRecommendationMinutes: computed.timeRecommendation.minutes,
     timeRecommendationLabel:   computed.timeRecommendation.label,
     timeRecommendationReasoning: computed.timeRecommendation.reasoning,

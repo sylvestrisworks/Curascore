@@ -108,6 +108,7 @@ export type GameScoresResult = {
   socialRisk: number
   contentRisk: number
   ris: number
+  curascore: number   // harmonic mean of BDS and Safety (1-RIS), scaled 0-100
   timeRecommendation: TimeRecommendation
   topBenefits: TopBenefit[]
 }
