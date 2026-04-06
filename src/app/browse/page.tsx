@@ -20,7 +20,7 @@ const PLATFORM_KEYWORDS: Record<string, string> = {
   PC:          'PC',
   PlayStation: 'PlayStation',
   Xbox:        'Xbox',
-  Switch:      'Nintendo Switch',
+  Switch:      'Switch',
   iOS:         'iOS',
   Android:     'Android',
 }
