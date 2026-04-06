@@ -47,6 +47,8 @@ export type SerializedScores = {
   timeRecommendationReasoning: string | null
   timeRecommendationColor: 'green' | 'amber' | 'red' | null
   topBenefits: Array<{ skill: string; score: number; maxScore: number }> | null
+  accessibilityRisk: number | null
+  endlessDesignRisk: number | null
   executiveSummary: string | null
   calculatedAt: string | null
 }
@@ -115,6 +117,16 @@ export type SerializedReview = {
   hasNaturalStoppingPoints: boolean | null
   penalizesBreaks: boolean | null
   stoppingPointsDescription: string | null
+  // R5: Accessibility risk (display only)
+  r5CrossPlatform: number | null
+  r5LoadTime: number | null
+  r5MobileOptimized: number | null
+  r5LoginBarrier: number | null
+  // R6: Endless design risk (display only)
+  r6InfiniteGameplay: number | null
+  r6NoStoppingPoints: number | null
+  r6NoGameOver: number | null
+  r6NoChapterStructure: number | null
   // Virtual currency
   usesVirtualCurrency: boolean | null
   virtualCurrencyName: string | null

@@ -138,6 +138,18 @@ export const reviews = pgTable('reviews', {
   penalizesBreaks: boolean('penalizes_breaks'),
   stoppingPointsDescription: text('stopping_points_desc'),
 
+  // R5: Accessibility risk (0-3 each, max 12) — DISPLAY ONLY, not in RIS
+  r5CrossPlatform:    integer('r5_cross_platform'),
+  r5LoadTime:         integer('r5_load_time'),
+  r5MobileOptimized:  integer('r5_mobile_optimized'),
+  r5LoginBarrier:     integer('r5_login_barrier'),
+
+  // R6: Endless/world design risk (0-3 each, max 12) — DISPLAY ONLY, not in RIS
+  r6InfiniteGameplay:   integer('r6_infinite_gameplay'),
+  r6NoStoppingPoints:   integer('r6_no_stopping_points'),
+  r6NoGameOver:         integer('r6_no_game_over'),
+  r6NoChapterStructure: integer('r6_no_chapters'),
+
   // Virtual currency (for DP04 banner)
   usesVirtualCurrency: boolean('uses_virtual_currency').default(false),
   virtualCurrencyName: varchar('virtual_currency_name', { length: 50 }),
@@ -187,6 +199,10 @@ export const gameScores = pgTable('game_scores', {
 
   // Age recommendation (our own, may differ from ESRB/PEGI)
   recommendedMinAge: integer('recommended_min_age'),
+
+  // R5/R6 normalized (display only — not in RIS formula)
+  accessibilityRisk: real('accessibility_risk'),
+  endlessDesignRisk: real('endless_design_risk'),
 
   // Executive summary — one plain-language sentence for parents
   executiveSummary: text('executive_summary'),

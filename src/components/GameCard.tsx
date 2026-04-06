@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import type { DarkPattern, GameCardProps, SerializedReview, SerializedScores } from '@/types/game'
 import DarkPatternPills from './DarkPatternPills'
+import RiskRadarChart from './RiskRadarChart'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -382,6 +383,9 @@ function FullScoresTab({
         </div>
       </div>
 
+      {/* Radar chart */}
+      <RiskRadarChart scores={scores} review={review} />
+
       {/* Risk breakdown */}
       <div>
         <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">
@@ -436,6 +440,46 @@ function FullScoresTab({
           </span>
         </div>
       </div>
+
+      {/* R5 — Accessibility Risk */}
+      {review && (review.r5CrossPlatform != null || review.r5LoadTime != null) && (
+        <div>
+          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">
+            R5 · Accessibility Risk <span className="normal-case font-normal text-slate-400">(display only)</span>
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+            <div>
+              <DetailRow label="Cross-platform availability" score={review.r5CrossPlatform} max={3} />
+              <DetailRow label="Load time / friction"        score={review.r5LoadTime}       max={3} />
+              <DetailRow label="Mobile-optimised"            score={review.r5MobileOptimized} max={3} />
+              <DetailRow label="Login barrier"               score={review.r5LoginBarrier}   max={3} />
+            </div>
+          </div>
+          <p className="mt-2 text-xs text-slate-400">
+            How easily a child can reach the game unsupervised. Does not affect the time recommendation.
+          </p>
+        </div>
+      )}
+
+      {/* R6 — Endless Design Risk */}
+      {review && (review.r6InfiniteGameplay != null || review.r6NoStoppingPoints != null) && (
+        <div>
+          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">
+            R6 · Endless Design <span className="normal-case font-normal text-slate-400">(display only)</span>
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+            <div>
+              <DetailRow label="Infinite gameplay"     score={review.r6InfiniteGameplay}   max={3} />
+              <DetailRow label="No stopping points"    score={review.r6NoStoppingPoints}   max={3} />
+              <DetailRow label="No fail / game-over"   score={review.r6NoGameOver}         max={3} />
+              <DetailRow label="No chapter structure"  score={review.r6NoChapterStructure} max={3} />
+            </div>
+          </div>
+          <p className="mt-2 text-xs text-slate-400">
+            Whether the game has natural ending points. Does not affect the time recommendation.
+          </p>
+        </div>
+      )}
     </div>
   )
 }
