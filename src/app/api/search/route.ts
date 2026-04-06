@@ -17,13 +17,14 @@ export async function GET(req: NextRequest) {
       esrbRating:      games.esrbRating,
       backgroundImage: games.backgroundImage,
       metacriticScore: games.metacriticScore,
+      curascore:                 gameScores.curascore,
       timeRecommendationMinutes: gameScores.timeRecommendationMinutes,
       timeRecommendationColor:   gameScores.timeRecommendationColor,
     })
     .from(games)
     .leftJoin(gameScores, eq(gameScores.gameId, games.id))
     .where(ilike(games.title, `%${q}%`))
-    .orderBy(desc(games.metacriticScore))
+    .orderBy(desc(gameScores.curascore), desc(games.metacriticScore))
     .limit(8)
 
   const results: GameSummary[] = rows.map((r) => ({
@@ -34,6 +35,7 @@ export async function GET(req: NextRequest) {
     esrbRating:      r.esrbRating,
     backgroundImage: r.backgroundImage,
     metacriticScore: r.metacriticScore,
+    curascore:       r.curascore,
     timeRecommendationMinutes: r.timeRecommendationMinutes,
     timeRecommendationColor: r.timeRecommendationColor as 'green' | 'amber' | 'red' | null,
   }))

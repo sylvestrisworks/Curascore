@@ -19,10 +19,10 @@ function esrbBadge(rating: string | null) {
   )
 }
 
-function timeChip(minutes: number | null, color: 'green' | 'amber' | 'red' | null) {
-  if (!minutes) return null
-  const bg = color === 'green' ? 'bg-emerald-100 text-emerald-700' : color === 'amber' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
-  return <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${bg}`}>{minutes}min</span>
+function curascoreChip(score: number | null | undefined) {
+  if (score == null) return null
+  const bg = score >= 70 ? 'bg-emerald-100 text-emerald-700' : score >= 40 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
+  return <span className={`text-xs font-black px-1.5 py-0.5 rounded-full ${bg}`}>{score}</span>
 }
 
 export default function SearchBar({ placeholder = 'Search games…' }: { placeholder?: string }) {
@@ -144,7 +144,7 @@ export default function SearchBar({ placeholder = 'Search games…' }: { placeho
 
               <div className="flex items-center gap-1.5 shrink-0">
                 {esrbBadge(game.esrbRating)}
-                {timeChip(game.timeRecommendationMinutes, game.timeRecommendationColor)}
+                {curascoreChip(game.curascore)}
               </div>
             </button>
           ))}

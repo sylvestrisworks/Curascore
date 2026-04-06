@@ -30,7 +30,7 @@ async function getTopGames(): Promise<GameSummary[]> {
     .innerJoin(gameScores, eq(gameScores.gameId, games.id))
     .where(isNotNull(gameScores.curascore))
     .orderBy(desc(gameScores.curascore))
-    .limit(6)
+    .limit(24)
 
   return rows.map((r) => ({
     slug:                      r.slug,

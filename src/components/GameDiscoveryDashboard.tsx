@@ -9,10 +9,10 @@ import type { GameSummary } from '@/types/game'
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 const AGE_SEGMENTS = [
-  { label: '5–7',   value: 'E',   esrb: 'E'    },
-  { label: '8–10',  value: 'E10', esrb: 'E10+' },
-  { label: '11–13', value: 'T',   esrb: 'T'    },
-  { label: '14+',   value: 'M',   esrb: 'M'    },
+  { label: '5–7',   value: 'E',   esrb: ['E']                  },
+  { label: '8–10',  value: 'E10', esrb: ['E', 'E10+']          },
+  { label: '11–13', value: 'T',   esrb: ['E', 'E10+', 'T']     },
+  { label: '14+',   value: 'M',   esrb: ['T', 'M']             },
 ]
 
 const CATEGORY_PILLS = [
@@ -131,8 +131,15 @@ type Props = {
 }
 
 export default function GameDiscoveryDashboard({ topGames = [] }: Props) {
-  const [activeAge, setActiveAge]          = useState<string | null>(null)
+  const [activeAge, setActiveAge]           = useState<string | null>(null)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
+
+  const activeSeg = AGE_SEGMENTS.find(s => s.value === activeAge)
+  const displayGames = activeSeg
+    ? topGames.filter(g => g.esrbRating && activeSeg.esrb.includes(g.esrbRating)).slice(0, 6)
+    : topGames.slice(0, 6)
+
+  const browseHref = activeSeg ? `/browse?age=${activeSeg.value}` : '/browse'
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -235,18 +242,16 @@ export default function GameDiscoveryDashboard({ topGames = [] }: Props) {
         <div>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-black tracking-tight text-slate-900">
-              {activeAge
-                ? `Top games for ages ${AGE_SEGMENTS.find(s => s.value === activeAge)?.label}`
-                : 'Top rated games'}
+              {activeSeg ? `Top games for ages ${activeSeg.label}` : 'Top rated games'}
             </h2>
-            <Link href="/browse" className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors flex items-center gap-1">
+            <Link href={browseHref} className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors flex items-center gap-1">
               See all <ArrowRight size={13} strokeWidth={2.5} />
             </Link>
           </div>
 
-          {topGames.length > 0 ? (
+          {displayGames.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {topGames.slice(0, 6).map((game) => (
+              {displayGames.map((game) => (
                 <div
                   key={game.slug}
                   className="hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer"
@@ -254,6 +259,14 @@ export default function GameDiscoveryDashboard({ topGames = [] }: Props) {
                   <GameCompactCard game={game} />
                 </div>
               ))}
+            </div>
+          ) : activeSeg ? (
+            <div className="text-center py-12 bg-white rounded-3xl border border-gray-100">
+              <p className="text-3xl mb-2">🎮</p>
+              <p className="font-semibold text-slate-600">No rated games yet for ages {activeSeg.label}</p>
+              <Link href={browseHref} className="mt-3 inline-block text-sm text-indigo-600 hover:underline">
+                Browse all games →
+              </Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
