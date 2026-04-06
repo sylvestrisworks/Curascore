@@ -187,7 +187,7 @@ async function scoreWithClaude(g: GameRow, cost: CostAccum): Promise<AiScores> {
     messages: [{ role: 'user', content: buildPrompt(g) }],
   })
 
-  const u = resp.usage as Record<string, number>
+  const u = resp.usage as unknown as Record<string, number>
   cost.inputTokens       += u.input_tokens                    ?? 0
   cost.outputTokens      += u.output_tokens                   ?? 0
   cost.cacheWriteTokens  += u.cache_creation_input_tokens     ?? 0
