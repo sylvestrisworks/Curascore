@@ -127,13 +127,16 @@ export default async function HomePage() {
 
         {/* Hero */}
         <section className="py-10 text-center space-y-4">
+          <p className="text-xs font-semibold uppercase tracking-widest text-indigo-500">
+            Grounded in child development
+          </p>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
-            Game ratings that put{' '}
-            <span className="text-indigo-600">benefits first</span>
+            Game ratings that go{' '}
+            <span className="text-indigo-600">beyond the age label</span>
           </h1>
           <p className="text-slate-500 text-lg max-w-xl mx-auto">
-            Understand what your child develops, what mechanics to watch for, and how
-            much daily playtime makes sense — for any game.
+            Every Curascore reflects what a game actually does to a developing mind —
+            the skills it builds, the habits it forms, and how much daily play makes sense.
           </p>
           <div className="max-w-xl mx-auto pt-2">
             <SearchBar placeholder="Search 500+ games…" />
@@ -183,9 +186,9 @@ export default async function HomePage() {
         <section className="border-t border-slate-200 py-8 pb-12">
           <div className="grid sm:grid-cols-3 gap-6">
             {[
-              { icon: '🌱', title: 'Benefits first',       body: 'We score cognitive, social-emotional, and motor development — not just content warnings.' },
-              { icon: '⚠️', title: 'Honest about risks',   body: 'We flag dopamine loops, loot boxes, spending pressure, and social mechanics clearly.' },
-              { icon: '⏱',  title: 'Time recommendations', body: 'Each game gets a recommended daily limit based on its risk and benefit profile.' },
+              { icon: '🧠', title: 'Developmental lens',    body: 'Our scoring framework draws on cognitive science, social-emotional learning, and behavioral development — translated into a single, clear score.' },
+              { icon: '⚠️', title: 'Honest about risks',   body: 'We identify dopamine loops, loot boxes, spending pressure, and social mechanics — the design patterns that matter most for developing minds.' },
+              { icon: '⏱',  title: 'Time limits that hold up', body: "Each game's daily limit follows from its actual benefit and risk profile. Better games earn more time." },
             ].map((item) => (
               <div key={item.title} className="text-center px-2">
                 <div className="text-3xl mb-2">{item.icon}</div>
