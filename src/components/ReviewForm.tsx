@@ -260,9 +260,12 @@ function makeSerializedReview(form: FormState): SerializedReview {
     hasNaturalStoppingPoints: form.hasNaturalStoppingPoints,
     penalizesBreaks:          form.penalizesBreaks,
     stoppingPointsDescription: form.stoppingPointsDescription || null,
-    benefitsNarrative:  form.benefitsNarrative || null,
-    risksNarrative:     form.risksNarrative || null,
-    parentTip:          form.parentTip || null,
+    benefitsNarrative:   form.benefitsNarrative || null,
+    risksNarrative:      form.risksNarrative || null,
+    parentTip:           form.parentTip || null,
+    usesVirtualCurrency: null,
+    virtualCurrencyName: null,
+    virtualCurrencyRate: null,
   }
 }
 
