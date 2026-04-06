@@ -1,0 +1,42 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { eq, ilike, desc } from 'drizzle-orm'
+import { db } from '@/lib/db'
+import { games, gameScores } from '@/lib/db/schema'
+import type { GameSummary } from '@/types/game'
+
+export async function GET(req: NextRequest) {
+  const q = req.nextUrl.searchParams.get('q')?.trim()
+  if (!q || q.length < 2 || q.length > 200) return NextResponse.json([])
+
+  const rows = await db
+    .select({
+      slug:            games.slug,
+      title:           games.title,
+      developer:       games.developer,
+      genres:          games.genres,
+      esrbRating:      games.esrbRating,
+      backgroundImage: games.backgroundImage,
+      metacriticScore: games.metacriticScore,
+      timeRecommendationMinutes: gameScores.timeRecommendationMinutes,
+      timeRecommendationColor:   gameScores.timeRecommendationColor,
+    })
+    .from(games)
+    .leftJoin(gameScores, eq(gameScores.gameId, games.id))
+    .where(ilike(games.title, `%${q}%`))
+    .orderBy(desc(games.metacriticScore))
+    .limit(8)
+
+  const results: GameSummary[] = rows.map((r) => ({
+    slug:            r.slug,
+    title:           r.title,
+    developer:       r.developer,
+    genres:          (r.genres as string[]) ?? [],
+    esrbRating:      r.esrbRating,
+    backgroundImage: r.backgroundImage,
+    metacriticScore: r.metacriticScore,
+    timeRecommendationMinutes: r.timeRecommendationMinutes,
+    timeRecommendationColor: r.timeRecommendationColor as 'green' | 'amber' | 'red' | null,
+  }))
+
+  return NextResponse.json(results)
+}

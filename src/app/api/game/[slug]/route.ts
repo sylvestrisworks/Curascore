@@ -1,0 +1,107 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { eq } from 'drizzle-orm'
+import { db } from '@/lib/db'
+import { games, gameScores, reviews } from '@/lib/db/schema'
+import type { GameCardProps, SerializedGame, SerializedScores, SerializedReview } from '@/types/game'
+
+export async function GET(_req: NextRequest, { params }: { params: { slug: string } }) {
+  const [game] = await db
+    .select()
+    .from(games)
+    .where(eq(games.slug, params.slug))
+    .limit(1)
+
+  if (!game) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
+  const [score] = await db
+    .select()
+    .from(gameScores)
+    .where(eq(gameScores.gameId, game.id))
+    .limit(1)
+
+  const review = score
+    ? (await db.select().from(reviews).where(eq(reviews.id, score.reviewId)).limit(1))[0] ?? null
+    : null
+
+  const serializedGame: SerializedGame = {
+    id:               game.id,
+    slug:             game.slug,
+    title:            game.title,
+    description:      game.description,
+    developer:        game.developer,
+    publisher:        game.publisher,
+    releaseDate:      game.releaseDate?.toISOString() ?? null,
+    genres:           (game.genres as string[]) ?? [],
+    platforms:        (game.platforms as string[]) ?? [],
+    esrbRating:       game.esrbRating,
+    metacriticScore:  game.metacriticScore,
+    avgPlaytimeHours: game.avgPlaytimeHours,
+    backgroundImage:  game.backgroundImage,
+    basePrice:        game.basePrice,
+    hasMicrotransactions: game.hasMicrotransactions ?? false,
+    hasLootBoxes:     game.hasLootBoxes ?? false,
+    hasSubscription:  game.hasSubscription ?? false,
+    hasBattlePass:    game.hasBattlePass ?? false,
+    requiresInternet: game.requiresInternet,
+    hasStrangerChat:  game.hasStrangerChat ?? false,
+    chatModeration:   game.chatModeration,
+    updatedAt:        game.updatedAt?.toISOString() ?? null,
+  }
+
+  const serializedScores: SerializedScores | null = score ? {
+    bds:                       score.bds,
+    ris:                       score.ris,
+    cognitiveScore:            score.cognitiveScore,
+    socialEmotionalScore:      score.socialEmotionalScore,
+    motorScore:                score.motorScore,
+    dopamineRisk:              score.dopamineRisk,
+    monetizationRisk:          score.monetizationRisk,
+    socialRisk:                score.socialRisk,
+    contentRisk:               score.contentRisk,
+    timeRecommendationMinutes: score.timeRecommendationMinutes,
+    timeRecommendationLabel:   score.timeRecommendationLabel,
+    timeRecommendationReasoning: score.timeRecommendationReasoning,
+    timeRecommendationColor:   score.timeRecommendationColor as 'green' | 'amber' | 'red' | null,
+    topBenefits:               score.topBenefits as SerializedScores['topBenefits'],
+    calculatedAt:              score.calculatedAt?.toISOString() ?? null,
+  } : null
+
+  const serializedReview: SerializedReview | null = review ? {
+    problemSolving: review.problemSolving, spatialAwareness: review.spatialAwareness,
+    strategicThinking: review.strategicThinking, criticalThinking: review.criticalThinking,
+    memoryAttention: review.memoryAttention, creativity: review.creativity,
+    readingLanguage: review.readingLanguage, mathSystems: review.mathSystems,
+    learningTransfer: review.learningTransfer, adaptiveChallenge: review.adaptiveChallenge,
+    teamwork: review.teamwork, communication: review.communication,
+    empathy: review.empathy, emotionalRegulation: review.emotionalRegulation,
+    ethicalReasoning: review.ethicalReasoning, positiveSocial: review.positiveSocial,
+    handEyeCoord: review.handEyeCoord, fineMotor: review.fineMotor,
+    reactionTime: review.reactionTime, physicalActivity: review.physicalActivity,
+    variableRewards: review.variableRewards, streakMechanics: review.streakMechanics,
+    lossAversion: review.lossAversion, fomoEvents: review.fomoEvents,
+    stoppingBarriers: review.stoppingBarriers, notifications: review.notifications,
+    nearMiss: review.nearMiss, infinitePlay: review.infinitePlay,
+    escalatingCommitment: review.escalatingCommitment, variableRewardFreq: review.variableRewardFreq,
+    spendingCeiling: review.spendingCeiling, payToWin: review.payToWin,
+    currencyObfuscation: review.currencyObfuscation, spendingPrompts: review.spendingPrompts,
+    childTargeting: review.childTargeting, adPressure: review.adPressure,
+    subscriptionPressure: review.subscriptionPressure, socialSpending: review.socialSpending,
+    socialObligation: review.socialObligation, competitiveToxicity: review.competitiveToxicity,
+    strangerRisk: review.strangerRisk, socialComparison: review.socialComparison,
+    identitySelfWorth: review.identitySelfWorth, privacyRisk: review.privacyRisk,
+    violenceLevel: review.violenceLevel, sexualContent: review.sexualContent,
+    language: review.language, substanceRef: review.substanceRef, fearHorror: review.fearHorror,
+    estimatedMonthlyCostLow: review.estimatedMonthlyCostLow,
+    estimatedMonthlyCostHigh: review.estimatedMonthlyCostHigh,
+    minSessionMinutes: review.minSessionMinutes,
+    hasNaturalStoppingPoints: review.hasNaturalStoppingPoints,
+    penalizesBreaks: review.penalizesBreaks,
+    stoppingPointsDescription: review.stoppingPointsDescription ?? null,
+    benefitsNarrative: review.benefitsNarrative,
+    risksNarrative: review.risksNarrative,
+    parentTip: review.parentTip,
+  } : null
+
+  const result: GameCardProps = { game: serializedGame, scores: serializedScores, review: serializedReview }
+  return NextResponse.json(result)
+}
