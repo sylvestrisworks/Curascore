@@ -163,6 +163,7 @@ export type GameSummary = {
   metacriticScore: number | null
   timeRecommendationMinutes: number | null
   timeRecommendationColor: 'green' | 'amber' | 'red' | null
+  curascore?: number | null
   bds?: number | null
   ris?: number | null
   hasMicrotransactions?: boolean

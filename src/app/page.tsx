@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import Link from 'next/link'
-import { eq, desc, isNotNull } from 'drizzle-orm'
+import { eq, desc, isNotNull, sql } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { games, gameScores } from '@/lib/db/schema'
 import SearchBar from '@/components/SearchBar'
@@ -19,13 +19,14 @@ async function getFeaturedGames(): Promise<GameSummary[]> {
       esrbRating:      games.esrbRating,
       backgroundImage: games.backgroundImage,
       metacriticScore: games.metacriticScore,
+      curascore:       gameScores.curascore,
       timeRecommendationMinutes: gameScores.timeRecommendationMinutes,
       timeRecommendationColor:   gameScores.timeRecommendationColor,
     })
     .from(games)
     .innerJoin(gameScores, eq(gameScores.gameId, games.id))
-    .where(isNotNull(games.metacriticScore))
-    .orderBy(desc(games.metacriticScore))
+    .where(isNotNull(gameScores.curascore))
+    .orderBy(desc(gameScores.curascore))
     .limit(12)
 
   return rows.map((r) => ({
@@ -36,6 +37,7 @@ async function getFeaturedGames(): Promise<GameSummary[]> {
     esrbRating:      r.esrbRating,
     backgroundImage: r.backgroundImage,
     metacriticScore: r.metacriticScore,
+    curascore:       r.curascore,
     timeRecommendationMinutes: r.timeRecommendationMinutes,
     timeRecommendationColor: r.timeRecommendationColor as 'green' | 'amber' | 'red' | null,
   }))
@@ -43,13 +45,14 @@ async function getFeaturedGames(): Promise<GameSummary[]> {
 
 // ─── Helper components ────────────────────────────────────────────────────────
 
-function GameTile({ game }: { game: GameSummary }) {
-  const color = game.timeRecommendationColor
-  const timeBg =
-    color === 'green' ? 'bg-emerald-600' :
-    color === 'amber' ? 'bg-amber-500' :
-    color === 'red'   ? 'bg-red-600' : null
+function curascoreBg(score: number | null | undefined): string {
+  if (score == null) return 'bg-slate-400'
+  if (score >= 70) return 'bg-emerald-600'
+  if (score >= 40) return 'bg-amber-500'
+  return 'bg-red-600'
+}
 
+function GameTile({ game }: { game: GameSummary }) {
   return (
     <Link
       href={`/game/${game.slug}`}
@@ -70,9 +73,9 @@ function GameTile({ game }: { game: GameSummary }) {
             </span>
           </div>
         )}
-        {timeBg && game.timeRecommendationMinutes && (
-          <div className={`absolute top-2 right-2 ${timeBg} text-white text-xs font-bold px-2 py-0.5 rounded-full`}>
-            {game.timeRecommendationMinutes}m
+        {game.curascore != null && (
+          <div className={`absolute top-2 right-2 ${curascoreBg(game.curascore)} text-white text-xs font-black px-2 py-0.5 rounded-full`}>
+            {game.curascore}
           </div>
         )}
         {game.esrbRating && (
@@ -85,30 +88,23 @@ function GameTile({ game }: { game: GameSummary }) {
         <p className="text-sm font-semibold text-slate-800 truncate group-hover:text-indigo-700 transition-colors">
           {game.title}
         </p>
-        <div className="flex items-center gap-1 mt-0.5">
-          <span className="text-xs text-slate-500 truncate">
-            {game.genres[0] ?? game.developer ?? ''}
-          </span>
-          {game.metacriticScore && (
-            <span className="ml-auto text-xs font-medium text-slate-400 shrink-0">
-              {game.metacriticScore}
-            </span>
-          )}
-        </div>
+        <p className="text-xs text-slate-500 truncate mt-0.5">
+          {game.genres[0] ?? game.developer ?? ''}
+        </p>
       </div>
     </Link>
   )
 }
 
 const CATEGORIES = [
-  { label: 'Ages 5–8',      href: '/search?esrb=E',               emoji: '🌱' },
-  { label: 'Ages 9–12',     href: '/search?esrb=E10',             emoji: '🎮' },
-  { label: 'Teens',         href: '/search?esrb=T',               emoji: '🧩' },
-  { label: 'Puzzle Games',  href: '/search?genre=puzzle',         emoji: '🔍' },
-  { label: 'Teamwork',      href: '/search?benefit=teamwork',     emoji: '🤝' },
-  { label: 'No Loot Boxes', href: '/search?filter=no-loot-boxes', emoji: '✅' },
-  { label: 'Platformers',   href: '/search?genre=platformer',     emoji: '🏃' },
-  { label: 'Strategy',      href: '/search?genre=strategy',       emoji: '♟️' },
+  { label: 'Ages 5–8',      href: '/browse?age=E',                emoji: '🌱' },
+  { label: 'Ages 9–12',     href: '/browse?age=E10',              emoji: '🎮' },
+  { label: 'Teens',         href: '/browse?age=T',                emoji: '🧩' },
+  { label: 'Puzzle Games',  href: '/browse?genres=puzzle',        emoji: '🔍' },
+  { label: 'Teamwork',      href: '/browse?benefits=teamwork',    emoji: '🤝' },
+  { label: 'Platformers',   href: '/browse?genres=platformer',    emoji: '🏃' },
+  { label: 'Strategy',      href: '/browse?genres=strategy',      emoji: '♟️' },
+  { label: 'Low Risk',      href: '/browse?risk=low',             emoji: '✅' },
 ]
 
 // ─── Page ─────────────────────────────────────────────────────────────────────

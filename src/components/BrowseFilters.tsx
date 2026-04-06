@@ -35,9 +35,10 @@ export const BENEFIT_OPTIONS = [
 ]
 
 export const SORT_OPTIONS = [
-  { value: 'metacritic', label: 'Highest rated' },
+  { value: 'curascore',  label: 'Curascore' },
   { value: 'benefit',    label: 'Best benefit score' },
   { value: 'safest',     label: 'Lowest risk' },
+  { value: 'metacritic', label: 'Metacritic score' },
   { value: 'newest',     label: 'Newest' },
   { value: 'alpha',      label: 'A–Z' },
 ]
@@ -77,7 +78,7 @@ export default function BrowseFilters({ active, totalCount }: Props) {
     if (merged.risk)              params.set('risk', merged.risk)
     if (merged.time)              params.set('time', merged.time)
     if (merged.price)             params.set('price', merged.price)
-    if (merged.sort && merged.sort !== 'metacritic') params.set('sort', merged.sort)
+    if (merged.sort && merged.sort !== 'curascore') params.set('sort', merged.sort)
     if (merged.q)                 params.set('q', merged.q)
     router.push(`${pathname}?${params.toString()}`)
   }, [active, pathname, router])

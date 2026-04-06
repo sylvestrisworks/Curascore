@@ -6,7 +6,6 @@ import { eq, desc, asc, sql, and, lte, gte, ilike, type SQL } from 'drizzle-orm'
 import type { Metadata } from 'next'
 import { db } from '@/lib/db'
 import { games, gameScores } from '@/lib/db/schema'
-import GameCompactCard from '@/components/GameCompactCard'
 import BrowseFilters, { type ActiveFilters } from '@/components/BrowseFilters'
 import SearchBar from '@/components/SearchBar'
 
@@ -53,6 +52,7 @@ type Row = {
   metacriticScore: number | null
   timeRecommendationMinutes: number | null
   timeRecommendationColor: string | null
+  curascore: number | null
   bds: number | null
   ris: number | null
   hasMicrotransactions: boolean | null
@@ -127,11 +127,12 @@ async function queryGames(filters: ActiveFilters): Promise<{ rows: Row[]; total:
   // Sort order
   let orderBy
   switch (filters.sort) {
-    case 'benefit':   orderBy = [desc(gameScores.bds), desc(games.metacriticScore)]; break
-    case 'safest':    orderBy = [asc(gameScores.ris), desc(games.metacriticScore)];  break
-    case 'newest':    orderBy = [desc(games.releaseDate)];                           break
-    case 'alpha':     orderBy = [asc(games.title)];                                 break
-    default:          orderBy = [desc(games.metacriticScore)];                       break
+    case 'benefit':   orderBy = [desc(gameScores.bds), desc(gameScores.curascore)]; break
+    case 'safest':    orderBy = [asc(gameScores.ris), desc(gameScores.curascore)];  break
+    case 'newest':    orderBy = [desc(games.releaseDate)];                          break
+    case 'alpha':     orderBy = [asc(games.title)];                                break
+    case 'metacritic': orderBy = [desc(games.metacriticScore)];                    break
+    default:          orderBy = [desc(gameScores.curascore)];                       break
   }
 
   const where = conditions.length ? and(...conditions) : undefined
@@ -150,6 +151,7 @@ async function queryGames(filters: ActiveFilters): Promise<{ rows: Row[]; total:
         hasLootBoxes:    games.hasLootBoxes,
         timeRecommendationMinutes: gameScores.timeRecommendationMinutes,
         timeRecommendationColor:   gameScores.timeRecommendationColor,
+        curascore:       gameScores.curascore,
         bds:             gameScores.bds,
         ris:             gameScores.ris,
       })
@@ -186,7 +188,7 @@ function parseFilters(sp: Record<string, string | string[] | undefined>): Active
     risk:      str('risk'),
     time:      str('time'),
     price:     str('price'),
-    sort:      str('sort') ?? 'metacritic',
+    sort:      str('sort') ?? 'curascore',
     q:         str('q'),
   }
 }
@@ -253,28 +255,72 @@ export default async function BrowsePage({ searchParams }: Props) {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                {rows.map((row) => (
-                  <GameCompactCard
-                    key={row.slug}
-                    game={{
-                      slug:            row.slug,
-                      title:           row.title,
-                      developer:       row.developer,
-                      genres:          (row.genres as string[]) ?? [],
-                      esrbRating:      row.esrbRating,
-                      backgroundImage: row.backgroundImage,
-                      metacriticScore: row.metacriticScore,
-                      timeRecommendationMinutes: row.timeRecommendationMinutes,
-                      timeRecommendationColor: row.timeRecommendationColor as 'green' | 'amber' | 'red' | null,
-                      bds:             row.bds,
-                      ris:             row.ris,
-                      hasMicrotransactions: row.hasMicrotransactions ?? false,
-                      hasLootBoxes:    row.hasLootBoxes ?? false,
-                    }}
-                  />
-                ))}
-              </div>
+              <ol className="divide-y divide-slate-100">
+                {rows.map((row, i) => {
+                  const score = row.curascore
+                  const scoreBg =
+                    score == null   ? 'bg-slate-200 text-slate-500' :
+                    score >= 70     ? 'bg-emerald-600 text-white' :
+                    score >= 40     ? 'bg-amber-500 text-white' :
+                                      'bg-red-600 text-white'
+                  return (
+                    <li key={row.slug}>
+                      <Link
+                        href={`/game/${row.slug}`}
+                        className="flex items-center gap-4 py-3 px-2 rounded-lg hover:bg-indigo-50 transition-colors group"
+                      >
+                        {/* Rank number */}
+                        <span className="w-7 text-right text-sm font-semibold text-slate-400 shrink-0">
+                          {i + 1}
+                        </span>
+
+                        {/* Thumbnail */}
+                        <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-indigo-100">
+                          {row.backgroundImage ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={row.backgroundImage}
+                              alt=""
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <span className="text-sm font-black text-indigo-300">
+                                {row.title.slice(0, 2).toUpperCase()}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Title + meta */}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-slate-800 truncate group-hover:text-indigo-700 transition-colors">
+                            {row.title}
+                          </p>
+                          <p className="text-xs text-slate-500 truncate mt-0.5">
+                            {(row.genres as string[])[0] ?? row.developer ?? ''}
+                            {row.esrbRating && (
+                              <span className="ml-2 text-slate-400">{row.esrbRating}</span>
+                            )}
+                          </p>
+                        </div>
+
+                        {/* Time rec */}
+                        {row.timeRecommendationMinutes != null && (
+                          <span className="text-xs text-slate-400 shrink-0 hidden sm:block">
+                            {row.timeRecommendationMinutes} min/day
+                          </span>
+                        )}
+
+                        {/* Curascore badge */}
+                        <span className={`w-10 text-center text-xs font-black px-2 py-1 rounded-full shrink-0 ${scoreBg}`}>
+                          {score ?? '—'}
+                        </span>
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ol>
             )}
 
             {total > 48 && (

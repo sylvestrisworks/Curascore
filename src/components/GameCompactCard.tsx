@@ -5,28 +5,14 @@ type Props = {
   game: GameSummary
 }
 
-const ESRB_COLORS: Record<string, string> = {
-  E:    'bg-green-100 text-green-800',
-  'E10+': 'bg-lime-100 text-lime-800',
-  T:    'bg-blue-100 text-blue-800',
-  M:    'bg-red-100 text-red-700',
-}
-
-function ScorePip({ label, value, color }: { label: string; value: number; color: string }) {
-  return (
-    <span title={`${label}: ${Math.round(value * 100)}/100`}
-      className={`text-xs font-bold px-1.5 py-0.5 rounded ${color}`}>
-      {Math.round(value * 100)}
-    </span>
-  )
+function curascoreBg(score: number | null | undefined): string {
+  if (score == null) return 'bg-slate-400'
+  if (score >= 70) return 'bg-emerald-600'
+  if (score >= 40) return 'bg-amber-500'
+  return 'bg-red-600'
 }
 
 export default function GameCompactCard({ game }: Props) {
-  const timeColor =
-    game.timeRecommendationColor === 'green' ? 'bg-emerald-600' :
-    game.timeRecommendationColor === 'amber' ? 'bg-amber-500' :
-    game.timeRecommendationColor === 'red'   ? 'bg-red-600' : null
-
   return (
     <Link
       href={`/game/${game.slug}`}
@@ -49,10 +35,10 @@ export default function GameCompactCard({ game }: Props) {
           </div>
         )}
 
-        {/* Time chip — top right */}
-        {timeColor && game.timeRecommendationMinutes && (
-          <div className={`absolute top-1.5 right-1.5 ${timeColor} text-white text-xs font-bold px-1.5 py-0.5 rounded-full`}>
-            {game.timeRecommendationMinutes}m
+        {/* Curascore chip — top right */}
+        {game.curascore != null && (
+          <div className={`absolute top-1.5 right-1.5 ${curascoreBg(game.curascore)} text-white text-xs font-black px-1.5 py-0.5 rounded-full`}>
+            {game.curascore}
           </div>
         )}
 
@@ -77,38 +63,22 @@ export default function GameCompactCard({ game }: Props) {
             </span>
           )}
           {game.esrbRating && (
-            <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${ESRB_COLORS[game.esrbRating] ?? 'bg-slate-100 text-slate-600'}`}>
+            <span className="text-xs text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
               {game.esrbRating}
             </span>
           )}
         </div>
 
-        {/* Scores row */}
-        {(game.bds != null || game.ris != null) && (
-          <div className="flex items-center gap-1 mt-auto pt-1">
-            {game.bds != null && (
-              <ScorePip label="Benefit Score" value={game.bds} color="bg-emerald-100 text-emerald-800" />
-            )}
-            {game.ris != null && (
-              <ScorePip label="Risk Score" value={game.ris} color={
-                game.ris < 0.3 ? 'bg-emerald-100 text-emerald-800' :
-                game.ris < 0.6 ? 'bg-amber-100 text-amber-800' :
-                'bg-red-100 text-red-700'
-              } />
-            )}
-            {/* Monetization flags */}
-            {(game.hasLootBoxes || game.hasMicrotransactions) && (
-              <span className="ml-auto text-xs text-amber-600" title="Has monetization">💰</span>
-            )}
+        {/* Time recommendation */}
+        {game.timeRecommendationMinutes != null && (
+          <div className="mt-auto pt-1">
+            <span className="text-xs text-slate-400">{game.timeRecommendationMinutes} min/day</span>
           </div>
         )}
 
-        {/* Metacritic fallback when no scores */}
-        {game.bds == null && game.metacriticScore != null && (
-          <div className="mt-auto pt-1 flex items-center justify-between">
-            <span className="text-xs text-slate-400">Metacritic</span>
-            <span className="text-xs font-bold text-slate-600">{game.metacriticScore}</span>
-          </div>
+        {/* Monetization flag */}
+        {(game.hasLootBoxes || game.hasMicrotransactions) && (
+          <span className="text-xs text-amber-600 mt-auto" title="Has monetization">💰 Monetization</span>
         )}
       </div>
     </Link>
