@@ -124,6 +124,18 @@ async function queryGames(filters: ActiveFilters): Promise<{ rows: Row[]; total:
     }
   }
 
+  // Compliance — game must have 'compliant' status for each selected regulation
+  for (const regulation of filters.compliance) {
+    conditions.push(
+      sql`EXISTS (
+        SELECT 1 FROM compliance_status cs
+        WHERE cs.game_id = ${games.id}
+          AND cs.regulation = ${regulation}
+          AND cs.status = 'compliant'
+      )`
+    )
+  }
+
   // Sort order
   let orderBy
   switch (filters.sort) {
@@ -181,11 +193,12 @@ function parseFilters(sp: Record<string, string | string[] | undefined>): Active
     return typeof v === 'string' ? v.split(',').filter(Boolean) : v
   }
   return {
-    age:       str('age'),
-    genres:    arr('genres'),
-    platforms: arr('platforms'),
-    benefits:  arr('benefits'),
-    risk:      str('risk'),
+    age:        str('age'),
+    genres:     arr('genres'),
+    platforms:  arr('platforms'),
+    benefits:   arr('benefits'),
+    compliance: arr('compliance'),
+    risk:       str('risk'),
     time:      str('time'),
     price:     str('price'),
     sort:      str('sort') ?? 'curascore',
@@ -203,7 +216,7 @@ export default async function BrowsePage({ searchParams }: Props) {
 
   const activeFilterCount = [
     filters.age, ...filters.genres, ...filters.platforms,
-    ...filters.benefits, filters.risk, filters.time, filters.price,
+    ...filters.benefits, ...filters.compliance, filters.risk, filters.time, filters.price,
   ].filter(Boolean).length
 
   return (

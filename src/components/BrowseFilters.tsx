@@ -26,6 +26,12 @@ export const PLATFORM_OPTIONS = [
   { value: 'Android',label: 'Android' },
 ]
 
+export const COMPLIANCE_OPTIONS = [
+  { value: 'DSA',    label: 'DSA compliant' },
+  { value: 'GDPR-K', label: 'GDPR-K compliant' },
+  { value: 'ODDS',   label: 'ODDS compliant' },
+]
+
 export const BENEFIT_OPTIONS = [
   { value: 'problem-solving', label: 'Problem Solving' },
   { value: 'spatial',         label: 'Spatial Awareness' },
@@ -50,9 +56,10 @@ export type ActiveFilters = {
   genres: string[]
   platforms: string[]
   benefits: string[]
-  risk?: string   // 'low' | 'medium' | ''
-  time?: string   // '30' | '60' | '90' | ''
-  price?: string  // 'free' | '20' | '40' | ''
+  compliance: string[]  // 'DSA' | 'GDPR-K' | 'ODDS'
+  risk?: string         // 'low' | 'medium' | ''
+  time?: string         // '30' | '60' | '90' | ''
+  price?: string        // 'free' | '20' | '40' | ''
   sort: string
   q?: string
 }
@@ -75,6 +82,7 @@ export default function BrowseFilters({ active, totalCount }: Props) {
     if (merged.genres.length)     params.set('genres', merged.genres.join(','))
     if (merged.platforms.length)  params.set('platforms', merged.platforms.join(','))
     if (merged.benefits.length)   params.set('benefits', merged.benefits.join(','))
+    if (merged.compliance.length) params.set('compliance', merged.compliance.join(','))
     if (merged.risk)              params.set('risk', merged.risk)
     if (merged.time)              params.set('time', merged.time)
     if (merged.price)             params.set('price', merged.price)
@@ -83,7 +91,7 @@ export default function BrowseFilters({ active, totalCount }: Props) {
     router.push(`${pathname}?${params.toString()}`)
   }, [active, pathname, router])
 
-  const toggle = (key: 'genres' | 'platforms' | 'benefits', value: string) => {
+  const toggle = (key: 'genres' | 'platforms' | 'benefits' | 'compliance', value: string) => {
     const arr = active[key]
     push({ [key]: arr.includes(value) ? arr.filter(v => v !== value) : [...arr, value] })
   }
@@ -91,7 +99,7 @@ export default function BrowseFilters({ active, totalCount }: Props) {
   const clearAll = () => router.push(pathname)
 
   const hasFilters = active.age || active.genres.length || active.platforms.length ||
-    active.benefits.length || active.risk || active.time || active.price
+    active.benefits.length || active.compliance.length || active.risk || active.time || active.price
 
   return (
     <aside className="w-64 shrink-0 space-y-6">
@@ -169,6 +177,18 @@ export default function BrowseFilters({ active, totalCount }: Props) {
             />
             <span className="text-sm text-slate-700 group-hover:text-slate-900">{o.label}</span>
           </label>
+        ))}
+      </FilterSection>
+
+      {/* Regulatory compliance */}
+      <FilterSection title="Compliance" note="Estimated">
+        {COMPLIANCE_OPTIONS.map(o => (
+          <Chip
+            key={o.value}
+            label={o.label}
+            active={active.compliance.includes(o.value)}
+            onClick={() => toggle('compliance', o.value)}
+          />
         ))}
       </FilterSection>
 

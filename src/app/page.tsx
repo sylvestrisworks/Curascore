@@ -118,7 +118,7 @@ export default async function HomePage() {
         <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
           <span className="text-lg font-bold text-indigo-700 tracking-tight">PlaySmart</span>
           <nav className="flex items-center gap-4 text-sm text-slate-600">
-            <a href="#browse" className="hover:text-indigo-700 transition-colors">Browse</a>
+            <a href="/browse" className="hover:text-indigo-700 transition-colors">Browse</a>
           </nav>
         </div>
       </header>
