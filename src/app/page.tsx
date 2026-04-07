@@ -71,7 +71,7 @@ async function getCarouselRows(platform?: string, age?: string): Promise<Carouse
 
   const base = (extra?: SQL) => and(isNotNull(gameScores.curascore), platformFilter, ageFilter, extra)
 
-  const [topRated, forYoungKids, lowRisk, highBenefit, teamwork] = await Promise.all([
+  const [topRated, coopPlay, lowRisk, highBenefit, teamwork] = await Promise.all([
 
     // Top rated overall
     db.select(BASE_SELECT).from(games)
@@ -80,11 +80,11 @@ async function getCarouselRows(platform?: string, age?: string): Promise<Carouse
       .orderBy(desc(gameScores.curascore))
       .limit(12),
 
-    // Great for young kids — ESRB E
+    // Play together — high social-emotional score (teamwork, communication, empathy)
     db.select(BASE_SELECT).from(games)
       .innerJoin(gameScores, eq(gameScores.gameId, games.id))
-      .where(base(eq(games.esrbRating, 'E')))
-      .orderBy(desc(gameScores.curascore))
+      .where(base(gte(gameScores.socialEmotionalScore, 0.5)))
+      .orderBy(desc(gameScores.socialEmotionalScore))
       .limit(12),
 
     // Low risk — RIS ≤ 0.30
@@ -110,11 +110,11 @@ async function getCarouselRows(platform?: string, age?: string): Promise<Carouse
   ])
 
   const rows: CarouselRow[] = [
-    { id: 'top',      title: 'Top rated',            emoji: '⭐', browseHref: '/browse?sort=curascore', games: topRated.map(toSummary) },
-    { id: 'kids',     title: 'Great for young kids',  emoji: '🌱', browseHref: '/browse?age=E',          games: forYoungKids.map(toSummary) },
-    { id: 'safe',     title: 'Low risk picks',        emoji: '✅', browseHref: '/browse?risk=low',        games: lowRisk.map(toSummary) },
-    { id: 'brain',    title: 'Build your brain',      emoji: '🧠', browseHref: '/browse?benefits=problem-solving', games: highBenefit.map(toSummary) },
-    { id: 'teamwork', title: 'Team up',               emoji: '🤝', browseHref: '/browse?benefits=teamwork', games: teamwork.map(toSummary) },
+    { id: 'top',      title: 'Top rated',          emoji: '⭐', browseHref: '/browse?sort=curascore',            games: topRated.map(toSummary)  },
+    { id: 'coop',     title: 'Play together',      emoji: '👨‍👩‍👧', browseHref: '/browse?benefits=teamwork',            games: coopPlay.map(toSummary)  },
+    { id: 'safe',     title: 'Low risk picks',     emoji: '✅', browseHref: '/browse?risk=low',                  games: lowRisk.map(toSummary)   },
+    { id: 'brain',    title: 'Build your brain',   emoji: '🧠', browseHref: '/browse?benefits=problem-solving',  games: highBenefit.map(toSummary) },
+    { id: 'teamwork', title: 'Team up',             emoji: '🤝', browseHref: '/browse?benefits=teamwork',         games: teamwork.map(toSummary)  },
   ]
 
   return rows.filter(r => r.games.length > 0)
