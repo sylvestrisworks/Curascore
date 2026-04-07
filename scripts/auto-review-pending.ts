@@ -21,7 +21,7 @@
  */
 
 import Anthropic from '@anthropic-ai/sdk'
-import { GoogleGenAI, FunctionCallingConfigMode } from '@google/genai'
+import { GoogleGenAI, FunctionCallingConfigMode, Type } from '@google/genai'
 import { isNull, eq } from 'drizzle-orm'
 import { db } from '../src/lib/db'
 import { games, gameScores, reviews } from '../src/lib/db/schema'
@@ -140,18 +140,32 @@ const ANTHROPIC_TOOL: Anthropic.Tool = {
   },
 }
 
-// ─── Gemini function declaration (uppercase types, no additionalProperties) ───
+// ─── Gemini function declaration ──────────────────────────────────────────────
 
-// Gemini uses uppercase type names in its schema
+// Convert JSON Schema to @google/genai Schema using Type enum
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function toGeminiSchema(schema: any): any {
   if (!schema || typeof schema !== 'object') return schema
+
+  const TYPE_MAP: Record<string, Type> = {
+    object:  Type.OBJECT,
+    string:  Type.STRING,
+    integer: Type.INTEGER,
+    number:  Type.NUMBER,
+    boolean: Type.BOOLEAN,
+    array:   Type.ARRAY,
+  }
+
   const out: Record<string, unknown> = {}
   for (const [k, v] of Object.entries(schema)) {
-    if (k === 'additionalProperties') continue // not supported in Gemini
+    if (k === 'additionalProperties') continue
     if (k === 'type' && typeof v === 'string') {
-      out[k] = v.toUpperCase()
-    } else if (typeof v === 'object' && v !== null) {
+      out[k] = TYPE_MAP[v] ?? v
+    } else if (k === 'properties' && typeof v === 'object' && v !== null) {
+      out[k] = Object.fromEntries(
+        Object.entries(v as Record<string, unknown>).map(([pk, pv]) => [pk, toGeminiSchema(pv)])
+      )
+    } else if (typeof v === 'object' && v !== null && !Array.isArray(v)) {
       out[k] = toGeminiSchema(v)
     } else {
       out[k] = v
