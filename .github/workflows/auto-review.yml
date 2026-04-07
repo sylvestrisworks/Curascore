@@ -71,5 +71,7 @@ jobs:
             ARGS="$ARGS --dry-run"
           fi
 
+          echo "DATABASE_URL set: $( [ -n "$DATABASE_URL" ] && echo YES || echo NO )"
+          echo "GOOGLE_PROJECT_ID set: $( [ -n "$GOOGLE_PROJECT_ID" ] && echo YES || echo NO )"
           echo "Running: auto-review-pending.ts $ARGS"
           node --import tsx scripts/auto-review-pending.ts $ARGS
