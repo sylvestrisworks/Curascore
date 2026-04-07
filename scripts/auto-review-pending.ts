@@ -21,7 +21,7 @@
  */
 
 import Anthropic from '@anthropic-ai/sdk'
-import { VertexAI } from '@google-cloud/vertexai'
+import { VertexAI, FunctionCallingMode } from '@google-cloud/vertexai'
 import { isNull, eq } from 'drizzle-orm'
 import { db } from '../src/lib/db'
 import { games, gameScores, reviews } from '../src/lib/db/schema'
@@ -271,7 +271,7 @@ async function callGemini(prompt: string): Promise<ReviewInput> {
     tools: [{ functionDeclarations: [GEMINI_FUNCTION] }],
     toolConfig: {
       functionCallingConfig: {
-        mode: 'ANY' as const,
+        mode: FunctionCallingMode.ANY,
         allowedFunctionNames: ['submit_game_review'],
       },
     },
