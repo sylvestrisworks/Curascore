@@ -1,64 +1,122 @@
 export const dynamic = 'force-dynamic'
 
 import Link from 'next/link'
-import { eq, desc, isNotNull, sql } from 'drizzle-orm'
+import { eq, desc, lte, gte, isNotNull, sql, and } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { games, gameScores } from '@/lib/db/schema'
 import SearchBar from '@/components/SearchBar'
 import type { GameSummary } from '@/types/game'
 
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type CarouselRow = {
+  id: string
+  title: string
+  emoji: string
+  browseHref: string
+  games: GameSummary[]
+}
+
 // ─── Data fetching ────────────────────────────────────────────────────────────
 
-async function getFeaturedGames(): Promise<GameSummary[]> {
-  const rows = await db
-    .select({
-      slug:            games.slug,
-      title:           games.title,
-      developer:       games.developer,
-      genres:          games.genres,
-      esrbRating:      games.esrbRating,
-      backgroundImage: games.backgroundImage,
-      metacriticScore: games.metacriticScore,
-      curascore:       gameScores.curascore,
-      timeRecommendationMinutes: gameScores.timeRecommendationMinutes,
-      timeRecommendationColor:   gameScores.timeRecommendationColor,
-    })
-    .from(games)
-    .innerJoin(gameScores, eq(gameScores.gameId, games.id))
-    .where(isNotNull(gameScores.curascore))
-    .orderBy(desc(gameScores.curascore))
-    .limit(12)
-
-  return rows.map((r) => ({
-    slug:            r.slug,
-    title:           r.title,
-    developer:       r.developer,
-    genres:          (r.genres as string[]) ?? [],
-    esrbRating:      r.esrbRating,
-    backgroundImage: r.backgroundImage,
-    metacriticScore: r.metacriticScore,
-    curascore:       r.curascore,
-    timeRecommendationMinutes: r.timeRecommendationMinutes,
-    timeRecommendationColor: r.timeRecommendationColor as 'green' | 'amber' | 'red' | null,
-  }))
+const BASE_SELECT = {
+  slug:            games.slug,
+  title:           games.title,
+  developer:       games.developer,
+  genres:          games.genres,
+  esrbRating:      games.esrbRating,
+  backgroundImage: games.backgroundImage,
+  metacriticScore: games.metacriticScore,
+  curascore:       gameScores.curascore,
+  timeRecommendationMinutes: gameScores.timeRecommendationMinutes,
+  timeRecommendationColor:   gameScores.timeRecommendationColor,
 }
 
-// ─── Helper components ────────────────────────────────────────────────────────
+function toSummary(r: typeof BASE_SELECT & Record<string, unknown>): GameSummary {
+  return {
+    slug:            r.slug as string,
+    title:           r.title as string,
+    developer:       r.developer as string | null,
+    genres:          (r.genres as string[]) ?? [],
+    esrbRating:      r.esrbRating as string | null,
+    backgroundImage: r.backgroundImage as string | null,
+    metacriticScore: r.metacriticScore as number | null,
+    curascore:       r.curascore as number | null,
+    timeRecommendationMinutes: r.timeRecommendationMinutes as number | null,
+    timeRecommendationColor:   r.timeRecommendationColor as 'green' | 'amber' | 'red' | null,
+  }
+}
+
+async function getCarouselRows(): Promise<CarouselRow[]> {
+  const [topRated, forYoungKids, lowRisk, highBenefit, teamwork] = await Promise.all([
+
+    // Top rated overall
+    db.select(BASE_SELECT).from(games)
+      .innerJoin(gameScores, eq(gameScores.gameId, games.id))
+      .where(isNotNull(gameScores.curascore))
+      .orderBy(desc(gameScores.curascore))
+      .limit(12),
+
+    // Great for young kids — ESRB E
+    db.select(BASE_SELECT).from(games)
+      .innerJoin(gameScores, eq(gameScores.gameId, games.id))
+      .where(and(isNotNull(gameScores.curascore), eq(games.esrbRating, 'E')))
+      .orderBy(desc(gameScores.curascore))
+      .limit(12),
+
+    // Low risk — RIS ≤ 0.30
+    db.select(BASE_SELECT).from(games)
+      .innerJoin(gameScores, eq(gameScores.gameId, games.id))
+      .where(and(isNotNull(gameScores.curascore), lte(gameScores.ris, 0.3)))
+      .orderBy(desc(gameScores.curascore))
+      .limit(12),
+
+    // Build your brain — high cognitive score
+    db.select(BASE_SELECT).from(games)
+      .innerJoin(gameScores, eq(gameScores.gameId, games.id))
+      .where(and(isNotNull(gameScores.curascore), gte(gameScores.cognitiveScore, 0.6)))
+      .orderBy(desc(gameScores.bds))
+      .limit(12),
+
+    // Team up — games with teamwork in topBenefits
+    db.select(BASE_SELECT).from(games)
+      .innerJoin(gameScores, eq(gameScores.gameId, games.id))
+      .where(and(
+        isNotNull(gameScores.curascore),
+        sql`${gameScores.topBenefits}::jsonb @> ${JSON.stringify([{ skill: 'Teamwork' }])}::jsonb`,
+      ))
+      .orderBy(desc(gameScores.curascore))
+      .limit(12),
+  ])
+
+  const rows: CarouselRow[] = [
+    { id: 'top',      title: 'Top rated',            emoji: '⭐', browseHref: '/browse?sort=curascore', games: topRated.map(toSummary) },
+    { id: 'kids',     title: 'Great for young kids',  emoji: '🌱', browseHref: '/browse?age=E',          games: forYoungKids.map(toSummary) },
+    { id: 'safe',     title: 'Low risk picks',        emoji: '✅', browseHref: '/browse?risk=low',        games: lowRisk.map(toSummary) },
+    { id: 'brain',    title: 'Build your brain',      emoji: '🧠', browseHref: '/browse?benefits=problem-solving', games: highBenefit.map(toSummary) },
+    { id: 'teamwork', title: 'Team up',               emoji: '🤝', browseHref: '/browse?benefits=teamwork', games: teamwork.map(toSummary) },
+  ]
+
+  return rows.filter(r => r.games.length > 0)
+}
+
+// ─── Components ───────────────────────────────────────────────────────────────
 
 function curascoreBg(score: number | null | undefined): string {
-  if (score == null) return 'bg-slate-400'
-  if (score >= 70) return 'bg-emerald-600'
+  if (score == null) return 'bg-slate-500'
+  if (score >= 70) return 'bg-emerald-500'
   if (score >= 40) return 'bg-amber-500'
-  return 'bg-red-600'
+  return 'bg-red-500'
 }
 
-function GameTile({ game }: { game: GameSummary }) {
+function CarouselTile({ game }: { game: GameSummary }) {
   return (
     <Link
       href={`/game/${game.slug}`}
-      className="group bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md hover:border-indigo-300 transition-all"
+      className="group shrink-0 w-36 sm:w-44"
     >
-      <div className="relative h-32 bg-indigo-100 overflow-hidden">
+      {/* Image */}
+      <div className="relative w-full h-24 sm:h-28 rounded-xl overflow-hidden bg-indigo-100">
         {game.backgroundImage ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -67,50 +125,81 @@ function GameTile({ game }: { game: GameSummary }) {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-100 to-violet-100">
-            <span className="text-3xl font-black text-indigo-300">
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-100 to-violet-200">
+            <span className="text-2xl font-black text-indigo-300 select-none">
               {game.title.slice(0, 2).toUpperCase()}
             </span>
           </div>
         )}
+        {/* Curascore badge */}
         {game.curascore != null && (
-          <div className={`absolute top-2 right-2 ${curascoreBg(game.curascore)} text-white text-xs font-black px-2 py-0.5 rounded-full`}>
+          <span className={`absolute top-1.5 right-1.5 ${curascoreBg(game.curascore)} text-white text-[10px] font-black px-1.5 py-0.5 rounded-full leading-none`}>
             {game.curascore}
-          </div>
+          </span>
         )}
+        {/* ESRB */}
         {game.esrbRating && (
-          <div className="absolute bottom-2 left-2 bg-black/60 text-white text-xs font-bold px-1.5 py-0.5 rounded">
+          <span className="absolute bottom-1.5 left-1.5 bg-black/60 text-white text-[9px] font-bold px-1 py-0.5 rounded leading-none">
             {game.esrbRating}
-          </div>
+          </span>
+        )}
+        {/* Time rec */}
+        {game.timeRecommendationMinutes != null && (
+          <span className="absolute bottom-1.5 right-1.5 bg-black/60 text-white text-[9px] font-semibold px-1 py-0.5 rounded leading-none">
+            {game.timeRecommendationMinutes}m
+          </span>
         )}
       </div>
-      <div className="px-3 py-2.5">
-        <p className="text-sm font-semibold text-slate-800 truncate group-hover:text-indigo-700 transition-colors">
-          {game.title}
-        </p>
-        <p className="text-xs text-slate-500 truncate mt-0.5">
-          {game.genres[0] ?? game.developer ?? ''}
-        </p>
-      </div>
+      {/* Title */}
+      <p className="mt-2 text-xs font-semibold text-slate-800 truncate group-hover:text-indigo-700 transition-colors leading-tight">
+        {game.title}
+      </p>
+      <p className="text-[10px] text-slate-400 truncate mt-0.5">
+        {game.genres[0] ?? game.developer ?? ''}
+      </p>
     </Link>
   )
 }
 
-const CATEGORIES = [
-  { label: 'Ages 5–8',      href: '/browse?age=E',                emoji: '🌱' },
-  { label: 'Ages 9–12',     href: '/browse?age=E10',              emoji: '🎮' },
-  { label: 'Teens',         href: '/browse?age=T',                emoji: '🧩' },
-  { label: 'Puzzle Games',  href: '/browse?genres=puzzle',        emoji: '🔍' },
-  { label: 'Teamwork',      href: '/browse?benefits=teamwork',    emoji: '🤝' },
-  { label: 'Platformers',   href: '/browse?genres=platformer',    emoji: '🏃' },
-  { label: 'Strategy',      href: '/browse?genres=strategy',      emoji: '♟️' },
-  { label: 'Low Risk',      href: '/browse?risk=low',             emoji: '✅' },
+function Carousel({ row }: { row: CarouselRow }) {
+  return (
+    <section>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+          <span>{row.emoji}</span>
+          <span>{row.title}</span>
+        </h2>
+        <Link
+          href={row.browseHref}
+          className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors shrink-0"
+        >
+          See all →
+        </Link>
+      </div>
+      <div className="flex gap-3 overflow-x-auto pb-3 -mx-4 px-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        {row.games.map(game => (
+          <CarouselTile key={game.slug} game={game} />
+        ))}
+      </div>
+    </section>
+  )
+}
+
+const QUICK_LINKS = [
+  { label: 'Ages 5–8',     href: '/browse?age=E',                emoji: '🌱' },
+  { label: 'Ages 9–12',    href: '/browse?age=E10',              emoji: '🎮' },
+  { label: 'Teens',        href: '/browse?age=T',                emoji: '🧩' },
+  { label: 'Puzzle',       href: '/browse?genres=Puzzle',        emoji: '🔍' },
+  { label: 'Teamwork',     href: '/browse?benefits=teamwork',    emoji: '🤝' },
+  { label: 'Strategy',     href: '/browse?genres=Strategy',      emoji: '♟️' },
+  { label: 'Low Risk',     href: '/browse?risk=low',             emoji: '✅' },
+  { label: 'Free to play', href: '/browse?price=free',           emoji: '🆓' },
 ]
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function HomePage() {
-  const featured = await getFeaturedGames()
+  const carousels = await getCarouselRows()
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -145,13 +234,10 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Category quick links */}
-        <section id="browse" className="pb-6">
-          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">
-            Browse by category
-          </h2>
+        {/* Quick-filter pills */}
+        <section className="pb-6">
           <div className="flex flex-wrap gap-2">
-            {CATEGORIES.map((c) => (
+            {QUICK_LINKS.map((c) => (
               <Link
                 key={c.href}
                 href={c.href}
@@ -164,33 +250,25 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Featured games */}
-        <section className="pb-12">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-slate-900">Top-rated games</h2>
-            <span className="text-xs text-slate-400">{featured.length} shown</span>
+        {/* Carousels */}
+        {carousels.length > 0 ? (
+          <div className="space-y-8 pb-12">
+            {carousels.map(row => <Carousel key={row.id} row={row} />)}
           </div>
-          {featured.length === 0 ? (
-            <div className="text-center py-16 text-slate-400">
-              <p className="text-4xl mb-3">🎮</p>
-              <p className="font-medium text-slate-600">Game ratings coming soon</p>
-              <p className="text-sm mt-1">We&apos;re reviewing games now — check back shortly.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              {featured.map((game) => (
-                <GameTile key={game.slug} game={game} />
-              ))}
-            </div>
-          )}
-        </section>
+        ) : (
+          <div className="text-center py-16 text-slate-400 pb-12">
+            <p className="text-4xl mb-3">🎮</p>
+            <p className="font-medium text-slate-600">Game ratings coming soon</p>
+            <p className="text-sm mt-1">We&apos;re reviewing games now — check back shortly.</p>
+          </div>
+        )}
 
         {/* About */}
         <section className="border-t border-slate-200 py-8 pb-12">
           <div className="grid sm:grid-cols-3 gap-6">
             {[
-              { icon: '🧠', title: 'Developmental lens',    body: 'Our scoring framework draws on cognitive science, social-emotional learning, and behavioral development — translated into a single, clear score.' },
-              { icon: '⚠️', title: 'Honest about risks',   body: 'We identify dopamine loops, loot boxes, spending pressure, and social mechanics — the design patterns that matter most for developing minds.' },
+              { icon: '🧠', title: 'Developmental lens',       body: 'Our scoring framework draws on cognitive science, social-emotional learning, and behavioral development — translated into a single, clear score.' },
+              { icon: '⚠️', title: 'Honest about risks',      body: 'We identify dopamine loops, loot boxes, spending pressure, and social mechanics — the design patterns that matter most for developing minds.' },
               { icon: '⏱',  title: 'Time limits that hold up', body: "Each game's daily limit follows from its actual benefit and risk profile. Better games earn more time." },
             ].map((item) => (
               <div key={item.title} className="text-center px-2">
