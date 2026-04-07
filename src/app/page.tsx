@@ -32,18 +32,19 @@ const BASE_SELECT = {
   timeRecommendationColor:   gameScores.timeRecommendationColor,
 }
 
-function toSummary(r: typeof BASE_SELECT & Record<string, unknown>): GameSummary {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function toSummary(r: any): GameSummary {
   return {
-    slug:            r.slug as string,
-    title:           r.title as string,
-    developer:       r.developer as string | null,
+    slug:            r.slug,
+    title:           r.title,
+    developer:       r.developer ?? null,
     genres:          (r.genres as string[]) ?? [],
-    esrbRating:      r.esrbRating as string | null,
-    backgroundImage: r.backgroundImage as string | null,
-    metacriticScore: r.metacriticScore as number | null,
-    curascore:       r.curascore as number | null,
-    timeRecommendationMinutes: r.timeRecommendationMinutes as number | null,
-    timeRecommendationColor:   r.timeRecommendationColor as 'green' | 'amber' | 'red' | null,
+    esrbRating:      r.esrbRating ?? null,
+    backgroundImage: r.backgroundImage ?? null,
+    metacriticScore: r.metacriticScore ?? null,
+    curascore:       r.curascore ?? null,
+    timeRecommendationMinutes: r.timeRecommendationMinutes ?? null,
+    timeRecommendationColor:   (r.timeRecommendationColor ?? null) as 'green' | 'amber' | 'red' | null,
   }
 }
 
