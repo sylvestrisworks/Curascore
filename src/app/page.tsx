@@ -65,10 +65,12 @@ async function getCarouselRows(platforms: string[], age?: string): Promise<Carou
     ? or(...platforms.map(p => sql`${games.platforms}::text ILIKE ${'%' + p + '%'}`))
     : undefined
 
-  const ratings = age ? ESRB_FOR_AGE[age] : undefined
-  const ageFilter: SQL | undefined = ratings
+  // When no age is selected, default to family-friendly (E / E10+ / T).
+  // M-rated games are only shown when the parent explicitly picks "17+ Mature".
+  const ratings = ESRB_FOR_AGE[age ?? ''] ?? ['E', 'E10+', 'T']
+  const ageFilter: SQL = age
     ? sql`${games.esrbRating} = ANY(ARRAY[${sql.join(ratings.map(r => sql`${r}`), sql`, `)}])`
-    : undefined
+    : sql`(${games.esrbRating} IS NULL OR ${games.esrbRating} = ANY(ARRAY[${sql.join(ratings.map(r => sql`${r}`), sql`, `)}]))`
 
   const base = (extra?: SQL) => and(isNotNull(gameScores.curascore), platformFilter, ageFilter, extra)
 
@@ -133,11 +135,14 @@ export default async function HomePage({ searchParams }: Props) {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-slate-200">
-        <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
-          <span className="text-lg font-bold text-indigo-700 tracking-tight">PlaySmart</span>
-          <nav className="flex items-center gap-4 text-sm text-slate-600">
-            <a href="/discover" className="hover:text-indigo-700 transition-colors">Discover</a>
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
+        <div className="max-w-4xl mx-auto px-4 h-14 flex items-center gap-4">
+          <span className="text-lg font-bold text-indigo-700 tracking-tight shrink-0">PlaySmart</span>
+          {/* Search — hidden on mobile (hero has a full search bar already) */}
+          <div className="hidden sm:block flex-1 max-w-sm">
+            <SearchBar placeholder="Search games…" />
+          </div>
+          <nav className="ml-auto flex items-center gap-4 text-sm text-slate-600 shrink-0">
             <a href="/browse" className="hover:text-indigo-700 transition-colors">Browse</a>
             <a href="/faq" className="hover:text-indigo-700 transition-colors">How it works</a>
           </nav>
@@ -189,9 +194,9 @@ export default async function HomePage({ searchParams }: Props) {
 
         {/* Carousels */}
         {carousels.length > 0 ? (
-          <div className="space-y-10 pb-16">
-            {carousels.map(row => (
-              <CarouselRow key={row.id} emoji={row.emoji} title={row.title} browseHref={row.browseHref} games={row.games} />
+          <div className="pb-16">
+            {carousels.map((row, i) => (
+              <CarouselRow key={row.id} index={i} emoji={row.emoji} title={row.title} browseHref={row.browseHref} games={row.games} />
             ))}
           </div>
         ) : (

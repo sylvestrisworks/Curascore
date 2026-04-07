@@ -4,15 +4,15 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 
 const AGE_SEGMENTS = [
-  { value: 'E',   label: 'Under 7',  sub: 'ESRB E'    },
-  { value: 'E10', label: '7 – 10',   sub: 'ESRB E10+' },
-  { value: 'T',   label: '10 – 13',  sub: 'ESRB T'    },
-  { value: 'M',   label: '13 +',     sub: 'ESRB M'    },
+  { value: 'E',   label: 'Under 10', sub: 'ESRB E'      },
+  { value: 'E10', label: '10+',      sub: 'ESRB E10+'   },
+  { value: 'T',   label: '13+ Teen', sub: 'ESRB T'      },
+  { value: 'M',   label: '17+ Mature', sub: 'ESRB M'    },
 ]
 
 function AgePickerInner({ current }: { current?: string }) {
-  const router      = useRouter()
-  const pathname    = usePathname()
+  const router       = useRouter()
+  const pathname     = usePathname()
   const searchParams = useSearchParams()
 
   function select(value: string) {
@@ -31,8 +31,8 @@ function AgePickerInner({ current }: { current?: string }) {
   return (
     <div className="bg-slate-100 rounded-2xl p-1.5 flex gap-1">
       {AGE_SEGMENTS.map((seg, i) => {
-        const isActive  = current === seg.value
-        const isPast    = activeIndex >= 0 && i < activeIndex
+        const isActive = current === seg.value
+        const isPast   = activeIndex >= 0 && i < activeIndex
 
         return (
           <button

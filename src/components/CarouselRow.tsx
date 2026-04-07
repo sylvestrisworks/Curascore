@@ -34,23 +34,34 @@ function CarouselTile({ game }: { game: GameSummary }) {
             </span>
           </div>
         )}
-        {/* Curascore badge */}
+
+        {/* Curascore badge — top right */}
         {game.curascore != null && (
-          <span className={`absolute top-1.5 right-1.5 ${curascoreBg(game.curascore)} text-white text-[10px] font-black px-1.5 py-0.5 rounded-full leading-none`}>
+          <span className={`absolute top-1.5 right-1.5 ${curascoreBg(game.curascore)} text-white text-[10px] font-black px-1.5 py-0.5 rounded-full leading-none`}
+            title="Curascore — developmental benefit vs. design risk">
             {game.curascore}
           </span>
         )}
-        {/* ESRB — always reserves space so tiles stay the same height */}
-        <span className="absolute bottom-1.5 left-1.5 bg-black/60 text-white text-[9px] font-bold px-1 py-0.5 rounded leading-none min-w-[1.5ch]">
+
+        {/* ESRB — always reserved so tiles are uniform height */}
+        <span className="absolute bottom-1.5 left-1.5 bg-black/60 text-white text-[9px] font-bold px-1 py-0.5 rounded leading-none min-w-[1.5ch]"
+          title="ESRB content rating">
           {game.esrbRating ?? '—'}
         </span>
-        {/* Time rec */}
+
+        {/* Time rec — bottom right with clock icon */}
         {game.timeRecommendationMinutes != null && (
-          <span className="absolute bottom-1.5 right-1.5 bg-black/60 text-white text-[9px] font-semibold px-1 py-0.5 rounded leading-none">
+          <span className="absolute bottom-1.5 right-1.5 bg-black/60 text-white text-[9px] font-semibold px-1 py-0.5 rounded leading-none flex items-center gap-0.5"
+            title={`Recommended max ${game.timeRecommendationMinutes} min/day`}>
+            <svg className="w-2 h-2 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
             {game.timeRecommendationMinutes}m
           </span>
         )}
       </div>
+
       {/* Title */}
       <p className="mt-2 text-xs font-semibold text-slate-800 truncate group-hover/tile:text-indigo-700 transition-colors leading-tight">
         {game.title}
@@ -87,9 +98,10 @@ type Props = {
   title: string
   browseHref: string
   games: GameSummary[]
+  index: number
 }
 
-export default function CarouselRow({ emoji, title, browseHref, games }: Props) {
+export default function CarouselRow({ emoji, title, browseHref, games, index }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   function scroll(dir: 'left' | 'right') {
@@ -97,7 +109,7 @@ export default function CarouselRow({ emoji, title, browseHref, games }: Props) 
   }
 
   return (
-    <section>
+    <section className={index > 0 ? 'pt-10 border-t border-slate-100' : ''}>
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
           <span>{emoji}</span>
