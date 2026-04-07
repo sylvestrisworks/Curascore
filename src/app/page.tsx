@@ -205,17 +205,6 @@ function Carousel({ row }: { row: CarouselRow }) {
   )
 }
 
-const QUICK_LINKS = [
-  { label: 'Ages 5–8',     href: '/browse?age=E',                emoji: '🌱' },
-  { label: 'Ages 9–12',    href: '/browse?age=E10',              emoji: '🎮' },
-  { label: 'Teens',        href: '/browse?age=T',                emoji: '🧩' },
-  { label: 'Puzzle',       href: '/browse?genres=Puzzle',        emoji: '🔍' },
-  { label: 'Teamwork',     href: '/browse?benefits=teamwork',    emoji: '🤝' },
-  { label: 'Strategy',     href: '/browse?genres=Strategy',      emoji: '♟️' },
-  { label: 'Low Risk',     href: '/browse?risk=low',             emoji: '✅' },
-  { label: 'Free to play', href: '/browse?price=free',           emoji: '🆓' },
-]
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 type Props = { searchParams: Record<string, string | string[] | undefined> }
@@ -281,21 +270,6 @@ export default async function HomePage({ searchParams }: Props) {
           <PlatformPicker current={platforms} />
         </section>
 
-        {/* Quick-filter pills */}
-        <section className="pb-6">
-          <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            {QUICK_LINKS.map((c) => (
-              <Link
-                key={c.href}
-                href={c.href}
-                className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-full text-sm text-slate-700 hover:border-indigo-300 hover:text-indigo-700 hover:bg-indigo-50 transition-colors shadow-sm"
-              >
-                <span>{c.emoji}</span>
-                <span>{c.label}</span>
-              </Link>
-            ))}
-          </div>
-        </section>
 
         {/* Carousels */}
         {carousels.length > 0 ? (
