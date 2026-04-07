@@ -120,6 +120,7 @@ export default async function HomePage() {
           <nav className="flex items-center gap-4 text-sm text-slate-600">
             <a href="/discover" className="hover:text-indigo-700 transition-colors">Discover</a>
             <a href="/browse" className="hover:text-indigo-700 transition-colors">Browse</a>
+            <a href="/faq" className="hover:text-indigo-700 transition-colors">How it works</a>
           </nav>
         </div>
       </header>
@@ -202,7 +203,8 @@ export default async function HomePage() {
       </main>
 
       <footer className="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-400">
-        PlaySmart — game ratings for parents
+        PlaySmart — game ratings for parents ·{' '}
+        <a href="/faq" className="hover:text-indigo-600 transition-colors">How it works</a>
       </footer>
     </div>
   )
