@@ -254,6 +254,19 @@ export const darkPatterns = pgTable('dark_patterns', {
 
 
 // ============================================
+// GAME FEEDBACK
+// ============================================
+
+export const gameFeedback = pgTable('game_feedback', {
+  id:        serial('id').primaryKey(),
+  gameId:    integer('game_id').notNull().references(() => games.id, { onDelete: 'cascade' }),
+  type:      varchar('type', { length: 50 }).notNull(), // 'too_high' | 'too_low' | 'outdated' | 'missing_info' | 'other'
+  comment:   text('comment'),
+  status:    varchar('status', { length: 20 }).default('pending'), // 'pending' | 'reviewed' | 'actioned'
+  createdAt: timestamp('created_at').defaultNow(),
+})
+
+// ============================================
 // REVIEWERS
 // ============================================
 

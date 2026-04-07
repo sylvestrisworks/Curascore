@@ -7,6 +7,7 @@ import { db } from '@/lib/db'
 import { games, gameScores, reviews, darkPatterns, complianceStatus } from '@/lib/db/schema'
 import GameCard from '@/components/GameCard'
 import ExpandableText from '@/components/ExpandableText'
+import FeedbackForm from '@/components/FeedbackForm'
 import Link from 'next/link'
 import type { ComplianceBadge, DarkPattern, GameCardProps, SerializedGame, SerializedScores, SerializedReview } from '@/types/game'
 
@@ -318,6 +319,11 @@ export default async function GamePage({ params }: Props) {
               <ExpandableText text={game.description} lines={4} />
             </div>
           )}
+
+          {/* Feedback */}
+          <div className="mt-4 flex justify-end">
+            <FeedbackForm gameSlug={game.slug} />
+          </div>
 
           {/* Similar games */}
           {similarGames.length > 0 && (
