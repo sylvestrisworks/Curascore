@@ -65,6 +65,21 @@ function curascoreGradient(score: number | null): string {
   return 'from-red-400 to-rose-500'
 }
 
+// ─── Tooltip ─────────────────────────────────────────────────────────────────
+
+function Tooltip({ text }: { text: string }) {
+  return (
+    <span className="relative group/tip inline-flex items-center ml-1">
+      <span className="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-500 text-[9px] font-black flex items-center justify-center cursor-help leading-none">
+        ?
+      </span>
+      <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-52 rounded-xl bg-slate-800 px-3 py-2 text-xs text-white leading-snug opacity-0 group-hover/tip:opacity-100 transition-opacity z-50 text-center shadow-lg">
+        {text}
+      </span>
+    </span>
+  )
+}
+
 // ─── Shared small components ──────────────────────────────────────────────────
 
 function SkillDots({ score, max = 5 }: { score: number | null; max?: number }) {
@@ -78,10 +93,19 @@ function SkillDots({ score, max = 5 }: { score: number | null; max?: number }) {
   )
 }
 
+const BENEFIT_TOOLTIPS: Record<string, string> = {
+  'Cognitive':          'Problem solving, spatial awareness, strategic thinking, creativity, memory, and learning transfer. Weighted 50% of the Benefit Score.',
+  'Social & Emotional': 'Teamwork, communication, empathy, emotional regulation, and ethical reasoning. Weighted 30% of the Benefit Score.',
+  'Motor Skills':       'Hand-eye coordination, fine motor control, reaction time, and physical activity. Weighted 20% of the Benefit Score.',
+}
+
 function CategoryBar({ label, value }: { label: string; value: number | null }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="w-36 text-sm text-slate-600 shrink-0">{label}</span>
+      <span className="w-36 text-sm text-slate-600 shrink-0 flex items-center">
+        {label}
+        {BENEFIT_TOOLTIPS[label] && <Tooltip text={BENEFIT_TOOLTIPS[label]} />}
+      </span>
       <div className="flex-1 bg-slate-100 rounded-full h-2.5 overflow-hidden">
         <div className={`h-full rounded-full transition-all ${scoreBarColor(value)}`} style={{ width: pct(value) }} />
       </div>
@@ -92,12 +116,22 @@ function CategoryBar({ label, value }: { label: string; value: number | null }) 
   )
 }
 
+const RISK_TOOLTIPS: Record<string, string> = {
+  'Dopamine Manipulation':  'Variable rewards, streaks, FOMO events, near-miss mechanics, and other design patterns that exploit reward psychology.',
+  'Monetization Pressure':  'In-app purchases, pay-to-win mechanics, virtual currency obfuscation, spending prompts, and ad pressure.',
+  'Social Risk':            'Social obligations, competitive toxicity, stranger interaction, social comparison, and privacy concerns.',
+  'Content (not in risk score)': 'Violence, language, sexual content, and other age-related content factors. Shown separately — does not affect the time recommendation.',
+}
+
 function RiskMeter({ label, value, note }: { label: string; value: number | null; note?: string }) {
   const level = riskLevel(value)
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-slate-700">{label}</span>
+        <span className="text-sm font-medium text-slate-700 flex items-center">
+          {label}
+          {RISK_TOOLTIPS[label] && <Tooltip text={RISK_TOOLTIPS[label]} />}
+        </span>
         <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${level.bg} ${level.color}`}>
           {level.label}
         </span>
@@ -226,10 +260,35 @@ function RisksTab({ scores, game, review, darkPatterns }: {
 }
 
 function FullScoresTab({ scores, review }: { scores: SerializedScores; review: SerializedReview | null }) {
+  const [expanded, setExpanded] = useState(false)
+
   if (!review) return <p className="text-sm text-slate-400">No detailed review data yet.</p>
 
   return (
     <div className="space-y-6">
+      {/* Summary always visible */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="bg-emerald-50 rounded-xl p-3 text-xs text-emerald-800">
+          <p className="font-semibold mb-0.5">BDS — Benefit Score</p>
+          <p className="text-emerald-600">Cognitive ×0.50 + Social ×0.30 + Motor ×0.20</p>
+          <p className="text-lg font-black mt-1">{Math.round((scores.bds ?? 0) * 100)}<span className="text-xs font-semibold">/100</span></p>
+        </div>
+        <div className="bg-red-50 rounded-xl p-3 text-xs text-red-800">
+          <p className="font-semibold mb-0.5">RIS — Risk Score</p>
+          <p className="text-red-600">Dopamine ×0.45 + Monetization ×0.30 + Social ×0.25</p>
+          <p className="text-lg font-black mt-1">{Math.round((scores.ris ?? 0) * 100)}<span className="text-xs font-semibold">/100</span></p>
+        </div>
+      </div>
+
+      <button
+        onClick={() => setExpanded(v => !v)}
+        className="w-full text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors py-1 border border-dashed border-indigo-200 rounded-lg hover:border-indigo-400"
+      >
+        {expanded ? '↑ Hide item scores' : '↓ Expand all item scores (30+ fields)'}
+      </button>
+
+      {expanded && (
+      <>
       <div>
         <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Benefit Scores (0–5)</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
@@ -345,6 +404,8 @@ function FullScoresTab({ scores, review }: { scores: SerializedScores; review: S
           </div>
         </div>
       )}
+      </>
+      )} {/* end expanded */}
     </div>
   )
 }
@@ -496,7 +557,7 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
                 <p className={`text-3xl font-black tracking-tighter ${risk.color}`}>
                   {risk.label}
                 </p>
-                <p className="text-xs font-semibold text-orange-700 -mt-1">Addictive Hooks</p>
+                <p className="text-xs font-semibold text-orange-700 -mt-1">Engagement Patterns</p>
               </>
             )}
             <p className="text-xs text-orange-800 leading-snug pt-1">

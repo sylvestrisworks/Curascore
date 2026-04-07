@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import GameCard from '@/components/GameCard'
 import type { GameCardProps, GameSummary } from '@/types/game'
@@ -263,12 +264,57 @@ function SuggestionStrip({ highRiskGame }: { highRiskGame: GameCardProps }) {
 
 // ─── Main compare page ────────────────────────────────────────────────────────
 
-export default function ComparePage() {
+async function loadGame(slug: string): Promise<GameCardProps | null> {
+  try {
+    const res = await fetch(`/api/game/${slug}`)
+    if (!res.ok) return null
+    return await res.json()
+  } catch {
+    return null
+  }
+}
+
+function ComparePageInner() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [gameA, setGameA] = useState<GameCardProps | null>(null)
   const [gameB, setGameB] = useState<GameCardProps | null>(null)
   const [mobileTab, setMobileTab] = useState<'A' | 'B'>('A')
+  const [copied, setCopied] = useState(false)
+  const initialised = useRef(false)
 
-  const both = gameA && gameB
+  // Load games from URL on first render
+  useEffect(() => {
+    if (initialised.current) return
+    initialised.current = true
+    const slugA = searchParams.get('a')
+    const slugB = searchParams.get('b')
+    if (slugA) loadGame(slugA).then(d => d && setGameA(d))
+    if (slugB) loadGame(slugB).then(d => d && setGameB(d))
+  }, [searchParams])
+
+  // Sync URL whenever selections change
+  const syncUrl = useCallback((a: GameCardProps | null, b: GameCardProps | null) => {
+    const params = new URLSearchParams()
+    if (a) params.set('a', a.game.slug)
+    if (b) params.set('b', b.game.slug)
+    const qs = params.toString()
+    router.replace(qs ? `/compare?${qs}` : '/compare', { scroll: false })
+  }, [router])
+
+  function selectA(data: GameCardProps) { setGameA(data); syncUrl(data, gameB) }
+  function selectB(data: GameCardProps) { setGameB(data); syncUrl(gameA, data) }
+  function clearA() { setGameA(null); syncUrl(null, gameB) }
+  function clearB() { setGameB(null); syncUrl(gameA, null) }
+
+  function copyLink() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
+
+  const both = gameA !== null && gameB !== null
   const highRiskGame = both
     ? ((gameA.scores?.ris ?? 0) >= (gameB.scores?.ris ?? 0) ? gameA : gameB)
     : null
@@ -303,9 +349,21 @@ export default function ComparePage() {
 
         {/* Pickers */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <GamePicker label="Game A" selected={gameA} onSelect={setGameA} onClear={() => setGameA(null)} />
-          <GamePicker label="Game B" selected={gameB} onSelect={setGameB} onClear={() => setGameB(null)} />
+          <GamePicker label="Game A" selected={gameA} onSelect={selectA} onClear={clearA} />
+          <GamePicker label="Game B" selected={gameB} onSelect={selectB} onClear={clearB} />
         </div>
+
+        {/* Copy link */}
+        {(gameA || gameB) && (
+          <div className="flex justify-end">
+            <button
+              onClick={copyLink}
+              className="text-xs font-semibold text-slate-500 hover:text-indigo-700 border border-slate-200 hover:border-indigo-300 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1.5"
+            >
+              {copied ? '✓ Link copied!' : '🔗 Copy comparison link'}
+            </button>
+          </div>
+        )}
 
         {/* Empty state */}
         {!gameA && !gameB && (
@@ -411,5 +469,17 @@ export default function ComparePage() {
         )}
       </main>
     </div>
+  )
+}
+
+export default function ComparePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <ComparePageInner />
+    </Suspense>
   )
 }

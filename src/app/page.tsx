@@ -173,7 +173,8 @@ export default async function HomePage() {
           {featured.length === 0 ? (
             <div className="text-center py-16 text-slate-400">
               <p className="text-4xl mb-3">🎮</p>
-              <p>No games yet. Run the import script to populate the catalog.</p>
+              <p className="font-medium text-slate-600">Game ratings coming soon</p>
+              <p className="text-sm mt-1">We&apos;re reviewing games now — check back shortly.</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">

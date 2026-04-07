@@ -2,10 +2,12 @@ export const dynamic = 'force-dynamic'
 
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { eq } from 'drizzle-orm'
+import { eq, desc, and, isNotNull, sql } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { games, gameScores, reviews, darkPatterns, complianceStatus } from '@/lib/db/schema'
 import GameCard from '@/components/GameCard'
+import ExpandableText from '@/components/ExpandableText'
+import Link from 'next/link'
 import type { ComplianceBadge, DarkPattern, GameCardProps, SerializedGame, SerializedScores, SerializedReview } from '@/types/game'
 
 type Props = { params: { slug: string } }
@@ -172,6 +174,42 @@ async function fetchGameData(slug: string): Promise<GameCardProps | null> {
   return { game: serializedGame, scores: serializedScores, review: serializedReview, darkPatterns: serializedDarkPatterns, compliance: serializedCompliance }
 }
 
+// ─── Similar games ────────────────────────────────────────────────────────────
+
+type SimilarGame = {
+  slug: string
+  title: string
+  backgroundImage: string | null
+  esrbRating: string | null
+  curascore: number | null
+  timeRecommendationMinutes: number | null
+  timeRecommendationColor: string | null
+}
+
+async function getSimilarGames(genre: string | undefined, currentSlug: string): Promise<SimilarGame[]> {
+  if (!genre) return []
+  const rows = await db
+    .select({
+      slug:            games.slug,
+      title:           games.title,
+      backgroundImage: games.backgroundImage,
+      esrbRating:      games.esrbRating,
+      curascore:       gameScores.curascore,
+      timeRecommendationMinutes: gameScores.timeRecommendationMinutes,
+      timeRecommendationColor:   gameScores.timeRecommendationColor,
+    })
+    .from(games)
+    .innerJoin(gameScores, eq(gameScores.gameId, games.id))
+    .where(and(
+      sql`${games.genres}::jsonb @> ${JSON.stringify([genre])}::jsonb`,
+      sql`${games.slug} != ${currentSlug}`,
+      isNotNull(gameScores.curascore),
+    ))
+    .orderBy(desc(gameScores.curascore))
+    .limit(4)
+  return rows as SimilarGame[]
+}
+
 // ─── Metadata ────────────────────────────────────────────────────────────────
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -212,6 +250,7 @@ export default async function GamePage({ params }: Props) {
   if (!data) notFound()
 
   const { game, scores } = data
+  const similarGames = await getSimilarGames(game.genres[0] ?? undefined, game.slug)
 
   // JSON-LD structured data
   const jsonLd = {
@@ -245,17 +284,25 @@ export default async function GamePage({ params }: Props) {
             <a href="/" className="text-lg font-bold text-indigo-700 tracking-tight">
               PlaySmart
             </a>
-            {scores?.curascore != null && (
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-slate-500">Curascore</span>
-                <span className={`font-black px-2.5 py-0.5 rounded-full text-white text-sm
-                  ${scores.curascore >= 70 ? 'bg-emerald-600'
-                  : scores.curascore >= 40 ? 'bg-amber-500'
-                  : 'bg-red-600'}`}>
-                  {scores.curascore}
-                </span>
-              </div>
-            )}
+            <div className="flex items-center gap-3">
+              <Link
+                href={`/compare?a=${game.slug}`}
+                className="text-xs font-semibold text-slate-500 hover:text-indigo-700 border border-slate-200 hover:border-indigo-300 px-3 py-1 rounded-full transition-colors"
+              >
+                Compare
+              </Link>
+              {scores?.curascore != null && (
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-slate-500">Curascore</span>
+                  <span className={`font-black px-2.5 py-0.5 rounded-full text-white text-sm
+                    ${scores.curascore >= 70 ? 'bg-emerald-600'
+                    : scores.curascore >= 40 ? 'bg-amber-500'
+                    : 'bg-red-600'}`}>
+                    {scores.curascore}
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
         </header>
 
@@ -268,9 +315,56 @@ export default async function GamePage({ params }: Props) {
               <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">
                 About this game
               </h2>
-              <p className="text-sm text-slate-700 leading-relaxed line-clamp-6">
-                {game.description}
-              </p>
+              <ExpandableText text={game.description} lines={4} />
+            </div>
+          )}
+
+          {/* Similar games */}
+          {similarGames.length > 0 && (
+            <div className="mt-6">
+              <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">
+                More {game.genres[0]} games
+              </h2>
+              <div className="grid grid-cols-2 gap-3">
+                {similarGames.map(s => {
+                  const scoreBg =
+                    s.curascore == null   ? 'bg-slate-300 text-slate-600' :
+                    s.curascore >= 70     ? 'bg-emerald-600 text-white' :
+                    s.curascore >= 40     ? 'bg-amber-500 text-white' :
+                                            'bg-red-600 text-white'
+                  return (
+                    <Link
+                      key={s.slug}
+                      href={`/game/${s.slug}`}
+                      className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-3 py-2.5 hover:border-indigo-300 hover:shadow-sm transition-all group"
+                    >
+                      <div className="w-10 h-10 rounded-lg overflow-hidden bg-indigo-100 shrink-0">
+                        {s.backgroundImage ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={s.backgroundImage} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="w-full h-full flex items-center justify-center text-xs font-bold text-indigo-400">
+                            {s.title.slice(0, 2).toUpperCase()}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-slate-800 truncate group-hover:text-indigo-700 transition-colors">
+                          {s.title}
+                        </p>
+                        {s.esrbRating && (
+                          <p className="text-xs text-slate-400 mt-0.5">{s.esrbRating}</p>
+                        )}
+                      </div>
+                      {s.curascore != null && (
+                        <span className={`text-xs font-black px-2 py-0.5 rounded-full shrink-0 ${scoreBg}`}>
+                          {s.curascore}
+                        </span>
+                      )}
+                    </Link>
+                  )
+                })}
+              </div>
             </div>
           )}
         </main>
