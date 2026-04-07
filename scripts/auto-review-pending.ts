@@ -21,7 +21,7 @@
  */
 
 import Anthropic from '@anthropic-ai/sdk'
-import { VertexAI, FunctionCallingMode } from '@google-cloud/vertexai'
+import { GoogleGenAI, FunctionCallingConfigMode } from '@google/genai'
 import { isNull, eq } from 'drizzle-orm'
 import { db } from '../src/lib/db'
 import { games, gameScores, reviews } from '../src/lib/db/schema'
@@ -66,12 +66,13 @@ const anthropic = provider === 'anthropic'
   ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
   : null
 
-// ─── Vertex AI client ─────────────────────────────────────────────────────────
+// ─── Google Gen AI client ─────────────────────────────────────────────────────
 
-const vertex = provider === 'google'
-  ? new VertexAI({
-      project:  process.env.GOOGLE_PROJECT_ID!,
-      location: process.env.GOOGLE_LOCATION ?? 'us-central1',
+const googleAI = provider === 'google'
+  ? new GoogleGenAI({
+      vertexai:  true,
+      project:   process.env.GOOGLE_PROJECT_ID!,
+      location:  process.env.GOOGLE_LOCATION ?? 'us-central1',
     })
   : null
 
@@ -264,25 +265,26 @@ async function callAnthropic(prompt: string): Promise<ReviewInput> {
 // ─── Provider: Google Gemini via Vertex AI ────────────────────────────────────
 
 async function callGemini(prompt: string): Promise<ReviewInput> {
-  const model = vertex!.getGenerativeModel({ model: MODEL })
-
-  const result = await model.generateContent({
+  const result = await googleAI!.models.generateContent({
+    model:    MODEL,
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
-    tools: [{ functionDeclarations: [GEMINI_FUNCTION] }],
-    toolConfig: {
-      functionCallingConfig: {
-        mode: FunctionCallingMode.ANY,
-        allowedFunctionNames: ['submit_game_review'],
+    config: {
+      tools: [{ functionDeclarations: [GEMINI_FUNCTION] }],
+      toolConfig: {
+        functionCallingConfig: {
+          mode: FunctionCallingConfigMode.ANY,
+          allowedFunctionNames: ['submit_game_review'],
+        },
       },
     },
   })
 
-  const part = result.response.candidates?.[0]?.content?.parts?.[0]
-  if (!part?.functionCall?.args) {
+  const fc = result.candidates?.[0]?.content?.parts?.[0]?.functionCall
+  if (!fc?.args) {
     throw new Error('Gemini did not return a function call')
   }
 
-  return part.functionCall.args as ReviewInput
+  return fc.args as ReviewInput
 }
 
 // ─── Unified call ─────────────────────────────────────────────────────────────

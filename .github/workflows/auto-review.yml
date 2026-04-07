@@ -52,7 +52,10 @@ jobs:
 
       - name: Run auto-review
         env:
-          NODE_ENV: production
+          NODE_ENV:          production
+          DATABASE_URL:      ${{ secrets.DATABASE_URL }}
+          RAWG_API_KEY:      ${{ secrets.RAWG_API_KEY }}
+          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
         run: |
           LIMIT="${{ github.event.inputs.limit || '20' }}"
           MODEL="${{ github.event.inputs.model || '' }}"
