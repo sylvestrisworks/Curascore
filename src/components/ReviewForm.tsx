@@ -283,6 +283,8 @@ function makeSerializedReview(form: FormState): SerializedReview {
     repEthnicDiversity:   null,
     propagandaLevel:      null,
     propagandaNotes:      null,
+    bechdelResult:        null,
+    bechdelNotes:         null,
     usesVirtualCurrency: null,
     virtualCurrencyName: null,
     virtualCurrencyRate: null,

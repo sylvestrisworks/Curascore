@@ -259,6 +259,19 @@ function RisksTab({ scores, game, review, darkPatterns, t }: {
         </div>
       )}
 
+      {/* Bechdel badge */}
+      {review?.bechdelResult === 'pass' && (
+        <div className="bg-violet-50 border border-violet-200 rounded-2xl p-4 flex items-start gap-3">
+          <span className="text-lg leading-none mt-0.5">♀</span>
+          <div>
+            <p className="text-sm font-semibold text-violet-800">Passes the Bechdel test</p>
+            {review.bechdelNotes && (
+              <p className="text-xs text-violet-700 mt-0.5 leading-relaxed">{review.bechdelNotes}</p>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Propaganda flag */}
       {review?.propagandaLevel != null && review.propagandaLevel > 0 && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-5">

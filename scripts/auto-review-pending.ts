@@ -105,7 +105,7 @@ const ANTHROPIC_TOOL: Anthropic.Tool = {
   description: 'Submit a completed PlaySmart rubric review for a game.',
   input_schema: {
     type: 'object',
-    required: ['b1_cognitive','b2_social','b3_motor','r1_dopamine','r2_monetization','r3_social','r4_content','representation','propaganda','practical','narratives'],
+    required: ['b1_cognitive','b2_social','b3_motor','r1_dopamine','r2_monetization','r3_social','r4_content','representation','propaganda','bechdel','practical','narratives'],
     additionalProperties: false,
     properties: {
       b1_cognitive:    scoreGroup(B1_FIELDS, 5, 'B1 cognitive scores, each 0–5'),
@@ -123,6 +123,15 @@ const ANTHROPIC_TOOL: Anthropic.Tool = {
         properties: {
           propagandaLevel: { type: 'integer', minimum: 0, maximum: 3, description: '0=neutral, 1=mild cultural bias, 2=notable ideological framing, 3=heavy propaganda' },
           propagandaNotes: { type: 'string', description: 'If level>=1: what type and where it appears. Otherwise empty string.' },
+        },
+      },
+      bechdel: {
+        type: 'object',
+        required: ['result', 'notes'],
+        additionalProperties: false,
+        properties: {
+          result: { type: 'string', enum: ['pass', 'fail', 'na'], description: 'pass=≥2 named female characters interact about non-male topic; fail=has female chars but criteria not fully met; na=no named characters (puzzle/sports/abstract)' },
+          notes:  { type: 'string', description: 'One sentence: name the characters if pass, explain the gap if fail, confirm no characters if na.' },
         },
       },
       practical: {
@@ -233,6 +242,11 @@ Score what ships by default. Historical games in homogeneous settings can score 
 propagandaLevel: 0=neutral, 1=mild cultural perspective (common in historical games), 2=notable ideological framing parents should know, 3=heavy propaganda
 propagandaNotes: brief description if level≥1, else empty string
 
+### Bechdel Test (BECHDEL) — display only, does NOT affect scoring
+result: "pass" if ≥2 named female characters directly interact about something other than a male character; "fail" if female chars present but criteria not fully met; "na" if the game has no named characters at all (pure puzzle, sports sim, abstract)
+notes: one sentence — name the characters if pass, explain the gap if fail, confirm no characters if na
+Be strict on pass; be generous with na (no named characters = na, not fail)
+
 ## CALIBRATION EXAMPLES
 
 Minecraft (vanilla): B1=38, B2=16, B3=6 | R1=4, R2=2, R3=4 → BDS=0.60, RIS=0.14, Curascore=75, 120 min/day
@@ -272,6 +286,7 @@ type ReviewInput = {
   r4_content:      Record<string, number>
   representation:  Record<string, number>
   propaganda:      { propagandaLevel: number; propagandaNotes: string }
+  bechdel:         { result: 'pass' | 'fail' | 'na'; notes: string }
   practical: {
     estimatedMonthlyCostLow: number; estimatedMonthlyCostHigh: number
     minSessionMinutes: number; hasNaturalStoppingPoints: boolean
@@ -409,6 +424,8 @@ async function reviewGame(slug: string) {
     ...r.representation,
     propagandaLevel: r.propaganda.propagandaLevel,
     propagandaNotes: r.propaganda.propagandaNotes || null,
+    bechdelResult:   r.bechdel.result,
+    bechdelNotes:    r.bechdel.notes || null,
     estimatedMonthlyCostLow:   r.practical.estimatedMonthlyCostLow,
     estimatedMonthlyCostHigh:  r.practical.estimatedMonthlyCostHigh,
     minSessionMinutes:         r.practical.minSessionMinutes,
@@ -455,6 +472,7 @@ async function reviewGame(slug: string) {
     topBenefits:                 computed.topBenefits,
     representationScore:         (r.representation.repGenderBalance + r.representation.repEthnicDiversity) / 6,
     propagandaLevel:             r.propaganda.propagandaLevel,
+    bechdelResult:               r.bechdel.result,
     calculatedAt:                new Date(),
   }
 

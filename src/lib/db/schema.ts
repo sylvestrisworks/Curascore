@@ -147,6 +147,10 @@ export const reviews = pgTable('reviews', {
   propagandaLevel: integer('propaganda_level'),         // 0=neutral, 3=heavy ideological content
   propagandaNotes: text('propaganda_notes'),            // context: type/source of ideological framing
 
+  // BECHDEL: Female character representation test — DISPLAY ONLY, does not affect scoring
+  bechdelResult: varchar('bechdel_result', { length: 4 }), // 'pass' | 'fail' | 'na'
+  bechdelNotes: text('bechdel_notes'),                      // brief explanation of the result
+
   // R5: Accessibility risk (0-3 each, max 12) — DISPLAY ONLY, not in RIS
   r5CrossPlatform:    integer('r5_cross_platform'),
   r5LoadTime:         integer('r5_load_time'),
@@ -218,6 +222,8 @@ export const gameScores = pgTable('game_scores', {
   representationScore: real('representation_score'),
   // Propaganda level pass-through (display only)
   propagandaLevel: integer('propaganda_level'),
+  // Bechdel result pass-through (display only)
+  bechdelResult: varchar('bechdel_result', { length: 4 }), // 'pass' | 'fail' | 'na'
 
   // Executive summary — one plain-language sentence for parents
   executiveSummary: text('executive_summary'),

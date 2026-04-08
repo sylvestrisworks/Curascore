@@ -30,6 +30,14 @@ const LOCALE_NAMES: Record<string, string> = {
   de: 'German',
 }
 
+// Copywriting notes per locale — voice, tone, and things to avoid
+const LOCALE_VOICE: Record<string, string> = {
+  es: `Voice: warm, direct, empowering. Latin American Spanish. Use "tú" not "usted". Avoid overly formal or Castilian phrasing. Parents are savvy — don't talk down to them.`,
+  fr: `Voice: clear, confident, slightly warm. Metropolitan French. Avoid overly literal English constructions. French parents appreciate precision — keep it crisp, not bureaucratic.`,
+  sv: `Voice: calm, direct, trustworthy — classic Swedish "lagom" tone. Never stiff or overly formal. Avoid literal English word-for-word translations that sound unnatural in Swedish. Use everyday Swedish vocabulary a parent would use, not academic or corporate language. Contractions and conversational phrasing are fine. Examples of what to avoid: "Säker swap" → prefer "Bättre alternativ"; "Bläddra bland alla spel" is fine but "Utforska alla spel" may feel more natural. Think BabyBjörn brand copy, not IKEA instruction manual.`,
+  de: `Voice: straightforward, trustworthy, approachable — not stiff Hochdeutsch. German parents value clarity and directness. Avoid overly long compound words where a simpler phrase works. Du-form (informal) is appropriate throughout. Think Hornbach ad copy, not legal document.`,
+}
+
 const MESSAGES_DIR = nodePath.join(process.cwd(), 'messages')
 const EN_FILE      = nodePath.join(MESSAGES_DIR, 'en.json')
 
@@ -87,23 +95,27 @@ async function translateBatch(
 ): Promise<Record<string, string>> {
   const langName = LOCALE_NAMES[targetLang] ?? targetLang
 
-  const prompt = `You are a professional translator for a children's game rating website called "Curascore by Good Game Parent".
-Translate the following JSON values from English to ${langName}.
+  const voiceNote = LOCALE_VOICE[targetLang] ?? `Voice: natural, friendly, appropriate for parents.`
 
-CRITICAL RULES:
+  const prompt = `You are a local copywriter for a children's game rating website called "Curascore by Good Game Parent". You are NOT doing a literal translation — you are writing copy that feels native and natural in ${langName}, as if it were written by a local for a local audience.
+
+${voiceNote}
+
+The site is GAMING POSITIVE — it empowers parents rather than scaring them. Benefits always come before risks. The tone is informed and confident, never preachy or alarmist.
+
+RULES (non-negotiable):
 1. Return ONLY valid JSON — no markdown, no code fences, no commentary.
 2. Keep ALL keys exactly as-is.
 3. Preserve ICU placeholders exactly: {count}, {year}, {query}, {platforms}, {current}, {total}, {min}, {n} etc.
-4. Preserve HTML-like rich text tags exactly: <yellow>…</yellow> — only translate text inside them.
-5. Keep plural ICU patterns intact: {count, plural, one {# game} other {# games}} — only translate the English words inside.
+4. Preserve HTML-like rich text tags exactly: <yellow>…</yellow> — only translate the text inside them, never the tags themselves.
+5. Keep plural ICU patterns intact: {count, plural, one {# game} other {# games}} — only translate the English words inside the curly braces.
 6. Brand names are NEVER translated: "Curascore", "Good Game Parent", "ESRB", "Metacritic", "Gemini", "PlaySmart".
-7. Keep game-rating terms consistent: BDS = "Benefit Density Score", RIS = "Risk Intensity Score".
-8. Use natural, friendly tone appropriate for parents.
+7. Keep scoring terms consistent: BDS = "Benefit Density Score", RIS = "Risk Intensity Score" (these stay in English as proper nouns).
 
-Input JSON:
+Input JSON (English source):
 ${JSON.stringify(strings, null, 2)}
 
-Output: translated JSON with same keys.`
+Output: localized JSON with the same keys, copy that sounds like it was written by a native speaker.`
 
   const res = await googleAI.models.generateContent({
     model: MODEL,

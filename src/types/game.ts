@@ -144,6 +144,9 @@ export type SerializedReview = {
   // PROP: Propaganda / ideology (display only)
   propagandaLevel: number | null
   propagandaNotes: string | null
+  // BECHDEL (display only)
+  bechdelResult: 'pass' | 'fail' | 'na' | null
+  bechdelNotes: string | null
   // Virtual currency
   usesVirtualCurrency: boolean | null
   virtualCurrencyName: string | null

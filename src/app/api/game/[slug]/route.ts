@@ -133,6 +133,8 @@ export async function GET(_req: NextRequest, { params }: { params: { slug: strin
     repEthnicDiversity:   review.repEthnicDiversity ?? null,
     propagandaLevel:      review.propagandaLevel ?? null,
     propagandaNotes:      review.propagandaNotes ?? null,
+    bechdelResult:        (review.bechdelResult as 'pass' | 'fail' | 'na' | null) ?? null,
+    bechdelNotes:         review.bechdelNotes ?? null,
     usesVirtualCurrency: review.usesVirtualCurrency,
     virtualCurrencyName: review.virtualCurrencyName ?? null,
     virtualCurrencyRate: review.virtualCurrencyRate ?? null,

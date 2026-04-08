@@ -136,6 +136,8 @@ export default async function ReviewPage({ params }: { params: { gameSlug: strin
       repEthnicDiversity:   existing.repEthnicDiversity ?? null,
       propagandaLevel:      existing.propagandaLevel ?? null,
       propagandaNotes:      existing.propagandaNotes ?? null,
+      bechdelResult:        (existing.bechdelResult as 'pass' | 'fail' | 'na' | null) ?? null,
+      bechdelNotes:         existing.bechdelNotes ?? null,
       usesVirtualCurrency:       existing.usesVirtualCurrency ?? null,
       virtualCurrencyName:       existing.virtualCurrencyName ?? null,
       virtualCurrencyRate:       existing.virtualCurrencyRate ?? null,
