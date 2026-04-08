@@ -25,12 +25,12 @@ const args  = process.argv.slice(2)
 const LIMIT = parseInt(args[args.indexOf('--limit') + 1] ?? '3', 10)
 const SAVE  = args.includes('--save')
 
-const ADVOCATE_MODEL = 'gemini-1.5-pro-002'   // Gemini Pro — advocate (argues HIGH)
-const CRITIC_MODEL   = 'gemini-2.5-flash'      // Gemini Flash — critic (argues LOW)
+const ADVOCATE_MODEL = 'gemini-2.5-flash'  // advocate (argues HIGH)
+const CRITIC_MODEL   = 'gemini-2.5-flash'  // critic (argues LOW) — same model, opposite persona
 
 // Pricing (per 1M tokens, USD)
-const PRO_PRICE_IN    =  3.50
-const PRO_PRICE_OUT   = 10.50
+const PRO_PRICE_IN    =  0.15
+const PRO_PRICE_OUT   =  0.60
 const FLASH_PRICE_IN  =  0.15
 const FLASH_PRICE_OUT =  0.60
 

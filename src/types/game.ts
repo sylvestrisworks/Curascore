@@ -60,6 +60,8 @@ export type SerializedScores = {
   propagandaLevel: number | null
   executiveSummary: string | null
   calculatedAt: string | null
+  debateTranscript: string | null
+  debateRounds: number | null
 }
 
 export type SerializedReview = {

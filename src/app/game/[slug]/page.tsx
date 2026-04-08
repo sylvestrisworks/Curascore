@@ -94,6 +94,8 @@ async function fetchGameData(slug: string): Promise<GameCardProps | null> {
         propagandaLevel:          score.propagandaLevel ?? null,
         executiveSummary:         score.executiveSummary ?? null,
         calculatedAt:             score.calculatedAt?.toISOString() ?? null,
+        debateTranscript:         score.debateTranscript ?? null,
+        debateRounds:             score.debateRounds ?? null,
       }
     : null
 

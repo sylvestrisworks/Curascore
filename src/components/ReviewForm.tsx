@@ -206,6 +206,8 @@ function makeSerializedScores(computed: ReturnType<typeof calculateGameScores>):
     propagandaLevel:           null,
     executiveSummary:          null,
     calculatedAt:              null,
+    debateTranscript:          null,
+    debateRounds:              null,
   }
 }
 

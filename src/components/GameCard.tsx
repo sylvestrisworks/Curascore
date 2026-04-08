@@ -579,6 +579,12 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
               {scores.executiveSummary}
             </p>
           )}
+          {scores.debateRounds != null && (
+            <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-50 border border-violet-200 text-xs font-semibold text-violet-700">
+              <span>⚖️</span>
+              Adversarial debate · {scores.debateRounds} round{scores.debateRounds !== 1 ? 's' : ''}
+            </div>
+          )}
         </div>
       ) : (
         <div className="bg-white border border-slate-100 rounded-3xl p-6 text-center">
@@ -734,7 +740,31 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
         </div>
       </div>
 
-      {/* ── 7. COMPLIANCE ──────────────────────────────────────────────────────── */}
+      {/* ── 7. DEBATE TRANSCRIPT ───────────────────────────────────────────────── */}
+      {scores?.debateTranscript && (
+        <details className="group bg-violet-50 border border-violet-100 rounded-2xl overflow-hidden">
+          <summary className="flex items-center justify-between px-5 py-4 cursor-pointer list-none select-none">
+            <div className="flex items-center gap-2">
+              <span className="text-violet-600">⚖️</span>
+              <span className="text-sm font-semibold text-violet-800">How this score was debate-reviewed</span>
+            </div>
+            <span className="text-xs text-violet-500 group-open:hidden">Show transcript</span>
+            <span className="text-xs text-violet-500 hidden group-open:inline">Hide</span>
+          </summary>
+          <div className="px-5 pb-5 pt-1">
+            <p className="text-xs text-violet-600 mb-3 leading-relaxed">
+              Two AI models debated this score in {scores.debateRounds} round{scores.debateRounds !== 1 ? 's' : ''}:
+              an <strong>Advocate</strong> arguing for the highest defensible scores,
+              and a <strong>Critic</strong> arguing for the lowest. The final score averages their round-2 positions.
+            </p>
+            <pre className="text-xs text-slate-600 bg-white border border-violet-100 rounded-xl p-4 overflow-x-auto whitespace-pre-wrap leading-relaxed font-mono">
+              {scores.debateTranscript}
+            </pre>
+          </div>
+        </details>
+      )}
+
+      {/* ── 8. COMPLIANCE ──────────────────────────────────────────────────────── */}
       <ComplianceBadges compliance={compliance} />
 
     </div>
