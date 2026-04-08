@@ -203,7 +203,15 @@
     "scYes": "Yes",
     "scNo": "No",
     "scVerdictSub": "scores meaningfully higher overall",
-    "scFullReview": "Full review: {title}"
+    "scFullReview": "Full review: {title}",
+    "scCostHeader": "True Cost of Ownership",
+    "scMonetTags": "Monetization",
+    "scSubRequired": "Requires online subscription",
+    "tagsSkillsHeader": "Skills developed",
+    "tagsTacticsHeader": "Detected design tactics",
+    "tagsBothDevelop": "Both games develop",
+    "tagsBothUse": "Both games use",
+    "tagsOnly": "only"
   },
   "faq": {
     "methodology": "Methodology",
