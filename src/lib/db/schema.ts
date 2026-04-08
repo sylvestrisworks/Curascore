@@ -34,6 +34,7 @@ export const games = pgTable('games', {
   backgroundImage: text('background_image'),
 
   // Our enrichment
+  isVr: boolean('is_vr').default(false),        // true if primary experience requires a VR headset
   basePrice: real('base_price'),                // in USD
   basePriceCurrency: varchar('base_price_currency', { length: 3 }).default('USD'),
   hasMicrotransactions: boolean('has_microtransactions').default(false),

@@ -29,7 +29,7 @@ function PlatformPickerInner({ current }: { current: string[] }) {
       params.set('platform', next.join(','))
     }
     const qs = params.toString()
-    router.push(qs ? `${pathname}?${qs}` : pathname)
+    router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false })
   }
 
   return (

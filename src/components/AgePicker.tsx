@@ -23,7 +23,7 @@ function AgePickerInner({ current }: { current?: string }) {
       params.set('age', value)
     }
     const qs = params.toString()
-    router.push(qs ? `${pathname}?${qs}` : pathname)
+    router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false })
   }
 
   const activeIndex = AGE_SEGMENTS.findIndex(s => s.value === current)

@@ -29,10 +29,6 @@ type CarouselRow = {
   games: GameSummary[]
 }
 
-// ─── Constants ───────────────────────────────────────────────────────────────
-
-const VR_KEYWORDS = ['Oculus', 'Quest', 'Vive', 'Rift', 'Valve Index', 'PlayStation VR', 'PSVR', 'Mixed Reality', 'Gear VR']
-
 // ─── Data fetching ────────────────────────────────────────────────────────────
 
 const BASE_SELECT = {
@@ -87,7 +83,7 @@ async function getCarouselRows(platforms: string[], age?: string): Promise<Carou
 
   const base = (extra?: SQL) => and(isNotNull(gameScores.curascore), platformFilter, ageFilter, extra)
 
-  const [topRated, coopPlay, lowRisk, highBenefit, teamwork, vrGames] = await Promise.all([
+  const [topRated, coopPlay, lowRisk, highBenefit, teamwork, vrGames, beginnerGames] = await Promise.all([
 
     // Top rated overall
     db.select(BASE_SELECT).from(games)
@@ -124,12 +120,23 @@ async function getCarouselRows(platforms: string[], age?: string): Promise<Carou
       .orderBy(desc(gameScores.curascore))
       .limit(12),
 
-    // VR — any game on a known VR platform (ignores age/platform pickers intentionally)
+    // VR — games flagged as VR (ignores age/platform pickers intentionally)
+    db.select(BASE_SELECT).from(games)
+      .innerJoin(gameScores, eq(gameScores.gameId, games.id))
+      .where(and(isNotNull(gameScores.curascore), eq(games.isVr, true)))
+      .orderBy(desc(gameScores.curascore))
+      .limit(12),
+
+    // New to gaming — E/E10+ rated, low risk, good curascore
     db.select(BASE_SELECT).from(games)
       .innerJoin(gameScores, eq(gameScores.gameId, games.id))
       .where(and(
         isNotNull(gameScores.curascore),
-        or(...VR_KEYWORDS.map(k => sql`${games.platforms}::text ILIKE ${'%' + k + '%'}`)),
+        ageFilter,
+        platformFilter,
+        inArray(games.esrbRating, ['E', 'E10+']),
+        lte(gameScores.ris, 0.25),
+        gte(gameScores.curascore, 55),
       ))
       .orderBy(desc(gameScores.curascore))
       .limit(12),
@@ -141,7 +148,8 @@ async function getCarouselRows(platforms: string[], age?: string): Promise<Carou
     { id: 'safe',     title: 'Low risk picks',     emoji: '✅', browseHref: '/browse?risk=low',                  games: lowRisk.map(toSummary)   },
     { id: 'brain',    title: 'Build your brain',   emoji: '🧠', browseHref: '/browse?benefits=problem-solving',  games: highBenefit.map(toSummary) },
     { id: 'teamwork', title: 'Team up',             emoji: '🤝', browseHref: '/browse?benefits=teamwork',         games: teamwork.map(toSummary)  },
-    { id: 'vr',       title: 'VR & AR',             emoji: '🥽', browseHref: '/browse?platforms=VR',               games: vrGames.map(toSummary)   },
+    { id: 'vr',       title: 'VR & AR',             emoji: '🥽', browseHref: '/browse?platforms=VR',               games: vrGames.map(toSummary)      },
+    { id: 'beginner', title: 'New to gaming',       emoji: '🎯', browseHref: '/browse?age=E&risk=low',             games: beginnerGames.map(toSummary) },
   ]
 
   return rows.filter(r => r.games.length > 0)
