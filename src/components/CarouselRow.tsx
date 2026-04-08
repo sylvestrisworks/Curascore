@@ -2,6 +2,7 @@
 
 import { useRef } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import type { GameSummary } from '@/types/game'
 import { curascoreBg, esrbToAge, ageBadgeColor } from '@/lib/ui'
 
@@ -69,11 +70,11 @@ function CarouselTile({ game }: { game: GameSummary }) {
 
 // ─── Arrow button ─────────────────────────────────────────────────────────────
 
-function Arrow({ dir, onClick }: { dir: 'left' | 'right'; onClick: () => void }) {
+function Arrow({ dir, onClick, label }: { dir: 'left' | 'right'; onClick: () => void; label: string }) {
   return (
     <button
       onClick={onClick}
-      aria-label={dir === 'left' ? 'Scroll left' : 'Scroll right'}
+      aria-label={label}
       className={`absolute top-0 bottom-3 z-10 hidden sm:flex items-center
         ${dir === 'left' ? 'left-0 justify-start pl-1' : 'right-0 justify-end pr-1'}
         opacity-0 group-hover:opacity-100 transition-opacity`}
@@ -97,6 +98,7 @@ type Props = {
 
 export default function CarouselRow({ emoji, title, browseHref, games, index }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null)
+  const t = useTranslations('carousel')
 
   function scroll(dir: 'left' | 'right') {
     scrollRef.current?.scrollBy({ left: dir === 'right' ? 300 : -300, behavior: 'smooth' })
@@ -113,14 +115,14 @@ export default function CarouselRow({ emoji, title, browseHref, games, index }: 
           href={browseHref}
           className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors shrink-0"
         >
-          See all →
+          {t('seeAll')}
         </Link>
       </div>
 
       {/* Relative wrapper so arrows can be positioned against it */}
       <div className="relative group">
-        <Arrow dir="left"  onClick={() => scroll('left')}  />
-        <Arrow dir="right" onClick={() => scroll('right')} />
+        <Arrow dir="left"  onClick={() => scroll('left')}  label={t('scrollLeft')}  />
+        <Arrow dir="right" onClick={() => scroll('right')} label={t('scrollRight')} />
 
         <div
           ref={scrollRef}

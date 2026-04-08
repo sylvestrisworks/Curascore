@@ -1,22 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import type { ComplianceBadge } from '@/types/game'
-
-const REGULATION_META: Record<string, { label: string; description: string }> = {
-  DSA: {
-    label: 'EU Digital Services Act',
-    description: 'Meets transparency requirements for minors under the EU Digital Services Act.',
-  },
-  'GDPR-K': {
-    label: 'GDPR Children',
-    description: 'Proper consent and age-gating in place for users under 16 (GDPR Article 8).',
-  },
-  ODDS: {
-    label: 'Loot Box Odds',
-    description: 'Publishes drop rates for paid random rewards (required in CN, JP, KR).',
-  },
-}
 
 const ALL_REGULATIONS = ['DSA', 'GDPR-K', 'ODDS']
 
@@ -36,10 +22,20 @@ function statusLabel(status: ComplianceBadge['status']): string {
   }
 }
 
-function Badge({ badge }: { badge: ComplianceBadge }) {
+type T = ReturnType<typeof useTranslations<'compliance'>>
+
+type RegMeta = { label: string; description: string }
+
+function getRegulationMeta(t: T): Record<string, RegMeta> {
+  return {
+    DSA:      { label: t('dsaLabel'),   description: t('dsaDesc')   },
+    'GDPR-K': { label: t('gdprkLabel'), description: t('gdprkDesc') },
+    ODDS:     { label: t('oddsLabel'),  description: t('oddsDesc')  },
+  }
+}
+
+function Badge({ badge, meta }: { badge: ComplianceBadge; meta: RegMeta }) {
   const [expanded, setExpanded] = useState(false)
-  const meta = REGULATION_META[badge.regulation]
-  if (!meta) return null
 
   return (
     <div>
@@ -61,7 +57,9 @@ function Badge({ badge }: { badge: ComplianceBadge }) {
 }
 
 export default function ComplianceBadges({ compliance }: { compliance: ComplianceBadge[] }) {
-  // Build a full set — fill in not_assessed for any missing regulations
+  const t    = useTranslations('compliance')
+  const meta = getRegulationMeta(t)
+
   const byRegulation = Object.fromEntries(compliance.map((c) => [c.regulation, c]))
   const badges: ComplianceBadge[] = ALL_REGULATIONS.map((reg) =>
     byRegulation[reg] ?? { regulation: reg, status: 'not_assessed', notes: null }
@@ -70,15 +68,15 @@ export default function ComplianceBadges({ compliance }: { compliance: Complianc
   return (
     <div className="border-t border-slate-100 px-5 py-4">
       <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">
-        Regulatory Compliance
+        {t('heading')}
       </h3>
       <div className="flex flex-wrap gap-2">
         {badges.map((b) => (
-          <Badge key={b.regulation} badge={b} />
+          <Badge key={b.regulation} badge={b} meta={meta[b.regulation] ?? { label: b.regulation, description: '' }} />
         ))}
       </div>
       <p className="mt-2 text-xs text-slate-400">
-        Tap a badge for details. Grey = not yet assessed.
+        {t('footer')}
       </p>
     </div>
   )

@@ -164,7 +164,7 @@ async function queryGames(filters: ActiveFilters): Promise<{ rows: Row[]; total:
     case 'riskiest':   orderBy = [desc(gameScores.ris),           asc(gameScores.curascore)];  break
     case 'newest':     orderBy = [desc(games.releaseDate)];                                    break
     case 'alpha':      orderBy = [asc(games.title)];                                           break
-    case 'metacritic': orderBy = [desc(games.metacriticScore)];                                break
+    case 'metacritic': orderBy = [sql`${games.metacriticScore} DESC NULLS LAST`];              break
     default:           orderBy = [desc(gameScores.curascore)];                                 break
   }
 

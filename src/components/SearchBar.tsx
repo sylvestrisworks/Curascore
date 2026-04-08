@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useRouter } from '@/navigation'
+import { useTranslations, useLocale } from 'next-intl'
 import type { GameSummary } from '@/types/game'
 import { esrbToAge, ageBadgeColor } from '@/lib/ui'
 
@@ -31,6 +31,7 @@ function splitTitle(title: string): [string, string | null] {
 
 export default function SearchBar({ placeholder }: { placeholder?: string }) {
   const t = useTranslations('search')
+  const locale = useLocale()
   const defaultPlaceholder = placeholder ?? t('placeholder')
   const [query, setQuery]         = useState('')
   const [results, setResults]     = useState<GameSummary[]>([])
@@ -232,7 +233,7 @@ export default function SearchBar({ placeholder }: { placeholder?: string }) {
             <div className="px-5 py-4 text-center">
               <p className="text-sm text-slate-500">{t('noResults', { query })}</p>
               <a
-                href="/browse"
+                href={`/${locale}/browse`}
                 className="mt-2 inline-block text-xs text-indigo-600 hover:underline font-medium"
               >
                 {t('browseAll')}

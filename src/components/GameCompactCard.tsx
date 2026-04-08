@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { curascoreBg, esrbToAge, ageBadgeColor } from '@/lib/ui'
 import type { GameSummary } from '@/types/game'
 
@@ -7,6 +10,7 @@ type Props = {
 }
 
 export default function GameCompactCard({ game }: Props) {
+  const t = useTranslations('gameCompact')
   return (
     <Link
       href={`/game/${game.slug}`}
@@ -66,13 +70,13 @@ export default function GameCompactCard({ game }: Props) {
         {/* Time recommendation */}
         {game.timeRecommendationMinutes != null && (
           <div className="mt-auto pt-1">
-            <span className="text-xs text-slate-400">{game.timeRecommendationMinutes} min/day</span>
+            <span className="text-xs text-slate-400">{game.timeRecommendationMinutes} {t('minDay')}</span>
           </div>
         )}
 
         {/* Monetization flag */}
         {(game.hasLootBoxes || game.hasMicrotransactions) && (
-          <span className="text-xs text-amber-600 mt-auto" title="Has monetization">💰 Monetization</span>
+          <span className="text-xs text-amber-600 mt-auto" title={t('hasMonetization')}>💰 {t('monetization')}</span>
         )}
       </div>
     </Link>

@@ -26,6 +26,8 @@ const LIMIT          = parseInt(args[args.indexOf('--limit') + 1] ?? '3', 10)
 const SAVE           = args.includes('--save')
 const RESCORE_DEBATE = args.includes('--rescore-debate')  // re-run already debate-scored games
 const FORCE          = args.includes('--force')           // bypass swing cap (use when correcting)
+const slugFlag       = args.indexOf('--slug')
+const TARGET_SLUG    = slugFlag !== -1 ? args[slugFlag + 1] : null
 
 // Final score = CRITIC_WEIGHT * critic + (1 - CRITIC_WEIGHT) * advocate
 // 0.6 counteracts the LLM advocate inflation bias
@@ -414,7 +416,13 @@ async function getCandidates() {
     currentCurascore: gameScores.curascore,
   }
 
-  const rows = RESCORE_DEBATE
+  const rows = TARGET_SLUG
+    // Single-game targeting by slug
+    ? await db.select(baseSelect).from(games)
+        .innerJoin(gameScores, eq(gameScores.gameId, games.id))
+        .where(and(isNotNull(gameScores.curascore), eq(games.slug, TARGET_SLUG)))
+        .limit(1)
+    : RESCORE_DEBATE
     // Re-run previously debate-scored games (regardless of current curascore)
     ? await db.select(baseSelect).from(games)
         .innerJoin(gameScores, eq(gameScores.gameId, games.id))

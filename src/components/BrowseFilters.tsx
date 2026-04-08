@@ -3,16 +3,17 @@
 import { useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useCallback } from 'react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { SlidersHorizontal, X, LayoutGrid, List } from 'lucide-react'
 
 // ─── Filter definitions ───────────────────────────────────────────────────────
 
 export const AGE_OPTIONS = [
-  { value: 'E',   label: 'Early Years (5–7)'       },
-  { value: 'E10', label: 'Middle Childhood (8–12)'  },
-  { value: 'T',   label: 'Early Teens (13–15)'      },
-  { value: 'M',   label: 'Older Teens (16+)'        },
+  { value: 'E',   labelKey: 'ageEarlyYears'      },
+  { value: 'E10', labelKey: 'ageMiddleChildhood'  },
+  { value: 'T',   labelKey: 'ageEarlyTeens'       },
+  { value: 'M',   labelKey: 'ageOlderTeens'       },
 ]
 
 export const GENRE_OPTIONS = [
@@ -37,21 +38,11 @@ export const COMPLIANCE_OPTIONS = [
 ]
 
 export const BENEFIT_OPTIONS = [
-  { value: 'problem-solving', label: 'Problem Solving'   },
-  { value: 'spatial',         label: 'Spatial Awareness' },
-  { value: 'teamwork',        label: 'Teamwork'          },
-  { value: 'creativity',      label: 'Creativity'        },
-  { value: 'communication',   label: 'Communication'     },
-]
-
-export const SORT_OPTIONS = [
-  { value: 'curascore',   label: 'Curascore'          },
-  { value: 'benefit',     label: 'Best benefit score'  },
-  { value: 'safest',      label: 'Lowest risk'         },
-  { value: 'riskiest',    label: 'Highest risk'        },
-  { value: 'metacritic',  label: 'Metacritic score'    },
-  { value: 'newest',      label: 'Newest'              },
-  { value: 'alpha',       label: 'A–Z'                 },
+  { value: 'problem-solving', labelKey: 'benefitProblemSolving' },
+  { value: 'spatial',         labelKey: 'benefitSpatial'        },
+  { value: 'teamwork',        labelKey: 'benefitTeamwork'       },
+  { value: 'creativity',      labelKey: 'benefitCreativity'     },
+  { value: 'communication',   labelKey: 'benefitCommunication'  },
 ]
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -65,8 +56,8 @@ export type ActiveFilters = {
   risk?: string
   time?: string
   price?: string
-  rep?: string       // 'good' = representationScore >= 0.5
-  noProp?: string    // 'true' = propagandaLevel = 0
+  rep?: string
+  noProp?: string
   sort: string
   q?: string
   page?: number
@@ -78,15 +69,18 @@ type Props = {
   totalCount: number
 }
 
+type T = ReturnType<typeof useTranslations<'filters'>>
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function BrowseFilters({ active, totalCount }: Props) {
   const router   = useRouter()
   const pathname = usePathname()
+  const t        = useTranslations('filters')
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   const push = useCallback((updates: Partial<ActiveFilters>) => {
-    const merged = { ...active, ...updates, page: undefined } // reset page on filter change
+    const merged = { ...active, ...updates, page: undefined }
     const params = new URLSearchParams()
     if (merged.age)               params.set('age',        merged.age)
     if (merged.genres.length)     params.set('genres',     merged.genres.join(','))
@@ -117,130 +111,46 @@ export default function BrowseFilters({ active, totalCount }: Props) {
     active.risk, active.time, active.price, active.rep, active.noProp,
   ].filter(Boolean).length
 
-  const panel = (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="font-bold text-slate-800">Filters</h2>
-        {activeCount > 0 && (
-          <button onClick={clearAll} className="text-xs text-indigo-600 hover:text-indigo-800 font-medium">
-            Clear all
-          </button>
-        )}
-      </div>
+  const sortOptions = [
+    { value: 'curascore',  label: t('sortCurascore')  },
+    { value: 'benefit',    label: t('sortBenefit')     },
+    { value: 'safest',     label: t('sortSafest')      },
+    { value: 'riskiest',   label: t('sortRiskiest')    },
+    { value: 'metacritic', label: t('sortMetacritic')  },
+    { value: 'newest',     label: t('sortNewest')      },
+    { value: 'alpha',      label: t('sortAlpha')       },
+  ]
 
-      {/* Sort */}
-      <div>
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Sort by</p>
-        <select
-          value={active.sort}
-          onChange={e => push({ sort: e.target.value })}
-          className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 bg-white text-slate-700
-            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        >
-          {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-        </select>
-      </div>
+  const riskOptions = [
+    { value: 'low',    label: t('riskLow')    },
+    { value: 'medium', label: t('riskMedium') },
+  ]
 
-      <FilterSection title="Age range">
-        {AGE_OPTIONS.map(o => (
-          <Chip key={o.value} label={o.label} active={active.age === o.value}
-            onClick={() => push({ age: active.age === o.value ? undefined : o.value })} />
-        ))}
-      </FilterSection>
+  const timeOptions = [
+    { value: '30', label: '30+ min' },
+    { value: '60', label: '60+ min' },
+    { value: '90', label: '90+ min' },
+  ]
 
-      <FilterSection title="Genre">
-        <div className="flex flex-wrap gap-1.5">
-          {GENRE_OPTIONS.map(g => (
-            <Chip key={g} label={g} active={active.genres.includes(g)}
-              onClick={() => toggle('genres', g)} />
-          ))}
-        </div>
-      </FilterSection>
+  const priceOptions = [
+    { value: 'free', label: t('priceFree')    },
+    { value: '20',   label: t('priceUnder20') },
+    { value: '40',   label: t('priceUnder40') },
+  ]
 
-      <FilterSection title="Platform">
-        <div className="flex flex-wrap gap-1.5">
-          {PLATFORM_OPTIONS.map(o => (
-            <Chip key={o.value} label={o.label} active={active.platforms.includes(o.value)}
-              onClick={() => toggle('platforms', o.value)} />
-          ))}
-        </div>
-      </FilterSection>
-
-      <FilterSection title="Benefit focus" note="Requires a review">
-        {BENEFIT_OPTIONS.map(o => (
-          <label key={o.value} className="flex items-center gap-2 cursor-pointer group">
-            <input type="checkbox" checked={active.benefits.includes(o.value)}
-              onChange={() => toggle('benefits', o.value)}
-              className="rounded border-slate-300 text-indigo-600 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            />
-            <span className="text-sm text-slate-700 group-hover:text-slate-900">{o.label}</span>
-          </label>
-        ))}
-      </FilterSection>
-
-      <FilterSection title="Max risk level" note="Requires a review">
-        {[
-          { value: 'low',    label: 'Low only  (RIS ≤ 0.30)'    },
-          { value: 'medium', label: 'Low + Medium (RIS ≤ 0.60)'  },
-        ].map(o => (
-          <Chip key={o.value} label={o.label} active={active.risk === o.value}
-            onClick={() => push({ risk: active.risk === o.value ? undefined : o.value })} />
-        ))}
-      </FilterSection>
-
-      <FilterSection title="Min. daily time" note="Requires a review">
-        {[
-          { value: '30', label: '30+ min' },
-          { value: '60', label: '60+ min' },
-          { value: '90', label: '90+ min' },
-        ].map(o => (
-          <Chip key={o.value} label={o.label} active={active.time === o.value}
-            onClick={() => push({ time: active.time === o.value ? undefined : o.value })} />
-        ))}
-      </FilterSection>
-
-      <FilterSection title="Price">
-        {[
-          { value: 'free', label: 'Free to play' },
-          { value: '20',   label: 'Under $20'    },
-          { value: '40',   label: 'Under $40'    },
-        ].map(o => (
-          <Chip key={o.value} label={o.label} active={active.price === o.value}
-            onClick={() => push({ price: active.price === o.value ? undefined : o.value })} />
-        ))}
-      </FilterSection>
-
-      <FilterSection title="Representation" note="Display only">
-        <Chip
-          label="Good representation"
-          active={active.rep === 'good'}
-          onClick={() => push({ rep: active.rep === 'good' ? undefined : 'good' })}
-        />
-        <p className="text-xs text-slate-400 mt-1">Gender balance + ethnic diversity both scored ≥ 2/3</p>
-      </FilterSection>
-
-      <FilterSection title="Ideological content" note="Display only">
-        <Chip
-          label="Exclude ideological content"
-          active={active.noProp === 'true'}
-          onClick={() => push({ noProp: active.noProp === 'true' ? undefined : 'true' })}
-        />
-        <p className="text-xs text-slate-400 mt-1">Hides games flagged with propaganda or strong ideological framing</p>
-      </FilterSection>
-
-      <FilterSection title="Compliance" note="Estimated">
-        {COMPLIANCE_OPTIONS.map(o => (
-          <Chip key={o.value} label={o.label} active={active.compliance.includes(o.value)}
-            onClick={() => toggle('compliance', o.value)} />
-        ))}
-      </FilterSection>
-
-      <p className="text-xs text-slate-400 pt-2 border-t border-slate-100">
-        {totalCount} game{totalCount !== 1 ? 's' : ''} found
-      </p>
-    </div>
-  )
+  const panel = <FilterPanel
+    t={t}
+    active={active}
+    totalCount={totalCount}
+    activeCount={activeCount}
+    sortOptions={sortOptions}
+    riskOptions={riskOptions}
+    timeOptions={timeOptions}
+    priceOptions={priceOptions}
+    push={push}
+    toggle={toggle}
+    clearAll={clearAll}
+  />
 
   return (
     <>
@@ -258,7 +168,7 @@ export default function BrowseFilters({ active, totalCount }: Props) {
             shadow-sm transition-colors"
         >
           <SlidersHorizontal size={15} />
-          Filters
+          {t('heading')}
           {activeCount > 0 && (
             <span className="ml-1 bg-indigo-600 text-white text-xs font-black px-1.5 py-0.5 rounded-full">
               {activeCount}
@@ -273,7 +183,7 @@ export default function BrowseFilters({ active, totalCount }: Props) {
           <div className="absolute inset-0 bg-black/40" onClick={() => setDrawerOpen(false)} />
           <aside className="relative ml-auto w-80 max-w-full h-full bg-white shadow-xl overflow-y-auto">
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 sticky top-0 bg-white z-10">
-              <h2 className="font-bold text-slate-800">Filters</h2>
+              <h2 className="font-bold text-slate-800">{t('heading')}</h2>
               <button onClick={() => setDrawerOpen(false)}
                 className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 transition-colors"
                 aria-label="Close filters"
@@ -287,7 +197,7 @@ export default function BrowseFilters({ active, totalCount }: Props) {
                 onClick={() => setDrawerOpen(false)}
                 className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition-colors"
               >
-                Show {totalCount} game{totalCount !== 1 ? 's' : ''}
+                {t('showGames', { count: totalCount })}
               </button>
             </div>
           </aside>
@@ -297,20 +207,150 @@ export default function BrowseFilters({ active, totalCount }: Props) {
   )
 }
 
+// ─── Filter panel (shared between desktop + mobile) ───────────────────────────
+
+function FilterPanel({
+  t, active, totalCount, activeCount, sortOptions, riskOptions, timeOptions, priceOptions, push, toggle, clearAll,
+}: {
+  t: T
+  active: ActiveFilters
+  totalCount: number
+  activeCount: number
+  sortOptions: { value: string; label: string }[]
+  riskOptions: { value: string; label: string }[]
+  timeOptions: { value: string; label: string }[]
+  priceOptions: { value: string; label: string }[]
+  push: (u: Partial<ActiveFilters>) => void
+  toggle: (key: 'genres' | 'platforms' | 'benefits' | 'compliance', value: string) => void
+  clearAll: () => void
+}) {
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h2 className="font-bold text-slate-800">{t('heading')}</h2>
+        {activeCount > 0 && (
+          <button onClick={clearAll} className="text-xs text-indigo-600 hover:text-indigo-800 font-medium">
+            {t('clearAll')}
+          </button>
+        )}
+      </div>
+
+      {/* Sort */}
+      <div>
+        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">{t('sortBy')}</p>
+        <select
+          value={active.sort}
+          onChange={e => push({ sort: e.target.value })}
+          className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 bg-white text-slate-700
+            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        >
+          {sortOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+        </select>
+      </div>
+
+      <FilterSection title={t('sectionAge')}>
+        {AGE_OPTIONS.map(o => (
+          <Chip key={o.value} label={t(o.labelKey as Parameters<T>[0])} active={active.age === o.value}
+            onClick={() => push({ age: active.age === o.value ? undefined : o.value })} />
+        ))}
+      </FilterSection>
+
+      <FilterSection title={t('sectionGenre')}>
+        <div className="flex flex-wrap gap-1.5">
+          {GENRE_OPTIONS.map(g => (
+            <Chip key={g} label={g} active={active.genres.includes(g)}
+              onClick={() => toggle('genres', g)} />
+          ))}
+        </div>
+      </FilterSection>
+
+      <FilterSection title={t('sectionPlatform')}>
+        <div className="flex flex-wrap gap-1.5">
+          {PLATFORM_OPTIONS.map(o => (
+            <Chip key={o.value} label={o.label} active={active.platforms.includes(o.value)}
+              onClick={() => toggle('platforms', o.value)} />
+          ))}
+        </div>
+      </FilterSection>
+
+      <FilterSection title={t('sectionBenefit')} note={t('requiresReview')}>
+        {BENEFIT_OPTIONS.map(o => (
+          <label key={o.value} className="flex items-center gap-2 cursor-pointer group">
+            <input type="checkbox" checked={active.benefits.includes(o.value)}
+              onChange={() => toggle('benefits', o.value)}
+              className="rounded border-slate-300 text-indigo-600 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            />
+            <span className="text-sm text-slate-700 group-hover:text-slate-900">{t(o.labelKey as Parameters<T>[0])}</span>
+          </label>
+        ))}
+      </FilterSection>
+
+      <FilterSection title={t('sectionRisk')} note={t('requiresReview')}>
+        {riskOptions.map(o => (
+          <Chip key={o.value} label={o.label} active={active.risk === o.value}
+            onClick={() => push({ risk: active.risk === o.value ? undefined : o.value })} />
+        ))}
+      </FilterSection>
+
+      <FilterSection title={t('sectionTime')} note={t('requiresReview')}>
+        {timeOptions.map(o => (
+          <Chip key={o.value} label={o.label} active={active.time === o.value}
+            onClick={() => push({ time: active.time === o.value ? undefined : o.value })} />
+        ))}
+      </FilterSection>
+
+      <FilterSection title={t('sectionPrice')}>
+        {priceOptions.map(o => (
+          <Chip key={o.value} label={o.label} active={active.price === o.value}
+            onClick={() => push({ price: active.price === o.value ? undefined : o.value })} />
+        ))}
+      </FilterSection>
+
+      <FilterSection title={t('sectionRepresentation')} note={t('displayOnly')}>
+        <Chip
+          label={t('repGood')}
+          active={active.rep === 'good'}
+          onClick={() => push({ rep: active.rep === 'good' ? undefined : 'good' })}
+        />
+        <p className="text-xs text-slate-400 mt-1">{t('repGoodNote')}</p>
+      </FilterSection>
+
+      <FilterSection title={t('sectionIdeology')} note={t('displayOnly')}>
+        <Chip
+          label={t('ideologyExclude')}
+          active={active.noProp === 'true'}
+          onClick={() => push({ noProp: active.noProp === 'true' ? undefined : 'true' })}
+        />
+        <p className="text-xs text-slate-400 mt-1">{t('ideologyNote')}</p>
+      </FilterSection>
+
+      <FilterSection title={t('sectionCompliance')} note={t('estimated')}>
+        {COMPLIANCE_OPTIONS.map(o => (
+          <Chip key={o.value} label={o.label} active={active.compliance.includes(o.value)}
+            onClick={() => toggle('compliance', o.value)} />
+        ))}
+      </FilterSection>
+
+      <p className="text-xs text-slate-400 pt-2 border-t border-slate-100">
+        {t('gamesFound', { count: totalCount })}
+      </p>
+    </div>
+  )
+}
+
 // ─── View toggle (exported for use in browse page) ────────────────────────────
 
 export function ViewToggle({ view, listHref, gridHref }: { view: 'list' | 'grid'; listHref: string; gridHref: string }) {
   return (
     <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden bg-white">
-      <Link
-        href={listHref}
+      <Link href={listHref}
         className={`p-2 transition-colors ${view === 'list' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-700'}`}
         aria-label="List view"
       >
         <List size={15} />
       </Link>
-      <Link
-        href={gridHref}
+      <Link href={gridHref}
         className={`p-2 transition-colors ${view === 'grid' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-700'}`}
         aria-label="Grid view"
       >

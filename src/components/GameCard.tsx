@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Lightbulb, Sparkles, Zap, Clock, CheckCircle2 } from 'lucide-react'
+import { Lightbulb, Sparkles, Zap, Clock, CheckCircle2, User } from 'lucide-react'
 import type { DarkPattern, GameCardProps, SerializedReview, SerializedScores } from '@/types/game'
 import { esrbToAge, ageBadgeColor } from '@/lib/ui'
 import DarkPatternPills from './DarkPatternPills'
@@ -37,11 +37,11 @@ function riskBarColor(value: number | null): string {
   return 'bg-red-400'
 }
 
-function riskLevel(value: number | null): { label: string; color: string; bg: string } {
+function riskLevel(value: number | null): { labelKey: 'riskLow' | 'riskModerate' | 'riskHigh'; color: string; bg: string } {
   const v = value ?? 0
-  if (v < 0.3) return { label: 'LOW',      color: 'text-emerald-700', bg: 'bg-emerald-100' }
-  if (v < 0.6) return { label: 'MODERATE', color: 'text-amber-700',   bg: 'bg-amber-100'   }
-  return              { label: 'HIGH',     color: 'text-red-700',     bg: 'bg-red-100'     }
+  if (v < 0.3) return { labelKey: 'riskLow',      color: 'text-emerald-700', bg: 'bg-emerald-100' }
+  if (v < 0.6) return { labelKey: 'riskModerate', color: 'text-amber-700',   bg: 'bg-amber-100'   }
+  return              { labelKey: 'riskHigh',     color: 'text-red-700',     bg: 'bg-red-100'     }
 }
 
 function scoreBarColor(value: number | null): string {
@@ -86,18 +86,12 @@ function SkillDots({ score, max = 5 }: { score: number | null; max?: number }) {
   )
 }
 
-const BENEFIT_TOOLTIPS: Record<string, string> = {
-  'Cognitive':          'Problem solving, spatial awareness, strategic thinking, creativity, memory, and learning transfer. Weighted 50% of the Benefit Score.',
-  'Social & Emotional': 'Teamwork, communication, empathy, emotional regulation, and ethical reasoning. Weighted 30% of the Benefit Score.',
-  'Motor Skills':       'Hand-eye coordination, fine motor control, reaction time, and physical activity. Weighted 20% of the Benefit Score.',
-}
-
-function CategoryBar({ label, value }: { label: string; value: number | null }) {
+function CategoryBar({ label, value, tooltip }: { label: string; value: number | null; tooltip?: string }) {
   return (
     <div className="flex items-center gap-2 sm:gap-3">
       <span className="w-28 sm:w-36 text-xs sm:text-sm text-slate-600 shrink-0 flex items-center">
         {label}
-        {BENEFIT_TOOLTIPS[label] && <Tooltip text={BENEFIT_TOOLTIPS[label]} />}
+        {tooltip && <Tooltip text={tooltip} />}
       </span>
       <div className="flex-1 bg-slate-100 rounded-full h-2.5 overflow-hidden">
         <div className={`h-full rounded-full transition-all ${scoreBarColor(value)}`} style={{ width: pct(value) }} />
@@ -109,24 +103,18 @@ function CategoryBar({ label, value }: { label: string; value: number | null }) 
   )
 }
 
-const RISK_TOOLTIPS: Record<string, string> = {
-  'Dopamine Manipulation':  'Variable rewards, streaks, FOMO events, near-miss mechanics, and other design patterns that exploit reward psychology.',
-  'Monetization Pressure':  'In-app purchases, pay-to-win mechanics, virtual currency obfuscation, spending prompts, and ad pressure.',
-  'Social Risk':            'Social obligations, competitive toxicity, stranger interaction, social comparison, and privacy concerns.',
-  'Content (not in risk score)': 'Violence, language, sexual content, and other age-related content factors. Shown separately — does not affect the time recommendation.',
-}
-
-function RiskMeter({ label, value, note }: { label: string; value: number | null; note?: string }) {
+function RiskMeter({ label, value, note, tooltip }: { label: string; value: number | null; note?: string; tooltip?: string }) {
+  const tGC = useTranslations('gameCard')
   const level = riskLevel(value)
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs sm:text-sm font-medium text-slate-700 flex items-center min-w-0">
           {label}
-          {RISK_TOOLTIPS[label] && <Tooltip text={RISK_TOOLTIPS[label]} />}
+          {tooltip && <Tooltip text={tooltip} />}
         </span>
         <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${level.bg} ${level.color}`}>
-          {level.label}
+          {tGC(level.labelKey)}
         </span>
       </div>
       <div className="bg-slate-100 rounded-full h-3 overflow-hidden">
@@ -175,66 +163,21 @@ function BenefitsTab({ scores, review, t }: { scores: SerializedScores; review: 
       <div>
         <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">{t('developmentAreas')}</h3>
         <div className="space-y-3">
-          <CategoryBar label={t('cognitive')}        value={scores.cognitiveScore} />
-          <CategoryBar label={t('socialEmotional')}  value={scores.socialEmotionalScore} />
-          <CategoryBar label={t('motorSkills')}      value={scores.motorScore} />
+          <CategoryBar label={t('cognitive')}       value={scores.cognitiveScore}       tooltip={t('tooltipCognitive')} />
+          <CategoryBar label={t('socialEmotional')} value={scores.socialEmotionalScore} tooltip={t('tooltipSocialEmotional')} />
+          <CategoryBar label={t('motorSkills')}     value={scores.motorScore}           tooltip={t('tooltipMotor')} />
         </div>
         <div className="mt-3 flex items-center gap-2">
           <span className="text-xs text-slate-500">{t('overallBds')}</span>
           <span className="text-sm font-bold text-emerald-700">{Math.round((scores.bds ?? 0) * 100)}/100</span>
         </div>
       </div>
-      {review?.benefitsNarrative && (
-        <div className="bg-emerald-50 rounded-2xl p-5">
-          <h3 className="text-sm font-semibold text-emerald-800 mb-1">{t('whatChildDevelops')}</h3>
-          <p className="text-sm text-emerald-900 leading-relaxed">{review.benefitsNarrative}</p>
-        </div>
-      )}
-    </div>
-  )
-}
-
-function RisksTab({ scores, game, review, darkPatterns, t }: {
-  scores: SerializedScores; game: GameCardProps['game']
-  review: SerializedReview | null; darkPatterns: DarkPattern[]; t: T
-}) {
-  const flags = [
-    game.hasMicrotransactions && 'In-app purchases',
-    game.hasLootBoxes         && 'Loot boxes / gacha',
-    game.hasBattlePass        && 'Battle pass',
-    game.hasSubscription      && 'Subscription required',
-    game.hasStrangerChat      && 'Stranger chat',
-  ].filter(Boolean) as string[]
-
-  return (
-    <div className="space-y-6">
-      <div className="space-y-4">
-        <RiskMeter label={t('dopamineManipulation')} value={scores.dopamineRisk}     note="Variable rewards, streaks, FOMO events, and other engagement mechanics" />
-        <RiskMeter label={t('monetizationPressure')} value={scores.monetizationRisk} note="In-app purchases, pay-to-win elements, and spending prompts" />
-        <RiskMeter label={t('socialRisk')}           value={scores.socialRisk}       note="Social obligation, competitive toxicity, stranger interaction" />
-        <div>
-          <RiskMeter label={t('contentRisk')} value={scores.contentRisk} note="Violence, language, and other content factors — context depends on age" />
-          <p className="text-xs text-slate-400 mt-1">{t('contentRiskNote')}</p>
-        </div>
-      </div>
-
-      {flags.length > 0 && (
-        <div className="bg-amber-50 rounded-2xl p-5">
-          <h3 className="text-sm font-semibold text-amber-800 mb-2">{t('flags')}</h3>
-          <div className="flex flex-wrap gap-2">
-            {flags.map((f) => (
-              <span key={f} className="text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200 px-2.5 py-1 rounded-full">{f}</span>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Representation */}
-      {(review?.repGenderBalance != null || review?.repEthnicDiversity != null) && (
-        <div className="bg-purple-50 rounded-2xl p-5 space-y-2">
+      {review && (review.repGenderBalance != null || review.repEthnicDiversity != null || review.bechdelResult != null) && (
+        <div className="bg-purple-50 rounded-2xl p-5 space-y-3">
           <h3 className="text-sm font-semibold text-purple-800 flex items-center gap-1.5">
-            {t('representation')}
-            <Tooltip text="How diverse the game's characters are in gender and ethnicity. Higher = more authentic representation. Display only — does not affect time recommendation." />
+            {t('representationSection')}
+            <Tooltip text={t('tooltipRepresentation')} />
           </h3>
           <div className="space-y-1.5">
             {review.repGenderBalance != null && (
@@ -256,18 +199,70 @@ function RisksTab({ scores, game, review, darkPatterns, t }: {
               </div>
             )}
           </div>
+          {review.bechdelResult != null && (
+            <div className={`flex items-start gap-3 rounded-xl p-3 ${
+              review.bechdelResult === 'pass' ? 'bg-violet-100' : 'bg-purple-100'
+            }`}>
+              <span className="text-base leading-none mt-0.5">♀</span>
+              <div>
+                <p className={`text-xs font-semibold ${review.bechdelResult === 'pass' ? 'text-violet-800' : 'text-purple-600'}`}>
+                  {t('bechdelPasses')}
+                  {review.bechdelResult !== 'pass' && (
+                    <span className="font-normal ml-1">
+                      {review.bechdelResult === 'na' ? `— ${t('bechdelNa')}` : '— does not pass'}
+                    </span>
+                  )}
+                </p>
+                {review.bechdelNotes && (
+                  <p className="text-xs text-purple-700 mt-0.5 leading-relaxed">{review.bechdelNotes}</p>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
-      {/* Bechdel badge */}
-      {review?.bechdelResult === 'pass' && (
-        <div className="bg-violet-50 border border-violet-200 rounded-2xl p-4 flex items-start gap-3">
-          <span className="text-lg leading-none mt-0.5">♀</span>
-          <div>
-            <p className="text-sm font-semibold text-violet-800">Passes the Bechdel test</p>
-            {review.bechdelNotes && (
-              <p className="text-xs text-violet-700 mt-0.5 leading-relaxed">{review.bechdelNotes}</p>
-            )}
+      {review?.benefitsNarrative && (
+        <div className="bg-emerald-50 rounded-2xl p-5">
+          <h3 className="text-sm font-semibold text-emerald-800 mb-1">{t('whatChildDevelops')}</h3>
+          <p className="text-sm text-emerald-900 leading-relaxed">{review.benefitsNarrative}</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function RisksTab({ scores, game, review, darkPatterns, t }: {
+  scores: SerializedScores; game: GameCardProps['game']
+  review: SerializedReview | null; darkPatterns: DarkPattern[]; t: T
+}) {
+  const flags = [
+    game.hasMicrotransactions && t('flagInAppPurchases'),
+    game.hasLootBoxes         && t('flagLootBoxes'),
+    game.hasBattlePass        && t('flagBattlePass'),
+    game.hasSubscription      && t('flagSubscription'),
+    game.hasStrangerChat      && t('flagStrangerChat'),
+  ].filter(Boolean) as string[]
+
+  return (
+    <div className="space-y-6">
+      <div className="space-y-4">
+        <RiskMeter label={t('dopamineManipulation')} value={scores.dopamineRisk}     note={t('riskNotesDopamine')}    tooltip={t('tooltipDopamine')} />
+        <RiskMeter label={t('monetizationPressure')} value={scores.monetizationRisk} note={t('riskNotesMonetization')} tooltip={t('tooltipMonetization')} />
+        <RiskMeter label={t('socialRisk')}           value={scores.socialRisk}       note={t('riskNotesSocial')}      tooltip={t('tooltipSocialRisk')} />
+        <div>
+          <RiskMeter label={t('contentRisk')} value={scores.contentRisk} note={t('riskNotesContent')} tooltip={t('tooltipContent')} />
+          <p className="text-xs text-slate-400 mt-1">{t('contentRiskNote')}</p>
+        </div>
+      </div>
+
+      {flags.length > 0 && (
+        <div className="bg-amber-50 rounded-2xl p-5">
+          <h3 className="text-sm font-semibold text-amber-800 mb-2">{t('flags')}</h3>
+          <div className="flex flex-wrap gap-2">
+            {flags.map((f) => (
+              <span key={f} className="text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200 px-2.5 py-1 rounded-full">{f}</span>
+            ))}
           </div>
         </div>
       )}
@@ -277,13 +272,13 @@ function RisksTab({ scores, game, review, darkPatterns, t }: {
         <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-5">
           <h3 className="text-sm font-semibold text-yellow-800 mb-1 flex items-center gap-1.5">
             {t('ideologicalContent')}
-            <Tooltip text="Presence of propaganda, nationalist framing, or strong ideological content. 0=neutral, 3=heavy. Display only — does not affect time recommendation." />
+            <Tooltip text={t('tooltipIdeological')} />
             <span className={`ml-auto text-xs font-bold px-2 py-0.5 rounded-full ${
               review.propagandaLevel === 1 ? 'bg-yellow-100 text-yellow-700' :
               review.propagandaLevel === 2 ? 'bg-orange-100 text-orange-700' :
               'bg-red-100 text-red-700'
             }`}>
-              {['', 'MILD', 'NOTABLE', 'HEAVY'][review.propagandaLevel]}
+              {review.propagandaLevel === 1 ? t('propagandaMild') : review.propagandaLevel === 2 ? t('propagandaNotable') : t('propagandaHeavy')}
             </span>
           </h3>
           {review.propagandaNotes && (
@@ -303,7 +298,7 @@ function RisksTab({ scores, game, review, darkPatterns, t }: {
 
       {darkPatterns.some((p) => p.patternId === 'DP05') && (
         <div className="bg-purple-50 rounded-2xl p-3 text-sm text-purple-900">
-          🧸 Characters in this game directly ask players to make purchases
+          {t('dp05Message')}
         </div>
       )}
 
@@ -320,7 +315,7 @@ function RisksTab({ scores, game, review, darkPatterns, t }: {
 function FullScoresTab({ scores, review, t }: { scores: SerializedScores; review: SerializedReview | null; t: T }) {
   const [expanded, setExpanded] = useState(false)
 
-  if (!review) return <p className="text-sm text-slate-400">No detailed review data yet.</p>
+  if (!review) return <p className="text-sm text-slate-400">{t('noReviewData')}</p>
 
   return (
     <div className="space-y-6">
@@ -328,12 +323,12 @@ function FullScoresTab({ scores, review, t }: { scores: SerializedScores; review
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-emerald-50 rounded-xl p-3 text-emerald-800">
           <p className="text-xs font-semibold mb-0.5">{t('bdsLabel')}</p>
-          <p className="text-[10px] text-emerald-600 leading-snug">Cognitive ×0.50<br/>Social ×0.30 + Motor ×0.20</p>
+          <p className="text-[10px] text-emerald-600 leading-snug">{t('bdsFormula')}</p>
           <p className="text-lg font-black mt-1">{Math.round((scores.bds ?? 0) * 100)}<span className="text-xs font-semibold">/100</span></p>
         </div>
         <div className="bg-red-50 rounded-xl p-3 text-red-800">
           <p className="text-xs font-semibold mb-0.5">{t('risLabel')}</p>
-          <p className="text-[10px] text-red-600 leading-snug">Dopamine ×0.45<br/>Monet. ×0.30 + Social ×0.25</p>
+          <p className="text-[10px] text-red-600 leading-snug">{t('risFormula')}</p>
           <p className="text-lg font-black mt-1">{Math.round((scores.ris ?? 0) * 100)}<span className="text-xs font-semibold">/100</span></p>
         </div>
       </div>
@@ -348,85 +343,85 @@ function FullScoresTab({ scores, review, t }: { scores: SerializedScores; review
       {expanded && (
       <>
       <div>
-        <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Benefit Scores (0–5)</h3>
+        <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">{t('benefitScoresHeader')}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
           <div>
-            <p className="text-xs font-semibold text-slate-400 mb-1">B1 · Cognitive</p>
-            <DetailRow label="Problem Solving"    score={review.problemSolving}    max={5} />
-            <DetailRow label="Spatial Awareness"  score={review.spatialAwareness}  max={5} />
-            <DetailRow label="Strategic Thinking" score={review.strategicThinking} max={5} />
-            <DetailRow label="Critical Thinking"  score={review.criticalThinking}  max={5} />
-            <DetailRow label="Memory & Attention" score={review.memoryAttention}   max={5} />
-            <DetailRow label="Creativity"         score={review.creativity}        max={5} />
-            <DetailRow label="Reading & Language" score={review.readingLanguage}   max={5} />
-            <DetailRow label="Math & Systems"     score={review.mathSystems}       max={5} />
-            <DetailRow label="Learning Transfer"  score={review.learningTransfer}  max={5} />
-            <DetailRow label="Adaptive Challenge" score={review.adaptiveChallenge} max={5} />
+            <p className="text-xs font-semibold text-slate-400 mb-1">{t('b1Cognitive')}</p>
+            <DetailRow label={t('fieldProblemSolving')}    score={review.problemSolving}    max={5} />
+            <DetailRow label={t('fieldSpatialAwareness')}  score={review.spatialAwareness}  max={5} />
+            <DetailRow label={t('fieldStrategicThinking')} score={review.strategicThinking} max={5} />
+            <DetailRow label={t('fieldCriticalThinking')}  score={review.criticalThinking}  max={5} />
+            <DetailRow label={t('fieldMemoryAttention')}   score={review.memoryAttention}   max={5} />
+            <DetailRow label={t('fieldCreativity')}        score={review.creativity}        max={5} />
+            <DetailRow label={t('fieldReadingLanguage')}   score={review.readingLanguage}   max={5} />
+            <DetailRow label={t('fieldMathSystems')}       score={review.mathSystems}       max={5} />
+            <DetailRow label={t('fieldLearningTransfer')}  score={review.learningTransfer}  max={5} />
+            <DetailRow label={t('fieldAdaptiveChallenge')} score={review.adaptiveChallenge} max={5} />
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-400 mb-1">B2 · Social-Emotional</p>
-            <DetailRow label="Teamwork"             score={review.teamwork}            max={5} />
-            <DetailRow label="Communication"        score={review.communication}       max={5} />
-            <DetailRow label="Empathy"              score={review.empathy}             max={5} />
-            <DetailRow label="Emotional Regulation" score={review.emotionalRegulation} max={5} />
-            <DetailRow label="Ethical Reasoning"    score={review.ethicalReasoning}    max={5} />
-            <DetailRow label="Positive Social"      score={review.positiveSocial}      max={5} />
-            <p className="text-xs font-semibold text-slate-400 mt-3 mb-1">B3 · Motor</p>
-            <DetailRow label="Hand-Eye Coordination" score={review.handEyeCoord}      max={5} />
-            <DetailRow label="Fine Motor"            score={review.fineMotor}         max={5} />
-            <DetailRow label="Reaction Time"         score={review.reactionTime}      max={5} />
-            <DetailRow label="Physical Activity"     score={review.physicalActivity}  max={5} />
+            <p className="text-xs font-semibold text-slate-400 mb-1">{t('b2Social')}</p>
+            <DetailRow label={t('fieldTeamwork')}             score={review.teamwork}            max={5} />
+            <DetailRow label={t('fieldCommunication')}        score={review.communication}       max={5} />
+            <DetailRow label={t('fieldEmpathy')}              score={review.empathy}             max={5} />
+            <DetailRow label={t('fieldEmotionalRegulation')}  score={review.emotionalRegulation} max={5} />
+            <DetailRow label={t('fieldEthicalReasoning')}     score={review.ethicalReasoning}    max={5} />
+            <DetailRow label={t('fieldPositiveSocial')}       score={review.positiveSocial}      max={5} />
+            <p className="text-xs font-semibold text-slate-400 mt-3 mb-1">{t('b3Motor')}</p>
+            <DetailRow label={t('fieldHandEye')}          score={review.handEyeCoord}     max={5} />
+            <DetailRow label={t('fieldFineMotor')}        score={review.fineMotor}         max={5} />
+            <DetailRow label={t('fieldReactionTime')}     score={review.reactionTime}      max={5} />
+            <DetailRow label={t('fieldPhysicalActivity')} score={review.physicalActivity}  max={5} />
           </div>
         </div>
         <div className="mt-4 bg-emerald-50 rounded-xl p-3 text-xs text-emerald-800">
-          <span className="font-semibold">BDS</span> = Cognitive ×0.50 + Social ×0.30 + Motor ×0.20{' = '}
+          <span className="font-semibold">BDS</span> = {t('bdsFormula')}{' = '}
           <span className="font-semibold">{Math.round((scores.bds ?? 0) * 100)}/100</span>
         </div>
       </div>
 
       <div>
-        <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Risk Scores (0–3)</h3>
+        <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">{t('riskScoresHeader')}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
           <div>
-            <p className="text-xs font-semibold text-slate-400 mb-1">R1 · Dopamine Manipulation</p>
-            <DetailRow label="Variable Rewards"      score={review.variableRewards}      max={3} />
-            <DetailRow label="Streak Mechanics"      score={review.streakMechanics}      max={3} />
-            <DetailRow label="Loss Aversion"         score={review.lossAversion}         max={3} />
-            <DetailRow label="FOMO Events"           score={review.fomoEvents}           max={3} />
-            <DetailRow label="Stopping Barriers"     score={review.stoppingBarriers}     max={3} />
-            <DetailRow label="Notifications"         score={review.notifications}        max={3} />
-            <DetailRow label="Near Miss"             score={review.nearMiss}             max={3} />
-            <DetailRow label="Infinite Play"         score={review.infinitePlay}         max={3} />
-            <DetailRow label="Escalating Commitment" score={review.escalatingCommitment} max={3} />
-            <DetailRow label="Reward Frequency"      score={review.variableRewardFreq}   max={3} />
-            <p className="text-xs font-semibold text-slate-400 mt-3 mb-1">R2 · Monetization Pressure</p>
-            <DetailRow label="Spending Ceiling"      score={review.spendingCeiling}      max={3} />
-            <DetailRow label="Pay-to-Win"            score={review.payToWin}             max={3} />
-            <DetailRow label="Currency Obfuscation"  score={review.currencyObfuscation}  max={3} />
-            <DetailRow label="Spending Prompts"      score={review.spendingPrompts}      max={3} />
-            <DetailRow label="Child Targeting"       score={review.childTargeting}       max={3} />
-            <DetailRow label="Ad Pressure"           score={review.adPressure}           max={3} />
-            <DetailRow label="Subscription Pressure" score={review.subscriptionPressure} max={3} />
-            <DetailRow label="Social Spending"       score={review.socialSpending}       max={3} />
+            <p className="text-xs font-semibold text-slate-400 mb-1">{t('r1Dopamine')}</p>
+            <DetailRow label={t('fieldVariableRewards')}      score={review.variableRewards}      max={3} />
+            <DetailRow label={t('fieldStreakMechanics')}      score={review.streakMechanics}      max={3} />
+            <DetailRow label={t('fieldLossAversion')}         score={review.lossAversion}         max={3} />
+            <DetailRow label={t('fieldFomoEvents')}           score={review.fomoEvents}           max={3} />
+            <DetailRow label={t('fieldStoppingBarriers')}     score={review.stoppingBarriers}     max={3} />
+            <DetailRow label={t('fieldNotifications')}        score={review.notifications}        max={3} />
+            <DetailRow label={t('fieldNearMiss')}             score={review.nearMiss}             max={3} />
+            <DetailRow label={t('fieldInfinitePlay')}         score={review.infinitePlay}         max={3} />
+            <DetailRow label={t('fieldEscalatingCommitment')} score={review.escalatingCommitment} max={3} />
+            <DetailRow label={t('fieldRewardFrequency')}      score={review.variableRewardFreq}   max={3} />
+            <p className="text-xs font-semibold text-slate-400 mt-3 mb-1">{t('r2Monetization')}</p>
+            <DetailRow label={t('fieldSpendingCeiling')}      score={review.spendingCeiling}      max={3} />
+            <DetailRow label={t('fieldPayToWin')}             score={review.payToWin}             max={3} />
+            <DetailRow label={t('fieldCurrencyObfuscation')}  score={review.currencyObfuscation}  max={3} />
+            <DetailRow label={t('fieldSpendingPrompts')}      score={review.spendingPrompts}      max={3} />
+            <DetailRow label={t('fieldChildTargeting')}       score={review.childTargeting}       max={3} />
+            <DetailRow label={t('fieldAdPressure')}           score={review.adPressure}           max={3} />
+            <DetailRow label={t('fieldSubscriptionPressure')} score={review.subscriptionPressure} max={3} />
+            <DetailRow label={t('fieldSocialSpending')}       score={review.socialSpending}       max={3} />
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-400 mb-1">R3 · Social Risk</p>
-            <DetailRow label="Social Obligation"    score={review.socialObligation}    max={3} />
-            <DetailRow label="Competitive Toxicity" score={review.competitiveToxicity} max={3} />
-            <DetailRow label="Stranger Risk"        score={review.strangerRisk}        max={3} />
-            <DetailRow label="Social Comparison"    score={review.socialComparison}    max={3} />
-            <DetailRow label="Identity / Self-Worth" score={review.identitySelfWorth}  max={3} />
-            <DetailRow label="Privacy Risk"         score={review.privacyRisk}         max={3} />
-            <p className="text-xs font-semibold text-slate-400 mt-3 mb-1">R4 · Content (display only)</p>
-            <DetailRow label="Violence Level"       score={review.violenceLevel}       max={3} />
-            <DetailRow label="Sexual Content"       score={review.sexualContent}       max={3} />
-            <DetailRow label="Language"             score={review.language}            max={3} />
-            <DetailRow label="Substance References" score={review.substanceRef}        max={3} />
-            <DetailRow label="Fear / Horror"        score={review.fearHorror}          max={3} />
+            <p className="text-xs font-semibold text-slate-400 mb-1">{t('r3Social')}</p>
+            <DetailRow label={t('fieldSocialObligation')}    score={review.socialObligation}    max={3} />
+            <DetailRow label={t('fieldCompetitiveToxicity')} score={review.competitiveToxicity} max={3} />
+            <DetailRow label={t('fieldStrangerRisk')}        score={review.strangerRisk}        max={3} />
+            <DetailRow label={t('fieldSocialComparison')}    score={review.socialComparison}    max={3} />
+            <DetailRow label={t('fieldIdentitySelfWorth')}   score={review.identitySelfWorth}   max={3} />
+            <DetailRow label={t('fieldPrivacyRisk')}         score={review.privacyRisk}         max={3} />
+            <p className="text-xs font-semibold text-slate-400 mt-3 mb-1">{t('r4Content')} {t('displayOnly')}</p>
+            <DetailRow label={t('fieldViolenceLevel')}       score={review.violenceLevel}       max={3} />
+            <DetailRow label={t('fieldSexualContent')}       score={review.sexualContent}       max={3} />
+            <DetailRow label={t('fieldLanguage')}            score={review.language}            max={3} />
+            <DetailRow label={t('fieldSubstanceRef')}        score={review.substanceRef}        max={3} />
+            <DetailRow label={t('fieldFearHorror')}          score={review.fearHorror}          max={3} />
           </div>
         </div>
         <div className="mt-4 bg-red-50 rounded-xl p-3 text-xs text-red-800">
-          <span className="font-semibold">RIS</span> = Dopamine ×0.45 + Monetization ×0.30 + Social ×0.25{' = '}
+          <span className="font-semibold">RIS</span> = {t('risFormula')}{' = '}
           <span className="font-semibold">{Math.round((scores.ris ?? 0) * 100)}/100</span>
         </div>
       </div>
@@ -434,14 +429,14 @@ function FullScoresTab({ scores, review, t }: { scores: SerializedScores; review
       {review && (review.r5CrossPlatform != null || review.r5LoadTime != null) && (
         <div>
           <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
-            R5 · Accessibility Risk <span className="normal-case font-normal">(display only)</span>
+            {t('r5Accessibility')} <span className="normal-case font-normal">{t('displayOnly')}</span>
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
             <div>
-              <DetailRow label="Cross-platform availability" score={review.r5CrossPlatform}   max={3} />
-              <DetailRow label="Load time / friction"        score={review.r5LoadTime}         max={3} />
-              <DetailRow label="Mobile-optimised"            score={review.r5MobileOptimized}  max={3} />
-              <DetailRow label="Login barrier"               score={review.r5LoginBarrier}     max={3} />
+              <DetailRow label={t('fieldCrossPlatform')}   score={review.r5CrossPlatform}   max={3} />
+              <DetailRow label={t('fieldLoadTime')}         score={review.r5LoadTime}         max={3} />
+              <DetailRow label={t('fieldMobileOptimised')}  score={review.r5MobileOptimized}  max={3} />
+              <DetailRow label={t('fieldLoginBarrier')}     score={review.r5LoginBarrier}     max={3} />
             </div>
           </div>
         </div>
@@ -450,14 +445,14 @@ function FullScoresTab({ scores, review, t }: { scores: SerializedScores; review
       {review && (review.r6InfiniteGameplay != null || review.r6NoStoppingPoints != null) && (
         <div>
           <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
-            R6 · Endless Design <span className="normal-case font-normal">(display only)</span>
+            {t('r6Endless')} <span className="normal-case font-normal">{t('displayOnly')}</span>
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
             <div>
-              <DetailRow label="Infinite gameplay"    score={review.r6InfiniteGameplay}   max={3} />
-              <DetailRow label="No stopping points"   score={review.r6NoStoppingPoints}   max={3} />
-              <DetailRow label="No fail / game-over"  score={review.r6NoGameOver}         max={3} />
-              <DetailRow label="No chapter structure" score={review.r6NoChapterStructure} max={3} />
+              <DetailRow label={t('fieldInfiniteGameplay')}    score={review.r6InfiniteGameplay}   max={3} />
+              <DetailRow label={t('fieldNoStoppingPoints')}    score={review.r6NoStoppingPoints}   max={3} />
+              <DetailRow label={t('fieldNoGameOver')}          score={review.r6NoGameOver}         max={3} />
+              <DetailRow label={t('fieldNoChapterStructure')}  score={review.r6NoChapterStructure} max={3} />
             </div>
           </div>
         </div>
@@ -466,12 +461,12 @@ function FullScoresTab({ scores, review, t }: { scores: SerializedScores; review
       {review && (review.repGenderBalance != null || review.repEthnicDiversity != null) && (
         <div>
           <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
-            REP · Representation <span className="normal-case font-normal">(display only — higher = better)</span>
+            {t('repHeader')} <span className="normal-case font-normal">{t('higherIsBetter')}</span>
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
             <div>
-              <DetailRow label="Gender balance"    score={review.repGenderBalance}   max={3} />
-              <DetailRow label="Ethnic diversity"  score={review.repEthnicDiversity} max={3} />
+              <DetailRow label={t('fieldGenderBalance')}   score={review.repGenderBalance}   max={3} />
+              <DetailRow label={t('fieldEthnicDiversity')} score={review.repEthnicDiversity} max={3} />
             </div>
           </div>
         </div>
@@ -480,11 +475,11 @@ function FullScoresTab({ scores, review, t }: { scores: SerializedScores; review
       {review && review.propagandaLevel != null && (
         <div>
           <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
-            PROP · Ideology <span className="normal-case font-normal">(display only)</span>
+            {t('propHeader')} <span className="normal-case font-normal">{t('displayOnly')}</span>
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
             <div>
-              <DetailRow label="Propaganda level" score={review.propagandaLevel} max={3} />
+              <DetailRow label={t('fieldPropagandaLevel')} score={review.propagandaLevel} max={3} />
               {review.propagandaNotes && (
                 <p className="text-xs text-slate-500 mt-1 italic">{review.propagandaNotes}</p>
               )}
@@ -530,7 +525,8 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
             <img src={game.backgroundImage} alt="" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             {game.esrbRating && (
-              <span className={`absolute top-3 right-3 text-xs font-black px-2.5 py-1 rounded-full text-white ${ageBadgeColor(game.esrbRating)}`}>
+              <span className={`absolute top-3 right-3 text-xs font-black px-2 py-1 rounded-full text-white flex items-center gap-1 ${ageBadgeColor(game.esrbRating)}`}>
+                <User size={10} strokeWidth={2.5} />
                 {esrbToAge(game.esrbRating)}
               </span>
             )}
@@ -539,7 +535,8 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
           <div className={`h-28 bg-gradient-to-br ${gradient} flex items-center justify-center relative`}>
             <span className="text-5xl font-black text-white/20 select-none">{abbr}</span>
             {game.esrbRating && (
-              <span className={`absolute top-3 right-3 text-xs font-black px-2.5 py-1 rounded-full text-white ${ageBadgeColor(game.esrbRating)}`}>
+              <span className={`absolute top-3 right-3 text-xs font-black px-2 py-1 rounded-full text-white flex items-center gap-1 ${ageBadgeColor(game.esrbRating)}`}>
+                <User size={10} strokeWidth={2.5} />
                 {esrbToAge(game.esrbRating)}
               </span>
             )}
@@ -562,7 +559,21 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
 
           {/* Developer */}
           {game.developer && (
-            <p className="text-sm text-slate-400 font-medium mb-3">{game.developer}</p>
+            <p className="text-sm text-slate-400 font-medium mb-2">{game.developer}</p>
+          )}
+
+          {/* Platforms */}
+          {game.platforms.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {game.platforms.slice(0, 5).map((p) => (
+                <span key={p} className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">
+                  {p}
+                </span>
+              ))}
+              {game.platforms.length > 5 && (
+                <span className="text-xs text-slate-400 self-center">+{game.platforms.length - 5}</span>
+              )}
+            </div>
           )}
 
           {/* Genre tags */}
@@ -574,7 +585,7 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
             ))}
             {game.metacriticScore != null && (
               <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full ml-auto">
-                MC {game.metacriticScore}
+                Metacritic {game.metacriticScore}
               </span>
             )}
           </div>
@@ -599,7 +610,7 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
           {scores.debateRounds != null && (
             <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-50 border border-violet-200 text-xs font-semibold text-violet-700">
               <span>⚖️</span>
-              Adversarial debate · {scores.debateRounds} round{scores.debateRounds !== 1 ? 's' : ''}
+              {t('adversarialDebate', { rounds: scores.debateRounds ?? 0 })}
             </div>
           )}
         </div>
@@ -650,7 +661,7 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
             {risk && (
               <>
                 <p className={`text-3xl font-black tracking-tighter ${risk.color}`}>
-                  {risk.label}
+                  {t(risk.labelKey)}
                 </p>
                 <p className="text-xs font-semibold text-orange-700 -mt-1">{t('engagementPatterns')}</p>
               </>
@@ -683,8 +694,8 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
       {/* ── 5. VIRTUAL CURRENCY BANNER ─────────────────────────────────────────── */}
       {darkPatterns.some((p) => p.patternId === 'DP04') && (
         <div className="bg-amber-50 border border-amber-100 rounded-3xl px-5 py-4 text-sm text-amber-900">
-          <span className="font-bold">💱 Uses virtual currency</span>
-          {' — real costs may not be obvious to children'}
+          <span className="font-bold">💱 {t('virtualCurrency')}</span>
+          {' — '}{t('virtualCurrencySub')}
           {review?.virtualCurrencyName && (
             <span className="block text-xs text-amber-700 mt-0.5">
               {review.virtualCurrencyName}
@@ -727,7 +738,7 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
         <div className="border-t border-gray-100 px-5 py-3 flex flex-wrap gap-x-6 gap-y-1 text-xs text-slate-400">
           <span>
             <span className="font-semibold text-slate-600">{t('base')}: </span>
-            {game.basePrice != null ? `$${game.basePrice.toFixed(2)}` : 'Unknown'}
+            {game.basePrice != null ? `$${game.basePrice.toFixed(2)}` : t('baseUnknown')}
           </span>
           {review?.estimatedMonthlyCostLow != null && (
             <span>
@@ -742,13 +753,6 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
           {game.avgPlaytimeHours != null && game.avgPlaytimeHours > 0 && (
             <span>
               <span className="font-semibold text-slate-600">{t('playtime')}: </span>~{game.avgPlaytimeHours}h
-            </span>
-          )}
-          {game.platforms.length > 0 && (
-            <span className="hidden sm:inline">
-              <span className="font-semibold text-slate-600">{t('on')}: </span>
-              {game.platforms.slice(0, 3).join(', ')}
-              {game.platforms.length > 3 && ` +${game.platforms.length - 3}`}
             </span>
           )}
           <span className="ml-auto">
@@ -767,10 +771,10 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
           <summary className="flex items-center justify-between px-5 py-4 cursor-pointer list-none select-none">
             <div className="flex items-center gap-2">
               <span className="text-violet-600">⚖️</span>
-              <span className="text-sm font-semibold text-violet-800">How this score was debate-reviewed</span>
+              <span className="text-sm font-semibold text-violet-800">{t('debateTitle')}</span>
             </div>
-            <span className="text-xs text-violet-500 group-open:hidden">Show transcript</span>
-            <span className="text-xs text-violet-500 hidden group-open:inline">Hide</span>
+            <span className="text-xs text-violet-500 group-open:hidden">{t('debateShow')}</span>
+            <span className="text-xs text-violet-500 hidden group-open:inline">{t('debateHide')}</span>
           </summary>
           <div className="px-5 pb-5 pt-1">
             <p className="text-xs text-violet-600 mb-3 leading-relaxed">

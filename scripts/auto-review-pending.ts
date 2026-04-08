@@ -22,7 +22,7 @@
 
 import Anthropic from '@anthropic-ai/sdk'
 import { GoogleGenAI, FunctionCallingConfigMode, Type } from '@google/genai'
-import { isNull, eq } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import { db } from '../src/lib/db'
 import { games, gameScores, reviews } from '../src/lib/db/schema'
 import { calculateGameScores } from '../src/lib/scoring/engine'
@@ -44,6 +44,8 @@ const dryRun     = args.includes('--dry-run')
 const rescoreAll = args.includes('--rescore-all')
 const limitFlag  = args.indexOf('--limit')
 const limit      = limitFlag !== -1 ? parseInt(args[limitFlag + 1], 10) : 20
+const slugFlag   = args.indexOf('--slug')
+const targetSlug = slugFlag !== -1 ? args[slugFlag + 1] : null
 
 // Model name resolution
 const ANTHROPIC_MODELS: Record<string, string> = {
@@ -331,9 +333,11 @@ async function callGemini(prompt: string): Promise<ReviewInput> {
     },
   })
 
-  const fc = result.candidates?.[0]?.content?.parts?.[0]?.functionCall
+  const candidate = result.candidates?.[0]
+  const fc = candidate?.content?.parts?.[0]?.functionCall
   if (!fc?.args) {
-    throw new Error('Gemini did not return a function call')
+    const textFallback = candidate?.content?.parts?.[0]?.text?.slice(0, 200)
+    throw new Error(`Gemini did not return a function call${textFallback ? ` — model said: "${textFallback}"` : ''}`)
   }
 
   return fc.args as ReviewInput
@@ -493,6 +497,13 @@ async function reviewGame(slug: string) {
 // ─── Find games to review ─────────────────────────────────────────────────────
 
 async function getPendingGames(): Promise<{ slug: string; title: string }[]> {
+  if (targetSlug) {
+    return db
+      .select({ slug: games.slug, title: games.title })
+      .from(games)
+      .where(eq(games.slug, targetSlug))
+      .limit(1)
+  }
   if (rescoreAll) {
     return db
       .select({ slug: games.slug, title: games.title })
@@ -504,7 +515,10 @@ async function getPendingGames(): Promise<{ slug: string; title: string }[]> {
     .select({ slug: games.slug, title: games.title })
     .from(games)
     .leftJoin(gameScores, eq(gameScores.gameId, games.id))
-    .where(isNull(gameScores.id))
+    .where(sql`${gameScores.id} IS NULL AND (
+      (${games.description} IS NOT NULL AND char_length(${games.description}) > 50)
+      OR ${games.metacriticScore} IS NOT NULL
+    )`)
     .limit(limit)
 }
 
@@ -548,8 +562,7 @@ async function main() {
   console.log(`Done. ${pending.length - errors.length}/${pending.length} succeeded.`)
 
   if (errors.length > 0) {
-    console.error(`Failed: ${errors.join(', ')}`)
-    process.exit(1)
+    console.error(`Failed (skipped): ${errors.join(', ')}`)
   }
 }
 

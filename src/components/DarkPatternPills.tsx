@@ -1,39 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import type { DarkPattern } from '@/types/game'
-
-// ─── Pattern catalogue ────────────────────────────────────────────────────────
-
-const PATTERN_LABELS: Record<string, string> = {
-  DP01: 'Gateway Purchase',
-  DP02: 'Confirm-Shaming',
-  DP03: 'False Scarcity',
-  DP04: 'Currency Obfuscation',
-  DP05: 'Parasocial Prompts',
-  DP06: 'Streak Punishment',
-  DP07: 'Artificial Energy',
-  DP08: 'Social Obligation',
-  DP09: 'Loot Box / Gacha',
-  DP10: 'Pay-to-Skip',
-  DP11: 'Notification Spam',
-  DP12: 'FOMO Events',
-}
-
-const PATTERN_DEFAULT_DESC: Record<string, string> = {
-  DP01: 'Low-cost starter pack normalizes spending before expensive offers appear',
-  DP02: 'Guilting language on decline buttons ("Are you sure you don\'t want to be cool?")',
-  DP03: 'Fake countdown timers or "limited stock" on unlimited digital goods',
-  DP04: 'Real money converted to gems/crystals/coins, reducing spending awareness',
-  DP05: 'In-game character the child has bonded with asks them to buy things',
-  DP06: 'Streak mechanics that punish missed days rather than just rewarding attendance',
-  DP07: 'Stamina/energy system that refills on timer or purchase',
-  DP08: 'Progress requires friends (gift exchanges, raid parties, co-op gates)',
-  DP09: 'Random-chance paid rewards with undisclosed or poor odds',
-  DP10: 'Paywalled shortcuts past intentionally tedious progression',
-  DP11: 'Aggressive re-engagement push notifications',
-  DP12: 'Time-limited content/events designed to create urgency',
-}
 
 // ─── Pill styles ──────────────────────────────────────────────────────────────
 
@@ -47,10 +16,26 @@ function pillClasses(severity: DarkPattern['severity']): string {
 
 // ─── Single pill ─────────────────────────────────────────────────────────────
 
-function Pill({ pattern }: { pattern: DarkPattern }) {
+type T = ReturnType<typeof useTranslations<'darkPatterns'>>
+
+const LABEL_KEYS: Record<string, Parameters<T>[0]> = {
+  DP01: 'dp01Label', DP02: 'dp02Label', DP03: 'dp03Label', DP04: 'dp04Label',
+  DP05: 'dp05Label', DP06: 'dp06Label', DP07: 'dp07Label', DP08: 'dp08Label',
+  DP09: 'dp09Label', DP10: 'dp10Label', DP11: 'dp11Label', DP12: 'dp12Label',
+}
+
+const DESC_KEYS: Record<string, Parameters<T>[0]> = {
+  DP01: 'dp01Desc', DP02: 'dp02Desc', DP03: 'dp03Desc', DP04: 'dp04Desc',
+  DP05: 'dp05Desc', DP06: 'dp06Desc', DP07: 'dp07Desc', DP08: 'dp08Desc',
+  DP09: 'dp09Desc', DP10: 'dp10Desc', DP11: 'dp11Desc', DP12: 'dp12Desc',
+}
+
+function Pill({ pattern, t }: { pattern: DarkPattern; t: T }) {
   const [expanded, setExpanded] = useState(false)
-  const label = PATTERN_LABELS[pattern.patternId] ?? pattern.patternId
-  const desc = pattern.description ?? PATTERN_DEFAULT_DESC[pattern.patternId] ?? null
+  const labelKey = LABEL_KEYS[pattern.patternId]
+  const descKey  = DESC_KEYS[pattern.patternId]
+  const label    = labelKey ? t(labelKey) : pattern.patternId
+  const desc     = pattern.description ?? (descKey ? t(descKey) : null)
 
   return (
     <div>
@@ -73,20 +58,22 @@ function Pill({ pattern }: { pattern: DarkPattern }) {
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export default function DarkPatternPills({ patterns }: { patterns: DarkPattern[] }) {
+  const t = useTranslations('darkPatterns')
+
   return (
     <div>
       <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">
-        Detected Tactics
+        {t('heading')}
       </h3>
 
       {patterns.length === 0 ? (
         <p className="text-sm text-emerald-700 font-medium">
-          ✓ No manipulative tactics detected
+          {t('noneDetected')}
         </p>
       ) : (
         <div className="flex flex-wrap gap-2">
           {patterns.map((p) => (
-            <Pill key={p.patternId} pattern={p} />
+            <Pill key={p.patternId} pattern={p} t={t} />
           ))}
         </div>
       )}

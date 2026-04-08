@@ -158,7 +158,7 @@ async function main() {
 
     // Split into batches of 50 key-value pairs to avoid token limits
     const entries = Object.entries(flat)
-    const BATCH_SIZE = 60
+    const BATCH_SIZE = 25
     const translated: Record<string, string> = {}
 
     for (let i = 0; i < entries.length; i += BATCH_SIZE) {
@@ -176,9 +176,12 @@ async function main() {
           break
         } catch (err: unknown) {
           const status = (err as { status?: number })?.status
-          if (status === 429 && attempt < 4) {
-            const delay = Math.pow(2, attempt) * 10_000
-            console.log(`[429 — waiting ${delay / 1000}s]`)
+          const isNetworkErr = (err as { code?: string })?.code === 'UND_ERR_HEADERS_TIMEOUT'
+            || String(err).includes('fetch failed')
+            || String(err).includes('ECONNRESET')
+          if ((status === 429 || isNetworkErr) && attempt < 5) {
+            const delay = Math.pow(2, attempt) * 8_000
+            console.log(`[${status ?? 'network error'} — waiting ${delay / 1000}s]`)
             await new Promise(r => setTimeout(r, delay))
             attempt++
           } else {

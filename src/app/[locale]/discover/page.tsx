@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { desc, eq, isNotNull, lte, gte, and, sql, inArray, count, avg } from 'drizzle-orm'
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
 import { games, gameScores } from '@/lib/db/schema'
 import GameDiscoveryDashboard from '@/components/GameDiscoveryDashboard'
@@ -90,29 +91,31 @@ function buildRiskType(monetization: number | null, social: number | null, dopam
   return 'general'
 }
 
-const RISK_EXPLANATIONS: Record<string, string> = {
-  monetization: 'This game uses real-money purchases, loot boxes, or currency obfuscation — design techniques proven to encourage overspending, especially in children.',
-  dopamine:     'This game is engineered with variable reward loops and near-miss mechanics — the same psychological patterns used in slot machines — to make it hard to stop playing.',
-  social:       'This game uses social obligation mechanics: guild requirements, friend leaderboards, and competitive pressure that create anxiety around logging off.',
-  general:      'Our analysis found multiple high-risk design patterns that outweigh its developmental benefits.',
+type DiscoverT = Awaited<ReturnType<typeof getTranslations<'discover'>>>
+
+const RISK_EXPLANATION_KEYS: Record<string, Parameters<DiscoverT>[0]> = {
+  monetization: 'swapRiskMonetization',
+  dopamine:     'swapRiskDopamine',
+  social:       'swapRiskSocial',
+  general:      'swapRiskGeneral',
 }
 
-function buildFromReason(monetization: number | null, social: number | null, dopamine: number | null): string {
-  if (monetization != null && monetization >= 0.55) return 'Heavy monetization pressure and spending prompts'
-  if (social       != null && social       >= 0.55) return 'Unmoderated social features and stranger-interaction risks'
-  if (dopamine     != null && dopamine     >= 0.55) return 'Compulsive loop design — hard to put down'
-  if (monetization != null && monetization >= 0.4)  return 'In-app purchases targeting young players'
-  return 'High overall risk score across safety dimensions'
+function buildFromReason(t: DiscoverT, monetization: number | null, social: number | null, dopamine: number | null): string {
+  if (monetization != null && monetization >= 0.55) return t('swapFromHeavyMon')
+  if (social       != null && social       >= 0.55) return t('swapFromSocial')
+  if (dopamine     != null && dopamine     >= 0.55) return t('swapFromDopamine')
+  if (monetization != null && monetization >= 0.4)  return t('swapFromMon')
+  return t('swapFromGeneral')
 }
 
-function buildToReason(bds: number | null, ris: number | null): string {
-  if (bds != null && bds >= 0.6 && ris != null && ris <= 0.25) return 'Strong developmental benefits with minimal safety concerns'
-  if (bds != null && bds >= 0.5)  return 'Similar gameplay energy with meaningful skills development'
-  if (ris != null && ris <= 0.2)  return 'Same genre appeal — no spending pressure or social risks'
-  return 'Much safer by the numbers, comparable fun factor'
+function buildToReason(t: DiscoverT, bds: number | null, ris: number | null): string {
+  if (bds != null && bds >= 0.6 && ris != null && ris <= 0.25) return t('swapToStrong')
+  if (bds != null && bds >= 0.5)  return t('swapToSimilar')
+  if (ris != null && ris <= 0.2)  return t('swapToSameGenre')
+  return t('swapToSafer')
 }
 
-async function getSwapPair(): Promise<SwapPair | null> {
+async function getSwapPair(t: DiscoverT): Promise<SwapPair | null> {
   const risky = await db
     .select({
       id:               games.id,
@@ -189,7 +192,7 @@ async function getSwapPair(): Promise<SwapPair | null> {
         title:     g.title,
         genre:     gGenres[0] ?? fromGenres[0] ?? 'Game',
         curascore: g.curascore!,
-        reason:    buildToReason(g.bds, g.ris),
+        reason:    buildToReason(t, g.bds, g.ris),
         href:      `/game/${g.slug}`,
       })
     }
@@ -204,10 +207,10 @@ async function getSwapPair(): Promise<SwapPair | null> {
       title:           fromGame.title,
       genre:           fromGenres[0] ?? 'Game',
       curascore:       fromGame.curascore ?? 0,
-      reason:          buildFromReason(fromGame.monetizationRisk, fromGame.socialRisk, fromGame.dopamineRisk),
+      reason:          buildFromReason(t, fromGame.monetizationRisk, fromGame.socialRisk, fromGame.dopamineRisk),
       href:            `/game/${fromGame.slug}`,
       riskType,
-      riskExplanation: RISK_EXPLANATIONS[riskType],
+      riskExplanation: t(RISK_EXPLANATION_KEYS[riskType]),
     },
     alternatives,
   }
@@ -215,10 +218,13 @@ async function getSwapPair(): Promise<SwapPair | null> {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default async function DiscoverPage() {
+export default async function DiscoverPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'discover' })
+
   const [topGames, swap, stats] = await Promise.all([
     getTopGames(),
-    getSwapPair(),
+    getSwapPair(t),
     getCatalogStats(),
   ])
   return <GameDiscoveryDashboard topGames={topGames} swap={swap ?? undefined} stats={stats} />
