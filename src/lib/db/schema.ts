@@ -171,7 +171,8 @@ export const reviews = pgTable('reviews', {
   // Reviewer notes
   benefitsNarrative: text('benefits_narrative'),  // "What your child develops" explanation
   risksNarrative: text('risks_narrative'),         // "What to watch out for" explanation
-  parentTip: text('parent_tip'),                   // Practical advice
+  parentTip: text('parent_tip'),                   // Risk-side practical advice
+  parentTipBenefits: text('parent_tip_benefits'),  // Benefits-side encouragement tip
 
   // Timestamps
   createdAt: timestamp('created_at').defaultNow(),

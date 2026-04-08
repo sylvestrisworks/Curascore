@@ -1,4 +1,7 @@
 /**
+ * @deprecated — use auto-review-pending.ts instead (Gemini by default, no Claude credits).
+ *   node --env-file=.env node_modules/tsx/dist/cli.cjs scripts/auto-review-pending.ts --slug <slug>
+ *
  * Auto-review games using the Claude API.
  * Fetches game metadata, asks Claude to score against the PlaySmart rubric,
  * then inserts the review + computed scores into the DB.

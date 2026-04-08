@@ -155,6 +155,7 @@ export type SerializedReview = {
   benefitsNarrative: string | null
   risksNarrative: string | null
   parentTip: string | null
+  parentTipBenefits: string | null
 }
 
 export type GameCardProps = {

@@ -141,6 +141,7 @@ export async function GET(_req: NextRequest, { params }: { params: { slug: strin
     benefitsNarrative: review.benefitsNarrative,
     risksNarrative: review.risksNarrative,
     parentTip: review.parentTip,
+    parentTipBenefits: review.parentTipBenefits ?? null,
   } : null
 
   const result: GameCardProps = { game: serializedGame, scores: serializedScores, review: serializedReview, darkPatterns: rawDarkPatterns, compliance: rawCompliance }

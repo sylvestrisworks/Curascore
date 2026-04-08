@@ -176,6 +176,7 @@ async function fetchGameData(slug: string): Promise<GameCardProps | null> {
         benefitsNarrative:         review.benefitsNarrative,
         risksNarrative:            review.risksNarrative,
         parentTip:                 review.parentTip,
+        parentTipBenefits:         review.parentTipBenefits ?? null,
       }
     : null
 

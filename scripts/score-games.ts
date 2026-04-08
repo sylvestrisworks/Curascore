@@ -1,4 +1,7 @@
 /**
+ * @deprecated — use auto-review-pending.ts instead (Gemini by default, no Claude credits).
+ *   node --env-file=.env node_modules/tsx/dist/cli.cjs scripts/auto-review-pending.ts --limit 50
+ *
  * Score all games without game_scores using Claude Sonnet 4.6 + prompt caching.
  *
  * The RUBRIC.md is sent as a cached system prompt — pays the cache-write cost

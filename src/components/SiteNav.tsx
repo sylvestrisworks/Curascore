@@ -1,21 +1,45 @@
 'use client'
 
-import { useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Menu, X, Search } from 'lucide-react'
 import { useTranslations, useLocale } from 'next-intl'
+import { usePathname } from 'next/navigation'
 import SearchBar from './SearchBar'
 import LanguageSwitcher from './LanguageSwitcher'
 
 export default function SiteNav() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [atTop, setAtTop]       = useState(true)
   const t      = useTranslations('nav')
   const locale = useLocale()
+  const pathname = usePathname()
+
+  // Detect homepage (hero search already visible at top)
+  const isHomepage = pathname === `/${locale}` || pathname === `/${locale}/`
+
+  // Track whether we're still in the hero zone (first ~220 px)
+  useEffect(() => {
+    if (!isHomepage) return
+    const onScroll = () => setAtTop(window.scrollY < 220)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [isHomepage])
+
+  // On homepage while hero is visible, collapse nav search to an icon
+  const collapseNavSearch = isHomepage && atTop
 
   const NAV_LINKS = [
     { href: `/${locale}/discover`, label: t('discover') },
     { href: `/${locale}/browse`,   label: t('browse')   },
     { href: `/${locale}/compare`,  label: t('compare')  },
   ]
+
+  function focusHeroSearch() {
+    const heroInput = document.querySelector<HTMLInputElement>('.hero-gradient input[type="text"]')
+    heroInput?.focus()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
     <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
@@ -33,8 +57,18 @@ export default function SiteNav() {
         </a>
 
         {/* Search — hidden on mobile (shown in second row) */}
-        <div className="hidden sm:block flex-1 max-w-md">
-          <SearchBar placeholder={t('discover') + '…'} />
+        <div className="hidden sm:flex flex-1 max-w-md items-center">
+          {collapseNavSearch ? (
+            <button
+              onClick={focusHeroSearch}
+              className="flex items-center justify-center w-10 h-10 rounded-xl text-slate-400 hover:bg-slate-100 hover:text-indigo-600 transition-colors"
+              aria-label={t('search')}
+            >
+              <Search size={20} />
+            </button>
+          ) : (
+            <SearchBar placeholder={t('discover') + '…'} />
+          )}
         </div>
 
         {/* Desktop nav links */}

@@ -222,6 +222,16 @@ function BenefitsTab({ scores, review, t }: { scores: SerializedScores; review: 
         </div>
       )}
 
+      {review?.parentTipBenefits && (
+        <div className="bg-blue-50 rounded-2xl p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Lightbulb size={14} className="text-blue-600 shrink-0" strokeWidth={2.5} />
+            <h3 className="text-xs font-black uppercase tracking-widest text-blue-700">{t('parentProTip')}</h3>
+          </div>
+          <p className="text-sm text-blue-900 leading-relaxed">{review.parentTipBenefits}</p>
+        </div>
+      )}
+
       {review?.benefitsNarrative && (
         <div className="bg-emerald-50 rounded-2xl p-5">
           <h3 className="text-sm font-semibold text-emerald-800 mb-1">{t('whatChildDevelops')}</h3>
@@ -302,12 +312,6 @@ function RisksTab({ scores, game, review, darkPatterns, t }: {
         </div>
       )}
 
-      {review?.parentTip && (
-        <div className="bg-blue-50 rounded-2xl p-5">
-          <h3 className="text-sm font-semibold text-blue-800 mb-1">{t('parentTip')}</h3>
-          <p className="text-sm text-blue-900 leading-relaxed">{review.parentTip}</p>
-        </div>
-      )}
     </div>
   )
 }

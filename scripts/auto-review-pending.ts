@@ -3,11 +3,11 @@
  * Supports both Anthropic (Claude) and Google (Gemini via Vertex AI) as providers.
  *
  * Usage:
- *   # Default: Anthropic Haiku, batch of 20
+ *   # Default: Google Gemini Flash, batch of 20
  *   node --env-file=.env node_modules/tsx/dist/cli.cjs scripts/auto-review-pending.ts
  *
- *   # Use Google Gemini Flash (cheaper, good for bulk):
- *   node --env-file=.env node_modules/tsx/dist/cli.cjs scripts/auto-review-pending.ts --provider google
+ *   # Use Anthropic Claude Haiku (fallback):
+ *   node --env-file=.env node_modules/tsx/dist/cli.cjs scripts/auto-review-pending.ts --provider anthropic
  *
  *   # Custom batch size and model:
  *   node --env-file=.env node_modules/tsx/dist/cli.cjs scripts/auto-review-pending.ts --provider google --limit 50
@@ -34,7 +34,7 @@ import { mapDetailToInsert } from '../src/lib/rawg/mapper'
 const args = process.argv.slice(2)
 
 const providerFlag = args.indexOf('--provider')
-const provider     = (providerFlag !== -1 ? args[providerFlag + 1] : 'anthropic') as 'anthropic' | 'google'
+const provider     = (providerFlag !== -1 ? args[providerFlag + 1] : 'google') as 'anthropic' | 'google'
 
 const modelFlag = args.indexOf('--model')
 const modelArg  = modelFlag !== -1 ? args[modelFlag + 1]
@@ -151,12 +151,13 @@ const ANTHROPIC_TOOL: Anthropic.Tool = {
       },
       narratives: {
         type: 'object',
-        required: ['benefitsNarrative','risksNarrative','parentTip'],
+        required: ['benefitsNarrative','risksNarrative','parentTip','parentTipBenefits'],
         additionalProperties: false,
         properties: {
           benefitsNarrative: { type: 'string', description: '2–4 sentences: what the child develops' },
           risksNarrative:    { type: 'string', description: '2–4 sentences: what to watch out for' },
-          parentTip:         { type: 'string', description: '1–3 sentences: actionable advice for parents' },
+          parentTip:         { type: 'string', description: '1–2 sentences: risk-focused advice — spending limits, chat safety, session length' },
+          parentTipBenefits: { type: 'string', description: '1–2 sentences: benefit-focused encouragement — how to leverage the game\'s strengths (e.g. ask about puzzles, play together, discuss storylines)' },
         },
       },
     },
@@ -294,7 +295,7 @@ type ReviewInput = {
     minSessionMinutes: number; hasNaturalStoppingPoints: boolean
     penalizesBreaks: boolean; stoppingPointsDescription: string
   }
-  narratives: { benefitsNarrative: string; risksNarrative: string; parentTip: string }
+  narratives: { benefitsNarrative: string; risksNarrative: string; parentTip: string; parentTipBenefits: string }
 }
 
 // ─── Provider: Anthropic ──────────────────────────────────────────────────────
@@ -439,6 +440,7 @@ async function reviewGame(slug: string) {
     benefitsNarrative:         r.narratives.benefitsNarrative,
     risksNarrative:            r.narratives.risksNarrative,
     parentTip:                 r.narratives.parentTip,
+    parentTipBenefits:         r.narratives.parentTipBenefits,
     approvedAt:                new Date(),
   }
 
