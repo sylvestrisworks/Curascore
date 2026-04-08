@@ -22,18 +22,18 @@ export async function GET(req: NextRequest) {
       curascore:                 gameScores.curascore,
       timeRecommendationMinutes: gameScores.timeRecommendationMinutes,
       timeRecommendationColor:   gameScores.timeRecommendationColor,
-      similarity:      sql<number>`word_similarity(${q}, ${games.title})`,
+      similarity:      sql<number>`word_similarity(unaccent(${q}), unaccent(${games.title}))`,
     })
     .from(games)
     .leftJoin(gameScores, eq(gameScores.gameId, games.id))
     .where(
       or(
-        sql`word_similarity(${q}, ${games.title}) > 0.2`,
-        sql`${games.title} ilike ${'%' + q + '%'}`,
+        sql`word_similarity(unaccent(${q}), unaccent(${games.title})) > 0.2`,
+        sql`unaccent(${games.title}) ilike ${'%' + q + '%'}`,
       )
     )
     .orderBy(
-      sql`word_similarity(${q}, ${games.title}) desc`,
+      sql`word_similarity(unaccent(${q}), unaccent(${games.title})) desc`,
       desc(gameScores.curascore),
       desc(games.metacriticScore),
     )
