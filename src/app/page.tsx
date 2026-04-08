@@ -120,10 +120,10 @@ async function getCarouselRows(platforms: string[], age?: string): Promise<Carou
       .orderBy(desc(gameScores.curascore))
       .limit(12),
 
-    // VR — games flagged as VR (ignores age/platform pickers intentionally)
+    // VR — games flagged as VR, filtered by age (platform picker intentionally ignored)
     db.select(BASE_SELECT).from(games)
       .innerJoin(gameScores, eq(gameScores.gameId, games.id))
-      .where(and(isNotNull(gameScores.curascore), eq(games.isVr, true)))
+      .where(and(isNotNull(gameScores.curascore), eq(games.isVr, true), ageFilter))
       .orderBy(desc(gameScores.curascore))
       .limit(12),
 
