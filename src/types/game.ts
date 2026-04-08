@@ -161,21 +161,27 @@ export type GameCardProps = {
 }
 
 // Safe Swap pair for the discovery dashboard
+export type SwapGame = {
+  title:           string
+  genre:           string
+  curascore:       number
+  reason:          string
+  href:            string
+}
+
 export type SwapPair = {
-  from: {
-    title:     string
-    genre:     string
-    curascore: number
-    reason:    string
-    href:      string
+  from: SwapGame & {
+    riskType:        string   // 'monetization' | 'dopamine' | 'social' | 'general'
+    riskExplanation: string   // plain-language explanation of the specific mechanic
   }
-  to: {
-    title:     string
-    genre:     string
-    curascore: number
-    reason:    string
-    href:      string
-  }
+  alternatives: SwapGame[]   // 2–3 safer alternatives
+}
+
+export type CatalogStats = {
+  totalScored:    number
+  lootBoxFreePct: number   // % of scored games with no loot boxes
+  avgCurascoreE:  number   // avg curascore for E-rated games
+  greenCount:     number   // games with curascore >= 66
 }
 
 // Lightweight type for search results and cards in list views
