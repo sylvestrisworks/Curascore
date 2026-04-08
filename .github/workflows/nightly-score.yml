@@ -3,7 +3,20 @@ name: Nightly import + score
 on:
   schedule:
     - cron: '0 2 * * *'   # 2 AM UTC every night
-  workflow_dispatch:        # also triggerable manually from GitHub UI
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Max games to score (default: 200)'
+        required: false
+        default: '200'
+      dry_run:
+        description: 'Dry run — score but skip DB writes (true/false)'
+        required: false
+        default: 'false'
+      skip_import:
+        description: 'Skip RAWG import step (true/false)'
+        required: false
+        default: 'false'
 
 jobs:
   score:
@@ -21,25 +34,35 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Write the Google service account key to disk so ADC picks it up
       - name: Set up Google credentials
         run: |
           echo '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}' > /tmp/gcp-key.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp-key.json" >> $GITHUB_ENV
 
       - name: Import games from RAWG
+        if: ${{ github.event.inputs.skip_import != 'true' }}
         env:
-          DATABASE_URL:       ${{ secrets.DATABASE_URL }}
-          RAWG_API_KEY:       ${{ secrets.RAWG_API_KEY }}
-          GOOGLE_PROJECT_ID:  ${{ secrets.GOOGLE_PROJECT_ID }}
-          GOOGLE_LOCATION:    ${{ secrets.GOOGLE_LOCATION }}
-        run: node --env-file=/dev/null node_modules/tsx/dist/cli.cjs scripts/import-rawg.ts
+          DATABASE_URL:      ${{ secrets.DATABASE_URL }}
+          RAWG_API_KEY:      ${{ secrets.RAWG_API_KEY }}
+          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+          GOOGLE_LOCATION:   ${{ secrets.GOOGLE_LOCATION }}
+        run: npx tsx scripts/import-rawg.ts
         continue-on-error: true   # don't abort scoring if RAWG is flaky
 
       - name: Score pending games
         env:
-          DATABASE_URL:       ${{ secrets.DATABASE_URL }}
-          RAWG_API_KEY:       ${{ secrets.RAWG_API_KEY }}
-          GOOGLE_PROJECT_ID:  ${{ secrets.GOOGLE_PROJECT_ID }}
-          GOOGLE_LOCATION:    ${{ secrets.GOOGLE_LOCATION }}
-        run: node --env-file=/dev/null node_modules/tsx/dist/cli.cjs scripts/auto-review-pending.ts --provider google --limit 200
+          DATABASE_URL:      ${{ secrets.DATABASE_URL }}
+          RAWG_API_KEY:      ${{ secrets.RAWG_API_KEY }}
+          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+          GOOGLE_LOCATION:   ${{ secrets.GOOGLE_LOCATION }}
+        run: |
+          LIMIT="${{ github.event.inputs.limit || '200' }}"
+          DRY_RUN="${{ github.event.inputs.dry_run || 'false' }}"
+
+          ARGS="--provider google --limit $LIMIT"
+          if [ "$DRY_RUN" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+
+          echo "Running: auto-review-pending.ts $ARGS"
+          npx tsx scripts/auto-review-pending.ts $ARGS
