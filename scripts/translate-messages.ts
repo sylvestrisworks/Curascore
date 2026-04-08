@@ -11,8 +11,12 @@
  *   npx tsx scripts/translate-messages.ts --force            # overwrite existing files
  */
 
+import { config } from 'dotenv'
+import { resolve } from 'path'
+config({ path: resolve(process.cwd(), '.env') })
+
 import fs from 'fs'
-import path from 'path'
+import nodePath from 'path'
 import { GoogleGenAI } from '@google/genai'
 
 // ─── Config ───────────────────────────────────────────────────────────────────
@@ -26,8 +30,8 @@ const LOCALE_NAMES: Record<string, string> = {
   de: 'German',
 }
 
-const MESSAGES_DIR = path.join(process.cwd(), 'messages')
-const EN_FILE      = path.join(MESSAGES_DIR, 'en.json')
+const MESSAGES_DIR = nodePath.join(process.cwd(), 'messages')
+const EN_FILE      = nodePath.join(MESSAGES_DIR, 'en.json')
 
 const args    = process.argv.slice(2)
 const langArg = args.find(a => a.startsWith('--lang='))?.split('=')[1]
@@ -40,7 +44,7 @@ const targetLocales = langArg
 
 // ─── Gemini setup ─────────────────────────────────────────────────────────────
 
-const googleAI = new GoogleGenAI({ vertexai: true, project: process.env.GOOGLE_CLOUD_PROJECT ?? 'playsmart-457410', location: 'us-central1' })
+const googleAI = new GoogleGenAI({ vertexai: true, project: process.env.GOOGLE_PROJECT_ID!, location: process.env.GOOGLE_LOCATION ?? 'us-central1' })
 const MODEL    = 'gemini-2.5-flash'
 
 // ─── Flatten/unflatten helpers ────────────────────────────────────────────────
@@ -104,7 +108,6 @@ Output: translated JSON with same keys.`
   const res = await googleAI.models.generateContent({
     model: MODEL,
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
-    config: { responseMimeType: 'application/json' },
   })
 
   const text = res.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
@@ -132,7 +135,7 @@ async function main() {
   if (force) console.log('Force mode: will overwrite existing files\n')
 
   for (const locale of targetLocales) {
-    const outFile = path.join(MESSAGES_DIR, `${locale}.json`)
+    const outFile = nodePath.join(MESSAGES_DIR, `${locale}.json`)
 
     if (fs.existsSync(outFile) && !force) {
       console.log(`⏭  ${locale}: file exists — use --force to overwrite`)
