@@ -148,7 +148,7 @@ export default async function HomePage({ params, searchParams }: Props) {
     <div className="bg-slate-50">
 
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
-      <section className="hero-gradient relative overflow-hidden">
+      <section className="hero-gradient relative">
         <div className="hidden sm:block absolute inset-0 pointer-events-none select-none overflow-hidden">
           <div className="float-1 absolute top-8 left-[8%]  text-4xl opacity-30">🎮</div>
           <div className="float-2 absolute top-12 right-[12%] text-3xl opacity-25">🧠</div>

@@ -516,8 +516,8 @@ async function getPendingGames(): Promise<{ slug: string; title: string }[]> {
     .from(games)
     .leftJoin(gameScores, eq(gameScores.gameId, games.id))
     .where(sql`${gameScores.id} IS NULL AND (
-      (${games.description} IS NOT NULL AND char_length(${games.description}) > 50)
-      OR ${games.metacriticScore} IS NOT NULL
+      ${games.metacriticScore} IS NOT NULL
+      OR (${games.releaseDate} IS NOT NULL AND ${games.releaseDate} <= NOW())
     )`)
     .limit(limit)
 }

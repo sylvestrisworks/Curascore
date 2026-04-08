@@ -4,8 +4,8 @@ import { useState, useEffect, useRef, useCallback, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import GameCard from '@/components/GameCard'
 import type { GameCardProps, GameSummary } from '@/types/game'
+import { esrbToAge, ageBadgeColor } from '@/lib/ui'
 
 // ─── Game picker ──────────────────────────────────────────────────────────────
 
@@ -20,12 +20,13 @@ function GamePicker({
   onSelect: (data: GameCardProps) => void
   onClear: () => void
 }) {
-  const [query, setQuery] = useState('')
+  const [query, setQuery]           = useState('')
   const [suggestions, setSuggestions] = useState<GameSummary[]>([])
-  const [loading, setLoading] = useState(false)
-  const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-  const debounce = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [loading, setLoading]       = useState(false)
+  const [open, setOpen]             = useState(false)
+  const ref                         = useRef<HTMLDivElement>(null)
+  const debounce                    = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const t                           = useTranslations('compare')
 
   useEffect(() => {
     if (debounce.current) clearTimeout(debounce.current)
@@ -33,13 +34,11 @@ function GamePicker({
     debounce.current = setTimeout(async () => {
       setLoading(true)
       try {
-        const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
+        const res  = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
         const data: GameSummary[] = await res.json()
         setSuggestions(data)
         setOpen(data.length > 0)
-      } finally {
-        setLoading(false)
-      }
+      } finally { setLoading(false) }
     }, 250)
   }, [query])
 
@@ -52,19 +51,13 @@ function GamePicker({
   }, [])
 
   async function pick(slug: string) {
-    setOpen(false)
-    setQuery('')
-    setLoading(true)
+    setOpen(false); setQuery(''); setLoading(true)
     try {
-      const res = await fetch(`/api/game/${slug}`)
+      const res  = await fetch(`/api/game/${slug}`)
       const data: GameCardProps = await res.json()
       onSelect(data)
-    } finally {
-      setLoading(false)
-    }
+    } finally { setLoading(false) }
   }
-
-  const t = useTranslations('compare')
 
   if (selected) {
     return (
@@ -113,23 +106,17 @@ function GamePicker({
               className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 border-b border-slate-100 last:border-0 text-left"
             >
               <div className="w-8 h-8 rounded-lg overflow-hidden bg-indigo-100 shrink-0">
-                {s.backgroundImage ? (
+                {s.backgroundImage
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={s.backgroundImage} alt="" className="w-full h-full object-cover" />
-                ) : (
-                  <span className="w-full h-full flex items-center justify-center text-xs font-bold text-indigo-600">
-                    {s.title.slice(0, 2).toUpperCase()}
-                  </span>
-                )}
+                  ? <img src={s.backgroundImage} alt="" className="w-full h-full object-cover" />
+                  : <span className="w-full h-full flex items-center justify-center text-xs font-bold text-indigo-600">{s.title.slice(0, 2).toUpperCase()}</span>}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-slate-800 truncate">{s.title}</p>
                 {s.genres[0] && <p className="text-xs text-slate-500">{s.genres[0]}</p>}
               </div>
               {s.esrbRating && (
-                <span className="text-xs font-bold bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded shrink-0">
-                  {s.esrbRating}
-                </span>
+                <span className="text-xs font-bold bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded shrink-0">{s.esrbRating}</span>
               )}
             </button>
           ))}
@@ -139,91 +126,311 @@ function GamePicker({
   )
 }
 
-// ─── Difference highlight bar ─────────────────────────────────────────────────
+// ─── Scorecard ────────────────────────────────────────────────────────────────
 
-type DiffItem = {
+type ScoreRowProps = {
   label: string
-  aVal: number | null
-  bVal: number | null
-  aTitle: string
-  bTitle: string
+  tooltip?: string
+  aVal: number | null      // 0–1
+  bVal: number | null      // 0–1
   higherIsBetter: boolean
+  format?: (v: number) => string
 }
 
-function DifferenceBar({ item }: { item: DiffItem }) {
-  const a = item.aVal ?? 0
-  const b = item.bVal ?? 0
-  const diff = Math.abs(a - b)
-  if (diff < 0.1) return null // not significant
+function ScoreRow({ label, tooltip, aVal, bVal, higherIsBetter, format }: ScoreRowProps) {
+  const a = aVal ?? null
+  const b = bVal ?? null
+  if (a === null && b === null) return null
 
-  const aWins = item.higherIsBetter ? a > b : a < b
-  const winner = aWins ? item.aTitle : item.bTitle
+  const aNum = a ?? 0
+  const bNum = b ?? 0
+  const aWins = higherIsBetter ? aNum > bNum : aNum < bNum
+  const bWins = higherIsBetter ? bNum > aNum : bNum < aNum
+  const tie   = Math.abs(aNum - bNum) < 0.03
+
+  const fmt = format ?? ((v: number) => String(Math.round(v * 100)))
+
+  const barColor = (wins: boolean) =>
+    wins && !tie ? 'bg-emerald-400' : 'bg-slate-300'
+
+  const valColor = (wins: boolean) =>
+    wins && !tie ? 'text-emerald-700 font-black' : 'text-slate-500 font-semibold'
 
   return (
-    <div className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
-      <div className="w-36 text-xs text-slate-600 shrink-0">{item.label}</div>
-      <div className="flex-1 flex items-center gap-2">
-        {/* A bar */}
-        <div className="flex-1 flex items-center gap-1">
-          <div className="flex-1 bg-slate-100 rounded-full h-2 overflow-hidden">
-            <div
-              className={`h-full rounded-full ${aWins ? 'bg-emerald-500' : 'bg-slate-400'}`}
-              style={{ width: `${Math.round(a * 100)}%` }}
-            />
-          </div>
-          <span className={`text-xs font-bold w-8 text-right shrink-0 ${aWins ? 'text-emerald-700' : 'text-slate-500'}`}>
-            {Math.round(a * 100)}
-          </span>
-        </div>
-        {/* vs */}
-        <span className="text-xs text-slate-400 shrink-0">vs</span>
-        {/* B bar */}
-        <div className="flex-1 flex items-center gap-1">
-          <span className={`text-xs font-bold w-8 shrink-0 ${!aWins ? 'text-emerald-700' : 'text-slate-500'}`}>
-            {Math.round(b * 100)}
-          </span>
-          <div className="flex-1 bg-slate-100 rounded-full h-2 overflow-hidden">
-            <div
-              className={`h-full rounded-full ${!aWins ? 'bg-emerald-500' : 'bg-slate-400'}`}
-              style={{ width: `${Math.round(b * 100)}%` }}
-            />
-          </div>
+    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 py-2.5 border-b border-slate-100 last:border-0">
+      {/* Game A */}
+      <div className="flex items-center gap-2 justify-end">
+        <span className={`text-sm tabular-nums ${valColor(aWins)}`}>
+          {a !== null ? fmt(a) : '—'}
+        </span>
+        <div className="w-16 sm:w-24 bg-slate-100 rounded-full h-2 overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all ${barColor(aWins)}`}
+            style={{ width: a !== null ? `${Math.round(aNum * 100)}%` : '0%' }}
+          />
         </div>
       </div>
-      {/* Winner badge */}
-      <div className="w-24 text-right shrink-0">
-        <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full truncate block">
-          {winner.split(' ').slice(0, 2).join(' ')} ↑
+
+      {/* Label */}
+      <div className="text-center px-2 min-w-[100px] sm:min-w-[120px]">
+        <span className="text-xs text-slate-500 leading-tight">
+          {label}
+          {tooltip && (
+            <span className="ml-1 text-[10px] text-slate-400" title={tooltip}>ⓘ</span>
+          )}
+        </span>
+      </div>
+
+      {/* Game B */}
+      <div className="flex items-center gap-2">
+        <div className="w-16 sm:w-24 bg-slate-100 rounded-full h-2 overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all ${barColor(bWins)}`}
+            style={{ width: b !== null ? `${Math.round(bNum * 100)}%` : '0%' }}
+          />
+        </div>
+        <span className={`text-sm tabular-nums ${valColor(bWins)}`}>
+          {b !== null ? fmt(b) : '—'}
         </span>
       </div>
     </div>
   )
 }
 
-// ─── Suggestions strip ────────────────────────────────────────────────────────
+function SectionHeader({ label }: { label: string }) {
+  return (
+    <div className="py-2 mt-2">
+      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{label}</p>
+    </div>
+  )
+}
+
+function InfoRow({ label, aText, bText, aGood, bGood }: {
+  label: string; aText: string; bText: string; aGood?: boolean; bGood?: boolean
+}) {
+  return (
+    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 py-2.5 border-b border-slate-100 last:border-0">
+      <div className="text-right">
+        <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
+          aGood ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'
+        }`}>{aText}</span>
+      </div>
+      <div className="text-center px-2 min-w-[100px] sm:min-w-[120px]">
+        <span className="text-xs text-slate-500">{label}</span>
+      </div>
+      <div className="text-left">
+        <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
+          bGood ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'
+        }`}>{bText}</span>
+      </div>
+    </div>
+  )
+}
+
+function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
+  const t = useTranslations('compare')
+
+  const aScore = a.scores
+  const bScore = b.scores
+
+  // Curascore colours
+  const curaBg = (s: number | null) => {
+    if (s == null) return 'bg-slate-200 text-slate-500'
+    if (s >= 70) return 'bg-emerald-500 text-white'
+    if (s >= 40) return 'bg-amber-400 text-white'
+    return 'bg-red-500 text-white'
+  }
+
+  const timeBg = (c: string | null | undefined) =>
+    c === 'green' ? 'bg-emerald-500 text-white' : c === 'amber' ? 'bg-amber-400 text-white' : c === 'red' ? 'bg-red-500 text-white' : 'bg-slate-200 text-slate-500'
+
+  const aMonth = a.review?.estimatedMonthlyCostLow != null
+    ? a.review.estimatedMonthlyCostLow === 0 && a.review.estimatedMonthlyCostHigh === 0
+      ? t('free')
+      : `$${a.review.estimatedMonthlyCostLow}–$${a.review.estimatedMonthlyCostHigh ?? a.review.estimatedMonthlyCostLow}/mo`
+    : '—'
+
+  const bMonth = b.review?.estimatedMonthlyCostLow != null
+    ? b.review.estimatedMonthlyCostLow === 0 && b.review.estimatedMonthlyCostHigh === 0
+      ? t('free')
+      : `$${b.review.estimatedMonthlyCostLow}–$${b.review.estimatedMonthlyCostHigh ?? b.review.estimatedMonthlyCostLow}/mo`
+    : '—'
+
+  const aFree = a.review?.estimatedMonthlyCostLow === 0 && a.review?.estimatedMonthlyCostHigh === 0
+  const bFree = b.review?.estimatedMonthlyCostLow === 0 && b.review?.estimatedMonthlyCostHigh === 0
+
+  // Verdict
+  const aCura = aScore?.curascore ?? 0
+  const bCura = bScore?.curascore ?? 0
+  const gap   = Math.abs(aCura - bCura)
+  const winner = gap >= 5 ? (aCura > bCura ? a.game.title : b.game.title) : null
+
+  return (
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+
+      {/* ── Game headers ── */}
+      <div className="grid grid-cols-[1fr_auto_1fr] border-b border-slate-100">
+        {/* Game A header */}
+        <div className="p-4 sm:p-5 flex flex-col items-center text-center gap-2">
+          <div className="w-14 h-14 rounded-xl overflow-hidden bg-indigo-100 shrink-0">
+            {a.game.backgroundImage
+              // eslint-disable-next-line @next/next/no-img-element
+              ? <img src={a.game.backgroundImage} alt="" className="w-full h-full object-cover" />
+              : <span className="w-full h-full flex items-center justify-center text-sm font-black text-indigo-500">{a.game.title.slice(0,2).toUpperCase()}</span>}
+          </div>
+          <div>
+            <p className="text-sm font-bold text-slate-800 leading-tight line-clamp-2">{a.game.title}</p>
+            <p className="text-xs text-slate-400 mt-0.5">{a.game.developer ?? a.game.genres[0] ?? ''}</p>
+          </div>
+          {aScore?.curascore != null && (
+            <span className={`text-lg font-black px-3 py-1 rounded-full ${curaBg(aScore.curascore)}`}>
+              {aScore.curascore}
+            </span>
+          )}
+        </div>
+
+        {/* VS divider */}
+        <div className="flex items-center justify-center px-2 border-x border-slate-100">
+          <span className="text-xs font-black text-slate-300 uppercase tracking-widest rotate-0">vs</span>
+        </div>
+
+        {/* Game B header */}
+        <div className="p-4 sm:p-5 flex flex-col items-center text-center gap-2">
+          <div className="w-14 h-14 rounded-xl overflow-hidden bg-indigo-100 shrink-0">
+            {b.game.backgroundImage
+              // eslint-disable-next-line @next/next/no-img-element
+              ? <img src={b.game.backgroundImage} alt="" className="w-full h-full object-cover" />
+              : <span className="w-full h-full flex items-center justify-center text-sm font-black text-indigo-500">{b.game.title.slice(0,2).toUpperCase()}</span>}
+          </div>
+          <div>
+            <p className="text-sm font-bold text-slate-800 leading-tight line-clamp-2">{b.game.title}</p>
+            <p className="text-xs text-slate-400 mt-0.5">{b.game.developer ?? b.game.genres[0] ?? ''}</p>
+          </div>
+          {bScore?.curascore != null && (
+            <span className={`text-lg font-black px-3 py-1 rounded-full ${curaBg(bScore.curascore)}`}>
+              {bScore.curascore}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* ── Scorecard rows ── */}
+      <div className="px-4 sm:px-6 pb-4">
+
+        {/* Daily limit */}
+        <SectionHeader label={t('scTimeLimitHeader')} />
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 py-2.5 border-b border-slate-100">
+          <div className="flex justify-end">
+            <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${timeBg(aScore?.timeRecommendationColor)}`}>
+              {aScore?.timeRecommendationMinutes != null ? `${aScore.timeRecommendationMinutes >= 120 ? '120+' : aScore.timeRecommendationMinutes} min` : '—'}
+            </span>
+          </div>
+          <div className="text-center px-2 min-w-[100px] sm:min-w-[120px]">
+            <span className="text-xs text-slate-500">{t('scTimeLimit')}</span>
+          </div>
+          <div className="flex justify-start">
+            <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${timeBg(bScore?.timeRecommendationColor)}`}>
+              {bScore?.timeRecommendationMinutes != null ? `${bScore.timeRecommendationMinutes >= 120 ? '120+' : bScore.timeRecommendationMinutes} min` : '—'}
+            </span>
+          </div>
+        </div>
+
+        {/* Benefits */}
+        <SectionHeader label={t('scBenefitsHeader')} />
+        <ScoreRow label={t('scGrowthScore')}      aVal={aScore?.bds                 ?? null} bVal={bScore?.bds                 ?? null} higherIsBetter={true}  tooltip={t('scGrowthTip')} />
+        <ScoreRow label={t('scCognitive')}         aVal={aScore?.cognitiveScore       ?? null} bVal={bScore?.cognitiveScore       ?? null} higherIsBetter={true}  />
+        <ScoreRow label={t('scSocial')}            aVal={aScore?.socialEmotionalScore ?? null} bVal={bScore?.socialEmotionalScore ?? null} higherIsBetter={true}  />
+        <ScoreRow label={t('scMotor')}             aVal={aScore?.motorScore           ?? null} bVal={bScore?.motorScore           ?? null} higherIsBetter={true}  />
+
+        {/* Risks */}
+        <SectionHeader label={t('scRisksHeader')} />
+        <ScoreRow label={t('scRiskLevel')}         aVal={aScore?.ris                  ?? null} bVal={bScore?.ris                  ?? null} higherIsBetter={false} tooltip={t('scRiskTip')} />
+        <ScoreRow label={t('scDopamine')}          aVal={aScore?.dopamineRisk         ?? null} bVal={bScore?.dopamineRisk         ?? null} higherIsBetter={false} />
+        <ScoreRow label={t('scMonetization')}      aVal={aScore?.monetizationRisk     ?? null} bVal={bScore?.monetizationRisk     ?? null} higherIsBetter={false} />
+        <ScoreRow label={t('scSocialRisk')}        aVal={aScore?.socialRisk           ?? null} bVal={bScore?.socialRisk           ?? null} higherIsBetter={false} />
+
+        {/* Practical */}
+        <SectionHeader label={t('scPracticalHeader')} />
+
+        <InfoRow
+          label={t('scAgeRating')}
+          aText={a.game.esrbRating ? `${esrbToAge(a.game.esrbRating)}+` : '—'}
+          bText={b.game.esrbRating ? `${esrbToAge(b.game.esrbRating)}+` : '—'}
+        />
+
+        <InfoRow
+          label={t('scBasePrice')}
+          aText={a.game.basePrice === 0 ? t('free') : a.game.basePrice != null ? `$${a.game.basePrice.toFixed(0)}` : '—'}
+          bText={b.game.basePrice === 0 ? t('free') : b.game.basePrice != null ? `$${b.game.basePrice.toFixed(0)}` : '—'}
+          aGood={a.game.basePrice === 0}
+          bGood={b.game.basePrice === 0}
+        />
+
+        <InfoRow
+          label={t('scMonthlyCost')}
+          aText={aMonth}
+          bText={bMonth}
+          aGood={aFree}
+          bGood={bFree}
+        />
+
+        {(a.review?.hasNaturalStoppingPoints != null || b.review?.hasNaturalStoppingPoints != null) && (
+          <InfoRow
+            label={t('scStoppingPoints')}
+            aText={a.review?.hasNaturalStoppingPoints == null ? '—' : a.review.hasNaturalStoppingPoints ? t('scYes') : t('scNo')}
+            bText={b.review?.hasNaturalStoppingPoints == null ? '—' : b.review.hasNaturalStoppingPoints ? t('scYes') : t('scNo')}
+            aGood={a.review?.hasNaturalStoppingPoints === true}
+            bGood={b.review?.hasNaturalStoppingPoints === true}
+          />
+        )}
+      </div>
+
+      {/* ── Verdict ── */}
+      {winner && (
+        <div className="border-t border-slate-100 bg-emerald-50 px-6 py-4 flex items-center gap-3">
+          <span className="text-emerald-600 text-lg">✓</span>
+          <p className="text-sm text-emerald-800">
+            <span className="font-bold">{winner}</span>
+            {' '}{t('scVerdictSub')}
+          </p>
+        </div>
+      )}
+
+      {/* ── Full review links ── */}
+      <div className="border-t border-slate-100 px-6 py-3 flex justify-between">
+        <Link href={`/game/${a.game.slug}`} className="text-xs text-indigo-600 hover:text-indigo-800 hover:underline font-medium">
+          {t('scFullReview', { title: a.game.title.split(' ').slice(0, 3).join(' ') })} →
+        </Link>
+        <Link href={`/game/${b.game.slug}`} className="text-xs text-indigo-600 hover:text-indigo-800 hover:underline font-medium">
+          {t('scFullReview', { title: b.game.title.split(' ').slice(0, 3).join(' ') })} →
+        </Link>
+      </div>
+    </div>
+  )
+}
+
+// ─── Suggestion strip ─────────────────────────────────────────────────────────
 
 function SuggestionStrip({ highRiskGame }: { highRiskGame: GameCardProps }) {
   const t = useTranslations('compare')
   const [suggestions, setSuggestions] = useState<GameSummary[]>([])
   const genre = highRiskGame.game.genres[0]
-  const ris = highRiskGame.scores?.ris ?? 0
+  const ris   = highRiskGame.scores?.ris ?? 0
 
   useEffect(() => {
     if (!genre || ris < 0.5) return
     const maxRis = Math.max(ris - 0.2, 0.1)
     fetch(`/api/suggest?genre=${encodeURIComponent(genre)}&maxRis=${maxRis}&excludeSlug=${highRiskGame.game.slug}`)
-      .then(r => r.json())
-      .then(setSuggestions)
-      .catch(() => {})
+      .then(r => r.json()).then(setSuggestions).catch(() => {})
   }, [genre, ris, highRiskGame.game.slug])
 
   if (ris < 0.5 || suggestions.length === 0) return null
 
-  const timeColor = (c: 'green' | 'amber' | 'red' | null) =>
+  const timeBg = (c: 'green' | 'amber' | 'red' | null) =>
     c === 'green' ? 'bg-emerald-100 text-emerald-700' : c === 'amber' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'
 
   return (
-    <div className="mt-6 bg-emerald-50 border border-emerald-200 rounded-2xl p-5">
+    <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5">
       <h3 className="font-semibold text-emerald-800 mb-1">{t('similarSafer')}</h3>
       <p className="text-sm text-emerald-700 mb-4">
         {t('similarSaferSub', { title: highRiskGame.game.title, genre: genre ?? '' })}
@@ -236,23 +443,17 @@ function SuggestionStrip({ highRiskGame }: { highRiskGame: GameCardProps }) {
             className="flex items-center gap-3 bg-white rounded-xl border border-emerald-200 px-3 py-2.5 hover:border-indigo-300 hover:shadow-sm transition-all"
           >
             <div className="w-10 h-10 rounded-lg overflow-hidden bg-emerald-100 shrink-0">
-              {s.backgroundImage ? (
+              {s.backgroundImage
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={s.backgroundImage} alt="" className="w-full h-full object-cover" />
-              ) : (
-                <span className="w-full h-full flex items-center justify-center text-xs font-bold text-emerald-600">
-                  {s.title.slice(0, 2).toUpperCase()}
-                </span>
-              )}
+                ? <img src={s.backgroundImage} alt="" className="w-full h-full object-cover" />
+                : <span className="w-full h-full flex items-center justify-center text-xs font-bold text-emerald-600">{s.title.slice(0,2).toUpperCase()}</span>}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-slate-800 truncate">{s.title}</p>
               <div className="flex items-center gap-1 mt-0.5">
-                {s.esrbRating && (
-                  <span className="text-xs text-slate-500">{s.esrbRating}</span>
-                )}
+                {s.esrbRating && <span className="text-xs text-slate-500">{s.esrbRating}</span>}
                 {s.timeRecommendationMinutes && (
-                  <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${timeColor(s.timeRecommendationColor)}`}>
+                  <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${timeBg(s.timeRecommendationColor)}`}>
                     {s.timeRecommendationMinutes}m
                   </span>
                 )}
@@ -272,22 +473,18 @@ async function loadGame(slug: string): Promise<GameCardProps | null> {
     const res = await fetch(`/api/game/${slug}`)
     if (!res.ok) return null
     return await res.json()
-  } catch {
-    return null
-  }
+  } catch { return null }
 }
 
 function ComparePageInner() {
-  const t = useTranslations('compare')
-  const router = useRouter()
+  const t          = useTranslations('compare')
+  const router     = useRouter()
   const searchParams = useSearchParams()
   const [gameA, setGameA] = useState<GameCardProps | null>(null)
   const [gameB, setGameB] = useState<GameCardProps | null>(null)
-  const [mobileTab, setMobileTab] = useState<'A' | 'B'>('A')
   const [copied, setCopied] = useState(false)
   const initialised = useRef(false)
 
-  // Load games from URL on first render
   useEffect(() => {
     if (initialised.current) return
     initialised.current = true
@@ -297,7 +494,6 @@ function ComparePageInner() {
     if (slugB) loadGame(slugB).then(d => d && setGameB(d))
   }, [searchParams])
 
-  // Sync URL whenever selections change
   const syncUrl = useCallback((a: GameCardProps | null, b: GameCardProps | null) => {
     const params = new URLSearchParams()
     if (a) params.set('a', a.game.slug)
@@ -308,38 +504,23 @@ function ComparePageInner() {
 
   function selectA(data: GameCardProps) { setGameA(data); syncUrl(data, gameB) }
   function selectB(data: GameCardProps) { setGameB(data); syncUrl(gameA, data) }
-  function clearA() { setGameA(null); syncUrl(null, gameB) }
-  function clearB() { setGameB(null); syncUrl(gameA, null) }
+  function clearA()                     { setGameA(null); syncUrl(null, gameB) }
+  function clearB()                     { setGameB(null); syncUrl(gameA, null) }
 
   function copyLink() {
     navigator.clipboard.writeText(window.location.href).then(() => {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      setCopied(true); setTimeout(() => setCopied(false), 2000)
     })
   }
 
-  const both = gameA !== null && gameB !== null
+  const both        = gameA !== null && gameB !== null
   const highRiskGame = both
     ? ((gameA.scores?.ris ?? 0) >= (gameB.scores?.ris ?? 0) ? gameA : gameB)
     : null
 
-  // Build diff items
-  const diffs: DiffItem[] = both
-    ? [
-        { label: t('benefitScore'),  aVal: gameA.scores?.bds             ?? null, bVal: gameB.scores?.bds             ?? null, aTitle: gameA.game.title, bTitle: gameB.game.title, higherIsBetter: true  },
-        { label: t('riskScore'),     aVal: gameA.scores?.ris             ?? null, bVal: gameB.scores?.ris             ?? null, aTitle: gameA.game.title, bTitle: gameB.game.title, higherIsBetter: false },
-        { label: t('cognitive'),     aVal: gameA.scores?.cognitiveScore  ?? null, bVal: gameB.scores?.cognitiveScore  ?? null, aTitle: gameA.game.title, bTitle: gameB.game.title, higherIsBetter: true  },
-        { label: t('social'),        aVal: gameA.scores?.socialEmotionalScore ?? null, bVal: gameB.scores?.socialEmotionalScore ?? null, aTitle: gameA.game.title, bTitle: gameB.game.title, higherIsBetter: true },
-        { label: t('dopamineRisk'),  aVal: gameA.scores?.dopamineRisk    ?? null, bVal: gameB.scores?.dopamineRisk    ?? null, aTitle: gameA.game.title, bTitle: gameB.game.title, higherIsBetter: false },
-        { label: t('monetization'),  aVal: gameA.scores?.monetizationRisk ?? null, bVal: gameB.scores?.monetizationRisk ?? null, aTitle: gameA.game.title, bTitle: gameB.game.title, higherIsBetter: false },
-      ].filter(d => d.aVal != null || d.bVal != null)
-    : []
-
-  const significantDiffs = diffs.filter(d => Math.abs((d.aVal ?? 0) - (d.bVal ?? 0)) >= 0.1)
-
   return (
     <div className="min-h-screen bg-slate-50">
-      <main className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+      <main className="max-w-2xl mx-auto px-4 py-6 space-y-5">
 
         {/* Pickers */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -368,99 +549,26 @@ function ComparePageInner() {
           </div>
         )}
 
-        {/* Difference highlights */}
-        {both && significantDiffs.length > 0 && (
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-            <h2 className="font-bold text-slate-800 mb-1">{t('keyDifferences')}</h2>
-            <p className="text-sm text-slate-500 mb-4">
-              {t('keyDifferencesSub')}
-            </p>
-            <div className="flex items-center justify-between mb-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">
-              <span className="truncate max-w-[35%]">{gameA.game.title}</span>
-              <span className="shrink-0 mx-2">vs</span>
-              <span className="truncate max-w-[35%] text-right">{gameB.game.title}</span>
-            </div>
-            {significantDiffs.map(d => <DifferenceBar key={d.label} item={d} />)}
-
-            {/* Time recommendation comparison */}
-            {(gameA.scores?.timeRecommendationMinutes != null || gameB.scores?.timeRecommendationMinutes != null) && (
-              <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3">
-                {[gameA, gameB].map((g, i) => {
-                  const color = g.scores?.timeRecommendationColor
-                  const bg = color === 'green' ? 'bg-emerald-600' : color === 'amber' ? 'bg-amber-500' : color === 'red' ? 'bg-red-600' : 'bg-slate-400'
-                  return (
-                    <div key={i} className={`${bg} text-white rounded-xl px-4 py-3 text-center`}>
-                      <p className="text-2xl font-black">
-                        {g.scores?.timeRecommendationMinutes != null
-                          ? `${g.scores.timeRecommendationMinutes}m`
-                          : '—'}
-                      </p>
-                      <p className="text-xs opacity-80 mt-0.5 truncate">{g.game.title}</p>
-                    </div>
-                  )
-                })}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* No meaningful differences */}
-        {both && significantDiffs.length === 0 && gameA.scores && gameB.scores && (
-          <div className="bg-blue-50 border border-blue-200 rounded-xl px-5 py-3 text-sm text-blue-800">
-            {t('similarScores')}
-          </div>
-        )}
-
-        {/* Side-by-side cards */}
-        {both && (
-          <>
-            {/* Mobile tab toggle */}
-            <div className="sm:hidden flex border border-slate-200 rounded-xl overflow-hidden bg-white">
-              {(['A', 'B'] as const).map(tab => (
-                <button
-                  key={tab}
-                  onClick={() => setMobileTab(tab)}
-                  className={`flex-1 py-2.5 text-sm font-semibold transition-colors ${
-                    mobileTab === tab ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-50'
-                  }`}
-                >
-                  {tab === 'A' ? gameA.game.title.split(' ').slice(0, 3).join(' ') : gameB.game.title.split(' ').slice(0, 3).join(' ')}
-                </button>
-              ))}
-            </div>
-
-            {/* Desktop: side by side / Mobile: one at a time */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className={mobileTab === 'A' ? '' : 'hidden sm:block'}>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">{t('gameA')}</p>
-                <GameCard {...gameA} />
-              </div>
-              <div className={mobileTab === 'B' ? '' : 'hidden sm:block'}>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">{t('gameB')}</p>
-                <GameCard {...gameB} />
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* Single card shown */}
+        {/* Single game — waiting for second */}
         {(gameA && !gameB) && (
-          <div className="max-w-lg">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">{t('gameA')}</p>
-            <GameCard {...gameA} />
+          <div className="bg-indigo-50 border border-indigo-200 rounded-xl px-5 py-4 text-sm text-indigo-700 text-center">
+            {t('pickSecond')}
           </div>
         )}
         {(!gameA && gameB) && (
-          <div className="max-w-lg">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">{t('gameB')}</p>
-            <GameCard {...gameB} />
+          <div className="bg-indigo-50 border border-indigo-200 rounded-xl px-5 py-4 text-sm text-indigo-700 text-center">
+            {t('pickFirst')}
           </div>
         )}
+
+        {/* Scorecard */}
+        {both && <Scorecard a={gameA} b={gameB} />}
 
         {/* Similar but safer */}
         {highRiskGame && (highRiskGame.scores?.ris ?? 0) >= 0.5 && (
           <SuggestionStrip highRiskGame={highRiskGame} />
         )}
+
       </main>
     </div>
   )
