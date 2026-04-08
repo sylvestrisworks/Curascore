@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { useTranslations, useLocale } from 'next-intl'
 import SearchBar from './SearchBar'
+import LanguageSwitcher from './LanguageSwitcher'
 
 export default function SiteNav() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -43,6 +44,7 @@ export default function SiteNav() {
               {l.label}
             </a>
           ))}
+          <LanguageSwitcher />
         </nav>
 
         {/* Mobile hamburger */}
@@ -74,6 +76,9 @@ export default function SiteNav() {
               {l.label}
             </a>
           ))}
+          <div className="px-4 py-3 border-t border-slate-100">
+            <LanguageSwitcher />
+          </div>
         </nav>
       )}
     </header>
