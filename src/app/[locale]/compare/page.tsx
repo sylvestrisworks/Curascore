@@ -291,15 +291,15 @@ function TagsSection({ a, b }: { a: GameCardProps; b: GameCardProps }) {
 
   const aSkills    = new Set((a.scores?.topBenefits ?? []).map(s => s.skill))
   const bSkills    = new Set((b.scores?.topBenefits ?? []).map(s => s.skill))
-  const sharedSkills  = [...aSkills].filter(s => bSkills.has(s))
-  const uniqueASkills = [...aSkills].filter(s => !bSkills.has(s))
-  const uniqueBSkills = [...bSkills].filter(s => !aSkills.has(s))
+  const sharedSkills  = Array.from(aSkills).filter(s => bSkills.has(s))
+  const uniqueASkills = Array.from(aSkills).filter(s => !bSkills.has(s))
+  const uniqueBSkills = Array.from(bSkills).filter(s => !aSkills.has(s))
 
   const aDP    = new Set(a.darkPatterns.map(p => p.patternId))
   const bDP    = new Set(b.darkPatterns.map(p => p.patternId))
-  const sharedDP   = [...aDP].filter(p => bDP.has(p))
-  const uniqueADP  = [...aDP].filter(p => !bDP.has(p))
-  const uniqueBDP  = [...bDP].filter(p => !aDP.has(p))
+  const sharedDP   = Array.from(aDP).filter(p => bDP.has(p))
+  const uniqueADP  = Array.from(aDP).filter(p => !bDP.has(p))
+  const uniqueBDP  = Array.from(bDP).filter(p => !aDP.has(p))
 
   const hasSkills = aSkills.size > 0 || bSkills.size > 0
   const hasDP     = aDP.size > 0 || bDP.size > 0

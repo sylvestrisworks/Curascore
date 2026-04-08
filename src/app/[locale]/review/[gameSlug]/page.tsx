@@ -144,6 +144,7 @@ export default async function ReviewPage({ params }: { params: { gameSlug: strin
       benefitsNarrative:         existing.benefitsNarrative ?? null,
       risksNarrative:            existing.risksNarrative ?? null,
       parentTip:                 existing.parentTip ?? null,
+      parentTipBenefits:         existing.parentTipBenefits ?? null,
     }
   }
 

@@ -271,6 +271,7 @@ function makeSerializedReview(form: FormState): SerializedReview {
     benefitsNarrative:   form.benefitsNarrative || null,
     risksNarrative:      form.risksNarrative || null,
     parentTip:           form.parentTip || null,
+    parentTipBenefits:   null,
     r5CrossPlatform:      null,
     r5LoadTime:           null,
     r5MobileOptimized:    null,
