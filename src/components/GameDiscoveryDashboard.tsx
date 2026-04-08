@@ -52,7 +52,7 @@ function CurascoreScale() {
         <div className="bg-amber-400 flex-[25]" />
         <div className="bg-emerald-500 flex-[35]" />
       </div>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {SCORE_ZONES.map(z => (
           <div key={z.label}>
             <div className="flex items-center gap-1.5 mb-1">

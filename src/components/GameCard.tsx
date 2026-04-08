@@ -93,15 +93,15 @@ const BENEFIT_TOOLTIPS: Record<string, string> = {
 
 function CategoryBar({ label, value }: { label: string; value: number | null }) {
   return (
-    <div className="flex items-center gap-3">
-      <span className="w-36 text-sm text-slate-600 shrink-0 flex items-center">
+    <div className="flex items-center gap-2 sm:gap-3">
+      <span className="w-28 sm:w-36 text-xs sm:text-sm text-slate-600 shrink-0 flex items-center">
         {label}
         {BENEFIT_TOOLTIPS[label] && <Tooltip text={BENEFIT_TOOLTIPS[label]} />}
       </span>
       <div className="flex-1 bg-slate-100 rounded-full h-2.5 overflow-hidden">
         <div className={`h-full rounded-full transition-all ${scoreBarColor(value)}`} style={{ width: pct(value) }} />
       </div>
-      <span className="w-10 text-right text-sm font-medium text-slate-700 shrink-0">
+      <span className="w-8 sm:w-10 text-right text-xs sm:text-sm font-medium text-slate-700 shrink-0">
         {Math.round((value ?? 0) * 100)}
       </span>
     </div>
@@ -119,8 +119,8 @@ function RiskMeter({ label, value, note }: { label: string; value: number | null
   const level = riskLevel(value)
   return (
     <div className="space-y-1.5">
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-slate-700 flex items-center">
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-xs sm:text-sm font-medium text-slate-700 flex items-center min-w-0">
           {label}
           {RISK_TOOLTIPS[label] && <Tooltip text={RISK_TOOLTIPS[label]} />}
         </span>
@@ -140,12 +140,12 @@ function DetailRow({ label, score, max }: { label: string; score: number | null;
   const value = score ?? 0
   const fraction = value / max
   return (
-    <div className="flex items-center gap-3 py-1">
-      <span className="flex-1 text-xs text-slate-600">{label}</span>
-      <div className="w-32 bg-slate-100 rounded-full h-2 overflow-hidden">
+    <div className="flex items-center gap-2 py-1">
+      <span className="flex-1 text-xs text-slate-600 min-w-0">{label}</span>
+      <div className="w-16 sm:w-28 bg-slate-100 rounded-full h-2 overflow-hidden shrink-0">
         <div className={`h-full rounded-full ${scoreBarColor(fraction)}`} style={{ width: `${(fraction * 100).toFixed(0)}%` }} />
       </div>
-      <span className="w-10 text-right text-xs font-medium text-slate-500 shrink-0">{value}/{max}</span>
+      <span className="w-8 text-right text-xs font-medium text-slate-500 shrink-0">{value}/{max}</span>
     </div>
   )
 }
@@ -160,8 +160,8 @@ function BenefitsTab({ scores, review }: { scores: SerializedScores; review: Ser
           <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Top Skills Developed</h3>
           <div className="space-y-2">
             {scores.topBenefits.map((b) => (
-              <div key={b.skill} className="flex items-center gap-3">
-                <span className="w-44 text-sm font-medium text-slate-700">{b.skill}</span>
+              <div key={b.skill} className="flex items-center gap-2">
+                <span className="w-32 sm:w-44 text-xs sm:text-sm font-medium text-slate-700 shrink-0">{b.skill}</span>
                 <SkillDots score={b.score} max={b.maxScore} />
                 <span className="text-xs text-slate-400 ml-1">{b.score}/{b.maxScore}</span>
               </div>
@@ -236,7 +236,7 @@ function RisksTab({ scores, game, review, darkPatterns }: {
           <div className="space-y-1.5">
             {review.repGenderBalance != null && (
               <div className="flex items-center gap-3">
-                <span className="w-36 text-xs text-purple-700 shrink-0">Gender balance</span>
+                <span className="w-28 sm:w-36 text-xs text-purple-700 shrink-0">Gender balance</span>
                 <div className="flex-1 bg-purple-100 rounded-full h-2 overflow-hidden">
                   <div className="h-full rounded-full bg-purple-400 transition-all" style={{ width: `${(review.repGenderBalance / 3) * 100}%` }} />
                 </div>
@@ -245,7 +245,7 @@ function RisksTab({ scores, game, review, darkPatterns }: {
             )}
             {review.repEthnicDiversity != null && (
               <div className="flex items-center gap-3">
-                <span className="w-36 text-xs text-purple-700 shrink-0">Ethnic diversity</span>
+                <span className="w-28 sm:w-36 text-xs text-purple-700 shrink-0">Ethnic diversity</span>
                 <div className="flex-1 bg-purple-100 rounded-full h-2 overflow-hidden">
                   <div className="h-full rounded-full bg-purple-400 transition-all" style={{ width: `${(review.repEthnicDiversity / 3) * 100}%` }} />
                 </div>
@@ -310,14 +310,14 @@ function FullScoresTab({ scores, review }: { scores: SerializedScores; review: S
     <div className="space-y-6">
       {/* Summary always visible */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-emerald-50 rounded-xl p-3 text-xs text-emerald-800">
-          <p className="font-semibold mb-0.5">BDS — Benefit Score</p>
-          <p className="text-emerald-600">Cognitive ×0.50 + Social ×0.30 + Motor ×0.20</p>
+        <div className="bg-emerald-50 rounded-xl p-3 text-emerald-800">
+          <p className="text-xs font-semibold mb-0.5">BDS — Benefit Score</p>
+          <p className="text-[10px] text-emerald-600 leading-snug">Cognitive ×0.50<br/>Social ×0.30 + Motor ×0.20</p>
           <p className="text-lg font-black mt-1">{Math.round((scores.bds ?? 0) * 100)}<span className="text-xs font-semibold">/100</span></p>
         </div>
-        <div className="bg-red-50 rounded-xl p-3 text-xs text-red-800">
-          <p className="font-semibold mb-0.5">RIS — Risk Score</p>
-          <p className="text-red-600">Dopamine ×0.45 + Monetization ×0.30 + Social ×0.25</p>
+        <div className="bg-red-50 rounded-xl p-3 text-red-800">
+          <p className="text-xs font-semibold mb-0.5">RIS — Risk Score</p>
+          <p className="text-[10px] text-red-600 leading-snug">Dopamine ×0.45<br/>Monet. ×0.30 + Social ×0.25</p>
           <p className="text-lg font-black mt-1">{Math.round((scores.ris ?? 0) * 100)}<span className="text-xs font-semibold">/100</span></p>
         </div>
       </div>
@@ -333,7 +333,7 @@ function FullScoresTab({ scores, review }: { scores: SerializedScores; review: S
       <>
       <div>
         <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Benefit Scores (0–5)</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
           <div>
             <p className="text-xs font-semibold text-slate-400 mb-1">B1 · Cognitive</p>
             <DetailRow label="Problem Solving"    score={review.problemSolving}    max={5} />
@@ -370,7 +370,7 @@ function FullScoresTab({ scores, review }: { scores: SerializedScores; review: S
 
       <div>
         <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Risk Scores (0–3)</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
           <div>
             <p className="text-xs font-semibold text-slate-400 mb-1">R1 · Dopamine Manipulation</p>
             <DetailRow label="Variable Rewards"      score={review.variableRewards}      max={3} />
@@ -420,7 +420,7 @@ function FullScoresTab({ scores, review }: { scores: SerializedScores; review: S
           <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
             R5 · Accessibility Risk <span className="normal-case font-normal">(display only)</span>
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
             <div>
               <DetailRow label="Cross-platform availability" score={review.r5CrossPlatform}   max={3} />
               <DetailRow label="Load time / friction"        score={review.r5LoadTime}         max={3} />
@@ -436,7 +436,7 @@ function FullScoresTab({ scores, review }: { scores: SerializedScores; review: S
           <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
             R6 · Endless Design <span className="normal-case font-normal">(display only)</span>
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
             <div>
               <DetailRow label="Infinite gameplay"    score={review.r6InfiniteGameplay}   max={3} />
               <DetailRow label="No stopping points"   score={review.r6NoStoppingPoints}   max={3} />
@@ -452,7 +452,7 @@ function FullScoresTab({ scores, review }: { scores: SerializedScores; review: S
           <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
             REP · Representation <span className="normal-case font-normal">(display only — higher = better)</span>
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
             <div>
               <DetailRow label="Gender balance"    score={review.repGenderBalance}   max={3} />
               <DetailRow label="Ethnic diversity"  score={review.repEthnicDiversity} max={3} />
@@ -466,7 +466,7 @@ function FullScoresTab({ scores, review }: { scores: SerializedScores; review: S
           <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
             PROP · Ideology <span className="normal-case font-normal">(display only)</span>
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
             <div>
               <DetailRow label="Propaganda level" score={review.propagandaLevel} max={3} />
               {review.propagandaNotes && (
@@ -531,13 +531,13 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
 
         <div className="p-5">
           {/* Title row */}
-          <div className="flex items-start justify-between gap-3 mb-3">
-            <h1 className="text-2xl font-black tracking-tighter text-slate-900 leading-tight">
+          <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
+            <h1 className="text-xl sm:text-2xl font-black tracking-tighter text-slate-900 leading-tight">
               {game.title}
             </h1>
             {scores?.timeRecommendationMinutes != null && (
-              <div className="shrink-0 flex items-center gap-1.5 bg-emerald-100 text-emerald-800 text-sm font-bold px-3 py-1.5 rounded-full">
-                <Clock size={14} strokeWidth={2.5} />
+              <div className="shrink-0 flex items-center gap-1.5 bg-emerald-100 text-emerald-800 text-xs sm:text-sm font-bold px-2.5 sm:px-3 py-1.5 rounded-full">
+                <Clock size={13} strokeWidth={2.5} />
                 {scores.timeRecommendationMinutes >= 120 ? '120+' : scores.timeRecommendationMinutes} min/day
               </div>
             )}
@@ -683,7 +683,7 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
         <div className="p-2 bg-gray-100 m-3 rounded-2xl flex gap-1">
           {(['benefits', 'risks', 'scores'] as Tab[]).map((tab) => (
             <button key={tab} className={`flex-1 ${tabClass(tab)}`} onClick={() => setActiveTab(tab)}>
-              {tab === 'benefits' ? 'Benefits' : tab === 'risks' ? 'Risks' : 'Full Scores'}
+              {tab === 'benefits' ? 'Benefits' : tab === 'risks' ? 'Risks' : <><span className="hidden sm:inline">Full </span>Scores</>}
             </button>
           ))}
         </div>
