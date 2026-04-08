@@ -5,6 +5,7 @@ import { games, gameScores, reviews, darkPatterns, complianceStatus } from '@/li
 import type { ComplianceBadge, DarkPattern, GameCardProps, SerializedGame, SerializedScores, SerializedReview } from '@/types/game'
 
 export async function GET(_req: NextRequest, { params }: { params: { slug: string } }) {
+  try {
   const [game] = await db
     .select()
     .from(games)
@@ -146,4 +147,8 @@ export async function GET(_req: NextRequest, { params }: { params: { slug: strin
 
   const result: GameCardProps = { game: serializedGame, scores: serializedScores, review: serializedReview, darkPatterns: rawDarkPatterns, compliance: rawCompliance }
   return NextResponse.json(result)
+  } catch (err) {
+    console.error('[api/game] error:', err)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
 }

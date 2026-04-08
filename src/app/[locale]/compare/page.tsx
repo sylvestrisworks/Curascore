@@ -53,7 +53,8 @@ function GamePicker({
   async function pick(slug: string) {
     setOpen(false); setQuery(''); setLoading(true)
     try {
-      const res  = await fetch(`/api/game/${slug}`)
+      const res = await fetch(`/api/game/${slug}`)
+      if (!res.ok) return
       const data: GameCardProps = await res.json()
       onSelect(data)
     } finally { setLoading(false) }
@@ -472,7 +473,9 @@ async function loadGame(slug: string): Promise<GameCardProps | null> {
   try {
     const res = await fetch(`/api/game/${slug}`)
     if (!res.ok) return null
-    return await res.json()
+    const text = await res.text()
+    if (!text) return null
+    return JSON.parse(text)
   } catch { return null }
 }
 
