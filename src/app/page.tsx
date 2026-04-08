@@ -143,11 +143,11 @@ async function getCarouselRows(platforms: string[], age?: string): Promise<Carou
   ])
 
   const rows: CarouselRow[] = [
-    { id: 'top',      title: 'Top rated',          emoji: '⭐', browseHref: '/browse?sort=curascore',            games: topRated.map(toSummary)  },
-    { id: 'coop',     title: 'Play together',      emoji: '👨‍👩‍👧', browseHref: '/browse?benefits=teamwork',            games: coopPlay.map(toSummary)  },
-    { id: 'safe',     title: 'Low risk picks',     emoji: '✅', browseHref: '/browse?risk=low',                  games: lowRisk.map(toSummary)   },
-    { id: 'brain',    title: 'Build your brain',   emoji: '🧠', browseHref: '/browse?benefits=problem-solving',  games: highBenefit.map(toSummary) },
-    { id: 'teamwork', title: 'Team up',             emoji: '🤝', browseHref: '/browse?benefits=teamwork',         games: teamwork.map(toSummary)  },
+    { id: 'top',      title: 'The Highest Curascores', emoji: '⭐', browseHref: '/browse?sort=curascore',            games: topRated.map(toSummary)     },
+    { id: 'coop',     title: 'Family Co-Op',          emoji: '👨‍👩‍👧', browseHref: '/browse?benefits=teamwork',            games: coopPlay.map(toSummary)     },
+    { id: 'safe',     title: 'Safe & Stress-Free',    emoji: '✅', browseHref: '/browse?risk=low',                  games: lowRisk.map(toSummary)      },
+    { id: 'brain',    title: 'Sneaky Smart Games',    emoji: '🧠', browseHref: '/browse?benefits=problem-solving',  games: highBenefit.map(toSummary)  },
+    { id: 'teamwork', title: 'Team up',                emoji: '🤝', browseHref: '/browse?benefits=teamwork',         games: teamwork.map(toSummary)     },
     { id: 'vr',       title: 'VR & AR',             emoji: '🥽', browseHref: '/browse?platforms=VR',               games: vrGames.map(toSummary)      },
     { id: 'beginner', title: 'New to gaming',       emoji: '🎯', browseHref: '/browse?age=E&risk=low',             games: beginnerGames.map(toSummary) },
   ]
@@ -190,12 +190,13 @@ export default async function HomePage({ searchParams }: Props) {
             Grounded in child development
           </p>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
-            Game ratings that go{' '}
-            <span className="text-yellow-300 drop-shadow-sm">beyond the age label</span>
+            See exactly how a game impacts your child&apos;s{' '}
+            <span className="text-yellow-300 drop-shadow-sm">developing mind</span>
+            —before they hit &lsquo;play&rsquo;.
           </h1>
           <p className="text-white/80 text-lg max-w-xl mx-auto leading-relaxed">
-            Every Curascore reflects what a game actually does to a developing mind —
-            the skills it builds, the habits it forms, and how much daily play makes sense.
+            Every Curascore reveals the real impact of a game. We analyze the skills it builds,
+            the habits it forms, and recommend a daily screen time limit that actually makes sense.
           </p>
           <div className="max-w-xl mx-auto pt-2">
             <SearchBar placeholder={`Search ${stats.scoredGames}+ reviewed games…`} />
@@ -279,20 +280,20 @@ export default async function HomePage({ searchParams }: Props) {
               {
                 icon: '🧠',
                 gradient: 'from-indigo-500 to-violet-600',
-                title: 'Developmental lens',
-                body: 'Our scoring framework draws on cognitive science, social-emotional learning, and behavioral development — translated into a single, clear score.',
+                title: 'Science-Backed Scoring',
+                body: 'We translate complex cognitive science, behavioral psychology, and social-emotional learning into one clear, reliable score.',
               },
               {
                 icon: '⚠️',
                 gradient: 'from-amber-500 to-orange-500',
-                title: 'Honest about risks',
-                body: 'We identify dopamine loops, loot boxes, spending pressure, and social mechanics — the design patterns that matter most for developing minds.',
+                title: 'No Hidden Agendas',
+                body: 'We expose the sneaky stuff: predatory loot boxes, dark-pattern dopamine loops, and toxic social mechanics.',
               },
               {
                 icon: '⏱',
                 gradient: 'from-emerald-500 to-teal-600',
-                title: 'Time limits that hold up',
-                body: "Each game's daily limit follows from its actual benefit and risk profile. Better games earn more time.",
+                title: 'Screen Time That Makes Sense',
+                body: 'Not all screen time is equal. We provide custom daily time limits based on a game\'s actual risks and rewards. Healthier games earn more time.',
               },
             ].map((item) => (
               <div key={item.title} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center hover:shadow-md transition-shadow">

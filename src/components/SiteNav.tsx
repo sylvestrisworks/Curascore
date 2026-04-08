@@ -26,7 +26,7 @@ export default function SiteNav() {
           className="font-black tracking-tight text-indigo-700 shrink-0 hover:text-indigo-900 transition-colors text-base"
           onClick={() => setMenuOpen(false)}
         >
-          Good Game Parent
+          Curascore <span className="font-normal text-slate-400 text-sm">by Good Game Parent</span>
         </Link>
 
         {/* Search — hidden on mobile (shown in second row) */}

@@ -6,10 +6,10 @@ import SiteNav from '@/components/SiteNav'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Good Game Parent — Game ratings that put benefits first',
+  title: 'Curascore by Good Game Parent — See exactly how a game impacts your child',
   description:
-    'Understand what your child develops, what mechanics to watch for, and how much daily playtime makes sense — for any game.',
-  openGraph: { siteName: 'Good Game Parent', type: 'website' },
+    'Every Curascore reveals the real impact of a game. We analyze skills built, habits formed, and recommend a daily screen time limit that actually makes sense.',
+  openGraph: { siteName: 'Curascore by Good Game Parent', type: 'website' },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="max-w-6xl mx-auto px-4 py-8">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
-                <p className="font-black text-indigo-700 tracking-tight">Good Game Parent</p>
+                <p className="font-black text-indigo-700 tracking-tight">Curascore <span className="font-normal text-slate-400">by Good Game Parent</span></p>
                 <p className="text-xs text-slate-400 mt-0.5">Game ratings grounded in child development</p>
               </div>
               <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </nav>
             </div>
             <p className="text-xs text-slate-300 mt-6">
-              © {new Date().getFullYear()} Good Game Parent. Scores reflect our independent assessment methodology.
+              © {new Date().getFullYear()} Good Game Parent. Curascore scores reflect our independent assessment methodology.
             </p>
           </div>
         </footer>
