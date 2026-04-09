@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
       .from(games)
       .leftJoin(gameScores, eq(gameScores.gameId, games.id))
       .where(sql`${games.title} ilike ${q + '%'}`)
-      .orderBy(desc(gameScores.curascore), desc(games.metacriticScore))
+      .orderBy(desc(games.releaseDate), desc(gameScores.curascore), desc(games.metacriticScore))
       .limit(8)
     return NextResponse.json(rows.map(mapRow))
   }
@@ -49,6 +49,7 @@ export async function GET(req: NextRequest) {
     )
     .orderBy(
       sql`word_similarity(${qNorm}, ${titleNorm}) desc`,
+      desc(games.releaseDate),
       desc(gameScores.curascore),
       desc(games.metacriticScore),
     )
