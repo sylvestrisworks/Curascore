@@ -192,13 +192,15 @@ export type CatalogStats = {
 
 // Lightweight type for search results and cards in list views
 export type GameSummary = {
+  id?: number
   slug: string
   title: string
-  developer: string | null
+  developer?: string | null
   genres: string[]
+  platforms?: string[]
   esrbRating: string | null
   backgroundImage: string | null
-  metacriticScore: number | null
+  metacriticScore?: number | null
   timeRecommendationMinutes: number | null
   timeRecommendationColor: 'green' | 'amber' | 'red' | null
   curascore?: number | null

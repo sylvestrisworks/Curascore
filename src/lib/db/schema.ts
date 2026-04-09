@@ -346,3 +346,20 @@ export const verificationTokens = pgTable('verificationToken', {
 }, (vt) => ({
   compositePk: primaryKey({ columns: [vt.identifier, vt.token] }),
 }))
+
+// ============================================
+// CHILD PROFILES
+// ============================================
+
+export const childProfiles = pgTable('child_profiles', {
+  id:          serial('id').primaryKey(),
+  userId:      text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  name:        varchar('name', { length: 100 }).notNull(),
+  birthYear:   integer('birth_year').notNull(),
+  platforms:   jsonb('platforms').$type<string[]>().default([]),
+  focusSkills: jsonb('focus_skills').$type<string[]>().default([]),
+  createdAt:   timestamp('created_at').defaultNow(),
+  updatedAt:   timestamp('updated_at').defaultNow(),
+}, (table) => ({
+  userIdx: index('child_profile_user_idx').on(table.userId),
+}))
