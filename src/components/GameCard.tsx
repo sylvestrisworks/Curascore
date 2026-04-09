@@ -561,9 +561,13 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
             )}
           </div>
 
-          {/* Developer */}
-          {game.developer && (
-            <p className="text-sm text-slate-400 font-medium mb-2">{game.developer}</p>
+          {/* Developer + year */}
+          {(game.developer || game.releaseDate) && (
+            <p className="text-sm text-slate-400 font-medium mb-2">
+              {game.developer}
+              {game.developer && game.releaseDate && <span className="mx-1.5 opacity-40">·</span>}
+              {game.releaseDate && new Date(game.releaseDate).getFullYear()}
+            </p>
           )}
 
           {/* Platforms */}

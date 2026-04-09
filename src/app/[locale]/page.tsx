@@ -185,8 +185,8 @@ export default async function HomePage({ params, searchParams }: Props) {
           <div className="flex justify-center gap-2 sm:gap-3 pt-4">
             {[
               { value: stats.scoredGames,  label: t('statsGamesReviewed') },
-              { value: stats.lowRiskGames, label: t('statsLowRisk')       },
               { value: '49',               label: t('statsDataPoints') },
+              { value: stats.lowRiskGames, label: t('statsLowRisk')       },
             ].map(s => (
               <div key={s.label} className="stat-shimmer flex flex-col items-center bg-white/10 border border-white/20 rounded-2xl px-3 sm:px-5 py-3 backdrop-blur-sm">
                 <span className="text-xl sm:text-2xl font-extrabold text-white">{s.value}</span>
