@@ -364,9 +364,10 @@ async function callGeminiModel(modelId: string, prompt: string, attempt = 0): Pr
   // Find function call across all parts (thinking models emit multiple parts)
   const fc = candidate?.content?.parts?.find(p => p.functionCall)?.functionCall
   if (!fc?.args) {
-    if (finishReason === 'MAX_TOKENS' && attempt < 3) {
+    const retryableFinish = finishReason === 'MAX_TOKENS' || finishReason === 'OTHER' || finishReason == null
+    if (retryableFinish && attempt < 3) {
       const delay = Math.pow(2, attempt) * 5_000
-      console.log(`  [MAX_TOKENS on ${modelId} — retry ${attempt + 1}/3 in ${delay / 1000}s]`)
+      console.log(`  [no function call on ${modelId} (finishReason=${finishReason}) — retry ${attempt + 1}/3 in ${delay / 1000}s]`)
       await new Promise(r => setTimeout(r, delay))
       return callGeminiModel(modelId, prompt, attempt + 1)
     }
@@ -614,6 +615,7 @@ async function main() {
 
   if (errors.length > 0) {
     console.error(`Failed (skipped): ${errors.join(', ')}`)
+    process.exit(1)
   }
 }
 
