@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
 import { games, gameScores } from '@/lib/db/schema'
-import { eq, and, lte, isNotNull, desc, sql } from 'drizzle-orm'
+import { eq, and, lte, isNotNull, isNull, or, desc, sql } from 'drizzle-orm'
 import GameCompactCard from './GameCompactCard'
 import type { GameSummary } from '@/types/game'
 
@@ -32,9 +32,10 @@ type Props = {
   platforms: string[]
   focusSkills: string[]
   limit?: number
+  layout?: 'grid' | 'row'
 }
 
-export default async function TailoredFeed({ name, birthYear, platforms, focusSkills, limit = 20 }: Props) {
+export default async function TailoredFeed({ name, birthYear, platforms, focusSkills, limit = 20, layout = 'grid' }: Props) {
   const age = new Date().getFullYear() - birthYear
 
   // Determine order column from first focusSkill, default to curascore
@@ -65,7 +66,10 @@ export default async function TailoredFeed({ name, birthYear, platforms, focusSk
     .where(
       and(
         isNotNull(gameScores.curascore),
-        lte(gameScores.recommendedMinAge, age),
+        or(
+          isNull(gameScores.recommendedMinAge),
+          lte(gameScores.recommendedMinAge, age),
+        ),
       )
     )
     .orderBy(orderExpr)
@@ -102,6 +106,18 @@ export default async function TailoredFeed({ name, birthYear, platforms, focusSk
     return (
       <div className="text-sm text-slate-400 py-4">
         No matching games found yet — try adjusting {name}&apos;s platforms or age.
+      </div>
+    )
+  }
+
+  if (layout === 'row') {
+    return (
+      <div className="flex gap-3 overflow-x-auto pb-1 scrollbar-hide">
+        {games_.map(game => (
+          <div key={game.id} className="shrink-0 w-36">
+            <GameCompactCard game={game} />
+          </div>
+        ))}
       </div>
     )
   }
