@@ -21,20 +21,19 @@
 }
 
 .hero-gradient {
-  background: linear-gradient(135deg, #4f46e5, #7c3aed, #2563eb, #0ea5e9, #4f46e5);
+  background: linear-gradient(135deg, #065f46, #0f766e, #0369a1, #4f46e5, #065f46);
   background-size: 300% 300%;
   animation: gradient-shift 10s ease infinite;
   will-change: background-position;
 }
 
-/* Dark mode variant */
+/* Dark mode variant — något ljusare för bättre kontrast */
 .dark .hero-gradient {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6, #3b82f6, #06b6d4, #6366f1);
+  background: linear-gradient(135deg, #047857, #0d9488, #0284c7, #6366f1, #047857);
   background-size: 300% 300%;
   animation: gradient-shift 10s ease infinite;
   will-change: background-position;
 }
-
 
 /* ── Shimmer on stat cards ──────────────────────────────────────────────────── */
 @keyframes shimmer {
