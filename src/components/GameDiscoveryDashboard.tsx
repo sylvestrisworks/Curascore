@@ -37,9 +37,9 @@ const DID_YOU_KNOW = [
 ]
 
 const SCORE_ZONES = [
-  { min: 0,  max: 40,  labelKey: 'zoneCautionLabel',  color: 'bg-red-500',     textColor: 'text-red-600',    descKey: 'zoneCautionDesc'  },
-  { min: 41, max: 65,  labelKey: 'zoneModerateLabel', color: 'bg-amber-400',   textColor: 'text-amber-600',  descKey: 'zoneModerateDesc' },
-  { min: 66, max: 100, labelKey: 'zoneGreatLabel',    color: 'bg-emerald-500', textColor: 'text-emerald-600', descKey: 'zoneGreatDesc'   },
+  { min: 0,  max: 40,  labelKey: 'zoneCautionLabel',  color: 'bg-red-500',     textColor: 'text-red-600 dark:text-red-400',    descKey: 'zoneCautionDesc'  },
+  { min: 41, max: 65,  labelKey: 'zoneModerateLabel', color: 'bg-amber-400',   textColor: 'text-amber-600 dark:text-amber-400',  descKey: 'zoneModerateDesc' },
+  { min: 66, max: 100, labelKey: 'zoneGreatLabel',    color: 'bg-emerald-500', textColor: 'text-emerald-600 dark:text-emerald-400', descKey: 'zoneGreatDesc'   },
 ]
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -48,8 +48,8 @@ type T = ReturnType<typeof useTranslations<'discover'>>
 
 function CurascoreScale({ t }: { t: T }) {
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
-      <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">{t('whatMeansCurascore')}</p>
+    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm p-5">
+      <p className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3">{t('whatMeansCurascore')}</p>
       <div className="flex h-3 rounded-full overflow-hidden gap-0.5 mb-4">
         <div className="bg-red-500 flex-[40]" />
         <div className="bg-amber-400 flex-[25]" />
@@ -61,9 +61,9 @@ function CurascoreScale({ t }: { t: T }) {
             <div className="flex items-center gap-1.5 mb-1">
               <div className={`w-2.5 h-2.5 rounded-full ${z.color}`} />
               <span className={`text-xs font-black ${z.textColor}`}>{t(z.labelKey as Parameters<T>[0])}</span>
-              <span className="text-xs text-slate-400 font-medium">{z.min}–{z.max}</span>
+              <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">{z.min}–{z.max}</span>
             </div>
-            <p className="text-xs text-slate-500 leading-snug">{t(z.descKey as Parameters<T>[0])}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 leading-snug">{t(z.descKey as Parameters<T>[0])}</p>
           </div>
         ))}
       </div>
@@ -73,17 +73,17 @@ function CurascoreScale({ t }: { t: T }) {
 
 function StatStrip({ stats, t }: { stats: CatalogStats; t: T }) {
   const items = [
-    { value: `${stats.totalScored}`,        label: t('statGamesReviewed'), color: 'text-indigo-600' },
-    { value: `${stats.lootBoxFreePct}%`,    label: t('statNoLootBoxes'),   color: 'text-emerald-600' },
-    { value: `${stats.avgCurascoreE}`,      label: t('statAvgScoreE'),     color: 'text-amber-600' },
-    { value: `${stats.greenCount}`,         label: t('statGamesGreat'),    color: 'text-emerald-600' },
+    { value: `${stats.totalScored}`,        label: t('statGamesReviewed'), color: 'text-indigo-600 dark:text-indigo-400' },
+    { value: `${stats.lootBoxFreePct}%`,    label: t('statNoLootBoxes'),   color: 'text-emerald-600 dark:text-emerald-400' },
+    { value: `${stats.avgCurascoreE}`,      label: t('statAvgScoreE'),     color: 'text-amber-600 dark:text-amber-400' },
+    { value: `${stats.greenCount}`,         label: t('statGamesGreat'),    color: 'text-emerald-600 dark:text-emerald-400' },
   ]
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
       {items.map(s => (
-        <div key={s.label} className="bg-white rounded-2xl border border-slate-100 shadow-sm px-3 sm:px-4 py-3 text-center">
+        <div key={s.label} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm px-3 sm:px-4 py-3 text-center">
           <p className={`text-xl sm:text-2xl font-black tracking-tight ${s.color}`}>{s.value}</p>
-          <p className="text-xs text-slate-400 font-medium mt-0.5 leading-tight">{s.label}</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-0.5 leading-tight">{s.label}</p>
         </div>
       ))}
     </div>
@@ -94,30 +94,30 @@ function DidYouKnow() {
   const [idx, setIdx] = useState(0)
   const item = DID_YOU_KNOW[idx]
   return (
-    <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-5">
+    <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800 rounded-2xl p-5">
       <div className="flex items-center justify-between mb-3">
-        <p className="text-xs font-black uppercase tracking-widest text-indigo-400">Did you know?</p>
+        <p className="text-xs font-black uppercase tracking-widest text-indigo-400 dark:text-indigo-500">Did you know?</p>
         <div className="flex gap-1">
           {DID_YOU_KNOW.map((_, i) => (
             <button
               key={i}
               onClick={() => setIdx(i)}
-              className={`w-1.5 h-1.5 rounded-full transition-colors ${i === idx ? 'bg-indigo-500' : 'bg-indigo-200 hover:bg-indigo-300'}`}
+              className={`w-1.5 h-1.5 rounded-full transition-colors ${i === idx ? 'bg-indigo-500' : 'bg-indigo-200 dark:bg-indigo-700 hover:bg-indigo-300 dark:hover:bg-indigo-600'}`}
               aria-label={`Fact ${i + 1}`}
             />
           ))}
         </div>
       </div>
-      <p className="text-sm text-slate-700 leading-relaxed">&ldquo;{item.fact}&rdquo;</p>
-      <p className="text-xs text-slate-400 mt-2 italic">— {item.source}</p>
+      <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">&ldquo;{item.fact}&rdquo;</p>
+      <p className="text-xs text-slate-400 dark:text-slate-500 mt-2 italic">— {item.source}</p>
       <div className="flex gap-2 mt-3">
         <button
           onClick={() => setIdx(i => (i - 1 + DID_YOU_KNOW.length) % DID_YOU_KNOW.length)}
-          className="text-xs text-indigo-500 hover:text-indigo-700 font-semibold transition-colors"
+          className="text-xs text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-semibold transition-colors"
         >← Prev</button>
         <button
           onClick={() => setIdx(i => (i + 1) % DID_YOU_KNOW.length)}
-          className="text-xs text-indigo-500 hover:text-indigo-700 font-semibold transition-colors"
+          className="text-xs text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-semibold transition-colors"
         >Next →</button>
       </div>
     </div>
@@ -133,69 +133,69 @@ function SafeSwap({ swap }: { swap: SwapPair }) {
     general:      'High Risk',
   }
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
       {/* Header */}
       <div className="px-5 pt-5 pb-3">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-xs font-black uppercase tracking-widest text-slate-400">Safe Swap</span>
+          <span className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Safe Swap</span>
           <span className={`text-xs font-bold px-2 py-0.5 rounded-full text-white ${
             swap.from.riskType === 'monetization' ? 'bg-red-500' :
             swap.from.riskType === 'dopamine'     ? 'bg-orange-500' :
             swap.from.riskType === 'social'        ? 'bg-purple-500' : 'bg-slate-500'
           }`}>{RISK_LABELS[swap.from.riskType]}</span>
         </div>
-        <p className="text-lg font-black tracking-tight text-slate-800">
+        <p className="text-lg font-black tracking-tight text-slate-800 dark:text-slate-100">
           Is your child asking for{' '}
-          <Link href={swap.from.href} className="text-red-500 hover:underline">{swap.from.title}</Link>?
+          <Link href={swap.from.href} className="text-red-500 dark:text-red-400 hover:underline">{swap.from.title}</Link>?
         </p>
       </div>
 
       {/* Risk explanation toggle */}
       <button
         onClick={() => setExpanded(e => !e)}
-        className="w-full flex items-center justify-between px-5 py-2.5 bg-red-50 border-y border-red-100 text-left hover:bg-red-100 transition-colors"
+        className="w-full flex items-center justify-between px-5 py-2.5 bg-red-50 dark:bg-red-900/20 border-y border-red-100 dark:border-red-800 text-left hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
       >
-        <span className="text-xs font-semibold text-red-700">Why is this a concern?</span>
-        {expanded ? <ChevronUp size={14} className="text-red-400" /> : <ChevronDown size={14} className="text-red-400" />}
+        <span className="text-xs font-semibold text-red-700 dark:text-red-400">Why is this a concern?</span>
+        {expanded ? <ChevronUp size={14} className="text-red-400 dark:text-red-500" /> : <ChevronDown size={14} className="text-red-400 dark:text-red-500" />}
       </button>
       {expanded && (
-        <div className="px-5 py-3 bg-red-50/50 border-b border-red-100">
-          <p className="text-sm text-red-800 leading-relaxed">{swap.from.riskExplanation}</p>
+        <div className="px-5 py-3 bg-red-50/50 dark:bg-red-900/10 border-b border-red-100 dark:border-red-800">
+          <p className="text-sm text-red-800 dark:text-red-300 leading-relaxed">{swap.from.riskExplanation}</p>
         </div>
       )}
 
       {/* Risky game score */}
-      <div className="px-5 py-4 flex items-center gap-4 border-b border-slate-100">
+      <div className="px-5 py-4 flex items-center gap-4 border-b border-slate-100 dark:border-slate-700">
         <div className={`flex items-baseline gap-1 px-3 py-1.5 rounded-xl border shrink-0 ${curascoreRing(swap.from.curascore)}`}>
           <span className={`text-2xl font-black bg-gradient-to-br ${curascoreGradient(swap.from.curascore)} bg-clip-text text-transparent`}>
             {swap.from.curascore}
           </span>
-          <span className="text-xs text-slate-400">/100</span>
+          <span className="text-xs text-slate-400 dark:text-slate-500">/100</span>
         </div>
         <div>
-          <p className="font-bold text-slate-800 text-sm">{swap.from.title}</p>
-          <p className="text-xs text-red-600 mt-0.5">{swap.from.reason}</p>
+          <p className="font-bold text-slate-800 dark:text-slate-100 text-sm">{swap.from.title}</p>
+          <p className="text-xs text-red-600 dark:text-red-400 mt-0.5">{swap.from.reason}</p>
         </div>
       </div>
 
       {/* Alternatives */}
       <div className="px-5 py-4">
-        <p className="text-xs font-black uppercase tracking-widest text-emerald-500 mb-3">Better alternatives</p>
+        <p className="text-xs font-black uppercase tracking-widest text-emerald-500 dark:text-emerald-400 mb-3">Better alternatives</p>
         <div className="space-y-3">
-          {swap.alternatives.map((alt, i) => (
+          {swap.alternatives.map((alt) => (
             <Link
               key={alt.href}
               href={alt.href}
-              className="flex items-center gap-4 p-3 rounded-xl bg-emerald-50 border border-emerald-100 hover:border-emerald-300 hover:bg-emerald-100 transition-colors group"
+              className="flex items-center gap-4 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800 hover:border-emerald-300 dark:hover:border-emerald-600 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 transition-colors group"
             >
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-black shrink-0 ${curascoreBg(alt.curascore)}`}>
                 {alt.curascore}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-bold text-slate-800 text-sm truncate group-hover:text-indigo-700 transition-colors">{alt.title}</p>
-                <p className="text-xs text-emerald-700 mt-0.5 line-clamp-1">{alt.reason}</p>
+                <p className="font-bold text-slate-800 dark:text-slate-100 text-sm truncate group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition-colors">{alt.title}</p>
+                <p className="text-xs text-emerald-700 dark:text-emerald-400 mt-0.5 line-clamp-1">{alt.reason}</p>
               </div>
-              <ArrowRight size={14} className="text-slate-300 group-hover:text-indigo-500 shrink-0 transition-colors" />
+              <ArrowRight size={14} className="text-slate-300 dark:text-slate-600 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 shrink-0 transition-colors" />
             </Link>
           ))}
         </div>
@@ -220,7 +220,6 @@ export default function GameDiscoveryDashboard({ topGames = [], swap, stats }: P
   const [activeGenre,    setActiveGenre]    = useState<string | null>(null)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
 
-  // derive genre list from top games
   const allGenres = Array.from(new Set(topGames.flatMap(g => g.genres ?? []))).sort()
 
   const activeSeg = AGE_SEGMENTS.find(s => s.value === activeAge)
@@ -242,29 +241,29 @@ export default function GameDiscoveryDashboard({ topGames = [], swap, stats }: P
     : activeGenre ? activeGenre : t('topRatedGames')
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
       <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
 
         {/* ── 1. HEADER ───────────────────────────────────────────────────────── */}
         <div className="space-y-5">
           <div>
-            <p className="text-xs font-black uppercase tracking-widest text-indigo-400 mb-1">
+            <p className="text-xs font-black uppercase tracking-widest text-indigo-400 dark:text-indigo-500 mb-1">
               {t('tagline')}
             </p>
-            <h1 className="text-2xl sm:text-4xl font-black tracking-tighter text-slate-900 leading-none">
+            <h1 className="text-2xl sm:text-4xl font-black tracking-tighter text-slate-900 dark:text-slate-100 leading-none">
               {t('heading')}
             </h1>
           </div>
           {/* Age filter */}
-          <div className="bg-slate-100 rounded-2xl p-1.5 grid grid-cols-2 sm:flex gap-1">
+          <div className="bg-slate-100 dark:bg-slate-800 rounded-2xl p-1.5 grid grid-cols-2 sm:flex gap-1">
             {AGE_SEGMENTS.map((seg) => (
               <button
                 key={seg.value}
                 onClick={() => setActiveAge(activeAge === seg.value ? null : seg.value)}
                 className={`flex-1 py-2.5 text-xs sm:text-sm font-black tracking-tight rounded-xl transition-all duration-200 ${
                   activeAge === seg.value
-                    ? 'bg-white text-indigo-600 shadow-sm'
-                    : 'text-slate-400 hover:text-slate-600'
+                    ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm'
+                    : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300'
                 }`}
               >
                 {tAge(seg.labelKey as Parameters<typeof tAge>[0])}
@@ -289,8 +288,8 @@ export default function GameDiscoveryDashboard({ topGames = [], swap, stats }: P
               className={`shrink-0 flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold
                 border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm
                 ${activeCategory === pill.label
-                  ? 'bg-indigo-100 border-indigo-200 text-indigo-700 -translate-y-0.5 shadow-sm'
-                  : 'bg-white border-slate-200 text-slate-600 hover:border-indigo-200 hover:text-indigo-600'
+                  ? 'bg-indigo-100 dark:bg-indigo-900/40 border-indigo-200 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300 -translate-y-0.5 shadow-sm'
+                  : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-indigo-200 dark:hover:border-indigo-700 hover:text-indigo-600 dark:hover:text-indigo-400'
                 }`}
             >
               <span>{pill.emoji}</span>
@@ -302,8 +301,8 @@ export default function GameDiscoveryDashboard({ topGames = [], swap, stats }: P
         {/* ── 5. DISCOVERY GRID ───────────────────────────────────────────────── */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl font-black tracking-tight text-slate-900">{gridTitle}</h2>
-            <Link href={browseHref} className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors flex items-center gap-1">
+            <h2 className="text-xl font-black tracking-tight text-slate-900 dark:text-slate-100">{gridTitle}</h2>
+            <Link href={browseHref} className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors flex items-center gap-1">
               {t('seeAll')} <ArrowRight size={13} strokeWidth={2.5} />
             </Link>
           </div>
@@ -315,8 +314,8 @@ export default function GameDiscoveryDashboard({ topGames = [], swap, stats }: P
                 onClick={() => setActiveGenre(null)}
                 className={`shrink-0 px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${
                   activeGenre === null
-                    ? 'bg-slate-800 text-white border-slate-800'
-                    : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400'
+                    ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 border-slate-800 dark:border-slate-200'
+                    : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500'
                 }`}
               >
                 {t('allGenres')}
@@ -327,8 +326,8 @@ export default function GameDiscoveryDashboard({ topGames = [], swap, stats }: P
                   onClick={() => setActiveGenre(activeGenre === g ? null : g)}
                   className={`shrink-0 px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${
                     activeGenre === g
-                      ? 'bg-slate-800 text-white border-slate-800'
-                      : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400'
+                      ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 border-slate-800 dark:border-slate-200'
+                      : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500'
                   }`}
                 >
                   {g}
@@ -346,12 +345,12 @@ export default function GameDiscoveryDashboard({ topGames = [], swap, stats }: P
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 bg-white rounded-2xl border border-slate-100">
+            <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
               <p className="text-3xl mb-2">🎮</p>
-              <p className="font-semibold text-slate-600">{t('noMatchFilters')}</p>
+              <p className="font-semibold text-slate-600 dark:text-slate-300">{t('noMatchFilters')}</p>
               <button
                 onClick={() => { setActiveAge(null); setActiveGenre(null) }}
-                className="mt-3 text-sm text-indigo-600 hover:underline"
+                className="mt-3 text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
               >
                 {t('clearFilters')}
               </button>
@@ -366,7 +365,7 @@ export default function GameDiscoveryDashboard({ topGames = [], swap, stats }: P
         <DidYouKnow />
 
         {/* ── 8. FOOTER CTA ───────────────────────────────────────────────────── */}
-        <div className="bg-indigo-600 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+        <div className="bg-indigo-600 dark:bg-indigo-700 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <div>
             <p className="text-white font-black tracking-tight text-base sm:text-lg">{t('gamesRated', { count: stats.totalScored })}</p>
             <p className="text-indigo-200 text-sm mt-0.5">{t('groundedResearch')}</p>

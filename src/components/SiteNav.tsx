@@ -15,10 +15,8 @@ export default function SiteNav({ authSlot }: { authSlot?: React.ReactNode }) {
   const locale = useLocale()
   const pathname = usePathname()
 
-  // Detect homepage (hero search already visible at top)
   const isHomepage = pathname === `/${locale}` || pathname === `/${locale}/`
 
-  // Track whether we're still in the hero zone (first ~220 px)
   useEffect(() => {
     if (!isHomepage) return
     const onScroll = () => setAtTop(window.scrollY < 220)
@@ -27,14 +25,13 @@ export default function SiteNav({ authSlot }: { authSlot?: React.ReactNode }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [isHomepage])
 
-  // On homepage while hero is visible, collapse nav search to an icon
   const collapseNavSearch = isHomepage && atTop
 
   const NAV_LINKS = [
-    { href: `/${locale}/discover`, label: t('discover') },
-    { href: `/${locale}/browse`,   label: t('browse')   },
-    { href: `/${locale}/compare`,  label: t('compare')  },
-    { href: `/${locale}/library`,  label: t('library')  },
+    { href: `/${locale}/discover`,   label: t('discover')  },
+    { href: `/${locale}/browse`,     label: t('browse')    },
+    { href: `/${locale}/compare`,    label: t('compare')   },
+    { href: `/${locale}/dashboard`,  label: t('library')   },
   ]
 
   function focusHeroSearch() {
@@ -52,10 +49,10 @@ export default function SiteNav({ authSlot }: { authSlot?: React.ReactNode }) {
         {/* Logo */}
         <a
           href={`/${locale}`}
-          className="font-black tracking-tight text-indigo-700 shrink-0 hover:text-indigo-900 transition-colors text-base"
+          className="font-black tracking-tight text-indigo-700 dark:text-indigo-400 shrink-0 hover:text-indigo-900 dark:hover:text-indigo-300 transition-colors text-base"
           onClick={() => setMenuOpen(false)}
         >
-          {t('brand')} <span className="font-normal text-slate-400 text-sm">{t('brandSub')}</span>
+          {t('brand')} <span className="font-normal text-slate-400 dark:text-slate-500 text-sm">{t('brandSub')}</span>
         </a>
 
         {/* Search — hidden on mobile (shown in second row) */}
@@ -63,7 +60,7 @@ export default function SiteNav({ authSlot }: { authSlot?: React.ReactNode }) {
           {collapseNavSearch ? (
             <button
               onClick={focusHeroSearch}
-              className="flex items-center justify-center w-10 h-10 rounded-xl text-slate-400 hover:bg-slate-100 hover:text-indigo-600 transition-colors"
+              className="flex items-center justify-center w-10 h-10 rounded-xl text-slate-400 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
               aria-label={t('search')}
             >
               <Search size={20} />
@@ -87,7 +84,7 @@ export default function SiteNav({ authSlot }: { authSlot?: React.ReactNode }) {
 
         {/* Mobile hamburger */}
         <button
-          className="sm:hidden ml-auto p-2.5 rounded-lg text-slate-500 hover:bg-slate-100 transition-colors"
+          className="sm:hidden ml-auto p-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           onClick={() => setMenuOpen(o => !o)}
           aria-label={menuOpen ? t('closeMenu') : t('openMenu')}
         >
