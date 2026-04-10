@@ -12,10 +12,6 @@ import ShareButton from './ShareCard'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function initials(title: string): string {
-  return title.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('')
-}
-
 const PLACEHOLDER_COLORS = [
   'from-violet-500 to-indigo-600', 'from-indigo-500 to-blue-600',
   'from-blue-500 to-cyan-600',     'from-teal-500 to-emerald-600',
@@ -38,11 +34,24 @@ function riskBarColor(value: number | null): string {
   return 'bg-red-400'
 }
 
+// ─── Risk level — tydliga varningsfärger ──────────────────────────────────────
 function riskLevel(value: number | null): { labelKey: 'riskLow' | 'riskModerate' | 'riskHigh'; color: string; bg: string } {
   const v = value ?? 0
-  if (v < 0.3) return { labelKey: 'riskLow',      color: 'text-emerald-700 dark:text-emerald-400', bg: 'bg-emerald-100 dark:bg-emerald-900/40' }
-  if (v < 0.6) return { labelKey: 'riskModerate', color: 'text-amber-700 dark:text-amber-400',     bg: 'bg-amber-100 dark:bg-amber-900/40'     }
-  return              { labelKey: 'riskHigh',     color: 'text-red-700 dark:text-red-400',         bg: 'bg-red-100 dark:bg-red-900/40'         }
+  if (v < 0.3) return {
+    labelKey: 'riskLow',
+    color: 'text-emerald-700 dark:text-emerald-300',
+    bg:    'bg-emerald-100 dark:bg-emerald-900/50 border border-emerald-300 dark:border-emerald-700',
+  }
+  if (v < 0.6) return {
+    labelKey: 'riskModerate',
+    color: 'text-amber-800 dark:text-amber-200',
+    bg:    'bg-amber-100 dark:bg-amber-900/50 border border-amber-300 dark:border-amber-600',
+  }
+  return {
+    labelKey: 'riskHigh',
+    color: 'text-red-800 dark:text-red-200',
+    bg:    'bg-red-100 dark:bg-red-900/50 border border-red-300 dark:border-red-600',
+  }
 }
 
 function scoreBarColor(value: number | null): string {
@@ -50,13 +59,6 @@ function scoreBarColor(value: number | null): string {
   if (v >= 0.7) return 'bg-emerald-400'
   if (v >= 0.4) return 'bg-blue-400'
   return 'bg-slate-300 dark:bg-slate-600'
-}
-
-function curascoreGradient(score: number | null): string {
-  const s = score ?? 0
-  if (s >= 70) return 'from-emerald-400 to-teal-500'
-  if (s >= 40) return 'from-amber-400 to-orange-500'
-  return 'from-red-400 to-rose-500'
 }
 
 type StatusVerdict = { label: string; color: string; bg: string; ring: string }
@@ -70,14 +72,11 @@ function getVerdict(score: number | null): StatusVerdict {
 
 // ─── Risk flag pill colors ────────────────────────────────────────────────────
 
-// Maps known risk flags to appropriate warning colors
 const RISK_FLAG_COLORS: Record<string, string> = {
-  // Monetization — red (highest concern)
   'flagLootBoxes':       'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-700',
   'flagBattlePass':      'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-700',
   'flagInAppPurchases':  'bg-orange-100 dark:bg-orange-900/40 text-orange-800 dark:text-orange-300 border border-orange-200 dark:border-orange-700',
   'flagSubscription':    'bg-orange-100 dark:bg-orange-900/40 text-orange-800 dark:text-orange-300 border border-orange-200 dark:border-orange-700',
-  // Social — amber
   'flagStrangerChat':    'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700',
 }
 
@@ -103,12 +102,10 @@ function HorseshoeRing({ score }: { score: number | null }) {
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} style={{ transform: 'rotate(135deg)' }} aria-hidden="true">
-        {/* Track */}
         <circle cx={cx} cy={cy} r={r} fill="none" stroke="currentColor"
           className="text-slate-200 dark:text-slate-700"
           strokeWidth={stroke} strokeLinecap="round"
           strokeDasharray={`${totalArc} ${gap}`} />
-        {/* Fill */}
         <circle cx={cx} cy={cy} r={r} fill="none"
           stroke={verdict.ring} strokeWidth={stroke} strokeLinecap="round"
           strokeDasharray={`${filled} ${circ - filled}`}
@@ -177,7 +174,8 @@ function RiskMeter({ label, value, note, tooltip }: { label: string; value: numb
           {label}
           {tooltip && <Tooltip text={tooltip} />}
         </span>
-        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${level.bg} ${level.color}`}>
+        {/* Pill med tydlig varningsfärg */}
+        <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full shrink-0 ${level.bg} ${level.color}`}>
           {tGC(level.labelKey)}
         </span>
       </div>
@@ -237,7 +235,6 @@ function BenefitsTab({ scores, review, t }: { scores: SerializedScores; review: 
         </div>
       </div>
 
-      {/* Representation */}
       {review && (review.repGenderBalance != null || review.repEthnicDiversity != null || review.bechdelResult != null) && (
         <div className="bg-purple-50 dark:bg-purple-900/20 rounded-2xl p-5 space-y-3">
           <h3 className="text-sm font-semibold text-purple-800 dark:text-purple-300 flex items-center gap-1.5">
@@ -317,7 +314,6 @@ function RisksTab({ scores, game, review, darkPatterns, t }: {
   scores: SerializedScores; game: GameCardProps['game']
   review: SerializedReview | null; darkPatterns: DarkPattern[]; t: T
 }) {
-  // Map flag translation keys to their display labels and color classes
   const flagDefs: { key: string; label: string; colorClass: string }[] = [
     game.hasLootBoxes         ? { key: 'flagLootBoxes',      label: t('flagLootBoxes'),      colorClass: riskFlagClass('flagLootBoxes')      } : null,
     game.hasBattlePass        ? { key: 'flagBattlePass',     label: t('flagBattlePass'),     colorClass: riskFlagClass('flagBattlePass')     } : null,
@@ -329,16 +325,15 @@ function RisksTab({ scores, game, review, darkPatterns, t }: {
   return (
     <div className="space-y-6">
       <div className="space-y-4">
-        <RiskMeter label={t('dopamineManipulation')} value={scores.dopamineRisk}     note={t('riskNotesDopamine')}    tooltip={t('tooltipDopamine')} />
+        <RiskMeter label={t('dopamineManipulation')} value={scores.dopamineRisk}     note={t('riskNotesDopamine')}     tooltip={t('tooltipDopamine')} />
         <RiskMeter label={t('monetizationPressure')} value={scores.monetizationRisk} note={t('riskNotesMonetization')} tooltip={t('tooltipMonetization')} />
-        <RiskMeter label={t('socialRisk')}           value={scores.socialRisk}       note={t('riskNotesSocial')}      tooltip={t('tooltipSocialRisk')} />
+        <RiskMeter label={t('socialRisk')}           value={scores.socialRisk}       note={t('riskNotesSocial')}       tooltip={t('tooltipSocialRisk')} />
         <div>
           <RiskMeter label={t('contentRisk')} value={scores.contentRisk} note={t('riskNotesContent')} tooltip={t('tooltipContent')} />
           <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{t('contentRiskNote')}</p>
         </div>
       </div>
 
-      {/* Risk flags — färgkodade efter allvarlighetsgrad */}
       {flagDefs.length > 0 && (
         <div className="bg-red-50 dark:bg-red-900/20 rounded-2xl p-5 border border-red-100 dark:border-red-800">
           <h3 className="text-sm font-semibold text-red-800 dark:text-red-300 mb-3 flex items-center gap-1.5">
@@ -355,7 +350,6 @@ function RisksTab({ scores, game, review, darkPatterns, t }: {
         </div>
       )}
 
-      {/* Propaganda flag */}
       {review?.propagandaLevel != null && review.propagandaLevel > 0 && (
         <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-2xl p-5">
           <h3 className="text-sm font-semibold text-yellow-800 dark:text-yellow-300 mb-1 flex items-center gap-1.5">
@@ -400,7 +394,6 @@ function FullScoresTab({ scores, review, t }: { scores: SerializedScores; review
 
   return (
     <div className="space-y-6">
-      {/* Summary always visible */}
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-3 text-emerald-800 dark:text-emerald-300">
           <p className="text-xs font-semibold mb-0.5">{t('bdsLabel')}</p>
@@ -801,7 +794,7 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
         </div>
       )}
 
-      {/* ── 5. VIRTUAL CURRENCY BANNER ─────────────────────────────────────────── */}
+      {/* ── VIRTUAL CURRENCY BANNER ─────────────────────────────────────────── */}
       {darkPatterns.some((p) => p.patternId === 'DP04') && (
         <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800 rounded-3xl px-5 py-4 text-sm text-amber-900 dark:text-amber-300">
           <span className="font-bold">💱 {t('virtualCurrency')}</span>
@@ -817,7 +810,6 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
 
       {/* ── 6. DETAIL TABS ─────────────────────────────────────────────────────── */}
       <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm overflow-hidden border border-slate-100 dark:border-slate-700">
-        {/* Tab bar */}
         <div className="p-2 bg-gray-100 dark:bg-slate-700 m-3 rounded-2xl flex gap-1">
           {(['benefits', 'risks', 'scores'] as Tab[]).map((tab) => (
             <button key={tab} className={`flex-1 ${tabClass(tab)}`} onClick={() => setActiveTab(tab)}>
@@ -844,7 +836,6 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
           )}
         </div>
 
-        {/* Footer */}
         <div className="border-t border-gray-100 dark:border-slate-700 px-5 py-3 flex flex-wrap gap-x-6 gap-y-1 text-xs text-slate-400 dark:text-slate-500">
           <span>
             <span className="font-semibold text-slate-600 dark:text-slate-300">{t('base')}: </span>
