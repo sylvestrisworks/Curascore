@@ -171,105 +171,44 @@ export default async function HomePage({ params, searchParams }: Props) {
     { icon: '⏱',  gradient: 'from-emerald-500 to-teal-600',  title: t('featureTime'),     body: t('featureTimeBody')    },
   ]
 
-  // Trust features shown in hero
-  const TRUST_FEATURES = [
-    { icon: '🧠', label: t('featureScience')  },
-    { icon: '⚠️', label: t('featureAgenda')   },
-    { icon: '⏱',  label: t('featureTime')     },
-  ]
-
   return (
     <div className="bg-slate-50 dark:bg-slate-900">
 
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
-      <section className="hero-gradient relative overflow-hidden">
-
-        {/* Background decorations */}
-        <div className="absolute inset-0 pointer-events-none select-none">
-          {/* Dot grid pattern */}
-          <div className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px)',
-              backgroundSize: '28px 28px',
-            }}
-          />
-          {/* Blur orbs */}
-          <div className="hidden sm:block absolute -top-24 -left-24 w-96 h-96 rounded-full bg-violet-400/20 blur-3xl" />
-          <div className="hidden sm:block absolute -bottom-16 -right-16 w-80 h-80 rounded-full bg-blue-300/20 blur-3xl" />
-          <div className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-white/5 blur-3xl" />
+      <section className="hero-gradient relative">
+        <div className="hidden sm:block absolute inset-0 pointer-events-none select-none overflow-hidden">
+          <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-white/10 blur-3xl" />
+          <div className="absolute -bottom-10 -right-10 w-64 h-64 rounded-full bg-violet-300/20 blur-3xl" />
         </div>
 
-        <div className="relative max-w-4xl mx-auto px-4 pt-12 pb-10 sm:pt-20 sm:pb-16 text-center">
-
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/80 bg-white/10 px-4 py-1.5 rounded-full border border-white/20 mb-6 backdrop-blur-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <div className="relative max-w-4xl mx-auto px-4 py-14 sm:py-20 text-center space-y-5">
+          <p className="inline-block text-xs font-bold uppercase tracking-widest text-white/70 bg-white/10 px-3 py-1 rounded-full border border-white/20">
             {t('badge')}
-          </div>
-
-          {/* Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight mb-4">
+          </p>
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
             {t.rich('hero', {
-              yellow: (chunks) => (
-                <span className="text-yellow-300 drop-shadow-sm relative">
-                  {chunks}
-                  <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-yellow-300/40 rounded-full" />
-                </span>
-              ),
+              yellow: (chunks) => <span className="text-yellow-300 drop-shadow-sm">{chunks}</span>,
             })}
           </h1>
-
-          {/* Subtext */}
-          <p className="text-white/75 text-base sm:text-lg max-w-xl mx-auto leading-relaxed mb-6">
+          <p className="text-white/80 text-lg max-w-xl mx-auto leading-relaxed">
             {t('heroSub')}
           </p>
-
-          {/* Trust feature pills */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-7">
-            {TRUST_FEATURES.map(f => (
-              <span key={f.label} className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/80 bg-white/10 border border-white/15 px-3 py-1 rounded-full backdrop-blur-sm">
-                <span>{f.icon}</span>
-                <span>{f.label}</span>
-              </span>
-            ))}
-          </div>
-
-          {/* Search */}
-          <div className="max-w-xl mx-auto mb-8">
-            <div className="relative">
-              <SearchBar placeholder={t('searchPlaceholder', { count: stats.scoredGames })} />
-            </div>
-            <p className="text-white/40 text-xs mt-2">
-              {t('statsGamesReviewed', { count: stats.scoredGames })} · {stats.lowRiskGames} {t('statsLowRisk')}
-            </p>
+          <div className="max-w-xl mx-auto pt-2">
+            <SearchBar placeholder={t('searchPlaceholder', { count: stats.scoredGames })} />
           </div>
 
           {/* Stats row */}
-          <div className="flex justify-center gap-2 sm:gap-3">
+          <div className="flex justify-center gap-2 sm:gap-3 pt-4">
             {[
-              { value: stats.scoredGames,  label: t('statsGamesReviewed'), icon: '🎮' },
-              { value: '49',               label: t('statsDataPoints'),    icon: '📊' },
-              { value: stats.lowRiskGames, label: t('statsLowRisk'),       icon: '✅' },
+              { value: stats.scoredGames,  label: t('statsGamesReviewed') },
+              { value: '49',               label: t('statsDataPoints') },
+              { value: stats.lowRiskGames, label: t('statsLowRisk')       },
             ].map(s => (
-              <div
-                key={s.label}
-                className="stat-shimmer flex flex-col items-center bg-white/10 border border-white/15 rounded-2xl px-3 sm:px-5 py-3 backdrop-blur-sm hover:bg-white/15 transition-colors"
-              >
-                <span className="text-lg sm:text-xl mb-0.5">{s.icon}</span>
-                <span className="text-xl sm:text-2xl font-extrabold text-white leading-none">{s.value}</span>
-                <span className="text-[10px] sm:text-xs text-white/60 font-medium mt-1 text-center leading-tight max-w-[80px]">{s.label}</span>
+              <div key={s.label} className="stat-shimmer flex flex-col items-center bg-white/10 border border-white/20 rounded-2xl px-3 sm:px-5 py-3 backdrop-blur-sm">
+                <span className="text-xl sm:text-2xl font-extrabold text-white">{s.value}</span>
+                <span className="text-[11px] sm:text-xs text-white/70 font-medium mt-0.5 text-center">{s.label}</span>
               </div>
             ))}
-          </div>
-
-          {/* Scroll indicator */}
-          <div className="mt-10 flex justify-center">
-            <div className="flex flex-col items-center gap-1 text-white/30 animate-bounce">
-              <span className="text-xs font-medium tracking-widest uppercase">Scroll</span>
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
           </div>
         </div>
       </section>
