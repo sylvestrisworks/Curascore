@@ -406,3 +406,17 @@ export const gameTipVotes = pgTable('game_tip_votes', {
 }, (table) => ({
   uniq: uniqueIndex('game_tip_votes_tip_user_idx').on(table.tipId, table.userId),
 }))
+
+// ============================================
+// INGEST STATE (background game crawler cursor)
+// ============================================
+
+export const ingestCursor = pgTable('ingest_cursor', {
+  id:             integer('id').primaryKey().default(1),
+  genreIndex:     integer('genre_index').notNull().default(0),
+  page:           integer('page').notNull().default(1),
+  sweep:          integer('sweep').notNull().default(1),   // which ordering pass we're on
+  totalImported:  integer('total_imported').notNull().default(0),
+  lastRunAt:      timestamp('last_run_at'),
+  updatedAt:      timestamp('updated_at').defaultNow(),
+})
