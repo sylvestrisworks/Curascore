@@ -3,8 +3,6 @@ import { db } from '@/lib/db'
 import { games, gameScores } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 
-export const runtime = 'edge'
-
 function curascoreColor(score: number) {
   if (score >= 70) return '#059669' // emerald
   if (score >= 50) return '#d97706' // amber
