@@ -8,7 +8,18 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        // Enhanced dark mode colors
+        slate: {
+          850: '#1a202e',
+          950: '#0f1419',
+        },
+      },
+      animation: {
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      },
+    },
   },
   plugins: [],
 };
