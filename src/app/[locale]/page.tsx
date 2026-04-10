@@ -12,10 +12,6 @@ import CarouselRow from '@/components/CarouselRow'
 import type { GameSummary } from '@/types/game'
 
 // ─── Age → ESRB mapping ───────────────────────────────────────────────────────
-// E   = Suitable for early years (ESRB: E only)
-// E10 = Middle childhood (ESRB: E and E10+)
-// T   = Early teens (ESRB: E, E10+, T)
-// M   = Older teens (ESRB: E, E10+, T, M — all ratings)
 
 const ESRB_FOR_AGE: Record<string, string[]> = {
   E:   ['E'],
@@ -74,7 +70,6 @@ async function getStats() {
   return { totalGames, scoredGames, lowRiskGames }
 }
 
-// Escape ILIKE special chars to prevent pattern injection / expensive regex backtracking
 function escapeIlike(s: string): string {
   return s.replace(/[\\%_]/g, ch => '\\' + ch)
 }
@@ -84,8 +79,6 @@ async function getCarouselRows(platforms: string[], age?: string, locale = 'en')
     ? or(...platforms.map(p => sql`${games.platforms}::text ILIKE ${'%' + escapeIlike(p) + '%'}`))
     : undefined
 
-  // Om ålder är valt: visa bara spel med tillåtna ESRB-ratings
-  // Om ingen ålder: visa alla spel (inklusive de utan rating)
   const ratings = age ? (ESRB_FOR_AGE[age] ?? ['E', 'E10+', 'T']) : null
   const ageFilter: SQL = age && ratings
     ? inArray(games.esrbRating, ratings)
@@ -93,7 +86,6 @@ async function getCarouselRows(platforms: string[], age?: string, locale = 'en')
 
   const base = (extra?: SQL) => and(isNotNull(gameScores.curascore), platformFilter, ageFilter, extra)
 
-  // Beginner-kollektionen: alltid E/E10+ oavsett åldersfilter, men respekterar plattformsfilter
   const beginnerAgeFilter = inArray(games.esrbRating, ['E', 'E10+'])
   const beginnerBase = and(
     isNotNull(gameScores.curascore),
@@ -116,7 +108,6 @@ async function getCarouselRows(platforms: string[], age?: string, locale = 'en')
   ])
 
   const browseBase = `/${locale}/browse`
-  // Bygg age-param för browse-länkar om ålder är valt
   const ageParam = age ? `&age=${age}` : ''
   const platformParam = platforms.length > 0 ? `&platforms=${platforms.join(',')}` : ''
   const baseParams = `${ageParam}${platformParam}`
@@ -148,7 +139,6 @@ export default async function HomePage({ params, searchParams }: Props) {
   const sp = await searchParams
   const t = await getTranslations({ locale, namespace: 'home' })
 
-  // Sanitize and validate platform parameter
   const platformParam = typeof sp.platform === 'string'
     ? sp.platform.slice(0, 200).replace(/[^a-zA-Z0-9,\s-]/g, '')
     : ''
@@ -156,7 +146,6 @@ export default async function HomePage({ params, searchParams }: Props) {
     ? platformParam.split(',').filter(Boolean).slice(0, 8).map(p => p.trim().slice(0, 50))
     : []
 
-  // Validate age parameter against whitelist
   const age = typeof sp.age === 'string' && sp.age in ESRB_FOR_AGE ? sp.age : undefined
 
   const [carousels, stats] = await Promise.all([
@@ -228,17 +217,17 @@ export default async function HomePage({ params, searchParams }: Props) {
 
         {/* Age + Platform pickers */}
         <section className="pt-10 pb-6 space-y-4 text-center">
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
             {t('yourChildsAge')}
           </p>
           <AgePicker current={age} />
 
           <div className="flex items-center justify-center gap-3 pt-1">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
               {t('yourPlatforms')}
             </p>
             {(platforms.length > 0 || age) && (
-              <a href={`/${locale}`} className="text-xs font-normal text-indigo-500 hover:text-indigo-700 transition-colors">
+              <a href={`/${locale}`} className="text-xs font-normal text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors">
                 {t('clearFilters')}
               </a>
             )}
@@ -265,19 +254,19 @@ export default async function HomePage({ params, searchParams }: Props) {
             <p className="text-4xl mb-3">🎮</p>
             {(platforms.length > 0 || age) ? (
               <>
-                <p className="font-medium text-slate-600">
+                <p className="font-medium text-slate-600 dark:text-slate-300">
                   {t('noGamesFound')}
                   {age && ` ${t('noGamesForAge')}`}
                   {platforms.length > 0 && ` ${t('noGamesOnPlatform', { platforms: platforms.join(' / ') })}`}
                 </p>
-                <a href={`/${locale}`} className="mt-2 inline-block text-sm text-indigo-600 hover:underline">
+                <a href={`/${locale}`} className="mt-2 inline-block text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
                   {t('clearFilters')}
                 </a>
               </>
             ) : (
               <>
-                <p className="font-medium text-slate-600">{t('comingSoon')}</p>
-                <p className="text-sm text-slate-400 mt-1">{t('comingSoonSub')}</p>
+                <p className="font-medium text-slate-600 dark:text-slate-300">{t('comingSoon')}</p>
+                <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">{t('comingSoonSub')}</p>
               </>
             )}
           </div>
@@ -309,14 +298,14 @@ export default async function HomePage({ params, searchParams }: Props) {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
               <Link
                 href={`/${locale}/browse`}
-                className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-xl shadow-sm transition-colors"
+                className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-semibold px-6 py-3 rounded-xl shadow-sm transition-colors"
               >
                 {t('browseAll')}
                 <span aria-hidden>→</span>
               </Link>
               <Link
                 href={`/${locale}/faq`}
-                className="inline-flex items-center gap-2 text-slate-500 hover:text-indigo-600 font-medium text-sm transition-colors"
+                className="inline-flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium text-sm transition-colors"
               >
                 {t('howScoring')}
               </Link>

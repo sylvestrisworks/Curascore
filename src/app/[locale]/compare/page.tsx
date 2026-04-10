@@ -28,7 +28,6 @@ function generateVerdict(a: GameCardProps, b: GameCardProps): string | null {
   const bTime   = bS.timeRecommendationMinutes ?? 0
   const timeDiff = Math.abs(aTime - bTime)
 
-  // Use just the first word of each title to keep the sentence short
   const aName = a.game.title.split(/[\s:—–]/)[0]
   const bName = b.game.title.split(/[\s:—–]/)[0]
 
@@ -91,13 +90,11 @@ function GamePicker({
   const t                             = useTranslations('compare')
 
   useEffect(() => {
-    // Cleanup previous timeout and abort previous request
     if (debounceRef.current) clearTimeout(debounceRef.current)
     if (abortControllerRef.current) abortControllerRef.current.abort()
     
     if (query.length < 2) { setSuggestions([]); setOpen(false); return }
     
-    // Sanitize query to prevent injection
     const sanitizedQuery = query.slice(0, 100).trim()
     if (!sanitizedQuery) return
     
@@ -123,7 +120,6 @@ function GamePicker({
       }
     }, 250)
     
-    // Cleanup function
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current)
       if (abortControllerRef.current) abortControllerRef.current.abort()
@@ -139,7 +135,6 @@ function GamePicker({
   }, [])
 
   async function pick(slug: string) {
-    // Validate slug format (alphanumeric, hyphens, underscores only)
     if (!/^[a-zA-Z0-9_-]+$/.test(slug) || slug.length > 200) {
       console.error('Invalid slug format')
       return
@@ -215,11 +210,11 @@ function GamePicker({
               onClick={() => pick(s.slug)}
               className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700 last:border-0 text-left"
             >
-              <div className="w-8 h-8 rounded-lg overflow-hidden bg-indigo-100 shrink-0">
+              <div className="w-8 h-8 rounded-lg overflow-hidden bg-indigo-100 dark:bg-indigo-900/40 shrink-0">
                 {s.backgroundImage
                   // eslint-disable-next-line @next/next/no-img-element
                   ? <img src={s.backgroundImage} alt="" className="w-full h-full object-cover" />
-                  : <span className="w-full h-full flex items-center justify-center text-xs font-bold text-indigo-600">{s.title.slice(0, 2).toUpperCase()}</span>}
+                  : <span className="w-full h-full flex items-center justify-center text-xs font-bold text-indigo-600 dark:text-indigo-400">{s.title.slice(0, 2).toUpperCase()}</span>}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-slate-800 dark:text-slate-100 truncate">{s.title}</p>
@@ -259,18 +254,22 @@ function ScoreRow({ label, tooltip, aVal, bVal, higherIsBetter, format }: ScoreR
 
   const fmt = format ?? ((v: number) => String(Math.round(v * 100)))
 
-  const barColor  = (wins: boolean) => wins && !tie ? 'bg-emerald-400' : 'bg-slate-300'
-  const valColor  = (wins: boolean) => wins && !tie ? 'text-emerald-700 font-black' : 'text-slate-500 font-semibold'
-  const cellBg    = (wins: boolean) => wins && !tie ? 'bg-emerald-50' : ''
+  const barColor  = (wins: boolean) => wins && !tie ? 'bg-emerald-400' : 'bg-slate-300 dark:bg-slate-600'
+  const valColor  = (wins: boolean) => wins && !tie
+    ? 'text-emerald-700 dark:text-emerald-400 font-black'
+    : 'text-slate-500 dark:text-slate-400 font-semibold'
+  const cellBg    = (wins: boolean) => wins && !tie
+    ? 'bg-emerald-50 dark:bg-emerald-900/20'
+    : ''
 
   return (
-    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-0 border-b border-slate-100 last:border-0">
+    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-0 border-b border-slate-100 dark:border-slate-700/50 last:border-0">
       {/* Game A */}
       <div className={`flex items-center gap-2 justify-end px-3 py-2.5 rounded-l-lg ${cellBg(aWins)}`}>
         <span className={`text-sm tabular-nums ${valColor(aWins)}`}>
           {a !== null ? fmt(a) : '—'}
         </span>
-        <div className="w-16 sm:w-20 bg-slate-100 rounded-full h-2 overflow-hidden">
+        <div className="w-16 sm:w-20 bg-slate-100 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
           <div className={`h-full rounded-full transition-all ${barColor(aWins)}`}
             style={{ width: a !== null ? `${Math.round(aNum * 100)}%` : '0%' }} />
         </div>
@@ -278,15 +277,15 @@ function ScoreRow({ label, tooltip, aVal, bVal, higherIsBetter, format }: ScoreR
 
       {/* Label */}
       <div className="text-center px-2 py-2.5 min-w-[100px] sm:min-w-[120px]">
-        <span className="text-xs text-slate-500 leading-tight">
+        <span className="text-xs text-slate-500 dark:text-slate-400 leading-tight">
           {label}
-          {tooltip && <span className="ml-1 text-[10px] text-slate-400" title={tooltip}>ⓘ</span>}
+          {tooltip && <span className="ml-1 text-[10px] text-slate-400 dark:text-slate-500" title={tooltip}>ⓘ</span>}
         </span>
       </div>
 
       {/* Game B */}
       <div className={`flex items-center gap-2 px-3 py-2.5 rounded-r-lg ${cellBg(bWins)}`}>
-        <div className="w-16 sm:w-20 bg-slate-100 rounded-full h-2 overflow-hidden">
+        <div className="w-16 sm:w-20 bg-slate-100 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
           <div className={`h-full rounded-full transition-all ${barColor(bWins)}`}
             style={{ width: b !== null ? `${Math.round(bNum * 100)}%` : '0%' }} />
         </div>
@@ -301,7 +300,7 @@ function ScoreRow({ label, tooltip, aVal, bVal, higherIsBetter, format }: ScoreR
 function SectionHeader({ label }: { label: string }) {
   return (
     <div className="py-2 mt-2">
-      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{label}</p>
+      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">{label}</p>
     </div>
   )
 }
@@ -310,18 +309,22 @@ function InfoRow({ label, aText, bText, aGood, bGood }: {
   label: string; aText: string; bText: string; aGood?: boolean; bGood?: boolean
 }) {
   return (
-    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-0 border-b border-slate-100 last:border-0">
-      <div className={`text-right px-3 py-2.5 rounded-l-lg ${aGood ? 'bg-emerald-50' : ''}`}>
+    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-0 border-b border-slate-100 dark:border-slate-700/50 last:border-0">
+      <div className={`text-right px-3 py-2.5 rounded-l-lg ${aGood ? 'bg-emerald-50 dark:bg-emerald-900/20' : ''}`}>
         <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
-          aGood ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'
+          aGood
+            ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400'
+            : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
         }`}>{aText}</span>
       </div>
       <div className="text-center px-2 py-2.5 min-w-[100px] sm:min-w-[120px]">
-        <span className="text-xs text-slate-500">{label}</span>
+        <span className="text-xs text-slate-500 dark:text-slate-400">{label}</span>
       </div>
-      <div className={`text-left px-3 py-2.5 rounded-r-lg ${bGood ? 'bg-emerald-50' : ''}`}>
+      <div className={`text-left px-3 py-2.5 rounded-r-lg ${bGood ? 'bg-emerald-50 dark:bg-emerald-900/20' : ''}`}>
         <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
-          bGood ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'
+          bGood
+            ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400'
+            : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
         }`}>{bText}</span>
       </div>
     </div>
@@ -357,17 +360,17 @@ function TagsSection({ a, b }: { a: GameCardProps; b: GameCardProps }) {
   const bTitle = b.game.title.split(/[\s:—–]/)[0]
 
   return (
-    <div className="border-t border-slate-100 px-4 sm:px-6 py-4 space-y-5">
+    <div className="border-t border-slate-100 dark:border-slate-700 px-4 sm:px-6 py-4 space-y-5">
 
       {hasSkills && (
         <div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">{t('tagsSkillsHeader')}</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3">{t('tagsSkillsHeader')}</p>
 
           {sharedSkills.length > 0 && (
             <div className="mb-3">
-              <p className="text-[10px] text-slate-400 text-center mb-1.5">{t('tagsBothDevelop')}</p>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 text-center mb-1.5">{t('tagsBothDevelop')}</p>
               <div className="flex flex-wrap gap-1.5 justify-center">
-                {sharedSkills.map(s => <Tag key={s} label={s} color="bg-indigo-100 text-indigo-700" />)}
+                {sharedSkills.map(s => <Tag key={s} label={s} color="bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300" />)}
               </div>
             </div>
           )}
@@ -376,14 +379,14 @@ function TagsSection({ a, b }: { a: GameCardProps; b: GameCardProps }) {
             <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-start">
               <div className="flex flex-wrap gap-1 justify-end">
                 {uniqueASkills.length > 0
-                  ? uniqueASkills.map(s => <Tag key={s} label={s} color="bg-emerald-100 text-emerald-700" />)
-                  : <span className="text-[11px] text-slate-300 italic">—</span>}
+                  ? uniqueASkills.map(s => <Tag key={s} label={s} color="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300" />)
+                  : <span className="text-[11px] text-slate-300 dark:text-slate-600 italic">—</span>}
               </div>
-              <div className="text-[10px] text-slate-400 text-center self-center px-1 min-w-[70px]">{t('tagsOnly')}</div>
+              <div className="text-[10px] text-slate-400 dark:text-slate-500 text-center self-center px-1 min-w-[70px]">{t('tagsOnly')}</div>
               <div className="flex flex-wrap gap-1">
                 {uniqueBSkills.length > 0
-                  ? uniqueBSkills.map(s => <Tag key={s} label={s} color="bg-emerald-100 text-emerald-700" />)
-                  : <span className="text-[11px] text-slate-300 italic">—</span>}
+                  ? uniqueBSkills.map(s => <Tag key={s} label={s} color="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300" />)
+                  : <span className="text-[11px] text-slate-300 dark:text-slate-600 italic">—</span>}
               </div>
             </div>
           )}
@@ -392,13 +395,13 @@ function TagsSection({ a, b }: { a: GameCardProps; b: GameCardProps }) {
 
       {hasDP && (
         <div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">{t('tagsTacticsHeader')}</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3">{t('tagsTacticsHeader')}</p>
 
           {sharedDP.length > 0 && (
             <div className="mb-3">
-              <p className="text-[10px] text-slate-400 text-center mb-1.5">{t('tagsBothUse')}</p>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 text-center mb-1.5">{t('tagsBothUse')}</p>
               <div className="flex flex-wrap gap-1.5 justify-center">
-                {sharedDP.map(p => <Tag key={p} label={DP_LABELS[p] ?? p} color="bg-red-100 text-red-700" />)}
+                {sharedDP.map(p => <Tag key={p} label={DP_LABELS[p] ?? p} color="bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300" />)}
               </div>
             </div>
           )}
@@ -407,24 +410,23 @@ function TagsSection({ a, b }: { a: GameCardProps; b: GameCardProps }) {
             <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-start">
               <div className="flex flex-wrap gap-1 justify-end">
                 {uniqueADP.length > 0
-                  ? uniqueADP.map(p => <Tag key={p} label={DP_LABELS[p] ?? p} color="bg-amber-100 text-amber-700" />)
-                  : <span className="text-[11px] text-slate-300 italic">—</span>}
+                  ? uniqueADP.map(p => <Tag key={p} label={DP_LABELS[p] ?? p} color="bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300" />)
+                  : <span className="text-[11px] text-slate-300 dark:text-slate-600 italic">—</span>}
               </div>
-              <div className="text-[10px] text-slate-400 text-center self-center px-1 min-w-[70px]">{t('tagsOnly')}</div>
+              <div className="text-[10px] text-slate-400 dark:text-slate-500 text-center self-center px-1 min-w-[70px]">{t('tagsOnly')}</div>
               <div className="flex flex-wrap gap-1">
                 {uniqueBDP.length > 0
-                  ? uniqueBDP.map(p => <Tag key={p} label={DP_LABELS[p] ?? p} color="bg-amber-100 text-amber-700" />)
-                  : <span className="text-[11px] text-slate-300 italic">—</span>}
+                  ? uniqueBDP.map(p => <Tag key={p} label={DP_LABELS[p] ?? p} color="bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300" />)
+                  : <span className="text-[11px] text-slate-300 dark:text-slate-600 italic">—</span>}
               </div>
             </div>
           )}
 
-          {/* Column labels under tactics */}
           {(uniqueADP.length > 0 || uniqueBDP.length > 0) && (
             <div className="grid grid-cols-[1fr_auto_1fr] gap-2 mt-1">
-              <p className="text-[10px] text-slate-400 text-right truncate">{aTitle}</p>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 text-right truncate">{aTitle}</p>
               <div className="min-w-[70px]" />
-              <p className="text-[10px] text-slate-400 truncate">{bTitle}</p>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 truncate">{bTitle}</p>
             </div>
           )}
         </div>
@@ -443,7 +445,7 @@ function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
   const bScore = b.scores
 
   const curaBg = (s: number | null) => {
-    if (s == null) return 'bg-slate-200 text-slate-500'
+    if (s == null) return 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
     if (s >= 70) return 'bg-emerald-500 text-white'
     if (s >= 40) return 'bg-amber-400 text-white'
     return 'bg-red-500 text-white'
@@ -453,7 +455,7 @@ function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
     c === 'green' ? 'bg-emerald-500 text-white'
     : c === 'amber' ? 'bg-amber-400 text-white'
     : c === 'red'   ? 'bg-red-500 text-white'
-    : 'bg-slate-200 text-slate-500'
+    : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
 
   const timeLabel = (s: typeof aScore) =>
     s?.timeRecommendationMinutes != null
@@ -485,7 +487,6 @@ function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
   const bMonetTags = monetTags(b)
 
   return (
-    // No overflow-hidden on card so sticky header works
     <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
 
       {/* ── Sticky game headers ── */}
@@ -493,11 +494,11 @@ function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
         <div className="grid grid-cols-[1fr_auto_1fr]">
           {/* Game A */}
           <div className="p-3 sm:p-4 flex items-center gap-2.5">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-indigo-100 shrink-0">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-indigo-100 dark:bg-indigo-900/40 shrink-0">
               {a.game.backgroundImage
                 // eslint-disable-next-line @next/next/no-img-element
                 ? <img src={a.game.backgroundImage} alt="" className="w-full h-full object-cover" />
-                : <span className="w-full h-full flex items-center justify-center text-xs font-black text-indigo-500">{a.game.title.slice(0,2).toUpperCase()}</span>}
+                : <span className="w-full h-full flex items-center justify-center text-xs font-black text-indigo-500 dark:text-indigo-400">{a.game.title.slice(0,2).toUpperCase()}</span>}
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate leading-tight">{a.game.title}</p>
@@ -517,17 +518,17 @@ function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
           </div>
 
           {/* VS */}
-          <div className="flex items-center justify-center px-2 border-x border-slate-100">
-            <span className="text-xs font-black text-slate-300 uppercase tracking-widest">vs</span>
+          <div className="flex items-center justify-center px-2 border-x border-slate-100 dark:border-slate-700">
+            <span className="text-xs font-black text-slate-300 dark:text-slate-600 uppercase tracking-widest">vs</span>
           </div>
 
           {/* Game B */}
           <div className="p-3 sm:p-4 flex items-center gap-2.5 flex-row-reverse sm:flex-row">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-indigo-100 shrink-0">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-indigo-100 dark:bg-indigo-900/40 shrink-0">
               {b.game.backgroundImage
                 // eslint-disable-next-line @next/next/no-img-element
                 ? <img src={b.game.backgroundImage} alt="" className="w-full h-full object-cover" />
-                : <span className="w-full h-full flex items-center justify-center text-xs font-black text-indigo-500">{b.game.title.slice(0,2).toUpperCase()}</span>}
+                : <span className="w-full h-full flex items-center justify-center text-xs font-black text-indigo-500 dark:text-indigo-400">{b.game.title.slice(0,2).toUpperCase()}</span>}
             </div>
             <div className="min-w-0 flex-1 sm:text-left text-right">
               <p className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate leading-tight">{b.game.title}</p>
@@ -593,18 +594,18 @@ function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
 
         {/* Monetization tags */}
         {(aMonetTags.length > 0 || bMonetTags.length > 0) && (
-          <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-0 border-b border-slate-100 last:border-0">
+          <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-0 border-b border-slate-100 dark:border-slate-700/50 last:border-0">
             <div className="flex flex-wrap gap-1 justify-end px-3 py-2">
               {aMonetTags.map(tag => (
-                <span key={tag} className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600">{tag}</span>
+                <span key={tag} className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">{tag}</span>
               ))}
             </div>
             <div className="text-center px-2 py-2 min-w-[100px] sm:min-w-[120px] self-center">
-              <span className="text-xs text-slate-500">{t('scMonetTags')}</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400">{t('scMonetTags')}</span>
             </div>
             <div className="flex flex-wrap gap-1 px-3 py-2">
               {bMonetTags.map(tag => (
-                <span key={tag} className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600">{tag}</span>
+                <span key={tag} className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">{tag}</span>
               ))}
             </div>
           </div>
@@ -612,16 +613,16 @@ function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
 
         {/* Subscription warning */}
         {(a.game.hasSubscription || b.game.hasSubscription) && (
-          <div className="grid grid-cols-[1fr_auto_1fr] gap-0 py-2 border-b border-slate-100">
+          <div className="grid grid-cols-[1fr_auto_1fr] gap-0 py-2 border-b border-slate-100 dark:border-slate-700/50">
             <div className="text-right px-3">
               {a.game.hasSubscription && (
-                <span className="text-[11px] text-amber-700 font-semibold">⚠️ {t('scSubRequired')}</span>
+                <span className="text-[11px] text-amber-700 dark:text-amber-400 font-semibold">⚠️ {t('scSubRequired')}</span>
               )}
             </div>
             <div className="min-w-[100px] sm:min-w-[120px]" />
             <div className="px-3">
               {b.game.hasSubscription && (
-                <span className="text-[11px] text-amber-700 font-semibold">⚠️ {t('scSubRequired')}</span>
+                <span className="text-[11px] text-amber-700 dark:text-amber-400 font-semibold">⚠️ {t('scSubRequired')}</span>
               )}
             </div>
           </div>
@@ -652,9 +653,9 @@ function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
 
       {/* ── Verdict banner ── */}
       {winner && (
-        <div className="border-t border-slate-100 bg-emerald-50 px-6 py-4 flex items-center gap-3">
-          <span className="text-emerald-600 text-lg">✓</span>
-          <p className="text-sm text-emerald-800">
+        <div className="border-t border-slate-100 dark:border-slate-700 bg-emerald-50 dark:bg-emerald-900/20 px-6 py-4 flex items-center gap-3">
+          <span className="text-emerald-600 dark:text-emerald-400 text-lg">✓</span>
+          <p className="text-sm text-emerald-800 dark:text-emerald-300">
             <span className="font-bold">{winner}</span>
             {' '}{t('scVerdictSub')}
           </p>
@@ -662,11 +663,11 @@ function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
       )}
 
       {/* ── Full review links ── */}
-      <div className="border-t border-slate-100 px-6 py-3 flex justify-between rounded-b-2xl">
-        <Link href={`/${locale}/game/${a.game.slug}`} className="text-xs text-indigo-600 hover:text-indigo-800 hover:underline font-medium">
+      <div className="border-t border-slate-100 dark:border-slate-700 px-6 py-3 flex justify-between rounded-b-2xl">
+        <Link href={`/${locale}/game/${a.game.slug}`} className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 hover:underline font-medium">
           {t('scFullReview', { title: a.game.title.split(' ').slice(0, 3).join(' ') })} →
         </Link>
-        <Link href={`/${locale}/game/${b.game.slug}`} className="text-xs text-indigo-600 hover:text-indigo-800 hover:underline font-medium">
+        <Link href={`/${locale}/game/${b.game.slug}`} className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 hover:underline font-medium">
           {t('scFullReview', { title: b.game.title.split(' ').slice(0, 3).join(' ') })} →
         </Link>
       </div>
@@ -686,7 +687,6 @@ function SuggestionStrip({ highRiskGame }: { highRiskGame: GameCardProps }) {
   useEffect(() => {
     if (!genre || ris < 0.5) return
     
-    // Validate and sanitize inputs
     const sanitizedGenre = genre.slice(0, 100)
     const validRis = Math.max(0, Math.min(1, ris))
     const maxRis = Math.max(validRis - 0.2, 0.1)
@@ -715,7 +715,9 @@ function SuggestionStrip({ highRiskGame }: { highRiskGame: GameCardProps }) {
   if (ris < 0.5 || suggestions.length === 0) return null
 
   const timeBg = (c: 'green' | 'amber' | 'red' | null) =>
-    c === 'green' ? 'bg-emerald-100 text-emerald-700' : c === 'amber' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'
+    c === 'green' ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300'
+    : c === 'amber' ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300'
+    : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
 
   return (
     <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-5">
@@ -730,11 +732,11 @@ function SuggestionStrip({ highRiskGame }: { highRiskGame: GameCardProps }) {
             href={`/${locale}/game/${s.slug}`}
             className="flex items-center gap-3 bg-white dark:bg-slate-800 rounded-xl border border-emerald-200 dark:border-emerald-800 px-3 py-2.5 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-sm transition-all"
           >
-            <div className="w-10 h-10 rounded-lg overflow-hidden bg-emerald-100 shrink-0">
+            <div className="w-10 h-10 rounded-lg overflow-hidden bg-emerald-100 dark:bg-emerald-900/40 shrink-0">
               {s.backgroundImage
                 // eslint-disable-next-line @next/next/no-img-element
                 ? <img src={s.backgroundImage} alt="" className="w-full h-full object-cover" />
-                : <span className="w-full h-full flex items-center justify-center text-xs font-bold text-emerald-600">{s.title.slice(0,2).toUpperCase()}</span>}
+                : <span className="w-full h-full flex items-center justify-center text-xs font-bold text-emerald-600 dark:text-emerald-400">{s.title.slice(0,2).toUpperCase()}</span>}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">{s.title}</p>
@@ -757,7 +759,6 @@ function SuggestionStrip({ highRiskGame }: { highRiskGame: GameCardProps }) {
 // ─── Load game helper ─────────────────────────────────────────────────────────
 
 async function loadGame(slug: string): Promise<GameCardProps | null> {
-  // Validate slug format
   if (!/^[a-zA-Z0-9_-]+$/.test(slug) || slug.length > 200) {
     console.error('Invalid slug format:', slug)
     return null
@@ -794,7 +795,6 @@ function ComparePageInner() {
     const slugA = searchParams.get('a')
     const slugB = searchParams.get('b')
     
-    // Validate slugs before loading
     const isValidSlug = (s: string | null): s is string => 
       s !== null && /^[a-zA-Z0-9_-]+$/.test(s) && s.length <= 200
     
@@ -871,7 +871,7 @@ function ComparePageInner() {
           <div className="text-center py-16 text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
             <p className="text-5xl mb-3">⚖️</p>
             <p className="font-semibold text-slate-600 dark:text-slate-300">{t('emptyTitle')}</p>
-            <p className="text-sm mt-1">{t('emptySub')}</p>
+            <p className="text-sm mt-1 text-slate-400 dark:text-slate-500">{t('emptySub')}</p>
           </div>
         )}
 

@@ -36,10 +36,6 @@ const PLATFORM_KEYWORDS: Record<string, string> = {
 const VR_KEYWORDS = ['Oculus', 'Quest', 'Vive', 'Rift', 'Valve Index', 'PlayStation VR', 'PSVR', 'Mixed Reality', 'Gear VR']
 
 // ─── Age → ESRB mapping ───────────────────────────────────────────────────────
-// E   = Suitable for early years (ESRB: E only)
-// E10 = Middle childhood (ESRB: E and E10+)
-// T   = Early teens (ESRB: E, E10+, T)
-// M   = Older teens (ESRB: E, E10+, T, M — all ratings)
 
 const ESRB_FOR_AGE: Record<string, string[]> = {
   E:   ['E'],
@@ -86,7 +82,6 @@ async function queryGames(filters: ActiveFilters, child?: ChildFilter): Promise<
     conditions.push(ilike(games.title, `%${filters.q}%`))
   }
 
-  // Åldersfilter: visa spel med tillåtna ESRB-ratings för vald ålder
   if (filters.age) {
     const ratings = ESRB_FOR_AGE[filters.age]
     if (ratings) {
@@ -103,14 +98,12 @@ async function queryGames(filters: ActiveFilters, child?: ChildFilter): Promise<
     conditions.push(sql`${games.genres}::text ILIKE ${'%' + genre + '%'}`)
   }
 
-  // Standard platform filters
   const standardPlatforms = filters.platforms.filter(p => p !== 'VR')
   for (const platform of standardPlatforms) {
     const keyword = PLATFORM_KEYWORDS[platform] ?? platform
     conditions.push(sql`${games.platforms}::text ILIKE ${'%' + keyword + '%'}`)
   }
 
-  // VR platform filter — match any known VR platform keyword
   if (filters.platforms.includes('VR')) {
     const vrConditions = VR_KEYWORDS.map(k =>
       sql`${games.platforms}::text ILIKE ${'%' + k + '%'}`
@@ -126,15 +119,12 @@ async function queryGames(filters: ActiveFilters, child?: ChildFilter): Promise<
     conditions.push(lte(games.basePrice, 40))
   }
 
-  // Riskfilter: 'low' = max 30% risk, 'medium' = max 60% risk
   if (filters.risk === 'low') {
     conditions.push(lte(gameScores.ris, 0.30))
   } else if (filters.risk === 'medium') {
     conditions.push(lte(gameScores.ris, 0.60))
   }
 
-  // Tidsfilter: visa spel som rekommenderas för HÖGST X minuter/dag
-  // t.ex. "30 min" visar spel med timeRecommendationMinutes <= 30
   if (filters.time) {
     const maxMinutes = parseInt(filters.time)
     if (!isNaN(maxMinutes)) {
@@ -162,24 +152,20 @@ async function queryGames(filters: ActiveFilters, child?: ChildFilter): Promise<
     )
   }
 
-  // Representation filter: both gender and ethnic diversity scored ≥ 2
   if (filters.rep === 'good') {
     conditions.push(gte(gameScores.representationScore, 4 / 6))
   }
 
-  // No propaganda filter: propagandaLevel is null (unscored) or 0
   if (filters.noProp === 'true') {
     conditions.push(
       sql`(${gameScores.propagandaLevel} IS NULL OR ${gameScores.propagandaLevel} = 0)`
     )
   }
 
-  // Bechdel test filter
   if (filters.bechdel === 'pass') {
     conditions.push(eq(gameScores.bechdelResult, 'pass'))
   }
 
-  // Child profile filter: age-appropriate + platform match
   if (child) {
     conditions.push(
       or(
@@ -245,7 +231,6 @@ async function queryGames(filters: ActiveFilters, child?: ChildFilter): Promise<
 
 // ─── Parse search params ──────────────────────────────────────────────────────
 
-// Whitelist för tillåtna värden
 const VALID_AGE    = new Set(['E', 'E10', 'T', 'M'])
 const VALID_RISK   = new Set(['low', 'medium'])
 const VALID_SORT   = new Set(['curascore', 'benefit', 'safest', 'riskiest', 'newest', 'alpha', 'metacritic'])
@@ -327,7 +312,6 @@ export default async function BrowsePage({ params, searchParams }: Props) {
   const t = await getTranslations({ locale, namespace: 'browse' })
   const filters = parseFilters(sp)
 
-  // Child profile filter
   const childIdParam = typeof sp.child === 'string' ? parseInt(sp.child) : null
   let profiles: { id: number; name: string; birthYear: number; platforms: unknown }[] = []
   let selectedChild: { id: number; name: string; age: number; platforms: string[] } | null = null
@@ -389,12 +373,12 @@ export default async function BrowsePage({ params, searchParams }: Props) {
             {/* Child selector pills */}
             {profiles.length > 0 && (
               <div className="flex items-center gap-2 flex-wrap mb-4">
-                <span className="text-xs text-slate-400 font-medium">For:</span>
+                <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">For:</span>
                 <a
                   href={`/${locale}/browse?${new URLSearchParams(Object.entries(sp as Record<string, string>).filter(([k]) => k !== 'child' && k !== 'page')).toString()}`}
                   className={`text-xs px-3 py-1.5 rounded-full font-medium transition-colors ${
                     !selectedChild
-                      ? 'bg-slate-800 text-white'
+                      ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900'
                       : 'bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-slate-400 dark:hover:border-slate-500'
                   }`}
                 >
@@ -448,7 +432,7 @@ export default async function BrowsePage({ params, searchParams }: Props) {
                     <> {t('noGamesRisk')}</>
                   )}
                 </p>
-                <Link href={`/${locale}/browse`} className="mt-4 inline-block text-sm font-medium text-indigo-600 hover:text-indigo-800 hover:underline">
+                <Link href={`/${locale}/browse`} className="mt-4 inline-block text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 hover:underline">
                   {t('clearAllFilters')}
                 </Link>
               </div>
@@ -479,31 +463,31 @@ export default async function BrowsePage({ params, searchParams }: Props) {
               </div>
             ) : (
               /* ── List view ──────────────────────────────────────────────── */
-              <ol className="divide-y divide-slate-100 dark:divide-slate-700">
+              <ol className="divide-y divide-slate-100 dark:divide-slate-700/50">
                 {rows.map((row, i) => {
                   const score    = row.curascore
                   const badgeCls = score == null
-                    ? 'bg-slate-200 text-slate-500'
+                    ? 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
                     : `${curascoreBg(score)} text-white`
                   const rank = (currentPage - 1) * PAGE_SIZE + i + 1
                   return (
                     <li key={row.slug}>
                       <Link
                         href={`/${locale}/game/${row.slug}`}
-                        className="flex items-center gap-3 sm:gap-4 py-2.5 sm:py-3 px-1 sm:px-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-slate-700 hover:translate-x-0.5 transition-all group"
+                        className="flex items-center gap-3 sm:gap-4 py-2.5 sm:py-3 px-1 sm:px-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-slate-700/60 hover:translate-x-0.5 transition-all group"
                       >
-                        <span className="w-6 sm:w-7 text-right text-xs sm:text-sm font-semibold text-slate-400 dark:text-slate-500 shrink-0 group-hover:text-indigo-400 transition-colors">
+                        <span className="w-6 sm:w-7 text-right text-xs sm:text-sm font-semibold text-slate-400 dark:text-slate-500 shrink-0 group-hover:text-indigo-400 dark:group-hover:text-indigo-400 transition-colors">
                           {rank}
                         </span>
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden shrink-0 bg-indigo-100">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden shrink-0 bg-indigo-100 dark:bg-indigo-900/40">
                           {row.backgroundImage ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img src={row.backgroundImage} alt={row.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-100 to-violet-100">
-                              <span className="text-xs font-black text-indigo-300">
+                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-100 to-violet-100 dark:from-indigo-900/40 dark:to-violet-900/40">
+                              <span className="text-xs font-black text-indigo-300 dark:text-indigo-500">
                                 {row.title.slice(0, 2).toUpperCase()}
                               </span>
                             </div>
@@ -547,7 +531,6 @@ export default async function BrowsePage({ params, searchParams }: Props) {
                   </Link>
                 )}
 
-                {/* Page number pills */}
                 {Array.from({ length: totalPages }, (_, i) => i + 1)
                   .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 2)
                   .reduce<(number | '…')[]>((acc, p, idx, arr) => {
