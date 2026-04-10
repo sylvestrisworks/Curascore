@@ -54,11 +54,22 @@ function riskLevel(value: number | null): { labelKey: 'riskLow' | 'riskModerate'
   }
 }
 
-function scoreBarColor(value: number | null): string {
+// ─── Bar colors ───────────────────────────────────────────────────────────────
+
+// Benefit bars — blå/grön, högre = bättre
+function benefitBarColor(value: number | null): string {
   const v = value ?? 0
   if (v >= 0.7) return 'bg-emerald-400'
   if (v >= 0.4) return 'bg-blue-400'
   return 'bg-slate-300 dark:bg-slate-600'
+}
+
+// Risk bars — röd/amber/grön, högre = sämre
+function riskDetailBarColor(value: number, max: number): string {
+  const fraction = value / max
+  if (fraction >= 0.67) return 'bg-red-400'
+  if (fraction >= 0.34) return 'bg-amber-400'
+  return 'bg-emerald-400'
 }
 
 type StatusVerdict = { label: string; color: string; bg: string; ring: string }
@@ -155,7 +166,7 @@ function CategoryBar({ label, value, tooltip }: { label: string; value: number |
         {tooltip && <Tooltip text={tooltip} />}
       </span>
       <div className="flex-1 bg-slate-100 dark:bg-slate-700 rounded-full h-2.5 overflow-hidden">
-        <div className={`h-full rounded-full transition-all ${scoreBarColor(value)}`} style={{ width: pct(value) }} />
+        <div className={`h-full rounded-full transition-all ${benefitBarColor(value)}`} style={{ width: pct(value) }} />
       </div>
       <span className="w-8 sm:w-10 text-right text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 shrink-0">
         {Math.round((value ?? 0) * 100)}
@@ -174,7 +185,6 @@ function RiskMeter({ label, value, note, tooltip }: { label: string; value: numb
           {label}
           {tooltip && <Tooltip text={tooltip} />}
         </span>
-        {/* Pill med tydlig varningsfärg */}
         <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full shrink-0 ${level.bg} ${level.color}`}>
           {tGC(level.labelKey)}
         </span>
@@ -187,14 +197,32 @@ function RiskMeter({ label, value, note, tooltip }: { label: string; value: numb
   )
 }
 
-function DetailRow({ label, score, max }: { label: string; score: number | null; max: number }) {
+// ─── DetailRow — två varianter: benefit och risk ──────────────────────────────
+
+function BenefitDetailRow({ label, score, max }: { label: string; score: number | null; max: number }) {
   const value = score ?? 0
   const fraction = value / max
   return (
     <div className="flex items-center gap-2 py-1">
       <span className="flex-1 text-xs text-slate-600 dark:text-slate-400 min-w-0">{label}</span>
       <div className="w-16 sm:w-28 bg-slate-100 dark:bg-slate-700 rounded-full h-2 overflow-hidden shrink-0">
-        <div className={`h-full rounded-full ${scoreBarColor(fraction)}`} style={{ width: `${(fraction * 100).toFixed(0)}%` }} />
+        <div className={`h-full rounded-full ${benefitBarColor(fraction)}`} style={{ width: `${(fraction * 100).toFixed(0)}%` }} />
+      </div>
+      <span className="w-8 text-right text-xs font-medium text-slate-500 dark:text-slate-400 shrink-0">{value}/{max}</span>
+    </div>
+  )
+}
+
+function RiskDetailRow({ label, score, max }: { label: string; score: number | null; max: number }) {
+  const value = score ?? 0
+  return (
+    <div className="flex items-center gap-2 py-1">
+      <span className="flex-1 text-xs text-slate-600 dark:text-slate-400 min-w-0">{label}</span>
+      <div className="w-16 sm:w-28 bg-slate-100 dark:bg-slate-700 rounded-full h-2 overflow-hidden shrink-0">
+        <div
+          className={`h-full rounded-full ${riskDetailBarColor(value, max)}`}
+          style={{ width: `${((value / max) * 100).toFixed(0)}%` }}
+        />
       </div>
       <span className="w-8 text-right text-xs font-medium text-slate-500 dark:text-slate-400 shrink-0">{value}/{max}</span>
     </div>
@@ -416,35 +444,36 @@ function FullScoresTab({ scores, review, t }: { scores: SerializedScores; review
 
       {expanded && (
       <>
+      {/* ── BENEFIT SCORES ── */}
       <div>
         <h3 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">{t('benefitScoresHeader')}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
           <div>
             <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 mb-1">{t('b1Cognitive')}</p>
-            <DetailRow label={t('fieldProblemSolving')}    score={review.problemSolving}    max={5} />
-            <DetailRow label={t('fieldSpatialAwareness')}  score={review.spatialAwareness}  max={5} />
-            <DetailRow label={t('fieldStrategicThinking')} score={review.strategicThinking} max={5} />
-            <DetailRow label={t('fieldCriticalThinking')}  score={review.criticalThinking}  max={5} />
-            <DetailRow label={t('fieldMemoryAttention')}   score={review.memoryAttention}   max={5} />
-            <DetailRow label={t('fieldCreativity')}        score={review.creativity}        max={5} />
-            <DetailRow label={t('fieldReadingLanguage')}   score={review.readingLanguage}   max={5} />
-            <DetailRow label={t('fieldMathSystems')}       score={review.mathSystems}       max={5} />
-            <DetailRow label={t('fieldLearningTransfer')}  score={review.learningTransfer}  max={5} />
-            <DetailRow label={t('fieldAdaptiveChallenge')} score={review.adaptiveChallenge} max={5} />
+            <BenefitDetailRow label={t('fieldProblemSolving')}    score={review.problemSolving}    max={5} />
+            <BenefitDetailRow label={t('fieldSpatialAwareness')}  score={review.spatialAwareness}  max={5} />
+            <BenefitDetailRow label={t('fieldStrategicThinking')} score={review.strategicThinking} max={5} />
+            <BenefitDetailRow label={t('fieldCriticalThinking')}  score={review.criticalThinking}  max={5} />
+            <BenefitDetailRow label={t('fieldMemoryAttention')}   score={review.memoryAttention}   max={5} />
+            <BenefitDetailRow label={t('fieldCreativity')}        score={review.creativity}        max={5} />
+            <BenefitDetailRow label={t('fieldReadingLanguage')}   score={review.readingLanguage}   max={5} />
+            <BenefitDetailRow label={t('fieldMathSystems')}       score={review.mathSystems}       max={5} />
+            <BenefitDetailRow label={t('fieldLearningTransfer')}  score={review.learningTransfer}  max={5} />
+            <BenefitDetailRow label={t('fieldAdaptiveChallenge')} score={review.adaptiveChallenge} max={5} />
           </div>
           <div>
             <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 mb-1">{t('b2Social')}</p>
-            <DetailRow label={t('fieldTeamwork')}             score={review.teamwork}            max={5} />
-            <DetailRow label={t('fieldCommunication')}        score={review.communication}       max={5} />
-            <DetailRow label={t('fieldEmpathy')}              score={review.empathy}             max={5} />
-            <DetailRow label={t('fieldEmotionalRegulation')}  score={review.emotionalRegulation} max={5} />
-            <DetailRow label={t('fieldEthicalReasoning')}     score={review.ethicalReasoning}    max={5} />
-            <DetailRow label={t('fieldPositiveSocial')}       score={review.positiveSocial}      max={5} />
+            <BenefitDetailRow label={t('fieldTeamwork')}             score={review.teamwork}            max={5} />
+            <BenefitDetailRow label={t('fieldCommunication')}        score={review.communication}       max={5} />
+            <BenefitDetailRow label={t('fieldEmpathy')}              score={review.empathy}             max={5} />
+            <BenefitDetailRow label={t('fieldEmotionalRegulation')}  score={review.emotionalRegulation} max={5} />
+            <BenefitDetailRow label={t('fieldEthicalReasoning')}     score={review.ethicalReasoning}    max={5} />
+            <BenefitDetailRow label={t('fieldPositiveSocial')}       score={review.positiveSocial}      max={5} />
             <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 mt-3 mb-1">{t('b3Motor')}</p>
-            <DetailRow label={t('fieldHandEye')}          score={review.handEyeCoord}     max={5} />
-            <DetailRow label={t('fieldFineMotor')}        score={review.fineMotor}         max={5} />
-            <DetailRow label={t('fieldReactionTime')}     score={review.reactionTime}      max={5} />
-            <DetailRow label={t('fieldPhysicalActivity')} score={review.physicalActivity}  max={5} />
+            <BenefitDetailRow label={t('fieldHandEye')}          score={review.handEyeCoord}     max={5} />
+            <BenefitDetailRow label={t('fieldFineMotor')}        score={review.fineMotor}         max={5} />
+            <BenefitDetailRow label={t('fieldReactionTime')}     score={review.reactionTime}      max={5} />
+            <BenefitDetailRow label={t('fieldPhysicalActivity')} score={review.physicalActivity}  max={5} />
           </div>
         </div>
         <div className="mt-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-3 text-xs text-emerald-800 dark:text-emerald-300">
@@ -453,45 +482,46 @@ function FullScoresTab({ scores, review, t }: { scores: SerializedScores; review
         </div>
       </div>
 
+      {/* ── RISK SCORES — använder RiskDetailRow med varningsfärger ── */}
       <div>
         <h3 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">{t('riskScoresHeader')}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
           <div>
             <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 mb-1">{t('r1Dopamine')}</p>
-            <DetailRow label={t('fieldVariableRewards')}      score={review.variableRewards}      max={3} />
-            <DetailRow label={t('fieldStreakMechanics')}      score={review.streakMechanics}      max={3} />
-            <DetailRow label={t('fieldLossAversion')}         score={review.lossAversion}         max={3} />
-            <DetailRow label={t('fieldFomoEvents')}           score={review.fomoEvents}           max={3} />
-            <DetailRow label={t('fieldStoppingBarriers')}     score={review.stoppingBarriers}     max={3} />
-            <DetailRow label={t('fieldNotifications')}        score={review.notifications}        max={3} />
-            <DetailRow label={t('fieldNearMiss')}             score={review.nearMiss}             max={3} />
-            <DetailRow label={t('fieldInfinitePlay')}         score={review.infinitePlay}         max={3} />
-            <DetailRow label={t('fieldEscalatingCommitment')} score={review.escalatingCommitment} max={3} />
-            <DetailRow label={t('fieldRewardFrequency')}      score={review.variableRewardFreq}   max={3} />
+            <RiskDetailRow label={t('fieldVariableRewards')}      score={review.variableRewards}      max={3} />
+            <RiskDetailRow label={t('fieldStreakMechanics')}      score={review.streakMechanics}      max={3} />
+            <RiskDetailRow label={t('fieldLossAversion')}         score={review.lossAversion}         max={3} />
+            <RiskDetailRow label={t('fieldFomoEvents')}           score={review.fomoEvents}           max={3} />
+            <RiskDetailRow label={t('fieldStoppingBarriers')}     score={review.stoppingBarriers}     max={3} />
+            <RiskDetailRow label={t('fieldNotifications')}        score={review.notifications}        max={3} />
+            <RiskDetailRow label={t('fieldNearMiss')}             score={review.nearMiss}             max={3} />
+            <RiskDetailRow label={t('fieldInfinitePlay')}         score={review.infinitePlay}         max={3} />
+            <RiskDetailRow label={t('fieldEscalatingCommitment')} score={review.escalatingCommitment} max={3} />
+            <RiskDetailRow label={t('fieldRewardFrequency')}      score={review.variableRewardFreq}   max={3} />
             <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 mt-3 mb-1">{t('r2Monetization')}</p>
-            <DetailRow label={t('fieldSpendingCeiling')}      score={review.spendingCeiling}      max={3} />
-            <DetailRow label={t('fieldPayToWin')}             score={review.payToWin}             max={3} />
-            <DetailRow label={t('fieldCurrencyObfuscation')}  score={review.currencyObfuscation}  max={3} />
-            <DetailRow label={t('fieldSpendingPrompts')}      score={review.spendingPrompts}      max={3} />
-            <DetailRow label={t('fieldChildTargeting')}       score={review.childTargeting}       max={3} />
-            <DetailRow label={t('fieldAdPressure')}           score={review.adPressure}           max={3} />
-            <DetailRow label={t('fieldSubscriptionPressure')} score={review.subscriptionPressure} max={3} />
-            <DetailRow label={t('fieldSocialSpending')}       score={review.socialSpending}       max={3} />
+            <RiskDetailRow label={t('fieldSpendingCeiling')}      score={review.spendingCeiling}      max={3} />
+            <RiskDetailRow label={t('fieldPayToWin')}             score={review.payToWin}             max={3} />
+            <RiskDetailRow label={t('fieldCurrencyObfuscation')}  score={review.currencyObfuscation}  max={3} />
+            <RiskDetailRow label={t('fieldSpendingPrompts')}      score={review.spendingPrompts}      max={3} />
+            <RiskDetailRow label={t('fieldChildTargeting')}       score={review.childTargeting}       max={3} />
+            <RiskDetailRow label={t('fieldAdPressure')}           score={review.adPressure}           max={3} />
+            <RiskDetailRow label={t('fieldSubscriptionPressure')} score={review.subscriptionPressure} max={3} />
+            <RiskDetailRow label={t('fieldSocialSpending')}       score={review.socialSpending}       max={3} />
           </div>
           <div>
             <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 mb-1">{t('r3Social')}</p>
-            <DetailRow label={t('fieldSocialObligation')}    score={review.socialObligation}    max={3} />
-            <DetailRow label={t('fieldCompetitiveToxicity')} score={review.competitiveToxicity} max={3} />
-            <DetailRow label={t('fieldStrangerRisk')}        score={review.strangerRisk}        max={3} />
-            <DetailRow label={t('fieldSocialComparison')}    score={review.socialComparison}    max={3} />
-            <DetailRow label={t('fieldIdentitySelfWorth')}   score={review.identitySelfWorth}   max={3} />
-            <DetailRow label={t('fieldPrivacyRisk')}         score={review.privacyRisk}         max={3} />
+            <RiskDetailRow label={t('fieldSocialObligation')}    score={review.socialObligation}    max={3} />
+            <RiskDetailRow label={t('fieldCompetitiveToxicity')} score={review.competitiveToxicity} max={3} />
+            <RiskDetailRow label={t('fieldStrangerRisk')}        score={review.strangerRisk}        max={3} />
+            <RiskDetailRow label={t('fieldSocialComparison')}    score={review.socialComparison}    max={3} />
+            <RiskDetailRow label={t('fieldIdentitySelfWorth')}   score={review.identitySelfWorth}   max={3} />
+            <RiskDetailRow label={t('fieldPrivacyRisk')}         score={review.privacyRisk}         max={3} />
             <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 mt-3 mb-1">{t('r4Content')} {t('displayOnly')}</p>
-            <DetailRow label={t('fieldViolenceLevel')}       score={review.violenceLevel}       max={3} />
-            <DetailRow label={t('fieldSexualContent')}       score={review.sexualContent}       max={3} />
-            <DetailRow label={t('fieldLanguage')}            score={review.language}            max={3} />
-            <DetailRow label={t('fieldSubstanceRef')}        score={review.substanceRef}        max={3} />
-            <DetailRow label={t('fieldFearHorror')}          score={review.fearHorror}          max={3} />
+            <RiskDetailRow label={t('fieldViolenceLevel')}       score={review.violenceLevel}       max={3} />
+            <RiskDetailRow label={t('fieldSexualContent')}       score={review.sexualContent}       max={3} />
+            <RiskDetailRow label={t('fieldLanguage')}            score={review.language}            max={3} />
+            <RiskDetailRow label={t('fieldSubstanceRef')}        score={review.substanceRef}        max={3} />
+            <RiskDetailRow label={t('fieldFearHorror')}          score={review.fearHorror}          max={3} />
           </div>
         </div>
         <div className="mt-4 bg-red-50 dark:bg-red-900/20 rounded-xl p-3 text-xs text-red-800 dark:text-red-300">
@@ -507,10 +537,10 @@ function FullScoresTab({ scores, review, t }: { scores: SerializedScores; review
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
             <div>
-              <DetailRow label={t('fieldCrossPlatform')}   score={review.r5CrossPlatform}   max={3} />
-              <DetailRow label={t('fieldLoadTime')}         score={review.r5LoadTime}         max={3} />
-              <DetailRow label={t('fieldMobileOptimised')}  score={review.r5MobileOptimized}  max={3} />
-              <DetailRow label={t('fieldLoginBarrier')}     score={review.r5LoginBarrier}     max={3} />
+              <BenefitDetailRow label={t('fieldCrossPlatform')}   score={review.r5CrossPlatform}   max={3} />
+              <BenefitDetailRow label={t('fieldLoadTime')}         score={review.r5LoadTime}         max={3} />
+              <BenefitDetailRow label={t('fieldMobileOptimised')}  score={review.r5MobileOptimized}  max={3} />
+              <BenefitDetailRow label={t('fieldLoginBarrier')}     score={review.r5LoginBarrier}     max={3} />
             </div>
           </div>
         </div>
@@ -523,10 +553,10 @@ function FullScoresTab({ scores, review, t }: { scores: SerializedScores; review
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
             <div>
-              <DetailRow label={t('fieldInfiniteGameplay')}    score={review.r6InfiniteGameplay}   max={3} />
-              <DetailRow label={t('fieldNoStoppingPoints')}    score={review.r6NoStoppingPoints}   max={3} />
-              <DetailRow label={t('fieldNoGameOver')}          score={review.r6NoGameOver}         max={3} />
-              <DetailRow label={t('fieldNoChapterStructure')}  score={review.r6NoChapterStructure} max={3} />
+              <RiskDetailRow label={t('fieldInfiniteGameplay')}    score={review.r6InfiniteGameplay}   max={3} />
+              <RiskDetailRow label={t('fieldNoStoppingPoints')}    score={review.r6NoStoppingPoints}   max={3} />
+              <RiskDetailRow label={t('fieldNoGameOver')}          score={review.r6NoGameOver}         max={3} />
+              <RiskDetailRow label={t('fieldNoChapterStructure')}  score={review.r6NoChapterStructure} max={3} />
             </div>
           </div>
         </div>
@@ -539,8 +569,8 @@ function FullScoresTab({ scores, review, t }: { scores: SerializedScores; review
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
             <div>
-              <DetailRow label={t('fieldGenderBalance')}   score={review.repGenderBalance}   max={3} />
-              <DetailRow label={t('fieldEthnicDiversity')} score={review.repEthnicDiversity} max={3} />
+              <BenefitDetailRow label={t('fieldGenderBalance')}   score={review.repGenderBalance}   max={3} />
+              <BenefitDetailRow label={t('fieldEthnicDiversity')} score={review.repEthnicDiversity} max={3} />
             </div>
           </div>
         </div>
@@ -553,7 +583,7 @@ function FullScoresTab({ scores, review, t }: { scores: SerializedScores; review
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8">
             <div>
-              <DetailRow label={t('fieldPropagandaLevel')} score={review.propagandaLevel} max={3} />
+              <RiskDetailRow label={t('fieldPropagandaLevel')} score={review.propagandaLevel} max={3} />
               {review.propagandaNotes && (
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 italic">{review.propagandaNotes}</p>
               )}
