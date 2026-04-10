@@ -38,3 +38,11 @@ skills-lock.json
 gta_vs_split_fiction_rating_cards.html
 nutri.html.txt
 .vercel
+.aider*
+
+
+# Exclude environment secrets
+.env.txt
+
+# Exclude temporary or specific text docs
+docs/Ny(tt) Textdokument.txt

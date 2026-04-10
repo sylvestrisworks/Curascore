@@ -12,12 +12,16 @@ import CarouselRow from '@/components/CarouselRow'
 import type { GameSummary } from '@/types/game'
 
 // ─── Age → ESRB mapping ───────────────────────────────────────────────────────
+// E   = Suitable for early years (ESRB: E only)
+// E10 = Middle childhood (ESRB: E and E10+)
+// T   = Early teens (ESRB: E, E10+, T)
+// M   = Older teens (ESRB: E, E10+, T, M — all ratings)
 
 const ESRB_FOR_AGE: Record<string, string[]> = {
   E:   ['E'],
   E10: ['E', 'E10+'],
   T:   ['E', 'E10+', 'T'],
-  M:   ['T', 'M'],
+  M:   ['E', 'E10+', 'T', 'M'],
 }
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -80,12 +84,24 @@ async function getCarouselRows(platforms: string[], age?: string, locale = 'en')
     ? or(...platforms.map(p => sql`${games.platforms}::text ILIKE ${'%' + escapeIlike(p) + '%'}`))
     : undefined
 
-  const ratings = ESRB_FOR_AGE[age ?? ''] ?? ['E', 'E10+', 'T']
-  const ageFilter: SQL = age
+  // Om ålder är valt: visa bara spel med tillåtna ESRB-ratings
+  // Om ingen ålder: visa alla spel (inklusive de utan rating)
+  const ratings = age ? (ESRB_FOR_AGE[age] ?? ['E', 'E10+', 'T']) : null
+  const ageFilter: SQL = age && ratings
     ? inArray(games.esrbRating, ratings)
-    : or(isNull(games.esrbRating), inArray(games.esrbRating, ratings))!
+    : or(isNull(games.esrbRating), inArray(games.esrbRating, ['E', 'E10+', 'T', 'M']))!
 
   const base = (extra?: SQL) => and(isNotNull(gameScores.curascore), platformFilter, ageFilter, extra)
+
+  // Beginner-kollektionen: alltid E/E10+ oavsett åldersfilter, men respekterar plattformsfilter
+  const beginnerAgeFilter = inArray(games.esrbRating, ['E', 'E10+'])
+  const beginnerBase = and(
+    isNotNull(gameScores.curascore),
+    platformFilter,
+    beginnerAgeFilter,
+    lte(gameScores.ris, 0.25),
+    gte(gameScores.curascore, 55),
+  )
 
   const [topRated, coopPlay, lowRisk, highBenefit, teamwork, vrGames, beginnerGames, dopamineTraps, newAndGood] = await Promise.all([
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base()).orderBy(desc(gameScores.curascore)).limit(12),
@@ -94,23 +110,27 @@ async function getCarouselRows(platforms: string[], age?: string, locale = 'en')
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(gte(gameScores.cognitiveScore, 0.6))).orderBy(desc(gameScores.bds)).limit(12),
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(sql`${gameScores.topBenefits}::jsonb @> ${JSON.stringify([{ skill: 'Teamwork' }])}::jsonb`)).orderBy(desc(gameScores.curascore)).limit(12),
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(and(isNotNull(gameScores.curascore), eq(games.isVr, true), ageFilter)).orderBy(desc(gameScores.curascore)).limit(12),
-    db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(and(isNotNull(gameScores.curascore), ageFilter, platformFilter, inArray(games.esrbRating, ['E', 'E10+']), lte(gameScores.ris, 0.25), gte(gameScores.curascore, 55))).orderBy(desc(gameScores.curascore)).limit(12),
+    db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(beginnerBase).orderBy(desc(gameScores.curascore)).limit(12),
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(and(isNotNull(gameScores.curascore), platformFilter, ageFilter, gte(gameScores.ris, 0.60))).orderBy(desc(gameScores.ris)).limit(12),
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(gte(gameScores.curascore, 60))).orderBy(desc(games.releaseDate)).limit(12),
   ])
 
   const browseBase = `/${locale}/browse`
+  // Bygg age-param för browse-länkar om ålder är valt
+  const ageParam = age ? `&age=${age}` : ''
+  const platformParam = platforms.length > 0 ? `&platforms=${platforms.join(',')}` : ''
+  const baseParams = `${ageParam}${platformParam}`
 
   const rows: CarouselRowData[] = [
-    { id: 'newgood',  title: 'New & Worth Playing',     emoji: '✨', browseHref: `${browseBase}?sort=newest`,               games: newAndGood.map(toSummary)    },
-    { id: 'top',      title: 'The Highest Curascores', emoji: '⭐', browseHref: `${browseBase}?sort=curascore`,           games: topRated.map(toSummary)    },
-    { id: 'coop',     title: 'Family Co-Op',           emoji: '👨‍👩‍👧', browseHref: `${browseBase}?benefits=teamwork`,           games: coopPlay.map(toSummary)    },
-    { id: 'safe',     title: 'Safe & Stress-Free',     emoji: '✅', browseHref: `${browseBase}?risk=low`,                 games: lowRisk.map(toSummary)     },
-    { id: 'brain',    title: 'Sneaky Smart Games',     emoji: '🧠', browseHref: `${browseBase}?benefits=problem-solving`, games: highBenefit.map(toSummary) },
-    { id: 'teamwork', title: 'Team up',                emoji: '🤝', browseHref: `${browseBase}?benefits=teamwork`,        games: teamwork.map(toSummary)    },
-    { id: 'vr',       title: 'VR & AR',                emoji: '🥽', browseHref: `${browseBase}?platforms=VR`,             games: vrGames.map(toSummary)     },
-    { id: 'beginner', title: 'New to gaming',          emoji: '🎯', browseHref: `${browseBase}?age=E&risk=low`,           games: beginnerGames.map(toSummary) },
-    { id: 'dopamine', title: 'Dopamine Traps',          emoji: '🎰', browseHref: `${browseBase}?sort=riskiest`,             games: dopamineTraps.map(toSummary) },
+    { id: 'newgood',  title: 'New & Worth Playing',   emoji: '✨', browseHref: `${browseBase}?sort=newest${baseParams}`,                    games: newAndGood.map(toSummary)    },
+    { id: 'top',      title: 'The Highest Curascores', emoji: '⭐', browseHref: `${browseBase}?sort=curascore${baseParams}`,                 games: topRated.map(toSummary)      },
+    { id: 'coop',     title: 'Family Co-Op',           emoji: '👨‍👩‍👧', browseHref: `${browseBase}?benefits=teamwork${baseParams}`,              games: coopPlay.map(toSummary)      },
+    { id: 'safe',     title: 'Safe & Stress-Free',     emoji: '✅', browseHref: `${browseBase}?risk=low${baseParams}`,                       games: lowRisk.map(toSummary)       },
+    { id: 'brain',    title: 'Sneaky Smart Games',     emoji: '🧠', browseHref: `${browseBase}?benefits=problem-solving${baseParams}`,       games: highBenefit.map(toSummary)   },
+    { id: 'teamwork', title: 'Team up',                emoji: '🤝', browseHref: `${browseBase}?benefits=teamwork${baseParams}`,              games: teamwork.map(toSummary)      },
+    { id: 'vr',       title: 'VR & AR',                emoji: '🥽', browseHref: `${browseBase}?platforms=VR${ageParam}`,                    games: vrGames.map(toSummary)       },
+    { id: 'beginner', title: 'New to gaming',          emoji: '🎯', browseHref: `${browseBase}?age=E10&risk=low${platformParam}`,           games: beginnerGames.map(toSummary) },
+    { id: 'dopamine', title: 'Dopamine Traps',         emoji: '🎰', browseHref: `${browseBase}?sort=riskiest${baseParams}`,                 games: dopamineTraps.map(toSummary) },
   ]
 
   return rows.filter(r => r.games.length > 0)
@@ -128,10 +148,15 @@ export default async function HomePage({ params, searchParams }: Props) {
   const sp = await searchParams
   const t = await getTranslations({ locale, namespace: 'home' })
 
-  const platformParam = typeof sp.platform === 'string' ? sp.platform.slice(0, 200) : ''
+  // Sanitize and validate platform parameter
+  const platformParam = typeof sp.platform === 'string'
+    ? sp.platform.slice(0, 200).replace(/[^a-zA-Z0-9,\s-]/g, '')
+    : ''
   const platforms = platformParam
-    ? platformParam.split(',').filter(Boolean).slice(0, 8).map(p => p.slice(0, 50))
+    ? platformParam.split(',').filter(Boolean).slice(0, 8).map(p => p.trim().slice(0, 50))
     : []
+
+  // Validate age parameter against whitelist
   const age = typeof sp.age === 'string' && sp.age in ESRB_FOR_AGE ? sp.age : undefined
 
   const [carousels, stats] = await Promise.all([
@@ -158,15 +183,11 @@ export default async function HomePage({ params, searchParams }: Props) {
   ]
 
   return (
-    <div className="bg-slate-50">
+    <div className="bg-slate-50 dark:bg-slate-900">
 
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
       <section className="hero-gradient relative">
         <div className="hidden sm:block absolute inset-0 pointer-events-none select-none overflow-hidden">
-          <div className="float-1 absolute top-8 left-[8%]  text-4xl opacity-30">🎮</div>
-          <div className="float-2 absolute top-12 right-[12%] text-3xl opacity-25">🧠</div>
-          <div className="float-3 absolute bottom-10 left-[20%] text-3xl opacity-20">⭐</div>
-          <div className="float-1 absolute bottom-8 right-[22%] text-2xl opacity-25">🛡️</div>
           <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-white/10 blur-3xl" />
           <div className="absolute -bottom-10 -right-10 w-64 h-64 rounded-full bg-violet-300/20 blur-3xl" />
         </div>
@@ -196,7 +217,7 @@ export default async function HomePage({ params, searchParams }: Props) {
             ].map(s => (
               <div key={s.label} className="stat-shimmer flex flex-col items-center bg-white/10 border border-white/20 rounded-2xl px-3 sm:px-5 py-3 backdrop-blur-sm">
                 <span className="text-xl sm:text-2xl font-extrabold text-white">{s.value}</span>
-                <span className="text-[11px] sm:text-xs text-white/70 font-medium mt-0.5">{s.label}</span>
+                <span className="text-[11px] sm:text-xs text-white/70 font-medium mt-0.5 text-center">{s.label}</span>
               </div>
             ))}
           </div>
@@ -263,19 +284,23 @@ export default async function HomePage({ params, searchParams }: Props) {
         )}
 
         {/* About */}
-        <section className="border-t border-slate-200 py-14 pb-16">
-          <p className="text-center text-xs font-semibold text-slate-400 uppercase tracking-widest mb-8">
+        <section className="border-t border-slate-200 dark:border-slate-700 py-14 pb-16">
+          <p className="text-center text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-8">
             {t('howItWorksLabel')}
           </p>
           <div className="grid sm:grid-cols-3 gap-6">
             {HOW_IT_WORKS.map((item) => (
-              <div key={item.title} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center hover:shadow-md transition-shadow">
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center text-2xl mb-4 shadow-sm`}>
+              <Link
+                key={item.title}
+                href={`/${locale}/faq`}
+                className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm p-6 flex flex-col items-center text-center hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-600 transition-all cursor-pointer group"
+              >
+                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:scale-110 transition-transform`}>
                   {item.icon}
                 </div>
-                <h3 className="font-semibold text-slate-800 mb-2">{item.title}</h3>
-                <p className="text-sm text-slate-500 leading-relaxed">{item.body}</p>
-              </div>
+                <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{item.title}</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{item.body}</p>
+              </Link>
             ))}
           </div>
 

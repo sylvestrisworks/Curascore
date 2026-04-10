@@ -10,10 +10,10 @@ import { SlidersHorizontal, X, LayoutGrid, List } from 'lucide-react'
 // ─── Filter definitions ───────────────────────────────────────────────────────
 
 export const AGE_OPTIONS = [
-  { value: 'E',   labelKey: 'ageEarlyYears'      },
-  { value: 'E10', labelKey: 'ageMiddleChildhood'  },
-  { value: 'T',   labelKey: 'ageEarlyTeens'       },
-  { value: 'M',   labelKey: 'ageOlderTeens'       },
+  { value: 'E',   labelKey: 'ageEarlyYears'      },  // ESRB: E
+  { value: 'E10', labelKey: 'ageMiddleChildhood'  },  // ESRB: E, E10+
+  { value: 'T',   labelKey: 'ageEarlyTeens'       },  // ESRB: E, E10+, T
+  { value: 'M',   labelKey: 'ageOlderTeens'       },  // ESRB: E, E10+, T, M
 ]
 
 export const GENRE_OPTIONS = [
@@ -128,10 +128,11 @@ export default function BrowseFilters({ active, totalCount }: Props) {
     { value: 'medium', label: t('riskMedium') },
   ]
 
+  // Tidsfilter: "upp till X min/dag" — lägre värde = striktare filter
   const timeOptions = [
-    { value: '30', label: '30+ min' },
-    { value: '60', label: '60+ min' },
-    { value: '90', label: '90+ min' },
+    { value: '30', label: t('timeUpTo30')  },
+    { value: '60', label: t('timeUpTo60')  },
+    { value: '90', label: t('timeUpTo90')  },
   ]
 
   const priceOptions = [
@@ -157,17 +158,19 @@ export default function BrowseFilters({ active, totalCount }: Props) {
   return (
     <>
       {/* ── Desktop sidebar (lg+) ──────────────────────────────────────────── */}
-      <aside className="hidden lg:block w-64 shrink-0">
+      <aside className="hidden lg:block w-56 xl:w-64 shrink-0">
         {panel}
       </aside>
 
       {/* ── Mobile filter button ───────────────────────────────────────────── */}
-      <div className="lg:hidden mb-4">
+      <div className="lg:hidden mb-3 sm:mb-4">
         <button
           onClick={() => setDrawerOpen(true)}
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800
             text-sm font-semibold text-slate-700 dark:text-slate-200 hover:border-indigo-300 hover:text-indigo-700
             shadow-sm transition-colors"
+          aria-label="Open filters"
+          aria-expanded={drawerOpen}
         >
           <SlidersHorizontal size={15} />
           {t('heading')}
@@ -181,20 +184,21 @@ export default function BrowseFilters({ active, totalCount }: Props) {
 
       {/* ── Mobile drawer overlay ──────────────────────────────────────────── */}
       {drawerOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 flex">
+        <div className="lg:hidden fixed inset-0 z-50 flex" role="dialog" aria-modal="true" aria-label="Filters">
           <div className="absolute inset-0 bg-black/40" onClick={() => setDrawerOpen(false)} />
-          <aside className="relative ml-auto w-80 max-w-full h-full bg-white dark:bg-slate-800 shadow-xl overflow-y-auto">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800 z-10">
+          <aside className="relative ml-auto w-[min(320px,100vw)] h-full bg-white dark:bg-slate-800 shadow-xl overflow-y-auto">
+            <div className="flex items-center justify-between px-4 sm:px-5 py-4 border-b border-slate-100 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800 z-10">
               <h2 className="font-bold text-slate-800 dark:text-slate-100">{t('heading')}</h2>
-              <button onClick={() => setDrawerOpen(false)}
+              <button
+                onClick={() => setDrawerOpen(false)}
                 className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                 aria-label="Close filters"
               >
                 <X size={18} />
               </button>
             </div>
-            <div className="px-5 py-4">{panel}</div>
-            <div className="sticky bottom-0 px-5 py-4 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700">
+            <div className="px-4 sm:px-5 py-4">{panel}</div>
+            <div className="sticky bottom-0 px-4 sm:px-5 py-4 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700">
               <button
                 onClick={() => setDrawerOpen(false)}
                 className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition-colors"
@@ -227,7 +231,7 @@ function FilterPanel({
   clearAll: () => void
 }) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="font-bold text-slate-800 dark:text-slate-100">{t('heading')}</h2>
@@ -251,6 +255,7 @@ function FilterPanel({
         </select>
       </div>
 
+      {/* Ålder — visar vilka ESRB-ratings som inkluderas */}
       <FilterSection title={t('sectionAge')}>
         {AGE_OPTIONS.map(o => (
           <Chip key={o.value} label={t(o.labelKey as Parameters<T>[0])} active={active.age === o.value}
@@ -295,6 +300,7 @@ function FilterPanel({
         ))}
       </FilterSection>
 
+      {/* Tidsfilter: "Upp till X min/dag" */}
       <FilterSection title={t('sectionTime')} note={t('requiresReview')}>
         {timeOptions.map(o => (
           <Chip key={o.value} label={o.label} active={active.time === o.value}
@@ -356,14 +362,16 @@ export function ViewToggle({ view, listHref, gridHref }: { view: 'list' | 'grid'
   return (
     <div className="flex items-center border border-slate-200 dark:border-slate-600 rounded-lg overflow-hidden bg-white dark:bg-slate-800">
       <Link href={listHref}
-        className={`p-2 transition-colors ${view === 'list' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-700'}`}
+        className={`p-2 transition-colors ${view === 'list' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
         aria-label="List view"
+        aria-current={view === 'list' ? 'true' : undefined}
       >
         <List size={15} />
       </Link>
       <Link href={gridHref}
-        className={`p-2 transition-colors ${view === 'grid' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-700'}`}
+        className={`p-2 transition-colors ${view === 'grid' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
         aria-label="Grid view"
+        aria-current={view === 'grid' ? 'true' : undefined}
       >
         <LayoutGrid size={15} />
       </Link>

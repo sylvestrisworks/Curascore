@@ -86,21 +86,48 @@ function GamePicker({
   const [loading, setLoading]         = useState(false)
   const [open, setOpen]               = useState(false)
   const ref                           = useRef<HTMLDivElement>(null)
-  const debounce                      = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const debounceRef                   = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const abortControllerRef            = useRef<AbortController | null>(null)
   const t                             = useTranslations('compare')
 
   useEffect(() => {
-    if (debounce.current) clearTimeout(debounce.current)
+    // Cleanup previous timeout and abort previous request
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    if (abortControllerRef.current) abortControllerRef.current.abort()
+    
     if (query.length < 2) { setSuggestions([]); setOpen(false); return }
-    debounce.current = setTimeout(async () => {
+    
+    // Sanitize query to prevent injection
+    const sanitizedQuery = query.slice(0, 100).trim()
+    if (!sanitizedQuery) return
+    
+    debounceRef.current = setTimeout(async () => {
       setLoading(true)
+      abortControllerRef.current = new AbortController()
+      
       try {
-        const res  = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
+        const res = await fetch(`/api/search?q=${encodeURIComponent(sanitizedQuery)}`, {
+          signal: abortControllerRef.current.signal
+        })
+        if (!res.ok) throw new Error('Search failed')
         const data: GameSummary[] = await res.json()
         setSuggestions(data)
         setOpen(data.length > 0)
-      } finally { setLoading(false) }
+      } catch (err) {
+        if (err instanceof Error && err.name !== 'AbortError') {
+          console.error('Search error:', err)
+          setSuggestions([])
+        }
+      } finally { 
+        setLoading(false) 
+      }
     }, 250)
+    
+    // Cleanup function
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current)
+      if (abortControllerRef.current) abortControllerRef.current.abort()
+    }
   }, [query])
 
   useEffect(() => {
@@ -112,9 +139,15 @@ function GamePicker({
   }, [])
 
   async function pick(slug: string) {
+    // Validate slug format (alphanumeric, hyphens, underscores only)
+    if (!/^[a-zA-Z0-9_-]+$/.test(slug) || slug.length > 200) {
+      console.error('Invalid slug format')
+      return
+    }
+    
     setOpen(false); setQuery(''); setLoading(true)
     try {
-      const res  = await fetch(`/api/game/${slug}`)
+      const res = await fetch(`/api/game/${encodeURIComponent(slug)}`)
       const text = await res.text()
       if (!res.ok || !text) {
         console.error(`[compare/pick] ${res.status} for ${slug}:`, text)
@@ -122,23 +155,31 @@ function GamePicker({
       }
       const data: GameCardProps = JSON.parse(text)
       onSelect(data)
-    } finally { setLoading(false) }
+    } catch (err) {
+      console.error('Failed to load game:', err)
+    } finally { 
+      setLoading(false) 
+    }
   }
 
   if (selected) {
     return (
-      <div className="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
+      <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3">
         <div className="flex items-center gap-3 min-w-0">
           {selected.game.backgroundImage && (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={selected.game.backgroundImage} alt="" className="w-10 h-10 rounded-lg object-cover shrink-0" />
           )}
           <div className="min-w-0">
-            <p className="font-semibold text-slate-800 truncate">{selected.game.title}</p>
-            <p className="text-xs text-slate-500">{selected.game.genres[0] ?? selected.game.developer ?? ''}</p>
+            <p className="font-semibold text-slate-800 dark:text-slate-100 truncate">{selected.game.title}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{selected.game.genres[0] ?? selected.game.developer ?? ''}</p>
           </div>
         </div>
-        <button onClick={onClear} className="shrink-0 ml-3 text-xs text-slate-400 hover:text-red-500 transition-colors">
+        <button 
+          onClick={onClear} 
+          className="shrink-0 ml-3 text-xs text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+          aria-label={t('change')}
+        >
           {t('change')}
         </button>
       </div>
@@ -147,15 +188,18 @@ function GamePicker({
 
   return (
     <div ref={ref} className="relative">
-      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">{label}</p>
+      <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">{label}</p>
       <div className="relative">
         <input
           type="text"
           value={query}
           onChange={e => setQuery(e.target.value)}
           placeholder={t('searchPlaceholder')}
-          className="w-full px-4 py-3 text-sm rounded-xl border border-slate-300 bg-white shadow-sm
-            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-400"
+          className="w-full px-4 py-3 text-sm rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 shadow-sm
+            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-400 dark:placeholder:text-slate-500"
+          aria-label={label}
+          autoComplete="off"
+          maxLength={100}
         />
         {loading && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -164,12 +208,12 @@ function GamePicker({
         )}
       </div>
       {open && suggestions.length > 0 && (
-        <div className="absolute top-full mt-1 left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-lg z-50 overflow-hidden">
+        <div className="absolute top-full mt-1 left-0 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg z-50 overflow-hidden">
           {suggestions.map(s => (
             <button
               key={s.slug}
               onClick={() => pick(s.slug)}
-              className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 border-b border-slate-100 last:border-0 text-left"
+              className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700 last:border-0 text-left"
             >
               <div className="w-8 h-8 rounded-lg overflow-hidden bg-indigo-100 shrink-0">
                 {s.backgroundImage
@@ -178,11 +222,11 @@ function GamePicker({
                   : <span className="w-full h-full flex items-center justify-center text-xs font-bold text-indigo-600">{s.title.slice(0, 2).toUpperCase()}</span>}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-slate-800 truncate">{s.title}</p>
-                {s.genres[0] && <p className="text-xs text-slate-500">{s.genres[0]}</p>}
+                <p className="text-sm font-medium text-slate-800 dark:text-slate-100 truncate">{s.title}</p>
+                {s.genres[0] && <p className="text-xs text-slate-500 dark:text-slate-400">{s.genres[0]}</p>}
               </div>
               {s.esrbRating && (
-                <span className="text-xs font-bold bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded shrink-0">{s.esrbRating}</span>
+                <span className="text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded shrink-0">{s.esrbRating}</span>
               )}
             </button>
           ))}
@@ -442,10 +486,10 @@ function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
 
   return (
     // No overflow-hidden on card so sticky header works
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
 
       {/* ── Sticky game headers ── */}
-      <div className="sticky top-14 z-20 rounded-t-2xl overflow-hidden bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
+      <div className="sticky top-14 z-20 rounded-t-2xl overflow-hidden bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 shadow-sm">
         <div className="grid grid-cols-[1fr_auto_1fr]">
           {/* Game A */}
           <div className="p-3 sm:p-4 flex items-center gap-2.5">
@@ -456,7 +500,7 @@ function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
                 : <span className="w-full h-full flex items-center justify-center text-xs font-black text-indigo-500">{a.game.title.slice(0,2).toUpperCase()}</span>}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold text-slate-800 truncate leading-tight">{a.game.title}</p>
+              <p className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate leading-tight">{a.game.title}</p>
               <div className="flex items-center gap-1.5 mt-1 flex-wrap">
                 {aScore?.curascore != null && (
                   <span className={`text-xs font-black px-2 py-0.5 rounded-full ${curaBg(aScore.curascore)}`}>
@@ -486,7 +530,7 @@ function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
                 : <span className="w-full h-full flex items-center justify-center text-xs font-black text-indigo-500">{b.game.title.slice(0,2).toUpperCase()}</span>}
             </div>
             <div className="min-w-0 flex-1 sm:text-left text-right">
-              <p className="text-xs font-bold text-slate-800 truncate leading-tight">{b.game.title}</p>
+              <p className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate leading-tight">{b.game.title}</p>
               <div className="flex items-center gap-1.5 mt-1 flex-wrap sm:flex-row flex-row-reverse sm:justify-start justify-end">
                 {bScore?.curascore != null && (
                   <span className={`text-xs font-black px-2 py-0.5 rounded-full ${curaBg(bScore.curascore)}`}>
@@ -506,8 +550,8 @@ function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
 
       {/* ── At-a-glance verdict ── */}
       {verdict && (
-        <div className="px-5 py-3 bg-slate-50 border-b border-slate-100">
-          <p className="text-xs text-slate-600 leading-relaxed text-center italic">{verdict}</p>
+        <div className="px-5 py-3 bg-slate-50 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-700">
+          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed text-center italic">{verdict}</p>
         </div>
       )}
 
@@ -641,9 +685,31 @@ function SuggestionStrip({ highRiskGame }: { highRiskGame: GameCardProps }) {
 
   useEffect(() => {
     if (!genre || ris < 0.5) return
-    const maxRis = Math.max(ris - 0.2, 0.1)
-    fetch(`/api/suggest?genre=${encodeURIComponent(genre)}&maxRis=${maxRis}&excludeSlug=${highRiskGame.game.slug}`)
-      .then(r => r.json()).then(setSuggestions).catch(() => {})
+    
+    // Validate and sanitize inputs
+    const sanitizedGenre = genre.slice(0, 100)
+    const validRis = Math.max(0, Math.min(1, ris))
+    const maxRis = Math.max(validRis - 0.2, 0.1)
+    const slug = highRiskGame.game.slug.slice(0, 200)
+    
+    const abortController = new AbortController()
+    
+    fetch(
+      `/api/suggest?genre=${encodeURIComponent(sanitizedGenre)}&maxRis=${maxRis}&excludeSlug=${encodeURIComponent(slug)}`,
+      { signal: abortController.signal }
+    )
+      .then(r => {
+        if (!r.ok) throw new Error('Suggest API failed')
+        return r.json()
+      })
+      .then(setSuggestions)
+      .catch(err => {
+        if (err.name !== 'AbortError') {
+          console.error('Failed to fetch suggestions:', err)
+        }
+      })
+    
+    return () => abortController.abort()
   }, [genre, ris, highRiskGame.game.slug])
 
   if (ris < 0.5 || suggestions.length === 0) return null
@@ -652,9 +718,9 @@ function SuggestionStrip({ highRiskGame }: { highRiskGame: GameCardProps }) {
     c === 'green' ? 'bg-emerald-100 text-emerald-700' : c === 'amber' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'
 
   return (
-    <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5">
-      <h3 className="font-semibold text-emerald-800 mb-1">{t('similarSafer')}</h3>
-      <p className="text-sm text-emerald-700 mb-4">
+    <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-5">
+      <h3 className="font-semibold text-emerald-800 dark:text-emerald-300 mb-1">{t('similarSafer')}</h3>
+      <p className="text-sm text-emerald-700 dark:text-emerald-400 mb-4">
         {t('similarSaferSub', { title: highRiskGame.game.title, genre: genre ?? '' })}
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -662,7 +728,7 @@ function SuggestionStrip({ highRiskGame }: { highRiskGame: GameCardProps }) {
           <Link
             key={s.slug}
             href={`/${locale}/game/${s.slug}`}
-            className="flex items-center gap-3 bg-white rounded-xl border border-emerald-200 px-3 py-2.5 hover:border-indigo-300 hover:shadow-sm transition-all"
+            className="flex items-center gap-3 bg-white dark:bg-slate-800 rounded-xl border border-emerald-200 dark:border-emerald-800 px-3 py-2.5 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-sm transition-all"
           >
             <div className="w-10 h-10 rounded-lg overflow-hidden bg-emerald-100 shrink-0">
               {s.backgroundImage
@@ -671,9 +737,9 @@ function SuggestionStrip({ highRiskGame }: { highRiskGame: GameCardProps }) {
                 : <span className="w-full h-full flex items-center justify-center text-xs font-bold text-emerald-600">{s.title.slice(0,2).toUpperCase()}</span>}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-slate-800 truncate">{s.title}</p>
+              <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">{s.title}</p>
               <div className="flex items-center gap-1 mt-0.5">
-                {s.esrbRating && <span className="text-xs text-slate-500">{s.esrbRating}</span>}
+                {s.esrbRating && <span className="text-xs text-slate-500 dark:text-slate-400">{s.esrbRating}</span>}
                 {s.timeRecommendationMinutes && (
                   <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${timeBg(s.timeRecommendationColor)}`}>
                     {s.timeRecommendationMinutes}m
@@ -691,13 +757,22 @@ function SuggestionStrip({ highRiskGame }: { highRiskGame: GameCardProps }) {
 // ─── Load game helper ─────────────────────────────────────────────────────────
 
 async function loadGame(slug: string): Promise<GameCardProps | null> {
+  // Validate slug format
+  if (!/^[a-zA-Z0-9_-]+$/.test(slug) || slug.length > 200) {
+    console.error('Invalid slug format:', slug)
+    return null
+  }
+  
   try {
-    const res  = await fetch(`/api/game/${slug}`)
+    const res = await fetch(`/api/game/${encodeURIComponent(slug)}`)
     if (!res.ok) return null
     const text = await res.text()
     if (!text) return null
     return JSON.parse(text)
-  } catch { return null }
+  } catch (err) {
+    console.error('Failed to load game:', err)
+    return null
+  }
 }
 
 // ─── Main compare page ────────────────────────────────────────────────────────
@@ -715,10 +790,24 @@ function ComparePageInner() {
   useEffect(() => {
     if (initialised.current) return
     initialised.current = true
+    
     const slugA = searchParams.get('a')
     const slugB = searchParams.get('b')
-    if (slugA) loadGame(slugA).then(d => d && setGameA(d))
-    if (slugB) loadGame(slugB).then(d => d && setGameB(d))
+    
+    // Validate slugs before loading
+    const isValidSlug = (s: string | null): s is string => 
+      s !== null && /^[a-zA-Z0-9_-]+$/.test(s) && s.length <= 200
+    
+    if (isValidSlug(slugA)) {
+      loadGame(slugA).then(d => d && setGameA(d)).catch(err => {
+        console.error('Failed to load game A:', err)
+      })
+    }
+    if (isValidSlug(slugB)) {
+      loadGame(slugB).then(d => d && setGameB(d)).catch(err => {
+        console.error('Failed to load game B:', err)
+      })
+    }
   }, [searchParams])
 
   const syncUrl = useCallback((a: GameCardProps | null, b: GameCardProps | null) => {
@@ -735,9 +824,19 @@ function ComparePageInner() {
   function clearB()                     { setGameB(null); syncUrl(gameA, null) }
 
   function copyLink() {
-    navigator.clipboard.writeText(window.location.href).then(() => {
-      setCopied(true); setTimeout(() => setCopied(false), 2000)
-    })
+    if (!navigator.clipboard) {
+      console.error('Clipboard API not available')
+      return
+    }
+    
+    navigator.clipboard.writeText(window.location.href)
+      .then(() => {
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      })
+      .catch(err => {
+        console.error('Failed to copy link:', err)
+      })
   }
 
   const both         = gameA !== null && gameB !== null
@@ -746,7 +845,7 @@ function ComparePageInner() {
     : null
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-5">
 
         {/* Pickers */}
@@ -760,7 +859,7 @@ function ComparePageInner() {
           <div className="flex justify-end">
             <button
               onClick={copyLink}
-              className="text-xs font-semibold text-slate-500 hover:text-indigo-700 border border-slate-200 hover:border-indigo-300 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1.5"
+              className="text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-indigo-700 dark:hover:text-indigo-400 border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-600 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1.5"
             >
               {copied ? `✓ ${t('linkCopied')}` : `🔗 ${t('copyLink')}`}
             </button>
@@ -769,21 +868,21 @@ function ComparePageInner() {
 
         {/* Empty state */}
         {!gameA && !gameB && (
-          <div className="text-center py-16 text-slate-400 bg-white rounded-2xl border border-slate-200">
+          <div className="text-center py-16 text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
             <p className="text-5xl mb-3">⚖️</p>
-            <p className="font-semibold text-slate-600">{t('emptyTitle')}</p>
+            <p className="font-semibold text-slate-600 dark:text-slate-300">{t('emptyTitle')}</p>
             <p className="text-sm mt-1">{t('emptySub')}</p>
           </div>
         )}
 
         {/* Single game */}
         {(gameA && !gameB) && (
-          <div className="bg-indigo-50 border border-indigo-200 rounded-xl px-5 py-4 text-sm text-indigo-700 text-center">
+          <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 rounded-xl px-5 py-4 text-sm text-indigo-700 dark:text-indigo-300 text-center">
             {t('pickSecond')}
           </div>
         )}
         {(!gameA && gameB) && (
-          <div className="bg-indigo-50 border border-indigo-200 rounded-xl px-5 py-4 text-sm text-indigo-700 text-center">
+          <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 rounded-xl px-5 py-4 text-sm text-indigo-700 dark:text-indigo-300 text-center">
             {t('pickFirst')}
           </div>
         )}
@@ -804,7 +903,7 @@ function ComparePageInner() {
 export default function ComparePage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
       </div>
     }>

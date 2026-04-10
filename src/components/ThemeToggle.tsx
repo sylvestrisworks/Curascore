@@ -55,13 +55,15 @@ export default function ThemeToggle() {
         hover:ring-indigo-300 dark:hover:ring-indigo-600
       "
       aria-label={`Switch theme (currently ${LABELS[current]})`}
+      aria-live="polite"
     >
       <span className="transform group-hover:scale-110 transition-transform duration-200">
         {ICONS[current]}
       </span>
       
-      {/* Tooltip */}
+      {/* Tooltip - hidden on mobile to prevent overflow */}
       <span className="
+        hidden sm:block
         absolute -bottom-10 left-1/2 -translate-x-1/2
         px-2 py-1 rounded text-xs font-medium
         bg-slate-900 dark:bg-slate-100

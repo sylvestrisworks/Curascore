@@ -35,11 +35,17 @@ const PLATFORM_KEYWORDS: Record<string, string> = {
 
 const VR_KEYWORDS = ['Oculus', 'Quest', 'Vive', 'Rift', 'Valve Index', 'PlayStation VR', 'PSVR', 'Mixed Reality', 'Gear VR']
 
+// ─── Age → ESRB mapping ───────────────────────────────────────────────────────
+// E   = Suitable for early years (ESRB: E only)
+// E10 = Middle childhood (ESRB: E and E10+)
+// T   = Early teens (ESRB: E, E10+, T)
+// M   = Older teens (ESRB: E, E10+, T, M — all ratings)
+
 const ESRB_FOR_AGE: Record<string, string[]> = {
   E:   ['E'],
   E10: ['E', 'E10+'],
   T:   ['E', 'E10+', 'T'],
-  M:   ['T', 'M'],
+  M:   ['E', 'E10+', 'T', 'M'],
 }
 
 const BENEFIT_SKILL_MAP: Record<string, string> = {
@@ -80,10 +86,16 @@ async function queryGames(filters: ActiveFilters, child?: ChildFilter): Promise<
     conditions.push(ilike(games.title, `%${filters.q}%`))
   }
 
+  // Åldersfilter: visa spel med tillåtna ESRB-ratings för vald ålder
   if (filters.age) {
     const ratings = ESRB_FOR_AGE[filters.age]
     if (ratings) {
-      conditions.push(inArray(games.esrbRating, ratings))
+      conditions.push(
+        or(
+          isNull(games.esrbRating),
+          inArray(games.esrbRating, ratings),
+        )!
+      )
     }
   }
 
@@ -114,17 +126,19 @@ async function queryGames(filters: ActiveFilters, child?: ChildFilter): Promise<
     conditions.push(lte(games.basePrice, 40))
   }
 
-  // Fixed: both 'low' and 'medium' use lte only — they are max-risk filters
+  // Riskfilter: 'low' = max 30% risk, 'medium' = max 60% risk
   if (filters.risk === 'low') {
     conditions.push(lte(gameScores.ris, 0.30))
   } else if (filters.risk === 'medium') {
     conditions.push(lte(gameScores.ris, 0.60))
   }
 
+  // Tidsfilter: visa spel som rekommenderas för HÖGST X minuter/dag
+  // t.ex. "30 min" visar spel med timeRecommendationMinutes <= 30
   if (filters.time) {
-    const minMinutes = parseInt(filters.time)
-    if (!isNaN(minMinutes)) {
-      conditions.push(gte(gameScores.timeRecommendationMinutes, minMinutes))
+    const maxMinutes = parseInt(filters.time)
+    if (!isNaN(maxMinutes)) {
+      conditions.push(lte(gameScores.timeRecommendationMinutes, maxMinutes))
     }
   }
 
@@ -150,7 +164,7 @@ async function queryGames(filters: ActiveFilters, child?: ChildFilter): Promise<
 
   // Representation filter: both gender and ethnic diversity scored ≥ 2
   if (filters.rep === 'good') {
-    conditions.push(gte(gameScores.representationScore, 4 / 6)) // avg(2,2)/3 = 4/6
+    conditions.push(gte(gameScores.representationScore, 4 / 6))
   }
 
   // No propaganda filter: propagandaLevel is null (unscored) or 0
@@ -231,6 +245,18 @@ async function queryGames(filters: ActiveFilters, child?: ChildFilter): Promise<
 
 // ─── Parse search params ──────────────────────────────────────────────────────
 
+// Whitelist för tillåtna värden
+const VALID_AGE    = new Set(['E', 'E10', 'T', 'M'])
+const VALID_RISK   = new Set(['low', 'medium'])
+const VALID_SORT   = new Set(['curascore', 'benefit', 'safest', 'riskiest', 'newest', 'alpha', 'metacritic'])
+const VALID_PRICE  = new Set(['free', '20', '40'])
+const VALID_TIME   = new Set(['30', '60', '90'])
+const VALID_VIEW   = new Set(['list', 'grid'])
+const VALID_GENRES = new Set(['Action', 'Adventure', 'Puzzle', 'RPG', 'Strategy', 'Simulation', 'Sports', 'Platformer', 'Shooter', 'Racing'])
+const VALID_PLATFORMS = new Set(['PC', 'PlayStation', 'Xbox', 'Switch', 'iOS', 'Android', 'VR'])
+const VALID_BENEFITS  = new Set(['problem-solving', 'spatial', 'teamwork', 'creativity', 'communication'])
+const VALID_COMPLIANCE = new Set(['DSA', 'GDPR-K', 'ODDS'])
+
 function parseFilters(sp: Record<string, string | string[] | undefined>): ActiveFilters {
   const str = (key: string) => (typeof sp[key] === 'string' ? sp[key] as string : undefined)
   const arr = (key: string): string[] => {
@@ -238,22 +264,30 @@ function parseFilters(sp: Record<string, string | string[] | undefined>): Active
     if (!v) return []
     return typeof v === 'string' ? v.split(',').filter(Boolean) : v
   }
+
+  const rawAge  = str('age')
+  const rawRisk = str('risk')
+  const rawSort = str('sort')
+  const rawPrice = str('price')
+  const rawTime  = str('time')
+  const rawView  = str('view')
+
   return {
-    age:        str('age'),
-    genres:     arr('genres'),
-    platforms:  arr('platforms'),
-    benefits:   arr('benefits'),
-    compliance: arr('compliance'),
-    risk:       str('risk'),
-    time:       str('time'),
-    price:      str('price'),
-    rep:        str('rep'),
-    noProp:     str('noProp'),
-    bechdel:    str('bechdel'),
-    sort:       str('sort') ?? 'curascore',
-    q:          str('q'),
-    page:       str('page') ? parseInt(str('page')!) : 1,
-    view:       (str('view') as 'list' | 'grid') ?? 'list',
+    age:        rawAge  && VALID_AGE.has(rawAge)   ? rawAge  : undefined,
+    genres:     arr('genres').filter(g => VALID_GENRES.has(g)),
+    platforms:  arr('platforms').filter(p => VALID_PLATFORMS.has(p)),
+    benefits:   arr('benefits').filter(b => VALID_BENEFITS.has(b)),
+    compliance: arr('compliance').filter(c => VALID_COMPLIANCE.has(c)),
+    risk:       rawRisk  && VALID_RISK.has(rawRisk)   ? rawRisk  : undefined,
+    time:       rawTime  && VALID_TIME.has(rawTime)   ? rawTime  : undefined,
+    price:      rawPrice && VALID_PRICE.has(rawPrice) ? rawPrice : undefined,
+    rep:        str('rep') === 'good' ? 'good' : undefined,
+    noProp:     str('noProp') === 'true' ? 'true' : undefined,
+    bechdel:    str('bechdel') === 'pass' ? 'pass' : undefined,
+    sort:       rawSort && VALID_SORT.has(rawSort) ? rawSort : 'curascore',
+    q:          str('q')?.slice(0, 200).replace(/[<>]/g, '') ?? undefined,
+    page:       str('page') ? Math.max(1, parseInt(str('page')!)) : 1,
+    view:       rawView && VALID_VIEW.has(rawView) ? rawView as 'list' | 'grid' : 'list',
   }
 }
 
@@ -333,16 +367,16 @@ export default async function BrowsePage({ params, searchParams }: Props) {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
-      <div className="max-w-6xl mx-auto px-4 py-6">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
 
         {/* ── Search bar ─────────────────────────────────────────────────── */}
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <Suspense>
             <BrowseSearch initialValue={filters.q ?? ''} />
           </Suspense>
         </div>
 
-        <div className="lg:flex gap-8">
+        <div className="lg:flex gap-6 xl:gap-8">
 
           {/* Filters sidebar */}
           <Suspense>
@@ -390,8 +424,8 @@ export default async function BrowsePage({ params, searchParams }: Props) {
             {/* Header row */}
             <div className="flex items-center justify-between mb-4 gap-3">
               <div>
-                <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">{t('title')}</h1>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+                <h1 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">{t('title')}</h1>
+                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                   {t('gamesCount', { count: total })}
                   {activeFilterCount > 0 && ` · ${t('filtersActive', { count: activeFilterCount })}`}
                   {totalPages > 1 && ` · ${t('pageOf', { current: currentPage, total: totalPages })}`}
@@ -405,10 +439,10 @@ export default async function BrowsePage({ params, searchParams }: Props) {
             </div>
 
             {rows.length === 0 ? (
-              <div className="text-center py-20 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
+              <div className="text-center py-16 sm:py-20 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
                 <p className="text-4xl mb-3">🔍</p>
                 <p className="font-semibold text-slate-700 dark:text-slate-200">{t('noGames')}</p>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto">
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto px-4">
                   {t('noGamesSub')}
                   {(filters.risk || filters.time || filters.benefits.length > 0) && (
                     <> {t('noGamesRisk')}</>
@@ -420,7 +454,7 @@ export default async function BrowsePage({ params, searchParams }: Props) {
               </div>
             ) : filters.view === 'grid' ? (
               /* ── Grid view ──────────────────────────────────────────────── */
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3">
                 {rows.map(row => (
                   <GameCompactCard
                     key={row.slug}
@@ -456,12 +490,12 @@ export default async function BrowsePage({ params, searchParams }: Props) {
                     <li key={row.slug}>
                       <Link
                         href={`/${locale}/game/${row.slug}`}
-                        className="flex items-center gap-4 py-3 px-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-slate-700 hover:translate-x-0.5 transition-all group"
+                        className="flex items-center gap-3 sm:gap-4 py-2.5 sm:py-3 px-1 sm:px-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-slate-700 hover:translate-x-0.5 transition-all group"
                       >
-                        <span className="w-7 text-right text-sm font-semibold text-slate-400 dark:text-slate-500 shrink-0 group-hover:text-indigo-400 transition-colors">
+                        <span className="w-6 sm:w-7 text-right text-xs sm:text-sm font-semibold text-slate-400 dark:text-slate-500 shrink-0 group-hover:text-indigo-400 transition-colors">
                           {rank}
                         </span>
-                        <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-indigo-100">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden shrink-0 bg-indigo-100">
                           {row.backgroundImage ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img src={row.backgroundImage} alt={row.title}
@@ -469,7 +503,7 @@ export default async function BrowsePage({ params, searchParams }: Props) {
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-100 to-violet-100">
-                              <span className="text-sm font-black text-indigo-300">
+                              <span className="text-xs font-black text-indigo-300">
                                 {row.title.slice(0, 2).toUpperCase()}
                               </span>
                             </div>
@@ -491,7 +525,7 @@ export default async function BrowsePage({ params, searchParams }: Props) {
                             {row.timeRecommendationMinutes} min/day
                           </span>
                         )}
-                        <span className={`w-10 text-center text-xs font-black px-2 py-1 rounded-full shrink-0 ${badgeCls}`}>
+                        <span className={`w-9 sm:w-10 text-center text-xs font-black px-1.5 sm:px-2 py-1 rounded-full shrink-0 ${badgeCls}`}>
                           {score ?? '—'}
                         </span>
                       </Link>
@@ -503,11 +537,11 @@ export default async function BrowsePage({ params, searchParams }: Props) {
 
             {/* ── Pagination ───────────────────────────────────────────────── */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 mt-8">
+              <div className="flex items-center justify-center gap-1.5 sm:gap-2 mt-6 sm:mt-8 flex-wrap">
                 {currentPage > 1 && (
                   <Link
                     href={pageUrl(filters, currentPage - 1, locale, childIdParam ?? undefined)}
-                    className="px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg hover:border-indigo-300 hover:text-indigo-700 dark:hover:border-indigo-500 dark:hover:text-indigo-400 transition-colors"
+                    className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg hover:border-indigo-300 hover:text-indigo-700 dark:hover:border-indigo-500 dark:hover:text-indigo-400 transition-colors"
                   >
                     ← {t('prevPage')}
                   </Link>
@@ -523,12 +557,12 @@ export default async function BrowsePage({ params, searchParams }: Props) {
                   }, [])
                   .map((p, idx) =>
                     p === '…' ? (
-                      <span key={`ellipsis-${idx}`} className="px-2 text-slate-400 dark:text-slate-500 text-sm">…</span>
+                      <span key={`ellipsis-${idx}`} className="px-1.5 sm:px-2 text-slate-400 dark:text-slate-500 text-xs sm:text-sm">…</span>
                     ) : (
                       <Link
                         key={p}
                         href={pageUrl(filters, p as number, locale, childIdParam ?? undefined)}
-                        className={`w-9 h-9 flex items-center justify-center text-sm font-semibold rounded-lg transition-colors ${
+                        className={`w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-xs sm:text-sm font-semibold rounded-lg transition-colors ${
                           p === currentPage
                             ? 'bg-indigo-600 text-white'
                             : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:border-indigo-300 hover:text-indigo-700 dark:hover:border-indigo-500 dark:hover:text-indigo-400'
@@ -543,7 +577,7 @@ export default async function BrowsePage({ params, searchParams }: Props) {
                 {currentPage < totalPages && (
                   <Link
                     href={pageUrl(filters, currentPage + 1, locale, childIdParam ?? undefined)}
-                    className="px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg hover:border-indigo-300 hover:text-indigo-700 dark:hover:border-indigo-500 dark:hover:text-indigo-400 transition-colors"
+                    className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg hover:border-indigo-300 hover:text-indigo-700 dark:hover:border-indigo-500 dark:hover:text-indigo-400 transition-colors"
                   >
                     {t('nextPage')} →
                   </Link>
