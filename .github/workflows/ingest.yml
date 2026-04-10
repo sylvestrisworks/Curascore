@@ -22,6 +22,16 @@ jobs:
           echo "APP_URL is set: ${{ secrets.APP_URL }}"
           echo "CRON_SECRET is set: [hidden]"
 
+      - name: Test URL format
+        run: |
+          TARGET_URL="${{ secrets.APP_URL }}/api/cron/ingest-games"
+          echo "Full URL: $TARGET_URL"
+          if [[ ! "$TARGET_URL" =~ ^https?:// ]]; then
+            echo "::error::APP_URL does not start with http:// or https:// — value: $TARGET_URL"
+            exit 1
+          fi
+          echo "URL format looks valid"
+
       - name: Run ingest
         run: |
           RESPONSE=$(curl -s -w "\n%{http_code}" -X GET \
