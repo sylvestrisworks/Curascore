@@ -6,6 +6,7 @@ import { db } from '@/lib/db'
 import { userGames, games, gameScores, childProfiles } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import GameCompactCard from '@/components/GameCompactCard'
+import ImportLibraryButton from '@/components/ImportLibraryButton'
 import type { GameSummary } from '@/types/game'
 import { getLocale } from 'next-intl/server'
 
@@ -130,7 +131,10 @@ export default async function LibraryPage({ searchParams }: { searchParams: Prom
         {/* Header */}
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <h1 className="text-2xl font-bold text-slate-800">My Library</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-bold text-slate-800">My Library</h1>
+              <ImportLibraryButton />
+            </div>
             <p className="text-slate-500 text-sm mt-0.5">
               {selectedChild
                 ? `${owned.length} games for ${selectedChild.name} · ${wishlist.length} wishlisted`
