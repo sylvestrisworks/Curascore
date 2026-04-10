@@ -9,34 +9,35 @@ jobs:
   ingest:
     runs-on: ubuntu-latest
     steps:
-      - name: Debug secrets presence
+      - name: Check and run ingest
         run: |
-          if [ -z "${{ secrets.APP_URL }}" ]; then
+          APP_URL="${{ secrets.APP_URL }}"
+          CRON_SECRET="${{ secrets.CRON_SECRET }}"
+
+          echo "APP_URL length: ${#APP_URL}"
+          echo "CRON_SECRET length: ${#CRON_SECRET}"
+
+          if [ -z "$APP_URL" ]; then
             echo "::error::APP_URL secret is missing or empty!"
             exit 1
           fi
-          if [ -z "${{ secrets.CRON_SECRET }}" ]; then
+
+          if [ -z "$CRON_SECRET" ]; then
             echo "::error::CRON_SECRET secret is missing or empty!"
             exit 1
           fi
-          echo "APP_URL is set: ${{ secrets.APP_URL }}"
-          echo "CRON_SECRET is set: [hidden]"
 
-      - name: Test URL format
-        run: |
-          TARGET_URL="${{ secrets.APP_URL }}/api/cron/ingest-games"
-          echo "Full URL: $TARGET_URL"
+          TARGET_URL="${APP_URL}/api/cron/ingest-games"
+          echo "Target URL: $TARGET_URL"
+
           if [[ ! "$TARGET_URL" =~ ^https?:// ]]; then
-            echo "::error::APP_URL does not start with http:// or https:// — value: $TARGET_URL"
+            echo "::error::URL does not start with http:// or https://: $TARGET_URL"
             exit 1
           fi
-          echo "URL format looks valid"
 
-      - name: Run ingest
-        run: |
           RESPONSE=$(curl -s -w "\n%{http_code}" -X GET \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
-            "${{ secrets.APP_URL }}/api/cron/ingest-games")
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            "${TARGET_URL}")
 
           HTTP_CODE=$(echo "$RESPONSE" | tail -1)
           BODY=$(echo "$RESPONSE" | head -n -1)
