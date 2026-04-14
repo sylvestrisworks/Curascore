@@ -27,13 +27,9 @@ const CURATED_UNIVERSE_IDS: string[] = [
   '2316994223',  // Pet Simulator X
   '1831550657',  // Creatures of Sonaria
   '2619619496',  // BedWars
-  '14456995',    // MeepCity
-  '2677609345',  // Piggy
-  '3085408801',  // Shindo Life
-  '1530955840',  // Funky Friday
-  '1172707566',  // Doors
-  '5538040855',  // Brookhaven 2 / Livetopia
-  '4482536893',  // Anime Fighting Simulator X
+  '2440500124',  // Doors
+  '1008451066',  // Da Hood
+  // Add more by using ?add=PLACE_ID on this endpoint to resolve universe IDs
 ]
 
 // ─── Roblox API helpers ───────────────────────────────────────────────────────
@@ -136,8 +132,8 @@ export async function GET(req: NextRequest) {
   if (!roblox) return NextResponse.json({ error: 'Roblox platform row not found in games table' }, { status: 500 })
 
   for (const game of games_data) {
-    if (!game.isPublic || !game.name || game.name.includes("'s Place")) {
-      // Skip private/placeholder games
+    // Skip placeholder/private games — isPublic is undefined for public games in this API
+    if (game.isPublic === false || !game.name || game.name.includes("'s Place") || !game.playing && game.visits === 0) {
       continue
     }
 
