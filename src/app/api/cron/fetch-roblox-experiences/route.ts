@@ -15,7 +15,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { platformExperiences, experienceScores, games } from '@/lib/db/schema'
-import { eq, inArray, lt, sql } from 'drizzle-orm'
+import { eq, inArray, sql } from 'drizzle-orm'
 
 // Re-score if content hasn't been re-evaluated in this many days
 const STALE_SCORE_DAYS = 90
@@ -216,22 +216,22 @@ export async function GET(req: NextRequest) {
   }
 
   // ── Age-based rescore sweep ──────────────────────────────────────────────────
-  // Roblox games update frequently — re-evaluate any score older than STALE_SCORE_DAYS
+  // Re-evaluate any score older than STALE_SCORE_DAYS — Roblox games update frequently
   const staleCutoff = new Date()
   staleCutoff.setDate(staleCutoff.getDate() - STALE_SCORE_DAYS)
 
-  const staleResult = await db.execute(sql`
-    UPDATE platform_experiences
-    SET needs_rescore = true
-    WHERE id IN (
-      SELECT pe.id FROM platform_experiences pe
-      JOIN experience_scores es ON es.experience_id = pe.id
-      WHERE es.calculated_at < ${staleCutoff}
-        AND pe.needs_rescore = false
-    )
-  `)
-  const ageMarked = (staleResult as { rowCount?: number }).rowCount ?? 0
-  if (ageMarked > 0) {
+  const staleRows = await db
+    .select({ id: experienceScores.experienceId })
+    .from(experienceScores)
+    .where(sql`${experienceScores.calculatedAt} < ${staleCutoff}`)
+
+  let ageMarked = 0
+  if (staleRows.length > 0) {
+    const staleIds = staleRows.map(r => r.id)
+    await db.update(platformExperiences)
+      .set({ needsRescore: true })
+      .where(inArray(platformExperiences.id, staleIds))
+    ageMarked = staleIds.length
     console.log(`[fetch-roblox] Age sweep: marked ${ageMarked} experiences stale (>${STALE_SCORE_DAYS} days)`)
   }
 
