@@ -2,7 +2,7 @@
 
 import {
   pgTable, text, integer, real, timestamp, boolean,
-  varchar, jsonb, serial, uniqueIndex, index, primaryKey
+  varchar, jsonb, serial, uniqueIndex, index, primaryKey, bigint
 } from 'drizzle-orm/pg-core';
 
 // ============================================
@@ -44,6 +44,9 @@ export const games = pgTable('games', {
   requiresInternet: varchar('requires_internet', { length: 20 }), // always, sometimes, never
   hasStrangerChat: boolean('has_stranger_chat').default(false),
   chatModeration: varchar('chat_moderation', { length: 50 }),     // none, basic, strong
+
+  // Platform flag — true for apps like Roblox that host UGC experiences
+  isPlatform: boolean('is_platform').default(false),
 
   // Timestamps
   createdAt: timestamp('created_at').defaultNow(),
@@ -406,6 +409,48 @@ export const gameTipVotes = pgTable('game_tip_votes', {
 }, (table) => ({
   uniq: uniqueIndex('game_tip_votes_tip_user_idx').on(table.tipId, table.userId),
 }))
+
+// ============================================
+// INGEST STATE (background game crawler cursor)
+// ============================================
+
+// ============================================
+// PLATFORM EXPERIENCES (UGC inside platforms like Roblox)
+// ============================================
+
+export const platformExperiences = pgTable('platform_experiences', {
+  id:           serial('id').primaryKey(),
+  slug:         varchar('slug', { length: 255 }).notNull().unique(),
+  platformId:   integer('platform_id').notNull().references(() => games.id),
+
+  // External platform IDs
+  universeId:   varchar('universe_id', { length: 50 }),   // Roblox Universe ID
+  placeId:      varchar('place_id', { length: 50 }).notNull().unique(), // Roblox Place ID
+
+  // Metadata
+  title:        varchar('title', { length: 500 }).notNull(),
+  description:  text('description'),
+  creatorName:  varchar('creator_name', { length: 255 }),
+  creatorId:    varchar('creator_id', { length: 50 }),
+  thumbnailUrl: text('thumbnail_url'),
+  genre:        varchar('genre', { length: 100 }),
+  isPublic:     boolean('is_public').default(true),
+
+  // Live stats (refreshed periodically)
+  visitCount:    bigint('visit_count', { mode: 'number' }),
+  activePlayers: integer('active_players'),
+  maxPlayers:    integer('max_players'),
+
+  // Re-fetch cadence
+  lastFetchedAt: timestamp('last_fetched_at'),
+
+  // Timestamps
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+}, (table) => ({
+  platformIdx:  index('pe_platform_idx').on(table.platformId),
+  universeIdx:  index('pe_universe_idx').on(table.universeId),
+}));
 
 // ============================================
 // INGEST STATE (background game crawler cursor)
