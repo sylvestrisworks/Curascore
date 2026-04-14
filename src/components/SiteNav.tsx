@@ -8,7 +8,7 @@ import SearchBar from './SearchBar'
 import LanguageSwitcher from './LanguageSwitcher'
 import ThemeToggle from './ThemeToggle'
 
-export default function SiteNav({ authSlot }: { authSlot?: React.ReactNode }) {
+export default function SiteNav({ authSlot, notifSlot }: { authSlot?: React.ReactNode; notifSlot?: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [atTop, setAtTop]       = useState(true)
   const t      = useTranslations('nav')
@@ -79,6 +79,7 @@ export default function SiteNav({ authSlot }: { authSlot?: React.ReactNode }) {
           ))}
           <LanguageSwitcher />
           <ThemeToggle />
+          {notifSlot}
           {authSlot}
         </nav>
 
@@ -114,6 +115,7 @@ export default function SiteNav({ authSlot }: { authSlot?: React.ReactNode }) {
           <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between gap-4">
             <LanguageSwitcher />
             <ThemeToggle />
+            {notifSlot}
             {authSlot}
           </div>
         </nav>

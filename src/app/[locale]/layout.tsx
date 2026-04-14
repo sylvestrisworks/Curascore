@@ -6,6 +6,7 @@ import SiteNav from '@/components/SiteNav'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import NavAuthButton from '@/components/NavAuthButton'
 import CookieNotice from '@/components/CookieNotice'
+import NavNotificationBell from '@/components/NavNotificationBell'
 
 export default async function LocaleLayout({
   children,
@@ -23,7 +24,7 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider>
       <div className="flex flex-col min-h-screen">
-        <SiteNav authSlot={<NavAuthButton />} />
+        <SiteNav authSlot={<NavAuthButton />} notifSlot={<NavNotificationBell />} />
         <div className="flex-1">{children}</div>
         <CookieNotice />
         <footer className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">

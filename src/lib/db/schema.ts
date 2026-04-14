@@ -510,6 +510,24 @@ export const experienceScores = pgTable('experience_scores', {
 // INGEST STATE (background game crawler cursor)
 // ============================================
 
+// ============================================
+// NOTIFICATIONS
+// ============================================
+
+export const notifications = pgTable('notifications', {
+  id:        serial('id').primaryKey(),
+  userId:    text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  gameId:    integer('game_id').notNull().references(() => games.id, { onDelete: 'cascade' }),
+  type:      varchar('type', { length: 30 }).notNull(), // 'first_score' | 'score_change' | 'time_change'
+  title:     varchar('title', { length: 255 }).notNull(),
+  body:      text('body').notNull(),
+  read:      boolean('read').notNull().default(false),
+  createdAt: timestamp('created_at').defaultNow(),
+}, (table) => ({
+  userIdx: index('notif_user_idx').on(table.userId),
+  unreadIdx: index('notif_unread_idx').on(table.userId, table.read),
+}))
+
 export const ingestCursor = pgTable('ingest_cursor', {
   id:             integer('id').primaryKey().default(1),
   genreIndex:     integer('genre_index').notNull().default(0),

@@ -13,7 +13,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { games, gameScores, reviews } from '@/lib/db/schema'
+import { games, gameScores, reviews, userGames, notifications } from '@/lib/db/schema'
 import { eq, isNull, or } from 'drizzle-orm'
 import { calculateGameScores } from '@/lib/scoring/engine'
 
@@ -236,6 +236,50 @@ async function callBedrockReview(prompt: string, attempt = 0): Promise<ReviewInp
   }
 }
 
+// ─── Notification helper ──────────────────────────────────────────────────────
+
+type OldScore = { curascore: number | null; timeRecommendationMinutes: number | null; recommendedMinAge: number | null } | null
+type NewScore = { curascore: number; timeRecommendation: { minutes: number }; recommendedMinAge?: number }
+
+async function writeNotifications(gameId: number, gameTitle: string, old: OldScore, next: NewScore) {
+  const isFirst    = !old || old.curascore == null
+  const scoreDiff  = isFirst ? 0 : (next.curascore - (old.curascore ?? 0))
+  const timeChange = !isFirst && next.timeRecommendation.minutes !== old.timeRecommendationMinutes
+  const ageChange  = !isFirst && next.recommendedMinAge != null && next.recommendedMinAge !== old.recommendedMinAge
+
+  if (!isFirst && Math.abs(scoreDiff) < 5 && !timeChange && !ageChange) return
+
+  let type: string
+  let title: string
+  let body: string
+
+  if (isFirst) {
+    type  = 'first_score'
+    title = `${gameTitle} has been rated`
+    body  = `PlaySmart just published its first rating: Curascore ${next.curascore}. Recommended: ${next.timeRecommendation.minutes} min/day.`
+  } else {
+    type  = scoreDiff >= 0 ? 'score_up' : 'score_down'
+    title = `${gameTitle} rating updated`
+    const parts: string[] = []
+    if (Math.abs(scoreDiff) >= 5) parts.push(`Curascore ${scoreDiff > 0 ? '+' : ''}${scoreDiff} (${old!.curascore} → ${next.curascore})`)
+    if (timeChange) parts.push(`Time: ${old!.timeRecommendationMinutes} → ${next.timeRecommendation.minutes} min/day`)
+    if (ageChange)  parts.push(`Age: ${old!.recommendedMinAge}+ → ${next.recommendedMinAge}+`)
+    body = parts.join(' · ')
+  }
+
+  const libraryUsers = await db
+    .select({ userId: userGames.userId })
+    .from(userGames)
+    .where(eq(userGames.gameId, gameId))
+
+  if (libraryUsers.length === 0) return
+
+  await db.insert(notifications).values(
+    libraryUsers.map(u => ({ userId: u.userId, gameId, type, title, body }))
+  )
+  console.log(`[review-games] Wrote ${libraryUsers.length} notification(s) for "${gameTitle}" (${type})`)
+}
+
 // ─── Save review + scores to DB ───────────────────────────────────────────────
 
 async function saveReview(game: GameRow, r: ReviewInput): Promise<{ reviewId: number; curascore: number }> {
@@ -308,7 +352,12 @@ async function saveReview(game: GameRow, r: ReviewInput): Promise<{ reviewId: nu
   }
 
   const [existingScore] = await db
-    .select({ id: gameScores.id })
+    .select({
+      id:                        gameScores.id,
+      curascore:                 gameScores.curascore,
+      timeRecommendationMinutes: gameScores.timeRecommendationMinutes,
+      recommendedMinAge:         gameScores.recommendedMinAge,
+    })
     .from(gameScores)
     .where(eq(gameScores.gameId, game.id))
     .limit(1)
@@ -318,6 +367,9 @@ async function saveReview(game: GameRow, r: ReviewInput): Promise<{ reviewId: nu
   } else {
     await db.insert(gameScores).values(scoreData)
   }
+
+  // Write in-app notifications for library users
+  await writeNotifications(game.id, game.title, existingScore ?? null, computed)
 
   return { reviewId, curascore: computed.curascore }
 }
