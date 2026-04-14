@@ -18,7 +18,7 @@ export type ExperienceSummary = {
 }
 
 function formatCount(n: number | null): string {
-  if (n == null) return '—'
+  if (n == null) return ''
   if (n >= 1_000_000_000) return `${(n / 1_000_000_000).toFixed(1)}B`
   if (n >= 1_000_000)     return `${(n / 1_000_000).toFixed(1)}M`
   if (n >= 1_000)         return `${(n / 1_000).toFixed(0)}K`
@@ -26,8 +26,8 @@ function formatCount(n: number | null): string {
 }
 
 export default function ExperienceCard({ exp }: { exp: ExperienceSummary }) {
-  const hasHighStrangerRisk  = (exp.strangerRisk ?? 0) >= 2
-  const hasHighMonetization  = (exp.monetizationScore ?? 0) >= 2
+  const hasHighStrangerRisk = (exp.strangerRisk ?? 0) >= 2
+  const hasHighMonetization = (exp.monetizationScore ?? 0) >= 2
 
   return (
     <Link
@@ -44,59 +44,48 @@ export default function ExperienceCard({ exp }: { exp: ExperienceSummary }) {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-900/40 dark:to-orange-900/40">
-            <span className="text-2xl font-black text-red-300 dark:text-red-500 select-none">
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-100 to-violet-100 dark:from-indigo-900/40 dark:to-violet-900/40">
+            <span className="text-2xl font-black text-indigo-300 dark:text-indigo-500 select-none">
               {exp.title.slice(0, 2).toUpperCase()}
             </span>
           </div>
         )}
 
-        {/* Curascore chip */}
+        {/* Curascore chip — top right */}
         {exp.curascore != null && (
           <div className={`absolute top-1.5 right-1.5 ${curascoreBg(exp.curascore)} text-white text-xs font-black px-1.5 py-0.5 rounded-full`}>
             {exp.curascore}
           </div>
         )}
 
-        {/* Min age badge */}
+        {/* Min age badge — bottom left */}
         {exp.recommendedMinAge != null && (
           <div className="absolute bottom-1.5 left-1.5 bg-slate-700 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full leading-none">
             {exp.recommendedMinAge}+
           </div>
         )}
 
-        {/* Live player count */}
+        {/* Active players — bottom right */}
         {exp.activePlayers != null && exp.activePlayers > 0 && (
           <div className="absolute bottom-1.5 right-1.5 bg-black/60 text-white text-[10px] font-semibold px-1.5 py-0.5 rounded-full leading-none flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block shrink-0" />
             {formatCount(exp.activePlayers)}
           </div>
         )}
       </div>
 
-      {/* Body */}
+      {/* Body — mirrors GameCompactCard layout */}
       <div className="px-3 py-2.5 flex flex-col gap-1 flex-1">
         <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-tight line-clamp-2 group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition-colors">
           {exp.title}
         </p>
 
+        {/* Creator chip — same style as genre chip in GameCompactCard */}
         {exp.creatorName && (
-          <p className="text-xs text-slate-400 dark:text-slate-500 truncate">by {exp.creatorName}</p>
-        )}
-
-        {/* Risk flags */}
-        {(hasHighStrangerRisk || hasHighMonetization) && (
-          <div className="flex gap-1 flex-wrap mt-0.5">
-            {hasHighStrangerRisk && (
-              <span className="text-[10px] font-medium bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 px-1.5 py-0.5 rounded-full">
-                Stranger risk
-              </span>
-            )}
-            {hasHighMonetization && (
-              <span className="text-[10px] font-medium bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800 px-1.5 py-0.5 rounded-full">
-                Robux pressure
-              </span>
-        )}
+          <div className="flex items-center gap-1 flex-wrap">
+            <span className="text-xs text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/40 border border-indigo-200 dark:border-indigo-700 px-1.5 py-0.5 rounded-full truncate max-w-full">
+              {exp.creatorName}
+            </span>
           </div>
         )}
 
@@ -106,6 +95,18 @@ export default function ExperienceCard({ exp }: { exp: ExperienceSummary }) {
             <span className="text-xs text-slate-400 dark:text-slate-500">
               {exp.timeRecommendationMinutes} min/day
             </span>
+          </div>
+        )}
+
+        {/* Risk flags — subtle text, matches GameCompactCard's monetization flag style */}
+        {(hasHighStrangerRisk || hasHighMonetization) && (
+          <div className="flex flex-wrap gap-x-2 gap-y-0.5">
+            {hasHighStrangerRisk && (
+              <span className="text-xs text-amber-600 dark:text-amber-400">👥 Stranger risk</span>
+            )}
+            {hasHighMonetization && (
+              <span className="text-xs text-amber-600 dark:text-amber-400">💰 Robux pressure</span>
+            )}
           </div>
         )}
       </div>

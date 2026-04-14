@@ -36,36 +36,36 @@ const EVAL_TOOL = {
     type: 'object',
     required: ['risks', 'benefits', 'recommendation', 'narratives'],
     properties: {
-      risks: {
-        type: 'object',
-        description: 'UGC-specific risk scores, each 0–3 (0=absent, 1=mild, 2=notable, 3=severe)',
-        required: ['dopamineTrapScore','toxicityScore','ugcContentRisk','strangerRisk','monetizationScore','privacyRisk'],
-        properties: {
-          dopamineTrapScore:  { type: 'integer', minimum: 0, maximum: 3,
-            description: 'Variable rewards, loot, streaks, near-miss mechanics, infinite loop design' },
-          toxicityScore:      { type: 'integer', minimum: 0, maximum: 3,
-            description: 'Chat toxicity, bullying, competitive pressure, hostile community reputation' },
-          ugcContentRisk:     { type: 'integer', minimum: 0, maximum: 3,
-            description: 'Risk of inappropriate UGC: builds, avatar items, images, or chat bypassing filters' },
-          strangerRisk:       { type: 'integer', minimum: 0, maximum: 3,
-            description: 'Exposure to unknown adults, DM features, grooming vectors, friend requests from strangers' },
-          monetizationScore:  { type: 'integer', minimum: 0, maximum: 3,
-            description: 'Robux pressure, pay-to-win, exclusive items, social spending comparison' },
-          privacyRisk:        { type: 'integer', minimum: 0, maximum: 3,
-            description: 'Encourages sharing real name, age, location, or links to external platforms' },
-        },
-      },
       benefits: {
         type: 'object',
-        description: 'Benefit scores, each 0–3 (0=absent, 1=mild, 2=moderate, 3=strong)',
+        description: 'Benefit scores, each 0–3 (0=absent, 1=mild, 2=moderate, 3=strong). Score what the experience genuinely offers — do not underrate.',
         required: ['creativityScore','socialScore','learningScore'],
         properties: {
           creativityScore: { type: 'integer', minimum: 0, maximum: 3,
-            description: 'Does the experience reward building, designing, scripting, or creative expression?' },
+            description: 'Building, designing, scripting, storytelling, or open-ended creative expression. A full sandbox builder = 3; a linear obstacle course = 0.' },
           socialScore:     { type: 'integer', minimum: 0, maximum: 3,
-            description: 'Does it foster genuine cooperative play, positive friendships, or community belonging?' },
+            description: 'Genuine cooperative play, communication, friendship, or positive community. Requires actual collaboration, not just proximity.' },
           learningScore:   { type: 'integer', minimum: 0, maximum: 3,
-            description: 'Does it develop real skills: problem solving, strategy, literacy, numeracy?' },
+            description: 'Real skill development: problem solving, strategy, spatial reasoning, literacy, numeracy. Score what transfers outside the game.' },
+        },
+      },
+      risks: {
+        type: 'object',
+        description: 'Risk scores, each 0–3 (0=not present, 1=mild/optional, 2=significant, 3=core mechanic). Score what the designers built — not incidental community behaviour.',
+        required: ['dopamineTrapScore','toxicityScore','ugcContentRisk','strangerRisk','monetizationScore','privacyRisk'],
+        properties: {
+          dopamineTrapScore:  { type: 'integer', minimum: 0, maximum: 3,
+            description: 'Variable reward loops, loot, streaks with penalties, near-miss feedback, infinite-play design with no natural stopping points.' },
+          toxicityScore:      { type: 'integer', minimum: 0, maximum: 3,
+            description: 'Design that incentivises bullying, rank-shaming, or competitive toxicity. General chat rudeness alone is not a 3.' },
+          ugcContentRisk:     { type: 'integer', minimum: 0, maximum: 3,
+            description: 'Structural risk of inappropriate UGC appearing in-experience (custom builds, avatar items, images). Platform-wide moderation is already assumed.' },
+          strangerRisk:       { type: 'integer', minimum: 0, maximum: 3,
+            description: 'How much the experience design exposes children to unknown adults: open voice/text chat, DMs, friend-request prompts from strangers.' },
+          monetizationScore:  { type: 'integer', minimum: 0, maximum: 3,
+            description: 'Robux pressure inside the experience: pay-to-win mechanics, exclusive items gated behind purchases, social spending comparison.' },
+          privacyRisk:        { type: 'integer', minimum: 0, maximum: 3,
+            description: 'Experience actively encourages sharing real name, age, location, or links to external platforms.' },
         },
       },
       recommendation: {
@@ -73,11 +73,11 @@ const EVAL_TOOL = {
         required: ['recommendedMinAge','timeRecommendationMinutes','timeRecommendationLabel','timeRecommendationColor','curascore'],
         properties: {
           curascore: { type: 'integer', minimum: 0, maximum: 100,
-            description: 'Overall PlaySmart score: 0=avoid, 50=neutral, 100=excellent. Weight risks more heavily than benefits for UGC.' },
+            description: 'Overall PlaySmart score (0–100). Treat benefits and risks as independent profiles — a game can score high on both. 70–100 = recommended, 40–69 = with guidance, 0–39 = limit or avoid.' },
           recommendedMinAge:         { type: 'integer', minimum: 3, maximum: 18 },
           timeRecommendationMinutes: { type: 'integer', enum: [15, 30, 60, 90, 120] },
           timeRecommendationLabel:   { type: 'string',
-            description: 'e.g. "30 min/day" or "Not recommended"' },
+            description: 'e.g. "60 min/day" or "Not recommended for under 10"' },
           timeRecommendationColor:   { type: 'string', enum: ['green','amber','red'] },
         },
       },
@@ -85,10 +85,10 @@ const EVAL_TOOL = {
         type: 'object',
         required: ['summary','benefitsNarrative','risksNarrative','parentTip'],
         properties: {
-          summary:           { type: 'string', description: 'One sentence for a parent who has never heard of this game.' },
-          benefitsNarrative: { type: 'string', description: 'What your child develops or enjoys. 2–3 sentences, gaming-positive tone.' },
-          risksNarrative:    { type: 'string', description: 'What to watch out for. 2–3 sentences, factual not fear-based.' },
-          parentTip:         { type: 'string', description: 'One practical action a parent can take right now.' },
+          summary:           { type: 'string', description: 'One sentence for a parent who has never heard of this game. Neutral, factual.' },
+          benefitsNarrative: { type: 'string', description: 'What your child develops or enjoys. Lead with the good. 2–3 sentences, gaming-positive tone — this is PlaySmart, not a warning label.' },
+          risksNarrative:    { type: 'string', description: 'What to watch out for. Factual and specific, not fear-based. 2–3 sentences.' },
+          parentTip:         { type: 'string', description: 'One concrete, empowering action a parent can take. Frame as a positive action, not a restriction.' },
         },
       },
     },
@@ -118,21 +118,43 @@ function buildPrompt(e: ExperienceRow): string {
   const visits = e.visitCount ? e.visitCount.toLocaleString() : 'unknown'
   const active = e.activePlayers ? e.activePlayers.toLocaleString() : 'unknown'
 
-  return `You are a child safety researcher evaluating a Roblox experience for PlaySmart, a game rating service for parents.
+  return `You are a child development researcher evaluating a Roblox experience for PlaySmart — a game rating service for parents that is pro-informed-gaming, not anti-gaming.
 
-## CONTEXT: ROBLOX UGC
-Roblox experiences are user-generated. Unlike commercial games, they:
-- Can contain player-built content that bypasses Roblox moderation
-- Have unmoderated chat by default unless filtered
-- Often have real-money Robux purchases inside the experience
-- Attract a very young audience (avg age 13, many under 10)
-- Vary wildly in quality — same genre, very different safety profiles
+## RATING PHILOSOPHY
+Every experience gets two independent profiles: a Benefits Profile (what the child develops) and a Risk Profile (what to watch out for). These do not cancel each other out — an experience can score high on both. Lead with the good.
+
+The time recommendation is derived from risk intensity, then modulated upward by genuine developmental value. Your job is to rate what the designers built, not to assume the worst.
+
+## SCORING DIMENSIONS
+
+### Benefits (0–3 each)
+- **creativityScore**: Open-ended building, designing, scripting, storytelling. 3 = core mechanic (full sandbox). 0 = none.
+- **socialScore**: Genuine cooperative play, communication, positive community design. 3 = cooperation required. 0 = no real social dimension.
+- **learningScore**: Transferable skills — problem solving, strategy, spatial reasoning, numeracy. 3 = strong. 0 = none.
+
+### Risks (0–3 each — score what designers built, not incidental community behaviour)
+- **dopamineTrapScore**: Variable reward loops, streaks with penalties, near-miss feedback, no natural stopping points.
+- **toxicityScore**: Design that incentivises rank-shaming or bullying. General chat rudeness alone is not a 3.
+- **ugcContentRisk**: Structural exposure to inappropriate user-generated content (builds, avatars, images) — platform-level moderation is baseline.
+- **strangerRisk**: How much the experience design opens children to unknown adults: voice/text chat, DMs, unsolicited friend requests.
+- **monetizationScore**: Robux pressure built into the experience: pay-to-win, exclusive gated items, social spending comparison.
+- **privacyRisk**: Experience actively prompts children to share real name, age, location, or external links.
+
+### Time recommendation formula
+Base on risk intensity:
+- Low risk (dopamine+stranger+monetization all ≤ 1): up to 90–120 min
+- Moderate risk (some 2s): up to 60 min
+- High risk (any 3, or multiple 2s): 15–30 min
+Extend one tier if benefits are strong (creativityScore + learningScore + socialScore ≥ 6).
 
 ## CALIBRATION EXAMPLES
-- Adopt Me (pet simulator, huge UGC, active trading) → high stranger risk, moderate dopamine, low creativity
-- Tower of Hell (pure skill obstacle course, minimal social) → low risk overall, curascore ~70
-- Brookhaven RP (social roleplay, open chat, avatar dress-up) → high stranger risk, moderate ugcContentRisk, curascore ~35
-- Blox Fruits (grinding RPG, heavy pay-to-win) → high monetization + dopamine, curascore ~30
+| Experience | What it is | Key scores | Curascore |
+|---|---|---|---|
+| Tower of Hell | Pure skill obstacle course, no chat, no monetization | creativity 0, social 1, learning 1 / dopamine 1, stranger 0, monetization 0 | ~72 |
+| Adopt Me | Pet simulator, trading, large open world | creativity 1, social 2, learning 0 / dopamine 2, stranger 2, monetization 2 | ~42 |
+| Natural Disaster Survival | Survival mini-game, skill-based, minimal monetization | creativity 0, social 2, learning 1 / dopamine 1, stranger 1, monetization 0 | ~65 |
+| Brookhaven RP | Social roleplay, open chat, avatar dress-up | creativity 2, social 2, learning 0 / dopamine 1, stranger 3, ugcContentRisk 2 | ~38 |
+| Blox Fruits | Grinding RPG, heavy pay-to-win, streak mechanics | creativity 0, social 1, learning 1 / dopamine 3, stranger 1, monetization 3 | ~28 |
 
 ## EXPERIENCE TO EVALUATE
 Title: ${e.title}
@@ -140,10 +162,10 @@ Creator: ${e.creatorName ?? 'Unknown'}
 Description: ${e.description ?? 'No description provided'}
 Genre: ${e.genre ?? 'Unknown'}
 Total visits: ${visits}
-Current active players: ${active}
+Active players now: ${active}
 Max players per server: ${e.maxPlayers ?? 'Unknown'}
 
-Score this experience accurately. Calibrate against the examples. Call submit_experience_evaluation with your scores.`
+Score accurately. If the description suggests a creative builder or skill-based experience, reflect that in the benefits. Do not default to worst-case assumptions. Call submit_experience_evaluation with your scores.`
 }
 
 // ─── Bedrock caller ───────────────────────────────────────────────────────────
