@@ -4,11 +4,12 @@ import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { eq, desc, lte, gte, isNotNull, isNull, inArray, sql, and, or, count, type SQL } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { games, gameScores } from '@/lib/db/schema'
+import { games, gameScores, platformExperiences, experienceScores } from '@/lib/db/schema'
 import SearchBar from '@/components/SearchBar'
 import PlatformPicker from '@/components/PlatformPicker'
 import AgePicker from '@/components/AgePicker'
 import CarouselRow from '@/components/CarouselRow'
+import ExperienceCard, { type ExperienceSummary } from '@/components/ExperienceCard'
 import type { GameSummary } from '@/types/game'
 
 // ─── Age → ESRB mapping ───────────────────────────────────────────────────────
@@ -95,7 +96,7 @@ async function getCarouselRows(platforms: string[], age?: string, locale = 'en')
     gte(gameScores.curascore, 55),
   )
 
-  const [topRated, coopPlay, lowRisk, highBenefit, teamwork, vrGames, beginnerGames, dopamineTraps, newAndGood] = await Promise.all([
+  const [topRated, coopPlay, lowRisk, highBenefit, teamwork, vrGames, beginnerGames, newAndGood] = await Promise.all([
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base()).orderBy(desc(gameScores.curascore)).limit(12),
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(gte(gameScores.socialEmotionalScore, 0.5))).orderBy(desc(gameScores.socialEmotionalScore)).limit(12),
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(lte(gameScores.ris, 0.3))).orderBy(desc(gameScores.curascore)).limit(12),
@@ -103,7 +104,6 @@ async function getCarouselRows(platforms: string[], age?: string, locale = 'en')
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(sql`${gameScores.topBenefits}::jsonb @> ${JSON.stringify([{ skill: 'Teamwork' }])}::jsonb`)).orderBy(desc(gameScores.curascore)).limit(12),
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(and(isNotNull(gameScores.curascore), eq(games.isVr, true), ageFilter)).orderBy(desc(gameScores.curascore)).limit(12),
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(beginnerBase).orderBy(desc(gameScores.curascore)).limit(12),
-    db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(and(isNotNull(gameScores.curascore), platformFilter, ageFilter, gte(gameScores.ris, 0.60))).orderBy(desc(gameScores.ris)).limit(12),
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(gte(gameScores.curascore, 60))).orderBy(desc(games.releaseDate)).limit(12),
   ])
 
@@ -121,7 +121,6 @@ async function getCarouselRows(platforms: string[], age?: string, locale = 'en')
     { id: 'teamwork', title: 'Team up',                emoji: '🤝', browseHref: `${browseBase}?benefits=teamwork${baseParams}`,        games: teamwork.map(toSummary)      },
     { id: 'vr',       title: 'VR & AR',                emoji: '🥽', browseHref: `${browseBase}?platforms=VR${ageParam}`,              games: vrGames.map(toSummary)       },
     { id: 'beginner', title: 'New to gaming',          emoji: '🎯', browseHref: `${browseBase}?age=E10&risk=low${platformParam}`,     games: beginnerGames.map(toSummary) },
-    { id: 'dopamine', title: 'Dopamine Traps',         emoji: '🎰', browseHref: `${browseBase}?sort=riskiest${baseParams}`,           games: dopamineTraps.map(toSummary) },
   ]
 
   return rows.filter(r => r.games.length > 0)
@@ -148,9 +147,26 @@ export default async function HomePage({ params, searchParams }: Props) {
 
   const age = typeof sp.age === 'string' && sp.age in ESRB_FOR_AGE ? sp.age : undefined
 
-  const [carousels, stats] = await Promise.all([
+  const [carousels, stats, robloxExperiences] = await Promise.all([
     getCarouselRows(platforms, age, locale),
     getStats(),
+    db.select({
+      slug:          platformExperiences.slug,
+      title:         platformExperiences.title,
+      thumbnailUrl:  platformExperiences.thumbnailUrl,
+      creatorName:   platformExperiences.creatorName,
+      activePlayers: platformExperiences.activePlayers,
+      visitCount:    platformExperiences.visitCount,
+      curascore:     experienceScores.curascore,
+      timeRecommendationMinutes: experienceScores.timeRecommendationMinutes,
+      recommendedMinAge:         experienceScores.recommendedMinAge,
+      strangerRisk:              experienceScores.strangerRisk,
+      monetizationScore:         experienceScores.monetizationScore,
+    })
+    .from(platformExperiences)
+    .leftJoin(experienceScores, eq(experienceScores.experienceId, platformExperiences.id))
+    .orderBy(desc(platformExperiences.activePlayers))
+    .limit(8),
   ])
 
   const CAROUSEL_TITLES: Record<string, string> = {
@@ -161,7 +177,6 @@ export default async function HomePage({ params, searchParams }: Props) {
     teamwork: t('carouselTeamwork'),
     vr:       t('carouselVr'),
     beginner: t('carouselBeginner'),
-    dopamine: t('carouselDopamine'),
     newgood:  t('carouselNewGood'),
   }
 
@@ -270,6 +285,34 @@ export default async function HomePage({ params, searchParams }: Props) {
               </>
             )}
           </div>
+        )}
+
+        {/* Roblox section */}
+        {robloxExperiences.length > 0 && (
+          <section className="border-t border-slate-200 dark:border-slate-700 pt-10 pb-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-red-100 dark:bg-red-900/40 border border-red-200 dark:border-red-800 flex items-center justify-center shrink-0">
+                  <span className="text-xs font-black text-red-500">R</span>
+                </div>
+                <h2 className="text-base font-bold text-slate-800 dark:text-slate-100">Popular on Roblox</h2>
+                <span className="text-xs text-slate-400 dark:text-slate-500 font-normal">Rated for parents</span>
+              </div>
+              <Link
+                href="/game/roblox"
+                className="text-xs font-medium text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
+              >
+                View all →
+              </Link>
+            </div>
+            <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
+              {(robloxExperiences as ExperienceSummary[]).map(exp => (
+                <div key={exp.slug} className="shrink-0">
+                  <ExperienceCard exp={exp} />
+                </div>
+              ))}
+            </div>
+          </section>
         )}
 
         {/* About */}
