@@ -16,7 +16,6 @@ import { db } from '@/lib/db'
 import { games, gameScores, reviews } from '@/lib/db/schema'
 import { eq, isNull } from 'drizzle-orm'
 import { calculateGameScores } from '@/lib/scoring/engine'
-import { GoogleGenAI, FunctionCallingConfigMode, Type } from '@google/genai'
 
 export const maxDuration = 300
 
@@ -24,8 +23,8 @@ export const maxDuration = 300
 
 const MAX_REVIEWS_PER_RUN = 50
 const DELAY_MS            = 500
-const REVIEW_MODEL        = 'gemini-2.5-flash'
-const FALLBACK_MODEL      = 'gemini-1.5-flash-002'
+const BEDROCK_MODEL       = 'us.anthropic.claude-sonnet-4-5-20250929-v1:0'
+const BEDROCK_URL         = `https://bedrock-runtime.us-east-1.amazonaws.com/model/${BEDROCK_MODEL}/invoke`
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
 
@@ -42,44 +41,21 @@ const REP_FIELDS = ['repGenderBalance','repEthnicDiversity']
 
 // ─── Gemini schema helpers ────────────────────────────────────────────────────
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function toGeminiSchema(schema: any): any {
-  if (!schema || typeof schema !== 'object') return schema
-  const TYPE_MAP: Record<string, Type> = {
-    object: Type.OBJECT, string: Type.STRING, integer: Type.INTEGER,
-    number: Type.NUMBER, boolean: Type.BOOLEAN, array: Type.ARRAY,
-  }
-  const out: Record<string, unknown> = {}
-  for (const [k, v] of Object.entries(schema)) {
-    if (k === 'additionalProperties') continue
-    if (k === 'type' && typeof v === 'string') out[k] = TYPE_MAP[v] ?? v
-    else if (k === 'properties' && typeof v === 'object' && v !== null)
-      out[k] = Object.fromEntries(
-        Object.entries(v as Record<string, unknown>).map(([pk, pv]) => [pk, toGeminiSchema(pv)])
-      )
-    else if (typeof v === 'object' && v !== null && !Array.isArray(v)) out[k] = toGeminiSchema(v)
-    else out[k] = v
-  }
-  return out
-}
-
 function scoreGroup(fields: string[], max: number, desc: string) {
   return {
     type: 'object' as const, description: desc, required: fields,
     properties: Object.fromEntries(fields.map(f => [f, { type: 'integer' as const, minimum: 0, maximum: max }])),
-    additionalProperties: false as const,
   }
 }
 
-// ─── Review tool schema ───────────────────────────────────────────────────────
+// ─── Review tool schema (Anthropic format) ────────────────────────────────────
 
-const REVIEW_FUNCTION = {
+const REVIEW_TOOL = {
   name: 'submit_game_review',
   description: 'Submit a completed PlaySmart rubric review for a game.',
-  parameters: toGeminiSchema({
+  input_schema: {
     type: 'object',
     required: ['b1_cognitive','b2_social','b3_motor','r1_dopamine','r2_monetization','r3_social','r4_content','representation','propaganda','bechdel','practical','narratives'],
-    additionalProperties: false,
     properties: {
       b1_cognitive:    scoreGroup(B1_FIELDS, 5, 'B1 cognitive scores, each 0–5'),
       b2_social:       scoreGroup(B2_FIELDS, 5, 'B2 social-emotional scores, each 0–5'),
@@ -90,14 +66,14 @@ const REVIEW_FUNCTION = {
       r4_content:      scoreGroup(R4_FIELDS, 3, 'R4 content risk scores, each 0–3'),
       representation:  scoreGroup(REP_FIELDS, 3, 'REP representation scores, each 0–3'),
       propaganda: {
-        type: 'object', required: ['propagandaLevel','propagandaNotes'], additionalProperties: false,
+        type: 'object', required: ['propagandaLevel','propagandaNotes'],
         properties: {
           propagandaLevel: { type: 'integer', minimum: 0, maximum: 3 },
           propagandaNotes: { type: 'string' },
         },
       },
       bechdel: {
-        type: 'object', required: ['result','notes'], additionalProperties: false,
+        type: 'object', required: ['result','notes'],
         properties: {
           result: { type: 'string', enum: ['pass','fail','na'] },
           notes:  { type: 'string' },
@@ -106,7 +82,6 @@ const REVIEW_FUNCTION = {
       practical: {
         type: 'object',
         required: ['estimatedMonthlyCostLow','estimatedMonthlyCostHigh','minSessionMinutes','hasNaturalStoppingPoints','penalizesBreaks','stoppingPointsDescription'],
-        additionalProperties: false,
         properties: {
           estimatedMonthlyCostLow:   { type: 'number',  minimum: 0 },
           estimatedMonthlyCostHigh:  { type: 'number',  minimum: 0 },
@@ -119,7 +94,6 @@ const REVIEW_FUNCTION = {
       narratives: {
         type: 'object',
         required: ['benefitsNarrative','risksNarrative','parentTip','parentTipBenefits'],
-        additionalProperties: false,
         properties: {
           benefitsNarrative: { type: 'string' },
           risksNarrative:    { type: 'string' },
@@ -128,7 +102,7 @@ const REVIEW_FUNCTION = {
         },
       },
     },
-  }),
+  },
 }
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -213,47 +187,49 @@ Stranger chat: ${g.hasStrangerChat ? `Yes (${g.chatModeration ?? 'unknown modera
 Score this game accurately. Calibrate against the examples above. Call submit_game_review with your scores.`
 }
 
-// ─── Gemini caller ────────────────────────────────────────────────────────────
+// ─── Bedrock caller ───────────────────────────────────────────────────────────
 
-function getGoogleAI() {
-  return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
-}
-
-async function callGeminiReview(googleAI: GoogleGenAI, prompt: string, attempt = 0): Promise<ReviewInput> {
-  const modelId = attempt > 1 ? FALLBACK_MODEL : REVIEW_MODEL
+async function callBedrockReview(prompt: string, attempt = 0): Promise<ReviewInput> {
   try {
-    const result = await googleAI.models.generateContent({
-      model: modelId,
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      config: {
-        tools: [{ functionDeclarations: [REVIEW_FUNCTION] }],
-        toolConfig: {
-          functionCallingConfig: {
-            mode: FunctionCallingConfigMode.ANY,
-            allowedFunctionNames: ['submit_game_review'],
-          },
-        },
-        ...(modelId.includes('2.5') ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
+    const res = await fetch(BEDROCK_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.AWS_BEARER_TOKEN_BEDROCK}`,
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        anthropic_version: 'bedrock-2023-05-31',
+        max_tokens: 4096,
+        tools: [REVIEW_TOOL],
+        tool_choice: { type: 'tool', name: 'submit_game_review' },
+        messages: [{ role: 'user', content: prompt }],
+      }),
     })
-    const fc = result.candidates?.[0]?.content?.parts?.find(p => p.functionCall)?.functionCall
-    if (!fc?.args) {
+
+    if (!res.ok) {
+      const errText = await res.text()
+      if ((res.status === 429 || res.status === 503) && attempt < 3) {
+        await sleep(Math.pow(2, attempt) * 5000)
+        return callBedrockReview(prompt, attempt + 1)
+      }
+      throw new Error(`Bedrock ${res.status}: ${errText}`)
+    }
+
+    const data = await res.json()
+    const toolUse = data.content?.find((c: { type: string }) => c.type === 'tool_use')
+    if (!toolUse?.input) {
       if (attempt < 3) {
         await sleep(Math.pow(2, attempt) * 5000)
-        return callGeminiReview(googleAI, prompt, attempt + 1)
+        return callBedrockReview(prompt, attempt + 1)
       }
-      throw new Error(`Gemini did not return a function call after ${attempt + 1} attempts`)
+      throw new Error('Bedrock did not return tool_use block')
     }
-    return fc.args as ReviewInput
+    return toolUse.input as ReviewInput
   } catch (err: unknown) {
-    const isTransient =
-      String(err).includes('fetch failed') ||
-      String(err).includes('ECONNRESET') ||
-      (err as { status?: number })?.status === 429 ||
-      (err as { status?: number })?.status === 503
+    const isTransient = String(err).includes('fetch failed') || String(err).includes('ECONNRESET')
     if (isTransient && attempt < 3) {
       await sleep(Math.pow(2, attempt) * 5000)
-      return callGeminiReview(googleAI, prompt, attempt + 1)
+      return callBedrockReview(prompt, attempt + 1)
     }
     throw err
   }
@@ -358,11 +334,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  if (!process.env.GEMINI_API_KEY) {
-    return NextResponse.json({ error: 'GEMINI_API_KEY not set' }, { status: 500 })
+  if (!process.env.AWS_BEARER_TOKEN_BEDROCK) {
+    return NextResponse.json({ error: 'AWS_BEARER_TOKEN_BEDROCK not set' }, { status: 500 })
   }
-
-  const googleAI = getGoogleAI()
 
   try {
     // Hämta spel utan scores
@@ -389,7 +363,7 @@ export async function GET(req: NextRequest) {
         console.log(`[review-games] Reviewing: ${game.title}`)
 
         const prompt      = buildReviewPrompt(game)
-        const reviewInput = await callGeminiReview(googleAI, prompt)
+        const reviewInput = await callBedrockReview(prompt)
         const { curascore } = await saveReview(game, reviewInput)
 
         reviewed.push(game.slug)
