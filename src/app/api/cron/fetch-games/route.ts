@@ -35,19 +35,25 @@ const SWEEP_ORDERINGS: Record<number, string> = {
   3: '-released',
 }
 
-const MAX_GAMES_PER_RUN   = 25   // Reducerat från 200 för att hålla sig inom 300s timeout
+const MAX_GAMES_PER_RUN   = 25
 const PAGE_SIZE           = 40
 const MAX_PAGES_PER_GENRE = 25
-const DELAY_MS            = 400  // Lite längre delay för att undvika RAWG rate limits
+const DELAY_MS            = 400
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
 
 // ─── Handler ──────────────────────────────────────────────────────────────────
 
 export async function GET(req: NextRequest) {
-  const authHeader = req.headers.get('authorization')
+  // 🔒 FIX: Kräv alltid att CRON_SECRET är satt — tillåt aldrig anonym åtkomst
   const cronSecret = process.env.CRON_SECRET
-  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+  if (!cronSecret) {
+    console.error('[fetch-games] CRON_SECRET is not set — refusing all requests')
+    return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 })
+  }
+
+  const authHeader = req.headers.get('authorization')
+  if (authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -75,10 +81,14 @@ export async function GET(req: NextRequest) {
     let currentPage        = page
     let currentGenreIndex  = genreIndex
     let currentSweep       = sweep
-    let hasMore            = true
 
     // ── 3. Hämta spel tills vi har MAX_GAMES_PER_RUN nya ────────────────────
-    while (inserted.length < MAX_GAMES_PER_RUN && hasMore) {
+    // FIX: Använd en räknare för max iterationer för att undvika oändlig loop
+    const MAX_ITERATIONS = GENRES.length * MAX_PAGES_PER_GENRE
+    let iterations = 0
+
+    while (inserted.length < MAX_GAMES_PER_RUN && iterations < MAX_ITERATIONS) {
+      iterations++
       const currentGenre    = GENRES[currentGenreIndex]
       const currentOrdering = SWEEP_ORDERINGS[currentSweep] ?? '-metacritic'
 
@@ -134,7 +144,8 @@ export async function GET(req: NextRequest) {
           inserted.push(data.slug)
           console.log(`[fetch-games] Inserted: ${data.title}`)
         } catch (err) {
-          console.error(`[fetch-games] Failed to insert ${candidate.name}:`, err)
+          // FIX: Använd candidate.slug konsekvent (candidate.name kan vara undefined)
+          console.error(`[fetch-games] Failed to insert ${candidate.slug}:`, err)
           errors.push(candidate.slug)
         }
       }
@@ -154,16 +165,10 @@ export async function GET(req: NextRequest) {
       } else {
         currentPage++
       }
+    }
 
-      // Stoppa om vi gått ett helt varv utan nya spel
-      if (
-        currentGenreIndex === genreIndex &&
-        currentSweep === sweep &&
-        currentPage >= page &&
-        inserted.length === 0
-      ) {
-        hasMore = false
-      }
+    if (iterations >= MAX_ITERATIONS) {
+      console.warn('[fetch-games] Max iterations reached — possible full sweep with no new games')
     }
 
     // ── 4. Spara cursor ───────────────────────────────────────────────────────
@@ -192,6 +197,6 @@ export async function GET(req: NextRequest) {
 
   } catch (err) {
     console.error('[fetch-games] Fatal error:', err)
-    return NextResponse.json({ error: String(err) }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

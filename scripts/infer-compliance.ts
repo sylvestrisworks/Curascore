@@ -15,7 +15,7 @@
  *   node --env-file=.env node_modules/tsx/dist/cli.cjs scripts/infer-compliance.ts
  */
 
-import { eq, sql } from 'drizzle-orm'
+import { eq, and } from 'drizzle-orm'
 import { db } from '../src/lib/db'
 import { games, reviews, gameScores, complianceStatus, darkPatterns } from '../src/lib/db/schema'
 
@@ -34,19 +34,6 @@ type GameRow   = typeof games.$inferSelect
 
 /**
  * DSA — Digital Services Act
- *
- * Key obligations relevant to games:
- *   - Must not use dark patterns that manipulate users (Art. 25)
- *   - Must not target minors with advertising based on profiling (Art. 28)
- *   - Must not use deceptive UI / currency obfuscation (dark pattern rules)
- *
- * non_compliant if:
- *   - childTargeting >= 2 (deliberate targeting of children with spending pressure)
- *   - currencyObfuscation >= 2 (virtual currency obfuscation is a named DSA dark pattern)
- *   - 2+ high-severity dark patterns detected
- *
- * compliant if:
- *   - childTargeting <= 0, currencyObfuscation <= 0, monetizationRisk < 0.25, no high DPs
  */
 function inferDSA(review: ReviewRow, dpSeverities: string[], esrb: string | null): InferredBadge {
   const highDPs = dpSeverities.filter(s => s === 'high').length
@@ -70,7 +57,6 @@ function inferDSA(review: ReviewRow, dpSeverities: string[], esrb: string | null
     }
   }
 
-  // Positively compliant: no monetisation concerns and no high DPs
   const monetClean = childTarget === 0 && currencyObfusc === 0 && (review.payToWin ?? 0) === 0
   const dpClean = highDPs === 0 && dpSeverities.filter(s => s === 'medium').length <= 1
 
@@ -91,19 +77,6 @@ function inferDSA(review: ReviewRow, dpSeverities: string[], esrb: string | null
 
 /**
  * GDPR-K — GDPR applied to children's data
- *
- * Key obligations:
- *   - Must obtain verifiable parental consent for data processing of under-13s
- *   - Must not use children's data for profiling or behavioural advertising
- *   - Must provide clear privacy information
- *
- * non_compliant if:
- *   - privacyRisk >= 2 AND (esrb is E/E10 OR childTargeting >= 1)
- *   - strangerRisk >= 2 (unmoderated stranger contact = likely data sharing)
- *   - childTargeting >= 2 (profiling for marketing)
- *
- * compliant if:
- *   - privacyRisk <= 0, strangerRisk <= 0, childTargeting === 0
  */
 function inferGDPRK(review: ReviewRow, esrb: string | null): InferredBadge {
   const privacyRisk = review.privacyRisk ?? 0
@@ -145,22 +118,6 @@ function inferGDPRK(review: ReviewRow, esrb: string | null): InferredBadge {
 
 /**
  * ODDS — UK Children's Code / Online Design Standards
- * (Age-Appropriate Design Code — ICO)
- *
- * Key obligations:
- *   - Must not use design features that encourage children to stay longer than intended
- *   - Must not nudge children to provide more data or weaken privacy settings
- *   - Must not serve targeted advertising to children
- *   - Must have prominent stopping points / session breaks
- *
- * non_compliant if:
- *   - (infinitePlay >= 2 OR stoppingBarriers >= 2) AND esrb is E/E10/T
- *   - fomoEvents >= 2 in a children-rated game (pressures return/extended sessions)
- *   - streakMechanics >= 2 in a children-rated game
- *   - childTargeting >= 2
- *
- * compliant if:
- *   - all of the above are 0 or very low AND hasNaturalStoppingPoints === true
  */
 function inferODDS(review: ReviewRow, esrb: string | null): InferredBadge {
   const infinite = review.infinitePlay ?? 0
@@ -212,7 +169,6 @@ function inferODDS(review: ReviewRow, esrb: string | null): InferredBadge {
 async function main() {
   console.log('Inferring compliance status from review data…\n')
 
-  // Load all games that have a scored review
   const rows = await db
     .select({
       gameId:    games.id,
@@ -239,7 +195,6 @@ async function main() {
 
     if (!review) { skipped++; continue }
 
-    // Load dark pattern severities for this review
     const dps = await db
       .select({ severity: darkPatterns.severity })
       .from(darkPatterns)
@@ -254,12 +209,15 @@ async function main() {
     ]
 
     for (const badge of badges) {
-      // Check for existing row
+      // FIX: Använd Drizzle's and(eq(), eq()) istället för rå sql-template
       const existing = await db
         .select({ id: complianceStatus.id })
         .from(complianceStatus)
         .where(
-          sql`${complianceStatus.gameId} = ${row.gameId} AND ${complianceStatus.regulation} = ${badge.regulation}`
+          and(
+            eq(complianceStatus.gameId, row.gameId),
+            eq(complianceStatus.regulation, badge.regulation)
+          )
         )
         .limit(1)
 

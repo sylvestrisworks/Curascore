@@ -12,7 +12,17 @@
 
 import { config } from 'dotenv'
 import { resolve } from 'path'
-config({ path: resolve(process.cwd(), '.env') })
+
+// FIX: Varna tidigt om .env saknas eller GOOGLE_PROJECT_ID inte är satt
+const dotenvResult = config({ path: resolve(process.cwd(), '.env') })
+if (dotenvResult.error) {
+  console.warn('[debate-review] Warning: Could not load .env file:', dotenvResult.error.message)
+}
+
+if (!process.env.GOOGLE_PROJECT_ID) {
+  console.error('ERROR: GOOGLE_PROJECT_ID is not set. Aborting.')
+  process.exit(1)
+}
 
 import { GoogleGenAI, Type, FunctionCallingConfigMode } from '@google/genai'
 import { db } from '../src/lib/db'
@@ -24,22 +34,17 @@ import { eq, and, gte, lte, isNotNull, desc } from 'drizzle-orm'
 const args           = process.argv.slice(2)
 const LIMIT          = parseInt(args[args.indexOf('--limit') + 1] ?? '3', 10)
 const SAVE           = args.includes('--save')
-const RESCORE_DEBATE = args.includes('--rescore-debate')  // re-run already debate-scored games
-const FORCE          = args.includes('--force')           // bypass swing cap (use when correcting)
+const RESCORE_DEBATE = args.includes('--rescore-debate')
+const FORCE          = args.includes('--force')
 const slugFlag       = args.indexOf('--slug')
 const TARGET_SLUG    = slugFlag !== -1 ? args[slugFlag + 1] : null
 
-// Final score = CRITIC_WEIGHT * critic + (1 - CRITIC_WEIGHT) * advocate
-// 0.6 counteracts the LLM advocate inflation bias
-const CRITIC_WEIGHT = 0.60
-
-// Scores swinging more than this from current are flagged — not auto-saved
+const CRITIC_WEIGHT  = 0.60
 const MAX_AUTO_SWING = 20
 
-const ADVOCATE_MODEL = 'gemini-2.5-flash'  // advocate (argues HIGH)
-const CRITIC_MODEL   = 'gemini-2.5-flash'  // critic (argues LOW) — same model, opposite persona
+const ADVOCATE_MODEL = 'gemini-2.5-flash'
+const CRITIC_MODEL   = 'gemini-2.5-flash'
 
-// Pricing (per 1M tokens, USD)
 const PRO_PRICE_IN    =  0.15
 const PRO_PRICE_OUT   =  0.60
 const FLASH_PRICE_IN  =  0.15
@@ -47,7 +52,7 @@ const FLASH_PRICE_OUT =  0.60
 
 // ─── Clients ──────────────────────────────────────────────────────────────────
 
-const googleAI  = new GoogleGenAI({
+const googleAI = new GoogleGenAI({
   vertexai: true,
   project:  process.env.GOOGLE_PROJECT_ID!,
   location: process.env.GOOGLE_LOCATION ?? 'us-central1',
@@ -82,10 +87,10 @@ type Scores = {
 }
 
 type DebateRound = {
-  advocateScores:  Scores
+  advocateScores:    Scores
   advocateReasoning: string
-  criticScores:    Scores
-  criticReasoning: string
+  criticScores:      Scores
+  criticReasoning:   string
 }
 
 // ─── Prompt builders ──────────────────────────────────────────────────────────
@@ -281,7 +286,7 @@ async function callGemini(model: string, prompt: string, isPro: boolean): Promis
     } catch (err: unknown) {
       const status = (err as { status?: number })?.status
       if (status === 429 && attempt < MAX_RETRIES) {
-        const delay = Math.pow(2, attempt) * 10_000 // 10s, 20s, 40s, 80s, 160s
+        const delay = Math.pow(2, attempt) * 10_000
         console.log(`    [429 rate limit — waiting ${delay / 1000}s before retry ${attempt + 1}/${MAX_RETRIES}]`)
         await new Promise(r => setTimeout(r, delay))
         attempt++
@@ -297,8 +302,6 @@ const callCritic   = (prompt: string) => callGemini(CRITIC_MODEL,   prompt, fals
 
 // ─── Score math ───────────────────────────────────────────────────────────────
 
-// Weighted average: CRITIC_WEIGHT for critic, (1-CRITIC_WEIGHT) for advocate
-// to counteract advocate inflation bias
 function weightedScores(advocate: Scores, critic: Scores): Scores {
   const w = (fa: Record<string, number>, fb: Record<string, number>) =>
     Object.fromEntries(Object.keys(fa).map(k => [
@@ -318,8 +321,6 @@ function computeCurascore(s: Scores): { bds: number; ris: number; curascore: num
   const r1n = sumGroup(s.r1) / 30; const r2n = sumGroup(s.r2) / 24; const r3n = sumGroup(s.r3) / 18
   const bds = b1n * 0.50 + b2n * 0.30 + b3n * 0.20
   const ris = r1n * 0.45 + r2n * 0.30 + r3n * 0.25
-  // Harmonic mean of benefit and safety — matches the production scoring engine.
-  // Penalises imbalance: a low-benefit safe game ≠ a high-benefit safe game.
   const safety = 1 - ris
   const denom  = bds + safety
   const curascore = denom > 0 ? Math.round((2 * bds * safety) / denom * 100) : 0
@@ -360,7 +361,7 @@ async function debateGame(game: { id: number; slug: string; title: string; genre
 
   rounds.push({ advocateScores: r2adv.scores, advocateReasoning: r2adv.reasoning, criticScores: r2crit.scores, criticReasoning: r2crit.reasoning })
 
-  // ── Final: weighted average of round 2 (60% critic, 40% advocate) ──────────
+  // ── Final: weighted average of round 2 ──────────────────────────────────
   const finalScores = weightedScores(r2adv.scores, r2crit.scores)
   const { bds, ris, curascore } = computeCurascore(finalScores)
   const swing = curascore - game.currentCurascore
@@ -417,19 +418,16 @@ async function getCandidates() {
   }
 
   const rows = TARGET_SLUG
-    // Single-game targeting by slug
     ? await db.select(baseSelect).from(games)
         .innerJoin(gameScores, eq(gameScores.gameId, games.id))
         .where(and(isNotNull(gameScores.curascore), eq(games.slug, TARGET_SLUG)))
         .limit(1)
     : RESCORE_DEBATE
-    // Re-run previously debate-scored games (regardless of current curascore)
     ? await db.select(baseSelect).from(games)
         .innerJoin(gameScores, eq(gameScores.gameId, games.id))
         .where(and(isNotNull(gameScores.debateRounds), isNotNull(gameScores.curascore)))
         .orderBy(desc(gameScores.curascore))
         .limit(LIMIT)
-    // Normal mode: borderline popular games not yet debate-scored
     : await db.select(baseSelect).from(games)
         .innerJoin(gameScores, eq(gameScores.gameId, games.id))
         .where(and(
@@ -463,8 +461,6 @@ async function main() {
   console.log(`  Critic:   Gemini ${CRITIC_MODEL} (argues LOW)`)
   console.log(`  Limit:    ${LIMIT} games  |  Save: ${SAVE ? 'YES' : 'no (dry run)'}  |  Mode: ${RESCORE_DEBATE ? 'RESCORE DEBATE' : 'normal'}${FORCE ? '  |  FORCE (no swing cap)' : ''}`)
   if (!SAVE) console.log('\n  Tip: add --save to write results to the DB\n')
-
-  if (!process.env.GOOGLE_PROJECT_ID) { console.error('ERROR: GOOGLE_PROJECT_ID not set'); process.exit(1) }
 
   const candidates = await getCandidates()
   if (candidates.length === 0) {

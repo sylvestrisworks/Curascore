@@ -1,0 +1,1 @@
+if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {

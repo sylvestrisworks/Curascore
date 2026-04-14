@@ -1,0 +1,3 @@
+.where(
+  sql`${complianceStatus.gameId} = ${row.gameId} AND ${complianceStatus.regulation} = ${badge.regulation}`
+)

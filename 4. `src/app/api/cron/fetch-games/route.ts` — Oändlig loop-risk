@@ -1,0 +1,8 @@
+if (
+  currentGenreIndex === genreIndex &&
+  currentSweep === sweep &&
+  currentPage >= page &&
+  inserted.length === 0
+) {
+  hasMore = false
+}

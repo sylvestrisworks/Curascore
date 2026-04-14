@@ -1,0 +1,1 @@
+console.error(`[fetch-games] Failed to insert ${candidate.name}:`, err)

@@ -1,0 +1,7 @@
+while (true) {
+  try { ... }
+  catch (err) {
+    if (status === 429 && attempt < MAX_RETRIES) { ... attempt++; continue }
+    throw err  // OK — kastar vidare
+  }
+}

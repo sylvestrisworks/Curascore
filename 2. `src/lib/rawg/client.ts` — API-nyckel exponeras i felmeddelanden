@@ -1,0 +1,1 @@
+throw new RawgError(`RAWG ${res.status}: ${res.statusText} — ${path}`, res.status)
