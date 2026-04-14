@@ -1,0 +1,87 @@
+name: Nightly CodeRabbit Review
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # 01:00 UTC — after all crons, before workday
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-review-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure reviewed branch exists
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git ls-remote --exit-code origin reviewed > /dev/null 2>&1; then
+            echo "reviewed branch exists"
+          else
+            echo "Creating reviewed branch at current master HEAD"
+            git checkout -b reviewed
+            git push origin reviewed
+            git checkout master
+          fi
+
+      - name: Count new commits since last review
+        id: check
+        run: |
+          git fetch origin master reviewed
+          AHEAD=$(git rev-list origin/reviewed..origin/master --count)
+          echo "ahead=$AHEAD" >> "$GITHUB_OUTPUT"
+          echo "master is $AHEAD commit(s) ahead of reviewed"
+
+      - name: Check for existing open PR
+        id: existing
+        if: steps.check.outputs.ahead != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          COUNT=$(gh pr list --base reviewed --head master --state open --json number --jq length)
+          echo "open=$COUNT" >> "$GITHUB_OUTPUT"
+          echo "Open PRs from master→reviewed: $COUNT"
+
+      - name: Build PR body
+        id: body
+        if: steps.check.outputs.ahead != '0' && steps.existing.outputs.open == '0'
+        run: |
+          DATE=$(date -u +%Y-%m-%d)
+          COMMITS=$(git log origin/reviewed..origin/master --oneline | head -15)
+          {
+            echo "body<<PREOF"
+            echo "## Nightly CodeRabbit Review — $DATE"
+            echo ""
+            echo "Automated daily PR for AI code review. Contains all commits since the last review."
+            echo ""
+            echo "### Changes (${{ steps.check.outputs.ahead }} commits)"
+            echo '```'
+            echo "$COMMITS"
+            echo '```'
+            echo ""
+            echo "> Merge this PR once you are happy with CodeRabbit's feedback."
+            echo "> This advances the \`reviewed\` baseline so tomorrow's diff stays clean."
+            echo "PREOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create nightly review PR
+        if: steps.check.outputs.ahead != '0' && steps.existing.outputs.open == '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE=$(date -u +%Y-%m-%d)
+          gh pr create \
+            --base reviewed \
+            --head master \
+            --title "Nightly review: $DATE (${{ steps.check.outputs.ahead }} commits)" \
+            --body "${{ steps.body.outputs.body }}"
+
+      - name: Nothing to review
+        if: steps.check.outputs.ahead == '0'
+        run: echo "No new commits since last review — skipping PR creation."
