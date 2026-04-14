@@ -44,6 +44,12 @@ export default async function LocaleLayout({
                   <a href={`/${locale}/compare`} className="hover:text-indigo-700 dark:hover:text-indigo-400 hover:underline transition-colors">
                     Compare
                   </a>
+                  <a href={`/${locale}/privacy`} className="hover:text-indigo-700 dark:hover:text-indigo-400 hover:underline transition-colors">
+                    Privacy
+                  </a>
+                  <a href={`/${locale}/terms`} className="hover:text-indigo-700 dark:hover:text-indigo-400 hover:underline transition-colors">
+                    Terms
+                  </a>
                 </nav>
                 <LanguageSwitcher />
               </div>
