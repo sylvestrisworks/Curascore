@@ -164,11 +164,7 @@ function criticPrompt(gameInfo: string, round: number, advocateScores?: DebateSc
 // ─── Gemini caller ────────────────────────────────────────────────────────────
 
 function getGoogleAI() {
-  return new GoogleGenAI({
-    vertexai: true,
-    project:  process.env.GOOGLE_PROJECT_ID!,
-    location: process.env.GOOGLE_LOCATION ?? 'us-central1',
-  })
+  return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
 }
 
 async function callGeminiDebate(
@@ -301,8 +297,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  if (!process.env.GOOGLE_PROJECT_ID) {
-    return NextResponse.json({ error: 'GOOGLE_PROJECT_ID not set' }, { status: 500 })
+  if (!process.env.GEMINI_API_KEY) {
+    return NextResponse.json({ error: 'GEMINI_API_KEY not set' }, { status: 500 })
   }
 
   const googleAI = getGoogleAI()
