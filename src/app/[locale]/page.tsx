@@ -9,7 +9,8 @@ import SearchBar from '@/components/SearchBar'
 import PlatformPicker from '@/components/PlatformPicker'
 import AgePicker from '@/components/AgePicker'
 import CarouselRow from '@/components/CarouselRow'
-import ExperienceCard, { type ExperienceSummary } from '@/components/ExperienceCard'
+import RobloxCarouselRow from '@/components/RobloxCarouselRow'
+import { type ExperienceSummary } from '@/components/ExperienceCard'
 import type { GameSummary } from '@/types/game'
 
 // ─── Age → ESRB mapping ───────────────────────────────────────────────────────
@@ -288,32 +289,7 @@ export default async function HomePage({ params, searchParams }: Props) {
         )}
 
         {/* Roblox section */}
-        {robloxExperiences.length > 0 && (
-          <section className="border-t border-slate-200 dark:border-slate-700 pt-10 pb-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-red-100 dark:bg-red-900/40 border border-red-200 dark:border-red-800 flex items-center justify-center shrink-0">
-                  <span className="text-xs font-black text-red-500">R</span>
-                </div>
-                <h2 className="text-base font-bold text-slate-800 dark:text-slate-100">Popular on Roblox</h2>
-                <span className="text-xs text-slate-400 dark:text-slate-500 font-normal">Rated for parents</span>
-              </div>
-              <Link
-                href="/game/roblox"
-                className="text-xs font-medium text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
-              >
-                View all →
-              </Link>
-            </div>
-            <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
-              {(robloxExperiences as ExperienceSummary[]).map(exp => (
-                <div key={exp.slug} className="shrink-0">
-                  <ExperienceCard exp={exp} />
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+        <RobloxCarouselRow experiences={robloxExperiences as ExperienceSummary[]} />
 
         {/* About */}
         <section className="border-t border-slate-200 dark:border-slate-700 py-14 pb-16">
