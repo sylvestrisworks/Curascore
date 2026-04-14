@@ -86,6 +86,9 @@
   "filters": {
     "heading": "Filters",
     "clearAll": "Clear all",
+    "close": "Close",
+    "viewList": "List view",
+    "viewGrid": "Grid view",
     "showGames": "{count, plural, one {Show # game} other {Show # games}}",
     "gamesFound": "{count, plural, one {# game found} other {# games found}}",
     "sortBy": "Sort by",

@@ -86,6 +86,9 @@
   "filters": {
     "heading": "Filter",
     "clearAll": "Rensa alla",
+    "close": "Stäng",
+    "viewList": "Listvy",
+    "viewGrid": "Rutnätsvy",
     "showGames": "{count, plural, one {Visa # spel} other {Visa # spel}}",
     "gamesFound": "{count, plural, one {# spel hittades} other {# spel hittades}}",
     "sortBy": "Sortera efter",

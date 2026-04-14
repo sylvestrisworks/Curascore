@@ -40,7 +40,8 @@ function AgePickerInner({ current }: { current?: string }) {
           <button
             key={seg.value}
             onClick={() => select(seg.value)}
-            className={`flex-1 flex flex-col items-center py-2.5 sm:py-2 px-1 rounded-xl text-center transition-all duration-200 ${
+            // FIX: min-h-[44px] för att uppfylla Apples riktlinje för touch-targets
+            className={`flex-1 flex flex-col items-center justify-center min-h-[44px] py-2 px-1 rounded-xl text-center transition-all duration-200 ${
               isActive
                 ? 'bg-indigo-600 text-white shadow-sm'
                 : isPast
