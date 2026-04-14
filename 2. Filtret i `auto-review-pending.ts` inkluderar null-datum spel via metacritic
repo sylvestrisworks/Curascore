@@ -1,0 +1,4 @@
+or(
+  isNotNull(games.metacriticScore),
+  and(isNotNull(games.releaseDate), lte(games.releaseDate, new Date()))
+)

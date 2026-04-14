@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
-import { eq, desc, asc, sql, and, lte, gte, ilike, inArray, isNull, or, type SQL } from 'drizzle-orm'
+import { eq, desc, asc, sql, and, lte, gte, ilike, inArray, isNull, isNotNull, or, type SQL } from 'drizzle-orm'
 import { curascoreBg } from '@/lib/ui'
 import type { Metadata } from 'next'
 import { db } from '@/lib/db'
@@ -77,6 +77,15 @@ async function queryGames(filters: ActiveFilters, child?: ChildFilter): Promise<
   const conditions: SQL[] = []
   const page   = Math.max(1, filters.page ?? 1)
   const offset = (page - 1) * PAGE_SIZE
+
+  // FIX: Visa bara spel som faktiskt är släppta (releaseDate <= nu, eller null)
+  // Spel utan releaseDate inkluderas men spel med framtida datum exkluderas
+  conditions.push(
+    or(
+      isNull(games.releaseDate),
+      lte(games.releaseDate, new Date()),
+    )!
+  )
 
   if (filters.q) {
     conditions.push(ilike(games.title, `%${filters.q}%`))
@@ -186,7 +195,8 @@ async function queryGames(filters: ActiveFilters, child?: ChildFilter): Promise<
     case 'benefit':    orderBy = [desc(gameScores.bds),           desc(gameScores.curascore)]; break
     case 'safest':     orderBy = [asc(gameScores.ris),            desc(gameScores.curascore)]; break
     case 'riskiest':   orderBy = [desc(gameScores.ris),           asc(gameScores.curascore)];  break
-    case 'newest':     orderBy = [desc(games.releaseDate)];                                    break
+    // FIX: Sortera null-datum sist vid "newest" — NULLS LAST är explicit för tydlighet
+    case 'newest':     orderBy = [sql`${games.releaseDate} DESC NULLS LAST`];                  break
     case 'alpha':      orderBy = [asc(games.title)];                                           break
     case 'metacritic': orderBy = [sql`${games.metacriticScore} DESC NULLS LAST`];              break
     default:           orderBy = [desc(gameScores.curascore)];                                 break
