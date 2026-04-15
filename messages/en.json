@@ -629,6 +629,10 @@
     "adding": "Adding…",
     "removing": "Removing…"
   },
+  "game": {
+    "aboutThisGame": "About this game",
+    "recommendedAge": "Recommended age {age}+"
+  },
   "importModal": {
     "title": "Import Steam Library",
     "steamIdLabel": "Steam ID or profile URL",

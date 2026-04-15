@@ -25,7 +25,7 @@ const STALE_SCORE_DAYS    = 90
 const DISCOVERY_SAMPLE    = 25   // how many existing games to crawl per run
 const MAX_INSERTS_PER_RUN = 50   // cap new inserts per run to stay within budget
 
-export const maxDuration = 60
+export const maxDuration = 300
 
 // ─── Seed list — top Roblox experiences by active player count ────────────────
 // These get inserted on first run; the crawler then expands outward from them.
@@ -121,15 +121,31 @@ async function fetchUniversesBatch(universeIds: string[]): Promise<RobloxGame[]>
   return results
 }
 
-async function fetchThumbnail(universeId: string): Promise<string | null> {
-  try {
-    const res = await fetch(
-      `https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png&isCircular=false`
-    )
-    if (!res.ok) return null
-    const data = await res.json() as { data?: Array<{ state: string; imageUrl: string }> }
-    return data.data?.find(t => t.state === 'Completed')?.imageUrl ?? null
-  } catch { return null }
+/**
+ * Batch-fetch thumbnails for up to 100 universe IDs in a single request.
+ * Returns a map of universeId → imageUrl (only includes IDs with a completed thumbnail).
+ */
+async function fetchThumbnailsBatch(universeIds: string[]): Promise<Map<string, string>> {
+  const result = new Map<string, string>()
+  if (universeIds.length === 0) return result
+  // API supports up to 100 IDs per request
+  const chunks: string[][] = []
+  for (let i = 0; i < universeIds.length; i += 100) chunks.push(universeIds.slice(i, i + 100))
+  for (const chunk of chunks) {
+    try {
+      const res = await fetch(
+        `https://thumbnails.roblox.com/v1/games/icons?universeIds=${chunk.join(',')}&size=512x512&format=Png&isCircular=false`
+      )
+      if (!res.ok) continue
+      const data = await res.json() as { data?: Array<{ targetId: number; state: string; imageUrl: string }> }
+      for (const item of data.data ?? []) {
+        if (item.state === 'Completed' && item.imageUrl) {
+          result.set(String(item.targetId), item.imageUrl)
+        }
+      }
+    } catch { /* skip chunk */ }
+  }
+  return result
 }
 
 async function placeToUniverse(placeId: string): Promise<string | null> {
@@ -272,12 +288,20 @@ export async function GET(req: NextRequest) {
   }
 
   // ── Insert new experiences ───────────────────────────────────────────────────
+  // Pre-fetch all thumbnails in one batch to avoid N sequential HTTP calls
+  const validNewIds = newUniverseIdsDeduped.filter(id => {
+    const g = gameMap.get(id)
+    return g && isValidGame(g)
+  })
+  const thumbnailMap = await fetchThumbnailsBatch(validNewIds)
+  console.log(`[fetch-roblox] Thumbnails fetched: ${thumbnailMap.size}/${validNewIds.length}`)
+
   for (const universeId of newUniverseIdsDeduped) {
     const game = gameMap.get(universeId)
     if (!game || !isValidGame(game)) continue
 
     try {
-      const thumbnailUrl = await fetchThumbnail(universeId)
+      const thumbnailUrl = thumbnailMap.get(universeId) ?? null
       let slug = slugify(game.name)
 
       // Resolve slug collision

@@ -629,6 +629,10 @@
     "adding": "Lägger till…",
     "removing": "Tar bort…"
   },
+  "game": {
+    "aboutThisGame": "Om spelet",
+    "recommendedAge": "Rekommenderad ålder {age}+"
+  },
   "importModal": {
     "title": "Importera Steam-bibliotek",
     "steamIdLabel": "Steam-ID eller profil-URL",

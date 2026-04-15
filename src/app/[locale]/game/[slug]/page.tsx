@@ -12,9 +12,10 @@ import ShareButton from '@/components/ShareButton'
 import { auth } from '@/auth'
 import { calcAge } from '@/lib/age'
 import { Suspense } from 'react'
+import { getTranslations } from 'next-intl/server'
 import type { ComplianceBadge, DarkPattern, GameCardProps, SerializedGame, SerializedScores, SerializedReview } from '@/types/game'
 
-type Props = { params: { slug: string } }
+type Props = { params: Promise<{ slug: string }> }
 
 async function fetchGameData(slug: string): Promise<GameCardProps | null> {
   const [game] = await db
@@ -192,10 +193,11 @@ async function fetchGameData(slug: string): Promise<GameCardProps | null> {
 // ─── Metadata ────────────────────────────────────────────────────────────────
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
   const [game] = await db
     .select({ title: games.title, description: games.description, backgroundImage: games.backgroundImage })
     .from(games)
-    .where(eq(games.slug, params.slug))
+    .where(eq(games.slug, slug))
     .limit(1)
 
   if (!game) return { title: 'Game not found — Good Game Parent' }
@@ -204,7 +206,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? game.description.slice(0, 160)
     : `See the Good Game Parent rating for ${game.title} — benefits, risks, and time recommendations for parents.`
 
-  const ogImage = `${process.env.NEXTAUTH_URL ?? 'https://curascore.vercel.app'}/api/og/game/${params.slug}`
+  const ogImage = `${process.env.NEXTAUTH_URL ?? 'https://curascore.vercel.app'}/api/og/game/${slug}`
 
   return {
     title: `${game.title} — PlaySmart`,
@@ -227,9 +229,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 export default async function GamePage({ params }: Props) {
-  const [data, session] = await Promise.all([
-    fetchGameData(params.slug),
+  const { slug } = await params
+  const [data, session, t] = await Promise.all([
+    fetchGameData(slug),
     auth(),
+    getTranslations('game'),
   ])
   if (!data) notFound()
 
@@ -327,7 +331,7 @@ export default async function GamePage({ params }: Props) {
                       <span className="opacity-60 text-xs">({c.age})</span>
                     </span>
                   ))}
-                  {minAge > 0 && <span className="opacity-60 text-xs ml-auto">Recommended age {minAge}+</span>}
+                  {minAge > 0 && <span className="opacity-60 text-xs ml-auto">{t('recommendedAge', { age: minAge })}</span>}
                 </div>
               </div>
             )
@@ -356,7 +360,7 @@ export default async function GamePage({ params }: Props) {
             return (
               <div className="mt-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-5 py-4">
                 <h2 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">
-                  About this game
+                  {t('aboutThisGame')}
                 </h2>
                 <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{excerpt}</p>
               </div>
