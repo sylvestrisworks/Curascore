@@ -56,6 +56,15 @@ export default function AccountPage() {
           </div>
         </div>
 
+        {/* Connected accounts */}
+        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-5 py-4 space-y-2">
+          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">Connected accounts</p>
+          <Link href="/settings/nintendo" className="flex items-center justify-between text-sm text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+            <span className="flex items-center gap-2">🎮 Nintendo Switch</span>
+            <span className="text-slate-400 text-xs">Manage →</span>
+          </Link>
+        </div>
+
         {/* Legal links */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-5 py-4 space-y-2">
           <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">Legal</p>

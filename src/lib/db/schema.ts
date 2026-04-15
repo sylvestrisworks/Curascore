@@ -511,6 +511,39 @@ export const experienceScores = pgTable('experience_scores', {
 // ============================================
 
 // ============================================
+// NINTENDO PARENTAL CONTROLS INTEGRATION
+// ============================================
+
+export const nintendoConnections = pgTable('nintendo_connections', {
+  id:           serial('id').primaryKey(),
+  userId:       text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }).unique(),
+  naId:         varchar('na_id', { length: 50 }).notNull().unique(),
+  nickname:     varchar('nickname', { length: 255 }),
+  imageUrl:     text('image_url'),
+  sessionToken: text('session_token').notNull(),  // long-lived, never expires
+  createdAt:    timestamp('created_at').defaultNow(),
+  lastSyncedAt: timestamp('last_synced_at'),
+})
+
+export const nintendoPlaytime = pgTable('nintendo_playtime', {
+  id:               serial('id').primaryKey(),
+  userId:           text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  naId:             varchar('na_id', { length: 50 }).notNull(),
+  deviceId:         varchar('device_id', { length: 100 }).notNull(),
+  deviceName:       varchar('device_name', { length: 255 }),
+  date:             varchar('date', { length: 10 }).notNull(),   // YYYY-MM-DD
+  appId:            varchar('app_id', { length: 50 }).notNull(),
+  appTitle:         varchar('app_title', { length: 500 }).notNull(),
+  appImageUrl:      text('app_image_url'),
+  playTimeMinutes:  integer('play_time_minutes').notNull().default(0),
+  createdAt:        timestamp('created_at').defaultNow(),
+}, (table) => ({
+  uniqueEntry: uniqueIndex('nintendo_playtime_unique').on(table.naId, table.deviceId, table.date, table.appId),
+  userIdx:     index('nintendo_playtime_user_idx').on(table.userId),
+  dateIdx:     index('nintendo_playtime_date_idx').on(table.userId, table.date),
+}))
+
+// ============================================
 // NOTIFICATIONS
 // ============================================
 

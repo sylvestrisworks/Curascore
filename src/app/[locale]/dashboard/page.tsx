@@ -9,6 +9,7 @@ import NewForChild from '@/components/NewForChild'
 import ProfileManager from '@/components/ProfileManager'
 import { getLocale } from 'next-intl/server'
 import { curascoreBg } from '@/lib/ui'
+import NintendoPlaytimeWidget from '@/components/NintendoPlaytimeWidget'
 
 export const metadata = { title: 'Family Dashboard — PlaySmart' }
 export const dynamic = 'force-dynamic'
@@ -96,6 +97,9 @@ export default async function FamilyDashboard() {
             )}
           </div>
         </div>
+
+        {/* Nintendo Switch play time */}
+        <NintendoPlaytimeWidget />
 
         {/* Profile manager */}
         <ProfileManager
