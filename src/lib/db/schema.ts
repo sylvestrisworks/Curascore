@@ -2,7 +2,7 @@
 
 import {
   pgTable, text, integer, real, timestamp, boolean,
-  varchar, jsonb, serial, uniqueIndex, index, primaryKey, bigint
+  varchar, jsonb, serial, uniqueIndex, index, primaryKey, bigint, date
 } from 'drizzle-orm/pg-core';
 
 // ============================================
@@ -377,7 +377,8 @@ export const childProfiles = pgTable('child_profiles', {
   id:          serial('id').primaryKey(),
   userId:      text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   name:        varchar('name', { length: 100 }).notNull(),
-  birthYear:   integer('birth_year').notNull(),
+  birthYear:   integer('birth_year').notNull(),              // kept for compat; prefer birthDate
+  birthDate:   date('birth_date'),                           // YYYY-MM-DD, exact birth date
   platforms:   jsonb('platforms').$type<string[]>().default([]),
   focusSkills: jsonb('focus_skills').$type<string[]>().default([]),
   createdAt:   timestamp('created_at').defaultNow(),

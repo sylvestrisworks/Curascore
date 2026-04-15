@@ -9,6 +9,7 @@ import GameCompactCard from '@/components/GameCompactCard'
 import ImportLibraryButton from '@/components/ImportLibraryButton'
 import type { GameSummary } from '@/types/game'
 import { getLocale } from 'next-intl/server'
+import { calcAge } from '@/lib/age'
 
 export const metadata = { title: 'My Library — PlaySmart' }
 
@@ -68,7 +69,7 @@ export default async function LibraryPage({ searchParams }: { searchParams: Prom
   const selectedChild = profiles.find(p => p.id === selectedChildId) ?? null
 
   function isAppropriate(row: typeof rows[0], child: typeof profiles[0]): boolean {
-    const age = new Date().getFullYear() - child.birthYear
+    const age = calcAge(child.birthDate, child.birthYear)
     const ageOk = row.recommendedMinAge == null || row.recommendedMinAge <= age
     const childPlats = (child.platforms as string[]) ?? []
     const platOk = childPlats.length === 0 || (row.platforms as string[]).some(gp =>
@@ -157,7 +158,7 @@ export default async function LibraryPage({ searchParams }: { searchParams: Prom
                 All
               </a>
               {profiles.map(p => {
-                const age = new Date().getFullYear() - p.birthYear
+                const age = calcAge(p.birthDate, p.birthYear)
                 return (
                   <a
                     key={p.id}
@@ -179,7 +180,7 @@ export default async function LibraryPage({ searchParams }: { searchParams: Prom
         {/* Filtered notice */}
         {selectedChild && (allOwned.length !== owned.length || allWishlist.length !== wishlist.length) && (
           <div className="text-sm text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-2.5">
-            Showing {owned.length} of {allOwned.length} owned games appropriate for {selectedChild.name} (age {new Date().getFullYear() - selectedChild.birthYear}
+            Showing {owned.length} of {allOwned.length} owned games appropriate for {selectedChild.name} (age {calcAge(selectedChild.birthDate, selectedChild.birthYear)}
             {(selectedChild.platforms as string[]).length > 0 && `, ${(selectedChild.platforms as string[]).join('/')}`}).
             {' '}<a href={`/${locale}/library`} className="underline hover:text-indigo-900">View all</a>
           </div>

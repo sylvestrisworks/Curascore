@@ -10,6 +10,7 @@ import LibraryButton from '@/components/LibraryButton'
 import ParentTips from '@/components/ParentTips'
 import ShareButton from '@/components/ShareButton'
 import { auth } from '@/auth'
+import { calcAge } from '@/lib/age'
 import { Suspense } from 'react'
 import type { ComplianceBadge, DarkPattern, GameCardProps, SerializedGame, SerializedScores, SerializedReview } from '@/types/game'
 
@@ -240,7 +241,7 @@ export default async function GamePage({ params }: Props) {
   let initialOwned = false
   let initialWishlisted = false
   let recommendedMinAge: number | null = null
-  let userProfiles: { id: number; name: string; birthYear: number }[] = []
+  let userProfiles: { id: number; name: string; birthYear: number; birthDate: string | null }[] = []
 
   if (uid && game.id) {
     const [entries, scoreRow, profileRows] = await Promise.all([
@@ -251,7 +252,7 @@ export default async function GamePage({ params }: Props) {
         .from(gameScores)
         .where(eq(gameScores.gameId, game.id))
         .limit(1),
-      db.select({ id: childProfiles.id, name: childProfiles.name, birthYear: childProfiles.birthYear })
+      db.select({ id: childProfiles.id, name: childProfiles.name, birthYear: childProfiles.birthYear, birthDate: childProfiles.birthDate })
         .from(childProfiles)
         .where(eq(childProfiles.userId, uid)),
     ])
@@ -307,8 +308,8 @@ export default async function GamePage({ params }: Props) {
             const minAge = recommendedMinAge ?? (game.esrbRating === 'M' ? 17 : game.esrbRating === 'T' ? 13 : game.esrbRating === 'E10+' ? 10 : 0)
             const checks = userProfiles.map(p => ({
               name: p.name,
-              age: new Date().getFullYear() - p.birthYear,
-              ok: minAge === 0 || (new Date().getFullYear() - p.birthYear) >= minAge,
+              age: calcAge(p.birthDate, p.birthYear),
+              ok: minAge === 0 || calcAge(p.birthDate, p.birthYear) >= minAge,
             }))
             const allOk = checks.every(c => c.ok)
             const noneOk = checks.every(c => !c.ok)

@@ -3,11 +3,13 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { PLATFORM_OPTIONS, SKILL_OPTIONS } from '@/lib/childProfileOptions'
+import { calcAge } from '@/lib/age'
 
 type Profile = {
   id: number
   name: string
   birthYear: number
+  birthDate: string | null
   platforms: string[]
   focusSkills: string[]
 }
@@ -16,7 +18,15 @@ type Props = {
   initialProfiles: Profile[]
 }
 
-const EMPTY_FORM = { name: '', birthYear: new Date().getFullYear() - 8, platforms: [] as string[], focusSkills: [] as string[] }
+const today = new Date().toISOString().slice(0, 10)
+// Default: child born 8 years ago today
+const defaultBirthDate = (() => {
+  const d = new Date()
+  d.setFullYear(d.getFullYear() - 8)
+  return d.toISOString().slice(0, 10)
+})()
+
+const EMPTY_FORM = { name: '', birthDate: defaultBirthDate, platforms: [] as string[], focusSkills: [] as string[] }
 
 export default function ProfileManager({ initialProfiles }: Props) {
   const router = useRouter()
@@ -35,7 +45,12 @@ export default function ProfileManager({ initialProfiles }: Props) {
 
   function openEdit(p: Profile) {
     setEditing(p)
-    setForm({ name: p.name, birthYear: p.birthYear, platforms: p.platforms, focusSkills: p.focusSkills })
+    setForm({
+      name:        p.name,
+      birthDate:   p.birthDate ?? `${p.birthYear}-01-01`,
+      platforms:   p.platforms,
+      focusSkills: p.focusSkills,
+    })
     setError('')
     setShowForm(true)
   }
@@ -49,6 +64,7 @@ export default function ProfileManager({ initialProfiles }: Props) {
 
   async function save() {
     if (!form.name.trim()) { setError('Name is required'); return }
+    if (!form.birthDate)   { setError('Birth date is required'); return }
     setSaving(true)
     setError('')
     try {
@@ -80,34 +96,35 @@ export default function ProfileManager({ initialProfiles }: Props) {
     <div>
       {/* Profile chips */}
       <div className="flex flex-wrap gap-3 items-center">
-        {initialProfiles.map(p => (
-          <div
-            key={p.id}
-            className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 shadow-sm"
-          >
-            <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-600 shrink-0">
-              {p.name[0].toUpperCase()}
-            </div>
-            <div className="text-sm">
-              <span className="font-semibold text-slate-800 dark:text-slate-100">{p.name}</span>
-              <span className="text-slate-400 dark:text-slate-500 ml-1.5 text-xs">
-                {new Date().getFullYear() - p.birthYear}y
-              </span>
-            </div>
-            <button
-              onClick={() => openEdit(p)}
-              className="text-xs text-slate-400 dark:text-slate-500 hover:text-indigo-600 transition-colors ml-1"
+        {initialProfiles.map(p => {
+          const age = calcAge(p.birthDate, p.birthYear)
+          return (
+            <div
+              key={p.id}
+              className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 shadow-sm"
             >
-              Edit
-            </button>
-            <button
-              onClick={() => remove(p.id)}
-              className="text-xs text-slate-300 hover:text-red-500 transition-colors"
-            >
-              ✕
-            </button>
-          </div>
-        ))}
+              <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-600 shrink-0">
+                {p.name[0].toUpperCase()}
+              </div>
+              <div className="text-sm">
+                <span className="font-semibold text-slate-800 dark:text-slate-100">{p.name}</span>
+                <span className="text-slate-400 dark:text-slate-500 ml-1.5 text-xs">{age}y</span>
+              </div>
+              <button
+                onClick={() => openEdit(p)}
+                className="text-xs text-slate-400 dark:text-slate-500 hover:text-indigo-600 transition-colors ml-1"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => remove(p.id)}
+                className="text-xs text-slate-300 hover:text-red-500 transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+          )
+        })}
 
         <button
           onClick={openAdd}
@@ -118,10 +135,10 @@ export default function ProfileManager({ initialProfiles }: Props) {
         </button>
       </div>
 
-      {/* Modal / inline form */}
+      {/* Modal form */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full max-w-md p-6 space-y-5">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full max-w-md p-6 space-y-5 max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
               {editing ? `Edit ${editing.name}` : 'Add child profile'}
             </h2>
@@ -138,20 +155,22 @@ export default function ProfileManager({ initialProfiles }: Props) {
               />
             </div>
 
-            {/* Birth year */}
+            {/* Birth date */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Birth year</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Date of birth</label>
               <input
-                type="number"
-                value={form.birthYear}
-                min={2000}
-                max={new Date().getFullYear()}
-                onChange={e => setForm(f => ({ ...f, birthYear: parseInt(e.target.value) || f.birthYear }))}
+                type="date"
+                value={form.birthDate}
+                max={today}
+                min="2000-01-01"
+                onChange={e => setForm(f => ({ ...f, birthDate: e.target.value }))}
                 className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
-              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
-                Age: {new Date().getFullYear() - form.birthYear}
-              </p>
+              {form.birthDate && (
+                <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+                  Age: {calcAge(form.birthDate)} years old
+                </p>
+              )}
             </div>
 
             {/* Platforms */}

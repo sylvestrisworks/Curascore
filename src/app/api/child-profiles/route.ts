@@ -7,7 +7,7 @@ import { z } from 'zod'
 
 const ProfileSchema = z.object({
   name:        z.string().min(1).max(100),
-  birthYear:   z.number().int().min(2000).max(new Date().getFullYear()),
+  birthDate:   z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Must be YYYY-MM-DD'),
   platforms:   z.array(z.string()).default([]),
   focusSkills: z.array(z.string()).default([]),
 })
@@ -37,9 +37,11 @@ export async function POST(req: NextRequest) {
   const parsed = ProfileSchema.safeParse(body)
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten().fieldErrors }, { status: 400 })
 
+  const birthYear = new Date(parsed.data.birthDate).getFullYear()
+
   const [profile] = await db
     .insert(childProfiles)
-    .values({ userId, ...parsed.data })
+    .values({ userId, ...parsed.data, birthYear })
     .returning()
 
   return NextResponse.json({ data: profile }, { status: 201 })

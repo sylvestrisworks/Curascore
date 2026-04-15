@@ -12,6 +12,7 @@ import BrowseFilters, { ViewToggle, type ActiveFilters } from '@/components/Brow
 import GameCompactCard from '@/components/GameCompactCard'
 import BrowseSearch from '@/components/BrowseSearch'
 import { auth } from '@/auth'
+import { calcAge } from '@/lib/age'
 
 export const metadata: Metadata = {
   title: 'Browse Games — PlaySmart',
@@ -379,7 +380,7 @@ export default async function BrowsePage({ params, searchParams }: Props) {
   const filters = parseFilters(sp)
 
   const childIdParam = typeof sp.child === 'string' ? parseInt(sp.child) : null
-  let profiles: { id: number; name: string; birthYear: number; platforms: unknown }[] = []
+  let profiles: { id: number; name: string; birthYear: number; birthDate: string | null; platforms: unknown }[] = []
   let selectedChild: { id: number; name: string; age: number; platforms: string[] } | null = null
 
   const session = await auth()
@@ -390,6 +391,7 @@ export default async function BrowsePage({ params, searchParams }: Props) {
       id:        childProfiles.id,
       name:      childProfiles.name,
       birthYear: childProfiles.birthYear,
+      birthDate: childProfiles.birthDate,
       platforms: childProfiles.platforms,
     })
       .from(childProfiles)
@@ -401,7 +403,7 @@ export default async function BrowsePage({ params, searchParams }: Props) {
         selectedChild = {
           id:        found.id,
           name:      found.name,
-          age:       new Date().getFullYear() - found.birthYear,
+          age:       calcAge(found.birthDate, found.birthYear),
           platforms: (found.platforms as string[]) ?? [],
         }
       }
@@ -477,7 +479,7 @@ export default async function BrowsePage({ params, searchParams }: Props) {
                   {t('forEveryone')}
                 </a>
                 {profiles.map(p => {
-                  const age = new Date().getFullYear() - p.birthYear
+                  const age = calcAge(p.birthDate, p.birthYear)
                   const childParams = new URLSearchParams(
                     Object.entries(sp as Record<string, string>)
                       .filter(([k]) => k !== 'child' && k !== 'page')

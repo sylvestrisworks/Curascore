@@ -7,7 +7,7 @@ import { z } from 'zod'
 
 const ProfileSchema = z.object({
   name:        z.string().min(1).max(100).optional(),
-  birthYear:   z.number().int().min(2000).max(new Date().getFullYear()).optional(),
+  birthDate:   z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Must be YYYY-MM-DD').optional(),
   platforms:   z.array(z.string()).optional(),
   focusSkills: z.array(z.string()).optional(),
 })
@@ -33,9 +33,14 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   const parsed = ProfileSchema.safeParse(body)
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten().fieldErrors }, { status: 400 })
 
+  const updateData: Record<string, unknown> = { ...parsed.data }
+  if (parsed.data.birthDate) {
+    updateData.birthYear = new Date(parsed.data.birthDate).getFullYear()
+  }
+
   const [updated] = await db
     .update(childProfiles)
-    .set({ ...parsed.data, updatedAt: new Date() })
+    .set(updateData)
     .where(and(eq(childProfiles.id, id), eq(childProfiles.userId, userId)))
     .returning()
 

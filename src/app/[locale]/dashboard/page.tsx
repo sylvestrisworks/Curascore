@@ -2,14 +2,12 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import { childProfiles, userGames, games, gameScores } from '@/lib/db/schema'
-import { eq, isNotNull } from 'drizzle-orm'
-import { Suspense } from 'react'
-import TailoredFeed from '@/components/TailoredFeed'
-import NewForChild from '@/components/NewForChild'
-import ProfileManager from '@/components/ProfileManager'
-import { getLocale } from 'next-intl/server'
+import { eq } from 'drizzle-orm'
 import { curascoreBg } from '@/lib/ui'
+import { calcAge } from '@/lib/age'
+import ProfileManager from '@/components/ProfileManager'
 import NintendoPlaytimeWidget from '@/components/NintendoPlaytimeWidget'
+import { getLocale } from 'next-intl/server'
 
 export const metadata = { title: 'Family Dashboard — PlaySmart' }
 export const dynamic = 'force-dynamic'
@@ -32,10 +30,9 @@ export default async function FamilyDashboard() {
   const userId = (session.user as any).id ?? session.user.email!
   const locale = await getLocale()
 
-  const [profiles, libraryRows, wishlistCount] = await Promise.all([
+  const [profiles, libraryRows] = await Promise.all([
     db.select().from(childProfiles).where(eq(childProfiles.userId, userId)),
 
-    // All owned games with scores
     db.select({
         slug:              games.slug,
         title:             games.title,
@@ -50,18 +47,14 @@ export default async function FamilyDashboard() {
       .innerJoin(games, eq(games.id, userGames.gameId))
       .leftJoin(gameScores, eq(gameScores.gameId, userGames.gameId))
       .where(eq(userGames.userId, userId)),
-
-    Promise.resolve(0), // placeholder
   ])
 
   const owned   = libraryRows.filter(r => r.listType === 'owned') as LibraryGame[]
   const wlCount = libraryRows.filter(r => r.listType === 'wishlist').length
 
-  // Per-child library filtering
-  function gamesForChild(birthYear: number, platforms: string[]): LibraryGame[] {
-    const age = new Date().getFullYear() - birthYear
+  function gamesForChild(age: number, platforms: string[]): LibraryGame[] {
     return owned.filter(g => {
-      const ageOk = g.recommendedMinAge == null || g.recommendedMinAge <= age
+      const ageOk  = g.recommendedMinAge == null || g.recommendedMinAge <= age
       const platOk = platforms.length === 0 || (g.platforms as string[]).some(gp =>
         platforms.some(cp => gp.toLowerCase().includes(cp.toLowerCase()))
       )
@@ -85,7 +78,6 @@ export default async function FamilyDashboard() {
             <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Family Dashboard</h1>
             <p className="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Signed in as {session.user.email}</p>
           </div>
-          {/* Library quick stats */}
           <div className="flex items-center gap-3 text-sm">
             <a href={`/${locale}/library`} className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-600 dark:text-slate-300 hover:border-indigo-300 hover:text-indigo-700 transition-colors text-xs font-medium">
               🎮 {owned.length} owned
@@ -107,6 +99,7 @@ export default async function FamilyDashboard() {
             id:          p.id,
             name:        p.name,
             birthYear:   p.birthYear,
+            birthDate:   p.birthDate ?? null,
             platforms:   (p.platforms as string[]) ?? [],
             focusSkills: (p.focusSkills as string[]) ?? [],
           }))}
@@ -114,9 +107,9 @@ export default async function FamilyDashboard() {
 
         {/* Child cards */}
         {profiles.map(profile => {
-          const childGames  = gamesForChild(profile.birthYear, (profile.platforms as string[]) ?? [])
+          const age         = calcAge(profile.birthDate, profile.birthYear)
+          const childGames  = gamesForChild(age, (profile.platforms as string[]) ?? [])
           const healthScore = libHealthScore(childGames)
-          const age         = new Date().getFullYear() - profile.birthYear
 
           return (
             <section key={profile.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
@@ -152,25 +145,16 @@ export default async function FamilyDashboard() {
                 ) : null}
               </div>
 
-              <div className="px-6 py-5 space-y-6">
-
-                {/* New this week */}
-                <Suspense fallback={null}>
-                  <NewForChild
-                    birthYear={profile.birthYear}
-                    platforms={(profile.platforms as string[]) ?? []}
-                  />
-                </Suspense>
-
+              <div className="px-6 py-5">
                 {/* From your library */}
-                {childGames.length > 0 && (
+                {childGames.length > 0 ? (
                   <div>
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">From your library</h3>
-                      <a href={`/${locale}/library`} className="text-xs text-indigo-600 hover:underline">{childGames.length} games →</a>
+                      <a href={`/${locale}/library?child=${profile.id}`} className="text-xs text-indigo-600 hover:underline">{childGames.length} games →</a>
                     </div>
                     <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-                      {childGames.slice(0, 10).map(g => (
+                      {childGames.slice(0, 12).map(g => (
                         <a key={g.slug} href={`/${locale}/game/${g.slug}`} className="relative shrink-0 w-20 h-20 rounded-xl overflow-hidden bg-slate-100 hover:ring-2 hover:ring-indigo-400 transition-all">
                           {g.backgroundImage
                             ? <img src={g.backgroundImage} alt={g.title} className="w-full h-full object-cover" />
@@ -185,29 +169,12 @@ export default async function FamilyDashboard() {
                       ))}
                     </div>
                   </div>
+                ) : (
+                  <p className="text-sm text-slate-400 dark:text-slate-500">
+                    No games in your library match {profile.name} yet.{' '}
+                    <a href={`/${locale}/browse?child=${profile.id}`} className="text-indigo-600 dark:text-indigo-400 hover:underline">Browse for {profile.name} →</a>
+                  </p>
                 )}
-
-                {/* Discover */}
-                <div>
-                  <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3">Discover</h3>
-                  <Suspense fallback={
-                    <div className="flex gap-3">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <div key={i} className="shrink-0 w-36 h-52 rounded-xl bg-slate-100 animate-pulse" />
-                      ))}
-                    </div>
-                  }>
-                    <TailoredFeed
-                      profileId={profile.id}
-                      name={profile.name}
-                      birthYear={profile.birthYear}
-                      platforms={(profile.platforms as string[]) ?? []}
-                      focusSkills={(profile.focusSkills as string[]) ?? []}
-                      layout="row"
-                    />
-                  </Suspense>
-                </div>
-
               </div>
             </section>
           )
@@ -218,7 +185,7 @@ export default async function FamilyDashboard() {
             <p className="text-4xl mb-3">👨‍👩‍👧</p>
             <p className="font-medium text-slate-600 dark:text-slate-400 text-lg">Add a child profile to get started</p>
             <p className="text-sm mt-2 max-w-sm mx-auto text-slate-400 dark:text-slate-500">
-              We&apos;ll show personalised picks and score your existing library for each child in your family.
+              We&apos;ll score your existing library for each child in your family.
             </p>
           </div>
         )}
