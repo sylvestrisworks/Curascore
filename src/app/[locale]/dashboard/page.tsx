@@ -87,6 +87,9 @@ export default async function FamilyDashboard() {
                 ★ {wlCount} wishlisted
               </a>
             )}
+            <a href={`/${locale}/notifications`} className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-600 dark:text-slate-300 hover:border-indigo-300 hover:text-indigo-700 transition-colors text-xs font-medium">
+              🔔 Notifications
+            </a>
           </div>
         </div>
 
