@@ -193,6 +193,18 @@ export async function GET(req: NextRequest) {
   if (req.headers.get('authorization') !== `Bearer ${cronSecret}`)
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
+  try {
+    return await handler(req)
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
+    const stack   = err instanceof Error ? err.stack : undefined
+    console.error('[fetch-roblox] Unhandled error:', message, stack)
+    return NextResponse.json({ error: message, stack }, { status: 500 })
+  }
+}
+
+async function handler(req: NextRequest): Promise<NextResponse> {
+
   // Optional helper: ?add=PLACE_ID to resolve a place ID to universe ID
   const addPlaceId = req.nextUrl.searchParams.get('add')
   if (addPlaceId) {
