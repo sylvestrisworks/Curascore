@@ -2,6 +2,9 @@
 .env.*
 !.env.example
 
+# Claude Code local config (may contain secrets)
+.claude/settings.local.json
+
 # Build output
 .next/
 out/
