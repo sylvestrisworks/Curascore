@@ -19,7 +19,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { platformExperiences, experienceScores, games } from '@/lib/db/schema'
-import { eq, inArray, sql } from 'drizzle-orm'
+import { eq, inArray, sql, lt } from 'drizzle-orm'
 
 const STALE_SCORE_DAYS    = 90
 const DISCOVERY_SAMPLE    = 25   // how many existing games to crawl per run
@@ -357,7 +357,7 @@ async function handler(req: NextRequest): Promise<NextResponse> {
   const staleRows = await db
     .select({ id: experienceScores.experienceId })
     .from(experienceScores)
-    .where(sql`${experienceScores.calculatedAt} < ${staleCutoff}`)
+    .where(lt(experienceScores.calculatedAt, staleCutoff))
 
   let ageMarked = 0
   if (staleRows.length > 0) {
