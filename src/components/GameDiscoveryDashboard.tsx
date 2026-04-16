@@ -49,7 +49,7 @@ type T = ReturnType<typeof useTranslations<'discover'>>
 function LumiScoreScale({ t }: { t: T }) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm p-5">
-      <p className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3">{t('whatMeansLumiScore')}</p>
+      <p className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3">{t('whatMeansCurascore')}</p>
       <div className="flex h-3 rounded-full overflow-hidden gap-0.5 mb-4">
         <div className="bg-red-500 flex-[40]" />
         <div className="bg-amber-400 flex-[25]" />
@@ -75,7 +75,7 @@ function StatStrip({ stats, t }: { stats: CatalogStats; t: T }) {
   const items = [
     { value: `${stats.totalScored}`,        label: t('statGamesReviewed'), color: 'text-indigo-600 dark:text-indigo-400' },
     { value: `${stats.lootBoxFreePct}%`,    label: t('statNoLootBoxes'),   color: 'text-emerald-600 dark:text-emerald-400' },
-    { value: `${stats.avgLumiScoreE}`,      label: t('statAvgScoreE'),     color: 'text-amber-600 dark:text-amber-400' },
+    { value: `${stats.avgCurascoreE}`,      label: t('statAvgScoreE'),     color: 'text-amber-600 dark:text-amber-400' },
     { value: `${stats.greenCount}`,         label: t('statGamesGreat'),    color: 'text-emerald-600 dark:text-emerald-400' },
   ]
   return (
