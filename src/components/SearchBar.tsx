@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from '@/navigation'
 import { useTranslations, useLocale } from 'next-intl'
 import type { GameSummary } from '@/types/game'
+
+type SearchResult = GameSummary & { resultType?: 'game' | 'experience' }
 import { esrbToAge, ageBadgeColor } from '@/lib/ui'
 
 function esrbBadge(rating: string | null) {
@@ -34,7 +36,7 @@ export default function SearchBar({ placeholder }: { placeholder?: string }) {
   const locale = useLocale()
   const defaultPlaceholder = placeholder ?? t('placeholder')
   const [query, setQuery]         = useState('')
-  const [results, setResults]     = useState<GameSummary[]>([])
+  const [results, setResults]     = useState<SearchResult[]>([])
   const [loading, setLoading]     = useState(false)
   const [open, setOpen]           = useState(false)
   const [searched, setSearched]   = useState(false)   // true after first completed fetch
@@ -63,7 +65,7 @@ export default function SearchBar({ placeholder }: { placeholder?: string }) {
       setLoading(true)
       try {
         const res = await fetch(`/api/search?q=${encodeURIComponent(query.trim())}`)
-        const data: GameSummary[] = await res.json()
+        const data: SearchResult[] = await res.json()
         setResults(data)
         setOpen(true)
         setSearched(true)
@@ -93,11 +95,15 @@ export default function SearchBar({ placeholder }: { placeholder?: string }) {
     if (focusedIdx >= 0) itemRefs.current[focusedIdx]?.scrollIntoView({ block: 'nearest' })
   }, [focusedIdx])
 
-  const navigate = useCallback((slug: string) => {
+  const navigate = useCallback((result: SearchResult) => {
     setOpen(false)
     setQuery('')
     setSearched(false)
-    router.push(`/game/${slug}`)
+    if (result.resultType === 'experience') {
+      router.push(`/game/roblox/${result.slug}`)
+    } else {
+      router.push(`/game/${result.slug}`)
+    }
   }, [router])
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -116,9 +122,9 @@ export default function SearchBar({ placeholder }: { placeholder?: string }) {
     } else if (e.key === 'Enter') {
       e.preventDefault()
       if (focusedIdx >= 0 && results[focusedIdx]) {
-        navigate(results[focusedIdx].slug)
+        navigate(results[focusedIdx])
       } else if (results.length > 0) {
-        navigate(results[0].slug)
+        navigate(results[0])
       }
     } else if (e.key === 'Escape') {
       setOpen(false)
@@ -129,9 +135,9 @@ export default function SearchBar({ placeholder }: { placeholder?: string }) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (focusedIdx >= 0 && results[focusedIdx]) {
-      navigate(results[focusedIdx].slug)
+      navigate(results[focusedIdx])
     } else if (results.length > 0) {
-      navigate(results[0].slug)
+      navigate(results[0])
     }
   }
 
@@ -190,7 +196,7 @@ export default function SearchBar({ placeholder }: { placeholder?: string }) {
                   aria-selected={isFocused}
                   className={`w-full flex items-center gap-3 px-4 py-3 text-left border-b border-slate-100 dark:border-slate-700 last:border-0 transition-colors
                     ${isFocused ? 'bg-indigo-50 dark:bg-indigo-900/30' : 'hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}
-                  onClick={() => navigate(game.slug)}
+                  onClick={() => navigate(game)}
                   onMouseEnter={() => setFocusedIdx(idx)}
                 >
                   {/* Thumbnail */}

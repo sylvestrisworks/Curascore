@@ -253,9 +253,9 @@ export default function ImportModal({ onClose }: { onClose: () => void }) {
             <div className="text-center py-8">
               <div className="text-4xl mb-3">✓</div>
               <p className="font-semibold text-slate-700">
-                {addedCount > 0 ? t('success', { count: addedCount }) : 'Nothing new to add.'}
+                {addedCount > 0 ? t('success', { count: addedCount }) : t('nothingNew')}
               </p>
-              <p className="text-sm text-slate-500 mt-1">{tCommon('loading')}</p>
+              <p className="text-sm text-slate-500 mt-1">{t('successSub')}</p>
             </div>
           )}
         </div>

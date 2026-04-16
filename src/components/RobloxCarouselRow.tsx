@@ -2,6 +2,7 @@
 
 import { useRef } from 'react'
 import Link from 'next/link'
+import { useLocale } from 'next-intl'
 import { curascoreBg } from '@/lib/ui'
 import type { ExperienceSummary } from '@/components/ExperienceCard'
 
@@ -16,8 +17,9 @@ function formatCount(n: number | null): string {
 // ─── Tile — matches CarouselTile dimensions exactly ───────────────────────────
 
 function RobloxTile({ exp }: { exp: ExperienceSummary }) {
+  const locale = useLocale()
   return (
-    <Link href={`/game/roblox/${exp.slug}`} className="group/tile shrink-0 w-36 sm:w-44 snap-start">
+    <Link href={`/${locale}/game/roblox/${exp.slug}`} className="group/tile shrink-0 w-36 sm:w-44 snap-start">
       {/* Image */}
       <div className="relative w-full h-24 sm:h-28 rounded-xl overflow-hidden bg-red-100 dark:bg-red-900/40">
         {exp.thumbnailUrl ? (
@@ -100,6 +102,8 @@ function Arrow({ dir, onClick }: { dir: 'left' | 'right'; onClick: () => void })
 
 export default function RobloxCarouselRow({ experiences }: { experiences: ExperienceSummary[] }) {
   const scrollRef = useRef<HTMLDivElement>(null)
+  const locale = useLocale()
+
 
   function scroll(dir: 'left' | 'right') {
     scrollRef.current?.scrollBy({ left: dir === 'right' ? 300 : -300, behavior: 'smooth' })
@@ -117,7 +121,7 @@ export default function RobloxCarouselRow({ experiences }: { experiences: Experi
           <span>Popular on Roblox</span>
         </h2>
         <Link
-          href="/game/roblox"
+          href={`/${locale}/game/roblox`}
           className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors shrink-0"
         >
           See all

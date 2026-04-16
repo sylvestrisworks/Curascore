@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { curascoreBg } from '@/lib/ui'
 
 export type ExperienceSummary = {
@@ -28,12 +28,13 @@ function formatCount(n: number | null): string {
 
 export default function ExperienceCard({ exp }: { exp: ExperienceSummary }) {
   const t = useTranslations('roblox')
+  const locale = useLocale()
   const hasHighStrangerRisk = (exp.strangerRisk ?? 0) >= 2
   const hasHighMonetization = (exp.monetizationScore ?? 0) >= 2
 
   return (
     <Link
-      href={`/game/roblox/${exp.slug}`}
+      href={`/${locale}/game/roblox/${exp.slug}`}
       className="group flex flex-col bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-500 transition-all"
     >
       {/* Thumbnail */}

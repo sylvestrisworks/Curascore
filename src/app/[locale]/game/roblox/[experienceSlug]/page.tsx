@@ -6,7 +6,7 @@ import { db } from '@/lib/db'
 import { platformExperiences, experienceScores } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 
 type Props = { params: Promise<{ experienceSlug: string }> }
 
@@ -133,7 +133,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function ExperiencePage({ params }: Props) {
-  const [{ experienceSlug }, t] = await Promise.all([params, getTranslations('roblox')])
+  const [{ experienceSlug }, t, locale] = await Promise.all([params, getTranslations('roblox'), getLocale()])
   const [exp] = await db
     .select()
     .from(platformExperiences)
@@ -156,7 +156,7 @@ export default async function ExperiencePage({ params }: Props) {
 
         {/* Breadcrumb */}
         <nav className="text-xs text-slate-400 dark:text-slate-500 flex items-center gap-1.5">
-          <Link href="/game/roblox" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Roblox</Link>
+          <Link href={`/${locale}/game/roblox`} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Roblox</Link>
           <span>/</span>
           <span className="text-slate-600 dark:text-slate-300 truncate">{exp.title}</span>
         </nav>
@@ -285,7 +285,7 @@ export default async function ExperiencePage({ params }: Props) {
         )}
 
         <Link
-          href="/game/roblox"
+          href={`/${locale}/game/roblox`}
           className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
         >
           {t('backToRoblox')}

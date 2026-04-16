@@ -14,7 +14,12 @@
     "brand": "Curascore",
     "brandSub": "by Good Game Parent",
     "tagline": "Game ratings grounded in child development",
-    "copyright": "© {year} Good Game Parent. Curascore scores reflect our independent assessment methodology."
+    "copyright": "© {year} Good Game Parent. Curascore scores reflect our independent assessment methodology.",
+    "navDiscover": "Discover",
+    "navBrowse": "Browse",
+    "navCompare": "Compare",
+    "navPrivacy": "Privacy",
+    "navTerms": "Terms"
   },
   "home": {
     "badge": "Grounded in child development",
@@ -511,7 +516,17 @@
     "skillMotorSkills": "Motor Skills",
     "skillCreativity": "Creativity",
     "skillStrategicThinking": "Strategic Thinking",
-    "skillPhysical": "Physical"
+    "skillPhysical": "Physical",
+    "skillTeamwork": "Teamwork",
+    "skillProblemSolving": "Problem Solving",
+    "importButton": "Import library",
+    "sortBy": "Sort:",
+    "sortRecent": "Recently added",
+    "sortCurascore": "Curascore",
+    "sortTime": "Time limit",
+    "scoredOf": "{scored} of {total} scored",
+    "noMatchFilter": "No games in your library match this child's profile.",
+    "viewAll": "All"
   },
   "account": {
     "title": "Account",
@@ -644,6 +659,8 @@
     "privacyNote": "Your Steam library must be set to public.",
     "close": "Close",
     "howToFind": "How to find your Steam ID",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "successSub": "Your library has been updated.",
+    "nothingNew": "Nothing new to add."
   }
 }

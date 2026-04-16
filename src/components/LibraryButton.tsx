@@ -19,19 +19,25 @@ export default function LibraryButton({ gameId, initialOwned, initialWishlisted 
     const isActive = listType === 'owned' ? owned : wishlisted
     setLoading(listType)
 
-    if (isActive) {
-      await fetch(`/api/user-games?gameId=${gameId}&listType=${listType}`, { method: 'DELETE' })
-      listType === 'owned' ? setOwned(false) : setWishlisted(false)
-    } else {
-      await fetch('/api/user-games', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gameId, listType }),
-      })
-      listType === 'owned' ? setOwned(true) : setWishlisted(true)
+    try {
+      if (isActive) {
+        const res = await fetch(`/api/user-games?gameId=${gameId}&listType=${listType}`, { method: 'DELETE' })
+        if (!res.ok) throw new Error('DELETE failed')
+        listType === 'owned' ? setOwned(false) : setWishlisted(false)
+      } else {
+        const res = await fetch('/api/user-games', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ gameId, listType }),
+        })
+        if (!res.ok) throw new Error('POST failed')
+        listType === 'owned' ? setOwned(true) : setWishlisted(true)
+      }
+    } catch {
+      // State unchanged — UI already shows the pre-toggle value
+    } finally {
+      setLoading(null)
     }
-
-    setLoading(null)
   }
 
   return (

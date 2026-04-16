@@ -14,7 +14,12 @@
     "brand": "Curascore",
     "brandSub": "av Good Game Parent",
     "tagline": "Spelbedömningar baserade på barns utveckling",
-    "copyright": "© {year} Good Game Parent. Curascores poäng grundar sig på vår oberoende bedömningsmetodik."
+    "copyright": "© {year} Good Game Parent. Curascores poäng grundar sig på vår oberoende bedömningsmetodik.",
+    "navDiscover": "Upptäck",
+    "navBrowse": "Utforska",
+    "navCompare": "Jämför",
+    "navPrivacy": "Integritet",
+    "navTerms": "Villkor"
   },
   "home": {
     "badge": "Förankrat i barns utveckling",
@@ -511,7 +516,17 @@
     "skillMotorSkills": "Motoriska färdigheter",
     "skillCreativity": "Kreativitet",
     "skillStrategicThinking": "Strategiskt tänkande",
-    "skillPhysical": "Fysisk"
+    "skillPhysical": "Fysisk",
+    "skillTeamwork": "Lagarbete",
+    "skillProblemSolving": "Problemlösning",
+    "importButton": "Importera bibliotek",
+    "sortBy": "Sortera:",
+    "sortRecent": "Nyligen tillagda",
+    "sortCurascore": "Curascore",
+    "sortTime": "Tidsgräns",
+    "scoredOf": "{scored} av {total} bedömda",
+    "noMatchFilter": "Inga spel i ditt bibliotek matchar det här barnets profil.",
+    "viewAll": "Alla"
   },
   "account": {
     "title": "Konto",
@@ -644,6 +659,8 @@
     "privacyNote": "Ditt Steam-bibliotek måste vara inställt på offentligt.",
     "close": "Stäng",
     "howToFind": "Hur du hittar ditt Steam-ID",
-    "cancel": "Avbryt"
+    "cancel": "Avbryt",
+    "successSub": "Ditt bibliotek har uppdaterats.",
+    "nothingNew": "Inget nytt att lägga till."
   }
 }

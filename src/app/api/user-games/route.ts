@@ -81,9 +81,10 @@ export async function DELETE(req: NextRequest) {
 
   const { searchParams } = new URL(req.url)
   const gameId   = parseInt(searchParams.get('gameId') ?? '')
-  const listType = searchParams.get('listType') ?? 'owned'
+  const listType = searchParams.get('listType') ?? ''
 
   if (isNaN(gameId)) return NextResponse.json({ error: 'Missing gameId' }, { status: 400 })
+  if (listType !== 'owned' && listType !== 'wishlist') return NextResponse.json({ error: 'Invalid listType' }, { status: 400 })
 
   await db
     .delete(userGames)

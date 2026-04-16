@@ -39,19 +39,19 @@ export default async function LocaleLayout({
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                 <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
                   <a href={`/${locale}/discover`} className="hover:text-indigo-700 dark:hover:text-indigo-400 hover:underline transition-colors">
-                    Discover
+                    {t('navDiscover')}
                   </a>
                   <a href={`/${locale}/browse`} className="hover:text-indigo-700 dark:hover:text-indigo-400 hover:underline transition-colors">
-                    Browse
+                    {t('navBrowse')}
                   </a>
                   <a href={`/${locale}/compare`} className="hover:text-indigo-700 dark:hover:text-indigo-400 hover:underline transition-colors">
-                    Compare
+                    {t('navCompare')}
                   </a>
                   <a href={`/${locale}/privacy`} className="hover:text-indigo-700 dark:hover:text-indigo-400 hover:underline transition-colors">
-                    Privacy
+                    {t('navPrivacy')}
                   </a>
                   <a href={`/${locale}/terms`} className="hover:text-indigo-700 dark:hover:text-indigo-400 hover:underline transition-colors">
-                    Terms
+                    {t('navTerms')}
                   </a>
                 </nav>
                 <LanguageSwitcher />

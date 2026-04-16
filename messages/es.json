@@ -8,13 +8,18 @@
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú",
     "search": "Buscar",
-    "library": "Library"
+    "library": "Biblioteca"
   },
   "footer": {
     "brand": "Curascore",
     "brandSub": "by Good Game Parent",
     "tagline": "Calificaciones de juegos basadas en el desarrollo infantil",
-    "copyright": "© {year} Good Game Parent. Las calificaciones de Curascore reflejan nuestra metodología de evaluación independiente."
+    "copyright": "© {year} Good Game Parent. Las calificaciones de Curascore reflejan nuestra metodología de evaluación independiente.",
+    "navDiscover": "Descubrir",
+    "navBrowse": "Explorar",
+    "navCompare": "Comparar",
+    "navPrivacy": "Privacidad",
+    "navTerms": "Términos"
   },
   "home": {
     "badge": "Basado en el desarrollo infantil",
@@ -498,7 +503,17 @@
     "skillMotorSkills": "Habilidades motoras",
     "skillCreativity": "Creatividad",
     "skillStrategicThinking": "Pensamiento estratégico",
-    "skillPhysical": "Físico"
+    "skillPhysical": "Físico",
+    "skillTeamwork": "Trabajo en equipo",
+    "skillProblemSolving": "Resolución de problemas",
+    "importButton": "Importar biblioteca",
+    "sortBy": "Ordenar:",
+    "sortRecent": "Añadidos recientemente",
+    "sortCurascore": "Curascore",
+    "sortTime": "Límite de tiempo",
+    "scoredOf": "{scored} de {total} evaluados",
+    "noMatchFilter": "Ningún juego de tu biblioteca coincide con el perfil de este niño.",
+    "viewAll": "Todos"
   },
   "account": {
     "title": "Cuenta",
@@ -631,6 +646,8 @@
     "privacyNote": "Tu biblioteca de Steam debe estar configurada como pública.",
     "close": "Cerrar",
     "howToFind": "Cómo encontrar tu ID de Steam",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "successSub": "Tu biblioteca ha sido actualizada.",
+    "nothingNew": "No hay nada nuevo que agregar."
   }
 }

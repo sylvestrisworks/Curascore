@@ -8,13 +8,18 @@
     "openMenu": "Ouvrir le menu",
     "closeMenu": "Fermer le menu",
     "search": "Rechercher",
-    "library": "Library"
+    "library": "Bibliothèque"
   },
   "footer": {
     "brand": "Curascore",
     "brandSub": "par Good Game Parent",
     "tagline": "Des évaluations de jeux basées sur le développement de l'enfant",
-    "copyright": "© {year} Good Game Parent. Les scores Curascore reflètent notre méthodologie d'évaluation indépendante."
+    "copyright": "© {year} Good Game Parent. Les scores Curascore reflètent notre méthodologie d'évaluation indépendante.",
+    "navDiscover": "Découvrir",
+    "navBrowse": "Explorer",
+    "navCompare": "Comparer",
+    "navPrivacy": "Confidentialité",
+    "navTerms": "Conditions"
   },
   "home": {
     "badge": "Basé sur le développement de l'enfant",
@@ -498,7 +503,17 @@
     "skillMotorSkills": "Compétences motrices",
     "skillCreativity": "Créativité",
     "skillStrategicThinking": "Pensée stratégique",
-    "skillPhysical": "Physique"
+    "skillPhysical": "Physique",
+    "skillTeamwork": "Travail d'équipe",
+    "skillProblemSolving": "Résolution de problèmes",
+    "importButton": "Importer la bibliothèque",
+    "sortBy": "Trier :",
+    "sortRecent": "Ajoutés récemment",
+    "sortCurascore": "Curascore",
+    "sortTime": "Limite de temps",
+    "scoredOf": "{scored} sur {total} évalués",
+    "noMatchFilter": "Aucun jeu de votre bibliothèque ne correspond au profil de cet enfant.",
+    "viewAll": "Tous"
   },
   "account": {
     "title": "Compte",
@@ -631,6 +646,8 @@
     "privacyNote": "Votre bibliothèque Steam doit être définie sur publique.",
     "close": "Fermer",
     "howToFind": "Comment trouver votre ID Steam",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "successSub": "Votre bibliothèque a été mise à jour.",
+    "nothingNew": "Rien de nouveau à ajouter."
   }
 }

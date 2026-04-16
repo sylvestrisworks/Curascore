@@ -1,3 +1,21 @@
-git rm --cached .env
-.aider*
 .env
+.env.*
+!.env.example
+
+# Build output
+.next/
+out/
+
+# Dependencies
+node_modules/
+
+# Misc
+.aider*
+tsconfig.tsbuildinfo
+next-env.d.ts
+skills-lock.json
+*.tsbuildinfo
+
+# OS
+.DS_Store
+Thumbs.db
