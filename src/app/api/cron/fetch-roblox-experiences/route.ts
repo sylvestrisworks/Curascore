@@ -386,5 +386,10 @@ async function handler(req: NextRequest): Promise<NextResponse> {
     newGames:   inserted,
     errors:     errors.length,
     ageMarked,
+    _debug: {
+      gameMapSize:       gameMap.size,
+      newUniverseIds:    newUniverseIdsDeduped.length,
+      allUniverseIds:    allUniverseIds.length,
+    },
   })
 }
