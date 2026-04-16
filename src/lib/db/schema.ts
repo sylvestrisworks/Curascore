@@ -571,3 +571,21 @@ export const ingestCursor = pgTable('ingest_cursor', {
   lastRunAt:      timestamp('last_run_at'),
   updatedAt:      timestamp('updated_at').defaultNow(),
 })
+
+// ============================================
+// CONTENT TRANSLATIONS (auto-generated per locale)
+// ============================================
+
+export const gameTranslations = pgTable('game_translations', {
+  id:                 serial('id').primaryKey(),
+  gameId:             integer('game_id').references(() => games.id, { onDelete: 'cascade' }).notNull(),
+  locale:             varchar('locale', { length: 10 }).notNull(),  // sv, de, fr, es
+  executiveSummary:   text('executive_summary'),
+  benefitsNarrative:  text('benefits_narrative'),
+  risksNarrative:     text('risks_narrative'),
+  parentTip:          text('parent_tip'),
+  parentTipBenefits:  text('parent_tip_benefits'),
+  createdAt:          timestamp('created_at').defaultNow(),
+}, (t) => ({
+  uniqueGameLocale: uniqueIndex('game_translations_game_locale_idx').on(t.gameId, t.locale),
+}))

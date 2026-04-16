@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { eq, and, or, ne, isNotNull, desc, sql } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { games, gameScores, reviews, darkPatterns, complianceStatus, userGames, childProfiles } from '@/lib/db/schema'
+import { games, gameScores, reviews, darkPatterns, complianceStatus, userGames, childProfiles, gameTranslations } from '@/lib/db/schema'
 import GameCard from '@/components/GameCard'
 import GameCompactCard from '@/components/GameCompactCard'
 import type { GameSummary } from '@/types/game'
@@ -14,7 +14,7 @@ import ShareButton from '@/components/ShareButton'
 import { auth } from '@/auth'
 import { calcAge } from '@/lib/age'
 import { Suspense } from 'react'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import type { ComplianceBadge, DarkPattern, GameCardProps, SerializedGame, SerializedScores, SerializedReview } from '@/types/game'
 
 type Props = { params: Promise<{ slug: string }> }
@@ -232,12 +232,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function GamePage({ params }: Props) {
   const { slug } = await params
-  const [data, session, t] = await Promise.all([
+  const [data, session, t, locale] = await Promise.all([
     fetchGameData(slug),
     auth(),
     getTranslations('game'),
+    getLocale(),
   ])
   if (!data) notFound()
+
+  // Overlay translated narrative content when locale is not English
+  if (locale !== 'en' && data.game.id) {
+    const [tx] = await db
+      .select()
+      .from(gameTranslations)
+      .where(and(eq(gameTranslations.gameId, data.game.id), eq(gameTranslations.locale, locale)))
+      .limit(1)
+    if (tx) {
+      if (tx.executiveSummary  && data.scores) data.scores = { ...data.scores, executiveSummary: tx.executiveSummary }
+      if (tx.benefitsNarrative && data.review)  data.review = { ...data.review, benefitsNarrative: tx.benefitsNarrative }
+      if (tx.risksNarrative    && data.review)  data.review = { ...data.review, risksNarrative: tx.risksNarrative }
+      if (tx.parentTip         && data.review)  data.review = { ...data.review, parentTip: tx.parentTip }
+      if (tx.parentTipBenefits && data.review)  data.review = { ...data.review, parentTipBenefits: tx.parentTipBenefits }
+    }
+  }
 
   // Similar games — same genre, scored, exclude self
   const genreList = data.game.genres.slice(0, 3)
