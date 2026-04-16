@@ -104,10 +104,13 @@ type RobloxGame = {
   isPublic: boolean
 }
 
+let _lastBatchDebug: { status: number; bodySnippet: string } | null = null
+
 async function fetchUniversesBatch(universeIds: string[]): Promise<RobloxGame[]> {
   if (universeIds.length === 0) return []
+  // Use smaller chunks — large batches are more likely to be silently dropped
   const chunks: string[][] = []
-  for (let i = 0; i < universeIds.length; i += 100) chunks.push(universeIds.slice(i, i + 100))
+  for (let i = 0; i < universeIds.length; i += 10) chunks.push(universeIds.slice(i, i + 10))
 
   const results: RobloxGame[] = []
   for (const chunk of chunks) {
@@ -121,12 +124,14 @@ async function fetchUniversesBatch(universeIds: string[]): Promise<RobloxGame[]>
           'Referer': 'https://www.roblox.com/',
         },
       })
+      const rawBody = await res.text().catch(() => '')
+      _lastBatchDebug = { status: res.status, bodySnippet: rawBody.slice(0, 300) }
       if (!res.ok) {
-        const body = await res.text().catch(() => '')
-        console.error(`[fetch-roblox] games batch HTTP ${res.status}: ${body.slice(0, 200)}`)
+        console.error(`[fetch-roblox] games batch HTTP ${res.status}: ${rawBody.slice(0, 200)}`)
         continue
       }
-      const data = await res.json() as { data?: RobloxGame[] }
+      let data: { data?: RobloxGame[] }
+      try { data = JSON.parse(rawBody) } catch { console.error(`[fetch-roblox] JSON parse error: ${rawBody.slice(0, 200)}`); continue }
       console.log(`[fetch-roblox] games batch: ${data.data?.length ?? 0} games for ${chunk.length} IDs`)
       results.push(...(data.data ?? []))
     } catch (e) {
@@ -406,6 +411,8 @@ async function handler(req: NextRequest): Promise<NextResponse> {
       gameMapSize:       gameMap.size,
       newUniverseIds:    newUniverseIdsDeduped.length,
       allUniverseIds:    allUniverseIds.length,
+      lastBatchStatus:   _lastBatchDebug?.status,
+      lastBatchBody:     _lastBatchDebug?.bodySnippet,
     },
   })
 }
