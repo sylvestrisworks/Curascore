@@ -77,7 +77,7 @@ function Arrow({ dir, onClick, label }: { dir: 'left' | 'right'; onClick: () => 
       aria-label={label}
       className={`absolute top-0 bottom-3 z-10 hidden sm:flex items-center
         ${dir === 'left' ? 'left-0 justify-start pl-1' : 'right-0 justify-end pr-1'}
-        opacity-0 group-hover:opacity-100 transition-opacity`}
+        transition-opacity`}
     >
       <span className="w-8 h-8 rounded-full bg-white/95 dark:bg-slate-800/95 shadow-md border border-slate-200 dark:border-slate-600 flex items-center justify-center text-lg text-slate-600 dark:text-slate-300 hover:text-indigo-700 dark:hover:text-indigo-400 hover:border-indigo-300 dark:hover:border-indigo-500 transition-colors select-none leading-none">
         {dir === 'left' ? '‹' : '›'}
@@ -123,6 +123,9 @@ export default function CarouselRow({ emoji, title, browseHref, games, index }: 
       <div className="relative group">
         <Arrow dir="left"  onClick={() => scroll('left')}  label={t('scrollLeft')}  />
         <Arrow dir="right" onClick={() => scroll('right')} label={t('scrollRight')} />
+
+        {/* Right fade — signals more content on mobile */}
+        <div className="pointer-events-none absolute top-0 right-0 bottom-3 w-12 bg-gradient-to-l from-slate-50 dark:from-slate-900 to-transparent z-10 sm:hidden" />
 
         <div
           ref={scrollRef}

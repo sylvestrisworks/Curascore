@@ -2,10 +2,12 @@ export const dynamic = 'force-dynamic'
 
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { eq, and } from 'drizzle-orm'
+import { eq, and, ne, isNotNull, desc, sql } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { games, gameScores, reviews, darkPatterns, complianceStatus, userGames, childProfiles } from '@/lib/db/schema'
 import GameCard from '@/components/GameCard'
+import GameCompactCard from '@/components/GameCompactCard'
+import type { GameSummary } from '@/types/game'
 import LibraryButton from '@/components/LibraryButton'
 import ParentTips from '@/components/ParentTips'
 import ShareButton from '@/components/ShareButton'
@@ -237,6 +239,54 @@ export default async function GamePage({ params }: Props) {
   ])
   if (!data) notFound()
 
+  // Similar games — same genre, scored, exclude self
+  const similarGames: GameSummary[] = data.game.genres.length > 0
+    ? (await db
+        .select({
+          slug:                     games.slug,
+          title:                    games.title,
+          developer:                games.developer,
+          backgroundImage:          games.backgroundImage,
+          genres:                   games.genres,
+          platforms:                games.platforms,
+          esrbRating:               games.esrbRating,
+          hasLootBoxes:             games.hasLootBoxes,
+          hasMicrotransactions:     games.hasMicrotransactions,
+          curascore:                gameScores.curascore,
+          timeRecommendationMinutes: gameScores.timeRecommendationMinutes,
+          timeRecommendationColor:  gameScores.timeRecommendationColor,
+        })
+        .from(games)
+        .leftJoin(gameScores, eq(gameScores.gameId, games.id))
+        .where(and(
+          ne(games.slug, slug),
+          isNotNull(gameScores.curascore),
+          sql`EXISTS (
+            SELECT 1 FROM jsonb_array_elements_text(${games.genres}) ge
+            WHERE ge = ANY(ARRAY[${sql.join(
+              data.game.genres.slice(0, 3).map(g => sql`${g}`),
+              sql`, `
+            )}])
+          )`
+        ))
+        .orderBy(desc(gameScores.curascore))
+        .limit(6)
+      ).map(r => ({
+        slug:                     r.slug,
+        title:                    r.title,
+        developer:                r.developer,
+        backgroundImage:          r.backgroundImage,
+        genres:                   Array.isArray(r.genres) ? (r.genres as string[]) : [],
+        platforms:                Array.isArray(r.platforms) ? (r.platforms as string[]) : [],
+        esrbRating:               r.esrbRating,
+        hasLootBoxes:             r.hasLootBoxes ?? false,
+        hasMicrotransactions:     r.hasMicrotransactions ?? false,
+        curascore:                r.curascore ?? null,
+        timeRecommendationMinutes: r.timeRecommendationMinutes ?? null,
+        timeRecommendationColor:  (r.timeRecommendationColor as GameSummary['timeRecommendationColor']) ?? null,
+      }))
+    : []
+
   const { game, scores } = data
 
   // Fetch user's library/wishlist state for this game (if logged in)
@@ -366,6 +416,20 @@ export default async function GamePage({ params }: Props) {
               </div>
             )
           })()}
+
+          {/* Similar games */}
+          {similarGames.length > 0 && (
+            <div className="mt-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-5 py-4">
+              <h2 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">
+                {t('similarGames')}
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {similarGames.map(g => (
+                  <GameCompactCard key={g.slug} game={g} />
+                ))}
+              </div>
+            </div>
+          )}
         </main>
       </div>
     </>

@@ -431,7 +431,8 @@
     "thankYou": "¡Gracias por el consejo! Aparecerá en breve.",
     "placeholderWarning": "¿A qué deben prestar atención los padres?",
     "placeholderPraise": "¿Qué tiene de bueno este juego para los niños?",
-    "placeholderTip": "Comparte un consejo útil con otros padres…"
+    "placeholderTip": "Comparte un consejo útil con otros padres…",
+    "editorialFallback": "Intenta jugar la primera sesión junto a tu hijo — es una excelente manera de entender el tono del juego y establecer expectativas sobre el tiempo y los gastos antes de que juegue de forma independiente."
   },
   "gameCompact": {
     "minDay": "min/día",
@@ -662,7 +663,8 @@
   },
   "game": {
     "aboutThisGame": "Sobre este juego",
-    "recommendedAge": "Edad recomendada {age}+"
+    "recommendedAge": "Edad recomendada {age}+",
+    "similarGames": "Juegos similares"
   },
   "importModal": {
     "title": "Importar biblioteca de Steam",

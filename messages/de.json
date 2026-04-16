@@ -431,7 +431,8 @@
     "thankYou": "Danke für den Tipp! Er erscheint in Kürze.",
     "placeholderWarning": "Worauf sollten Eltern achten?",
     "placeholderPraise": "Was ist an diesem Spiel gut für Kinder?",
-    "placeholderTip": "Teile einen hilfreichen Tipp mit anderen Eltern…"
+    "placeholderTip": "Teile einen hilfreichen Tipp mit anderen Eltern…",
+    "editorialFallback": "Spiele die erste Session gemeinsam mit deinem Kind – so lernst du den Ton des Spiels kennen und kannst Erwartungen zu Zeit und Ausgaben setzen, bevor es alleine spielt."
   },
   "gameCompact": {
     "minDay": "Min./Tag",
@@ -662,7 +663,8 @@
   },
   "game": {
     "aboutThisGame": "Über dieses Spiel",
-    "recommendedAge": "Empfohlenes Alter {age}+"
+    "recommendedAge": "Empfohlenes Alter {age}+",
+    "similarGames": "Ähnliche Spiele"
   },
   "importModal": {
     "title": "Steam-Bibliothek importieren",

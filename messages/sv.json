@@ -444,7 +444,8 @@
     "thankYou": "Tack för tipset! Det visas snart.",
     "placeholderWarning": "Vad bör föräldrar hålla utkik efter?",
     "placeholderPraise": "Vad är bra med det här spelet för barn?",
-    "placeholderTip": "Dela ett användbart tips med andra föräldrar…"
+    "placeholderTip": "Dela ett användbart tips med andra föräldrar…",
+    "editorialFallback": "Försök att spela den första sessionen tillsammans med ditt barn — det är ett bra sätt att förstå spelets ton och sätta förväntningar kring tid och köp innan de spelar på egen hand."
   },
   "gameCompact": {
     "minDay": "min/dag",
@@ -675,7 +676,8 @@
   },
   "game": {
     "aboutThisGame": "Om spelet",
-    "recommendedAge": "Rekommenderad ålder {age}+"
+    "recommendedAge": "Rekommenderad ålder {age}+",
+    "similarGames": "Liknande spel"
   },
   "importModal": {
     "title": "Importera Steam-bibliotek",

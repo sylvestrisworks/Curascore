@@ -83,7 +83,13 @@ export default async function ParentTips({ gameId, uid }: Props) {
           })}
         </ul>
       ) : (
-        <p className="text-sm text-slate-400 dark:text-slate-500">{t('noTips')}</p>
+        <div className="space-y-3">
+          <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800 rounded-xl px-4 py-3">
+            <p className="text-xs font-semibold text-indigo-700 dark:text-indigo-400 mb-1">💡 LumiKin</p>
+            <p className="text-sm text-indigo-900 dark:text-indigo-200 leading-snug">{t('editorialFallback')}</p>
+          </div>
+          <p className="text-xs text-slate-400 dark:text-slate-500">{t('noTips')}</p>
+        </div>
       )}
 
       {uid && (
