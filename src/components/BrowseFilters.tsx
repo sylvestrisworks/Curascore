@@ -142,7 +142,7 @@ export default function BrowseFilters({ active, totalCount, childId, childName }
   ].filter(Boolean).length
 
   const sortOptions = [
-    { value: 'curascore',  label: t('sortCurascore')  },
+    { value: 'curascore',  label: t('sortLumiScore')  },
     { value: 'benefit',    label: t('sortBenefit')     },
     { value: 'safest',     label: t('sortSafest')      },
     { value: 'riskiest',   label: t('sortRiskiest')    },

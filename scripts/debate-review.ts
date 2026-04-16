@@ -137,7 +137,7 @@ function scoresBlock(s: Scores): string {
 }
 
 function advocatePrompt(gameInfo: string, round: number, criticScores?: Scores, criticReasoning?: string): string {
-  const role = `You are the ADVOCATE in a PlaySmart scoring debate. Your job is to argue for the HIGHEST DEFENSIBLE scores.
+  const role = `You are the ADVOCATE in a LumiKin scoring debate. Your job is to argue for the HIGHEST DEFENSIBLE scores.
 - Push benefit scores UP whenever the evidence supports it
 - Push risk scores DOWN when risks are manageable or overstated
 - Base arguments on child development research
@@ -174,7 +174,7 @@ Call submit_scores with your revised scores and a rebuttal (3–5 sentences).`
 }
 
 function criticPrompt(gameInfo: string, round: number, advocateScores?: Scores, advocateReasoning?: string): string {
-  const role = `You are the CRITIC in a PlaySmart scoring debate. Your job is to argue for the LOWEST DEFENSIBLE scores.
+  const role = `You are the CRITIC in a LumiKin scoring debate. Your job is to argue for the LOWEST DEFENSIBLE scores.
 - Push benefit scores DOWN unless the evidence is strong and specific
 - Push risk scores UP whenever a design pattern is present
 - Be rigorous: "could benefit" is not the same as "actively develops"
@@ -455,7 +455,7 @@ async function getCandidates() {
 
 async function main() {
   console.log('╔══════════════════════════════════════════════════╗')
-  console.log('║   PlaySmart — Adversarial Debate Scoring         ║')
+  console.log('║   LumiKin — Adversarial Debate Scoring         ║')
   console.log('╚══════════════════════════════════════════════════╝')
   console.log(`  Advocate: Gemini ${ADVOCATE_MODEL} (argues HIGH)`)
   console.log(`  Critic:   Gemini ${CRITIC_MODEL} (argues LOW)`)

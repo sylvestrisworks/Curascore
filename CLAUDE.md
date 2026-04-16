@@ -1,7 +1,7 @@
-# PlaySmart — Claude Code Instructions
+# LumiKin — Claude Code Instructions
 
 ## Project overview
-PlaySmart is a game rating engine for parents. It rates games on developmental benefits
+LumiKin is a game rating engine for parents. It rates games on developmental benefits
 (problem solving, teamwork, creativity, etc.) and design risks (addictive mechanics,
 monetization pressure, FOMO, etc.), producing a time recommendation per game.
 

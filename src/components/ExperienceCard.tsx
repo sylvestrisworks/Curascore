@@ -54,7 +54,7 @@ export default function ExperienceCard({ exp }: { exp: ExperienceSummary }) {
           </div>
         )}
 
-        {/* Curascore chip — top right */}
+        {/* LumiScore chip — top right */}
         {exp.curascore != null && (
           <div className={`absolute top-1.5 right-1.5 ${curascoreBg(exp.curascore)} text-white text-xs font-black px-1.5 py-0.5 rounded-full`}>
             {exp.curascore}

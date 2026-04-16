@@ -77,7 +77,7 @@ function scoreGroup(fields: string[], max: number, desc: string) {
 
 const REVIEW_TOOL = {
   name: 'submit_game_review',
-  description: 'Submit a completed PlaySmart rubric review for a game.',
+  description: 'Submit a completed LumiKin rubric review for a game.',
   input_schema: {
     type: 'object',
     required: ['b1_cognitive','b2_social','b3_motor','r1_dopamine','r2_monetization','r3_social','r4_content','representation','propaganda','bechdel','practical','narratives'],
@@ -176,7 +176,7 @@ type GameRow = typeof games.$inferSelect
 // ─── Prompt builders ──────────────────────────────────────────────────────────
 
 function buildReviewPrompt(g: GameRow): string {
-  return `You are a child development researcher scoring a video game using the PlaySmart rubric.
+  return `You are a child development researcher scoring a video game using the LumiKin rubric.
 
 ## SCORING RUBRIC SUMMARY
 
@@ -263,7 +263,7 @@ function scoresBlock(s: DebateScores): string {
 }
 
 function advocatePrompt(gameInfo: string, round: number, criticScores?: DebateScores, criticReasoning?: string): string {
-  const role = `You are the ADVOCATE in a PlaySmart scoring debate. Argue for the HIGHEST DEFENSIBLE scores.
+  const role = `You are the ADVOCATE in a LumiKin scoring debate. Argue for the HIGHEST DEFENSIBLE scores.
 - Push benefit scores UP whenever evidence supports it
 - Push risk scores DOWN when risks are manageable
 - Base arguments on child development research`
@@ -275,7 +275,7 @@ function advocatePrompt(gameInfo: string, round: number, criticScores?: DebateSc
 }
 
 function criticPrompt(gameInfo: string, round: number, advocateScores?: DebateScores, advocateReasoning?: string): string {
-  const role = `You are the CRITIC in a PlaySmart scoring debate. Argue for the LOWEST DEFENSIBLE scores.
+  const role = `You are the CRITIC in a LumiKin scoring debate. Argue for the LOWEST DEFENSIBLE scores.
 - Push benefit scores DOWN unless evidence is strong
 - Push risk scores UP whenever a design pattern is present
 - Single-player games with no multiplayer: teamwork=0, communication=0, positiveSocial≤1

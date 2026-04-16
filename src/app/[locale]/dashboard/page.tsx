@@ -9,7 +9,7 @@ import ProfileManager from '@/components/ProfileManager'
 import NintendoPlaytimeWidget from '@/components/NintendoPlaytimeWidget'
 import { getLocale, getTranslations } from 'next-intl/server'
 
-export const metadata = { title: 'Family Dashboard — PlaySmart' }
+export const metadata = { title: 'Family Dashboard — LumiKin' }
 export const dynamic = 'force-dynamic'
 
 type LibraryGame = {

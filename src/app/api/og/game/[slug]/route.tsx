@@ -107,7 +107,7 @@ export async function GET(
               fontWeight: 700,
               letterSpacing: '-0.3px',
             }}>
-              PlaySmart
+              LumiKin
             </div>
             <div style={{ color: '#94a3b8', fontSize: '16px' }}>for parents</div>
           </div>
@@ -163,7 +163,7 @@ export async function GET(
                     {curascore}
                   </div>
                   <div style={{ color: '#64748b', fontSize: '16px', letterSpacing: '2px', textTransform: 'uppercase' }}>
-                    Curascore
+                    LumiScore
                   </div>
                 </div>
 

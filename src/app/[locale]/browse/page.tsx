@@ -15,7 +15,7 @@ import { auth } from '@/auth'
 import { calcAge } from '@/lib/age'
 
 export const metadata: Metadata = {
-  title: 'Browse Games — PlaySmart',
+  title: 'Browse Games — LumiKin',
   description: 'Find the right game for your child. Filter by age, genre, platform, risk level, and more.',
 }
 

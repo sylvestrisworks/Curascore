@@ -182,7 +182,7 @@ export default function NintendoPlaytimeWidget() {
       {/* Legend */}
       {data.rows.some(r => r.timeRecommendationMinutes != null) && (
         <p className="text-[10px] text-slate-400 dark:text-slate-600 border-t border-slate-100 dark:border-slate-700 pt-2">
-          Bar shows weekly play vs PlaySmart recommended time. Red = over recommendation.
+          Bar shows weekly play vs LumiKin recommended time. Red = over recommendation.
         </p>
       )}
     </div>

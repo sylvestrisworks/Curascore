@@ -116,7 +116,7 @@ const INPUT_SCHEMA = {
 
 const GEMINI_FUNCTION = {
   name: 'submit_game_review',
-  description: 'Submit a completed PlaySmart rubric review for a game.',
+  description: 'Submit a completed LumiKin rubric review for a game.',
   parameters: toGeminiSchema(INPUT_SCHEMA),
 }
 
@@ -125,7 +125,7 @@ const GEMINI_FUNCTION = {
 type GameRow = typeof games.$inferSelect
 
 function buildPrompt(g: GameRow): string {
-  return `You are a child development researcher scoring a video game using the PlaySmart rubric.
+  return `You are a child development researcher scoring a video game using the LumiKin rubric.
 
 ## SCORING RUBRIC SUMMARY
 
@@ -204,7 +204,7 @@ async function callGemini(prompt: string): Promise<ReviewInput> {
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log(`\nPlaySmart — Field-Level Provider Comparison`)
+  console.log(`\nLumiKin — Field-Level Provider Comparison`)
   console.log(`Gemini ${MODEL}  vs  Sonnet 4.6 (stored)\n`)
 
   const rows = await db

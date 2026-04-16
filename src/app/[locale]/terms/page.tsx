@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Terms of Service — PlaySmart by Good Game Parent',
-  description: 'Terms governing your use of the PlaySmart game rating service.',
+  title: 'Terms of Service — LumiKin',
+  description: 'Terms governing your use of the LumiKin game rating service.',
 }
 
 export default function TermsPage() {
@@ -24,7 +24,7 @@ export default function TermsPage() {
           <div>
             <h2 className="text-base font-bold text-slate-800 dark:text-slate-200 mb-2">1. About the service</h2>
             <p className="text-slate-600 dark:text-slate-400">
-              PlaySmart (Curascore) is an independent game rating service provided by Good Game Parent.
+              LumiKin is an independent game rating service for parents.
               We publish AI-assisted evaluations of video games and Roblox experiences to help parents
               make informed decisions about the games their children play.
             </p>
@@ -33,7 +33,7 @@ export default function TermsPage() {
           <div>
             <h2 className="text-base font-bold text-slate-800 dark:text-slate-200 mb-2">2. Eligibility</h2>
             <p className="text-slate-600 dark:text-slate-400">
-              You must be at least 18 years old to create an account. By using PlaySmart you confirm
+              You must be at least 18 years old to create an account. By using LumiKin you confirm
               that you meet this requirement. Children should not register for or use this service.
             </p>
           </div>
@@ -41,7 +41,7 @@ export default function TermsPage() {
           <div>
             <h2 className="text-base font-bold text-slate-800 dark:text-slate-200 mb-2">3. Informational purpose only</h2>
             <p className="text-slate-600 dark:text-slate-400">
-              PlaySmart ratings and time recommendations are informational only. They reflect our
+              LumiKin ratings and time recommendations are informational only. They reflect our
               independent assessment methodology and are not a substitute for professional child
               development advice, parental supervision, or official age ratings (PEGI, ESRB). Every
               child is different — use our ratings as one input among many.
@@ -65,7 +65,7 @@ export default function TermsPage() {
             <ul className="list-disc list-inside mt-2 space-y-1 text-slate-600 dark:text-slate-400">
               <li>The content is your own and does not infringe third-party rights</li>
               <li>It does not contain harmful, abusive, or illegal content</li>
-              <li>You grant Good Game Parent a non-exclusive licence to display it on PlaySmart</li>
+              <li>You grant LumiKin a non-exclusive licence to display it on LumiKin</li>
             </ul>
             <p className="mt-2 text-slate-600 dark:text-slate-400">
               We reserve the right to remove tips that violate these terms without notice.
@@ -84,8 +84,8 @@ export default function TermsPage() {
           <div>
             <h2 className="text-base font-bold text-slate-800 dark:text-slate-200 mb-2">7. Intellectual property</h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Game titles, screenshots, and trademarks belong to their respective owners. PlaySmart
-              scores, methodology, and written content are owned by Good Game Parent and may not be
+              Game titles, screenshots, and trademarks belong to their respective owners. LumiKin
+              scores, methodology, and written content are owned by LumiKin and may not be
               reproduced without permission.
             </p>
           </div>
@@ -93,7 +93,7 @@ export default function TermsPage() {
           <div>
             <h2 className="text-base font-bold text-slate-800 dark:text-slate-200 mb-2">8. Limitation of liability</h2>
             <p className="text-slate-600 dark:text-slate-400">
-              To the maximum extent permitted by law, Good Game Parent shall not be liable for any
+              To the maximum extent permitted by law, LumiKin shall not be liable for any
               indirect, incidental, or consequential damages arising from use of this service or
               reliance on our game ratings.
             </p>

@@ -11,8 +11,8 @@ import RobloxFilters, { type RobloxFilterState } from '@/components/RobloxFilter
 import { getTranslations } from 'next-intl/server'
 
 export const metadata: Metadata = {
-  title: 'Roblox Experience Guide — PlaySmart',
-  description: 'PlaySmart ratings for popular Roblox experiences. Find out which games are safe for your child, with scores for stranger risk, monetization pressure, and more.',
+  title: 'Roblox Experience Guide — LumiKin',
+  description: 'LumiKin ratings for popular Roblox experiences. Find out which games are safe for your child, with scores for stranger risk, monetization pressure, and more.',
 }
 
 type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> }

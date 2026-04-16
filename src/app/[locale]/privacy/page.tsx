@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — PlaySmart by Good Game Parent',
-  description: 'How PlaySmart collects, uses, and protects your personal data.',
+  title: 'Privacy Policy — LumiKin',
+  description: 'How LumiKin collects, uses, and protects your personal data.',
 }
 
 export default function PrivacyPage() {
@@ -24,7 +24,7 @@ export default function PrivacyPage() {
           <div>
             <h2 className="text-base font-bold text-slate-800 dark:text-slate-200 mb-2">1. Who we are</h2>
             <p className="text-slate-600 dark:text-slate-400">
-              PlaySmart (also known as Curascore) is a game rating service operated by Good Game Parent.
+              LumiKin is a game rating service for parents.
               We help parents understand how video games may affect their children&apos;s development,
               and recommend appropriate daily screen time limits. We are the data controller for personal
               data processed through this service.
@@ -37,7 +37,7 @@ export default function PrivacyPage() {
           <div>
             <h2 className="text-base font-bold text-slate-800 dark:text-slate-200 mb-2">2. Who this service is for</h2>
             <p className="text-slate-600 dark:text-slate-400">
-              PlaySmart is intended for adults — specifically parents and guardians. You must be at least
+              LumiKin is intended for adults — specifically parents and guardians. You must be at least
               18 years old to create an account. We do not knowingly collect personal data from children
               under 13, and children should not register for or use this service directly.
             </p>

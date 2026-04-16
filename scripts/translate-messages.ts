@@ -98,7 +98,7 @@ async function translateBatch(
 
   const voiceNote = LOCALE_VOICE[targetLang] ?? `Voice: natural, friendly, appropriate for parents.`
 
-  const prompt = `You are a local copywriter for a children's game rating website called "Curascore by Good Game Parent". You are NOT doing a literal translation — you are writing copy that feels native and natural in ${langName}, as if it were written by a local for a local audience.
+  const prompt = `You are a local copywriter for a children's game rating website called "LumiKin". You are NOT doing a literal translation — you are writing copy that feels native and natural in ${langName}, as if it were written by a local for a local audience.
 
 ${voiceNote}
 
@@ -110,7 +110,7 @@ RULES (non-negotiable):
 3. Preserve ICU placeholders exactly: {count}, {year}, {query}, {platforms}, {current}, {total}, {min}, {n} etc.
 4. Preserve HTML-like rich text tags exactly: <yellow>…</yellow> — only translate the text inside them, never the tags themselves.
 5. Keep plural ICU patterns intact: {count, plural, one {# game} other {# games}} — only translate the English words inside the curly braces.
-6. Brand names are NEVER translated: "Curascore", "Good Game Parent", "ESRB", "Metacritic", "Gemini", "PlaySmart".
+6. Brand names are NEVER translated: "LumiKin", "ESRB", "Metacritic", "Gemini", "LumiKin".
 7. Keep scoring terms consistent: BDS = "Benefit Density Score", RIS = "Risk Intensity Score" (these stay in English as proper nouns).
 
 Input JSON (English source):

@@ -3,7 +3,7 @@
  *   node --env-file=.env node_modules/tsx/dist/cli.cjs scripts/auto-review-pending.ts --slug <slug>
  *
  * Auto-review games using the Claude API.
- * Fetches game metadata, asks Claude to score against the PlaySmart rubric,
+ * Fetches game metadata, asks Claude to score against the LumiKin rubric,
  * then inserts the review + computed scores into the DB.
  *
  * Usage:
@@ -57,7 +57,7 @@ const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 const REVIEW_TOOL: Anthropic.Tool = {
   name: 'submit_game_review',
-  description: 'Submit a completed PlaySmart rubric review for a game.',
+  description: 'Submit a completed LumiKin rubric review for a game.',
   input_schema: {
     type: 'object' as const,
     required: [
@@ -219,7 +219,7 @@ function buildPrompt(gameData: {
   hasStrangerChat: boolean
   chatModeration: string | null
 }): string {
-  return `You are a child development researcher scoring a video game using the PlaySmart rubric.
+  return `You are a child development researcher scoring a video game using the LumiKin rubric.
 
 ## SCORING RUBRIC SUMMARY
 

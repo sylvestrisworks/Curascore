@@ -200,26 +200,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .where(eq(games.slug, slug))
     .limit(1)
 
-  if (!game) return { title: 'Game not found — Good Game Parent' }
+  if (!game) return { title: 'Game not found — LumiKin' }
 
   const desc = game.description
     ? game.description.slice(0, 160)
-    : `See the Good Game Parent rating for ${game.title} — benefits, risks, and time recommendations for parents.`
+    : `See the LumiKin rating for ${game.title} — benefits, risks, and time recommendations for parents.`
 
   const ogImage = `${process.env.NEXTAUTH_URL ?? 'https://curascore.vercel.app'}/api/og/game/${slug}`
 
   return {
-    title: `${game.title} — PlaySmart`,
+    title: `${game.title} — LumiKin`,
     description: desc,
     openGraph: {
-      title: `${game.title} — PlaySmart`,
+      title: `${game.title} — LumiKin`,
       description: desc,
       images: [{ url: ogImage, width: 1200, height: 630 }],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${game.title} — PlaySmart`,
+      title: `${game.title} — LumiKin`,
       description: desc,
       images: [ogImage],
     },
@@ -281,7 +281,7 @@ export default async function GamePage({ params }: Props) {
       ? { '@type': 'AggregateRating', ratingValue: game.metacriticScore, bestRating: 100, ratingCount: 1 }
       : undefined,
     image: game.backgroundImage ?? undefined,
-    url: `https://playsmart.app/game/${game.slug}`,
+    url: `https://lumikin.com/game/${game.slug}`,
   }
 
   return (

@@ -53,7 +53,7 @@ function scoreGroup(fields: string[], max: number, desc: string) {
 
 const REVIEW_TOOL = {
   name: 'submit_game_review',
-  description: 'Submit a completed PlaySmart rubric review for a game.',
+  description: 'Submit a completed LumiKin rubric review for a game.',
   input_schema: {
     type: 'object',
     required: ['b1_cognitive','b2_social','b3_motor','r1_dopamine','r2_monetization','r3_social','r4_content','representation','propaganda','bechdel','practical','narratives'],
@@ -132,7 +132,7 @@ type GameRow = typeof games.$inferSelect
 // ─── Prompt builder ───────────────────────────────────────────────────────────
 
 function buildReviewPrompt(g: GameRow): string {
-  return `You are a child development researcher scoring a video game using the PlaySmart rubric.
+  return `You are a child development researcher scoring a video game using the LumiKin rubric.
 
 ## SCORING RUBRIC SUMMARY
 
@@ -256,7 +256,7 @@ async function writeNotifications(gameId: number, gameTitle: string, old: OldSco
   if (isFirst) {
     type  = 'first_score'
     title = `${gameTitle} has been rated`
-    body  = `PlaySmart just published its first rating: Curascore ${next.curascore}. Recommended: ${next.timeRecommendation.minutes} min/day.`
+    body  = `LumiKin just published its first rating: Curascore ${next.curascore}. Recommended: ${next.timeRecommendation.minutes} min/day.`
   } else {
     type  = scoreDiff >= 0 ? 'score_up' : 'score_down'
     title = `${gameTitle} rating updated`

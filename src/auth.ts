@@ -25,7 +25,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientSecret: process.env.AUTH_GOOGLE_SECRET ?? process.env.GOOGLE_CLIENT_SECRET,
     }),
     Credentials({
-      name: 'PlaySmart Reviewer',
+      name: 'LumiKin Reviewer',
       credentials: {
         email:    { label: 'Email',    type: 'email'    },
         password: { label: 'Password', type: 'password' },

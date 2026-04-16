@@ -28,10 +28,10 @@ function CarouselTile({ game }: { game: GameSummary }) {
           </div>
         )}
 
-        {/* Curascore badge — top right */}
+        {/* LumiScore badge — top right */}
         {game.curascore != null && (
           <span className={`absolute top-1.5 right-1.5 ${curascoreBg(game.curascore)} text-white text-[10px] font-black px-1.5 py-0.5 rounded-full leading-none`}
-            title="Curascore — developmental benefit vs. design risk">
+            title="LumiScore — developmental benefit vs. design risk">
             {game.curascore}
           </span>
         )}

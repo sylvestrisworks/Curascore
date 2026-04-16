@@ -33,7 +33,7 @@ async function generateBenefitsTip(gameTitle: string, benefitsNarrative: string 
   const skillsList = topBenefits?.slice(0, 3).map(b => b.skill).join(', ') ?? 'various skills'
   const narrative  = benefitsNarrative ?? `This game develops ${skillsList}.`
 
-  const prompt = `You are writing a brief parent tip for the Good Game Parent platform.
+  const prompt = `You are writing a brief parent tip for the LumiKin platform.
 
 Game: "${gameTitle}"
 What it develops: ${narrative}

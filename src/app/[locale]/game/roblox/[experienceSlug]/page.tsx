@@ -121,11 +121,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .where(eq(platformExperiences.slug, experienceSlug))
     .limit(1)
 
-  if (!exp) return { title: 'Experience not found — PlaySmart' }
+  if (!exp) return { title: 'Experience not found — LumiKin' }
 
   return {
-    title: `${exp.title} (Roblox) — PlaySmart`,
-    description: exp.description?.slice(0, 160) ?? `PlaySmart safety rating for ${exp.title} on Roblox.`,
+    title: `${exp.title} (Roblox) — LumiKin`,
+    description: exp.description?.slice(0, 160) ?? `LumiKin safety rating for ${exp.title} on Roblox.`,
     openGraph: exp.thumbnailUrl ? { images: [exp.thumbnailUrl] } : undefined,
   }
 }

@@ -31,7 +31,7 @@ const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
 
 const EVAL_TOOL = {
   name: 'submit_experience_evaluation',
-  description: 'Submit a PlaySmart safety evaluation for a Roblox UGC experience.',
+  description: 'Submit a LumiKin safety evaluation for a Roblox UGC experience.',
   input_schema: {
     type: 'object',
     required: ['risks', 'benefits', 'recommendation', 'narratives'],
@@ -73,7 +73,7 @@ const EVAL_TOOL = {
         required: ['recommendedMinAge','timeRecommendationMinutes','timeRecommendationLabel','timeRecommendationColor','curascore'],
         properties: {
           curascore: { type: 'integer', minimum: 0, maximum: 100,
-            description: 'Overall PlaySmart score (0–100). Treat benefits and risks as independent profiles — a game can score high on both. 70–100 = recommended, 40–69 = with guidance, 0–39 = limit or avoid.' },
+            description: 'Overall LumiKin score (0–100). Treat benefits and risks as independent profiles — a game can score high on both. 70–100 = recommended, 40–69 = with guidance, 0–39 = limit or avoid.' },
           recommendedMinAge:         { type: 'integer', minimum: 3, maximum: 18 },
           timeRecommendationMinutes: { type: 'integer', enum: [15, 30, 60, 90, 120] },
           timeRecommendationLabel:   { type: 'string',
@@ -86,7 +86,7 @@ const EVAL_TOOL = {
         required: ['summary','benefitsNarrative','risksNarrative','parentTip'],
         properties: {
           summary:           { type: 'string', description: 'One sentence for a parent who has never heard of this game. Neutral, factual.' },
-          benefitsNarrative: { type: 'string', description: 'What your child develops or enjoys. Lead with the good. 2–3 sentences, gaming-positive tone — this is PlaySmart, not a warning label.' },
+          benefitsNarrative: { type: 'string', description: 'What your child develops or enjoys. Lead with the good. 2–3 sentences, gaming-positive tone — this is LumiKin, not a warning label.' },
           risksNarrative:    { type: 'string', description: 'What to watch out for. Factual and specific, not fear-based. 2–3 sentences.' },
           parentTip:         { type: 'string', description: 'One concrete, empowering action a parent can take. Frame as a positive action, not a restriction.' },
         },
@@ -118,7 +118,7 @@ function buildPrompt(e: ExperienceRow): string {
   const visits = e.visitCount ? e.visitCount.toLocaleString() : 'unknown'
   const active = e.activePlayers ? e.activePlayers.toLocaleString() : 'unknown'
 
-  return `You are a child development researcher evaluating a Roblox experience for PlaySmart — a game rating service for parents that is pro-informed-gaming, not anti-gaming.
+  return `You are a child development researcher evaluating a Roblox experience for LumiKin — a game rating service for parents that is pro-informed-gaming, not anti-gaming.
 
 ## RATING PHILOSOPHY
 Every experience gets two independent profiles: a Benefits Profile (what the child develops) and a Risk Profile (what to watch out for). These do not cancel each other out — an experience can score high on both. Lead with the good.

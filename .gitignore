@@ -22,3 +22,6 @@ skills-lock.json
 # OS
 .DS_Store
 Thumbs.db
+
+# Claude agents
+.agents/

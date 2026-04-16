@@ -9,7 +9,7 @@ import GameDiscoveryDashboard from '@/components/GameDiscoveryDashboard'
 import type { GameSummary, SwapPair, CatalogStats } from '@/types/game'
 
 export const metadata: Metadata = {
-  title: 'Discover — Curascore by Good Game Parent',
+  title: 'Discover — LumiKin',
   description: 'Find the right game for your child, grounded in child development.',
 }
 

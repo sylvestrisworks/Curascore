@@ -48,7 +48,7 @@ export default async function FeedbackInboxPage() {
     <div className="min-h-screen bg-slate-50">
       <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 h-14 flex items-center gap-4">
-          <a href="/" className="text-lg font-bold text-indigo-700 tracking-tight">PlaySmart</a>
+          <a href="/" className="text-lg font-bold text-indigo-700 tracking-tight">LumiKin</a>
           <span className="text-slate-400">/</span>
           <span className="text-sm font-medium text-slate-700">Feedback inbox</span>
           <span className="ml-2 text-xs font-bold bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">

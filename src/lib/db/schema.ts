@@ -1,4 +1,4 @@
-// Core tables for the PlaySmart game rating engine
+// Core tables for the LumiKin game rating engine
 
 import {
   pgTable, text, integer, real, timestamp, boolean,

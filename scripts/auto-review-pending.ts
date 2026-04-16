@@ -104,7 +104,7 @@ function scoreGroup(fields: string[], max: number, desc: string) {
 
 const ANTHROPIC_TOOL: Anthropic.Tool = {
   name: 'submit_game_review',
-  description: 'Submit a completed PlaySmart rubric review for a game.',
+  description: 'Submit a completed LumiKin rubric review for a game.',
   input_schema: {
     type: 'object',
     required: ['b1_cognitive','b2_social','b3_motor','r1_dopamine','r2_monetization','r3_social','r4_content','representation','propaganda','bechdel','practical','narratives'],
@@ -200,7 +200,7 @@ function toGeminiSchema(schema: any): any {
 
 const GEMINI_FUNCTION = {
   name: 'submit_game_review',
-  description: 'Submit a completed PlaySmart rubric review for a game.',
+  description: 'Submit a completed LumiKin rubric review for a game.',
   parameters: toGeminiSchema(ANTHROPIC_TOOL.input_schema),
 }
 
@@ -216,7 +216,7 @@ type GameInfo = {
 }
 
 function buildPrompt(g: GameInfo): string {
-  return `You are a child development researcher scoring a video game using the PlaySmart rubric.
+  return `You are a child development researcher scoring a video game using the LumiKin rubric.
 
 ## SCORING RUBRIC SUMMARY
 

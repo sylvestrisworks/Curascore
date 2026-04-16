@@ -1434,7 +1434,7 @@ async function upsertGameScores(gameId: number, reviewId: number, r: ReviewInput
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('PlaySmart seed-reviews — inserting expert reviews for 20 games\n')
+  console.log('LumiKin seed-reviews — inserting expert reviews for 20 games\n')
 
   const results: Array<{ title: string; bds: number; ris: number; minutes: number; color: string }> = []
 

@@ -92,7 +92,7 @@ function toGeminiSchema(schema: any): any {
 
 const GEMINI_FUNCTION = {
   name: 'submit_game_review',
-  description: 'Submit the final debated PlaySmart rubric scores for a game.',
+  description: 'Submit the final debated LumiKin rubric scores for a game.',
   parameters: toGeminiSchema({
     type: 'object',
     required: ['b1_cognitive','b2_social','b3_motor','r1_dopamine','r2_monetization','r3_social','r4_content','representation','propaganda','bechdel','practical','narratives'],
@@ -164,7 +164,7 @@ function buildDebatePrompt(game: any, review: any, currentScore: any): string {
   const r2 = fmtGroup('R2', R2_FIELDS, review)
   const r3 = fmtGroup('R3', R3_FIELDS, review)
 
-  return `You are a senior child safety researcher auditing a PlaySmart rubric review. Your job is to CHALLENGE the existing scores — look for anything too generous or too lenient — and then submit what you believe are the correct final scores.
+  return `You are a senior child safety researcher auditing a LumiKin rubric review. Your job is to CHALLENGE the existing scores — look for anything too generous or too lenient — and then submit what you believe are the correct final scores.
 
 ## SCORING RUBRIC SUMMARY
 

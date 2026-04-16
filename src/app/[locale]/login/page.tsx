@@ -41,7 +41,7 @@ function LoginForm() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center px-4 transition-colors">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <a href="/" className="text-2xl font-extrabold text-indigo-700 dark:text-indigo-400">Good Game Parent</a>
+          <a href="/" className="text-2xl font-extrabold text-indigo-700 dark:text-indigo-400">LumiKin</a>
           <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">Reviewer sign-in</p>
         </div>
 
@@ -95,7 +95,7 @@ function LoginForm() {
         </div>
 
         <p className="text-center text-xs text-slate-400 dark:text-slate-500 mt-4">
-          <a href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">← Back to Good Game Parent</a>
+          <a href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">← Back to LumiKin</a>
         </p>
       </div>
     </div>

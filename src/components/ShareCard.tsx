@@ -80,7 +80,7 @@ function NutritionLabel({ data, labelRef }: { data: GameCardProps; labelRef: Ref
         <span className="text-sm font-black text-green-600 uppercase">{formatTime(scores?.timeRecommendationMinutes)}</span>
       </div>
 
-      {/* Curascore + Risk */}
+      {/* LumiScore + Risk */}
       <div className="border-t-4 border-black border-b-[6px] border-b-black py-3 grid grid-cols-2 gap-3">
         <div className="flex flex-col items-center justify-center text-center border-r-2 border-black px-1">
           <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">Growth Value</span>
@@ -128,7 +128,7 @@ function NutritionLabel({ data, labelRef }: { data: GameCardProps; labelRef: Ref
       )}
 
       <p className="text-[9px] text-gray-400 text-center mt-3 uppercase tracking-widest">
-        Curascore by Good Game Parent · curascore.com
+        LumiScore · lumikin.com
       </p>
     </div>
   )
@@ -155,7 +155,7 @@ export default function ShareButton({ data }: { data: GameCardProps }) {
   function handleCopyLink() {
     const url = window.location.href
     if (typeof navigator.share !== 'undefined') {
-      navigator.share({ title: `${data.game.title} — Curascore`, url }).catch(() => {})
+      navigator.share({ title: `${data.game.title} — LumiScore`, url }).catch(() => {})
     } else {
       navigator.clipboard.writeText(url).then(() => {
         setCopied(true)

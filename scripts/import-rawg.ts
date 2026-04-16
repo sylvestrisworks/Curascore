@@ -1,5 +1,5 @@
 /**
- * Import ~500 popular games from RAWG as the initial PlaySmart catalog.
+ * Import ~500 popular games from RAWG as the initial LumiKin catalog.
  *
  * Strategy:
  *   1. For each of 6 genres, fetch up to 3 pages (40 games/page = 120/genre)
@@ -255,7 +255,7 @@ async function importGames(candidates: Map<number, RawgGameSummary>): Promise<{
 
 async function main() {
   console.log('╔══════════════════════════════════════════════════╗')
-  console.log('║       PlaySmart — RAWG Import Script             ║')
+  console.log('║       LumiKin — RAWG Import Script             ║')
   console.log('╚══════════════════════════════════════════════════╝')
   console.log(`  Target: ~${TARGET_GAME_COUNT} games across ${GENRES.length} genres + ${TAGS.length} tag(s) (incl. VR)`)
   console.log(`  ESRB filter: E, E10+, T, M (AO excluded; unrated included)`)

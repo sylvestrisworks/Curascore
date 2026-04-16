@@ -177,7 +177,7 @@ export default function ImportModal({ onClose }: { onClose: () => void }) {
               {/* Summary */}
               <div className="bg-slate-50 rounded-xl px-4 py-3 text-sm text-slate-600 flex gap-4 flex-wrap">
                 <span><strong className="text-slate-800">{preview.totalSteamGames}</strong> games on Steam</span>
-                <span><strong className="text-indigo-700">{preview.matched.length}</strong> found in PlaySmart</span>
+                <span><strong className="text-indigo-700">{preview.matched.length}</strong> found in LumiKin</span>
                 {preview.unmatchedTotal > 0 && (
                   <span className="text-slate-400">{preview.unmatchedTotal} not yet in our database</span>
                 )}
@@ -233,7 +233,7 @@ export default function ImportModal({ onClose }: { onClose: () => void }) {
               {preview.unmatched.length > 0 && (
                 <details className="text-xs text-slate-500">
                   <summary className="cursor-pointer font-medium text-slate-600">
-                    {preview.unmatchedTotal} games not in PlaySmart yet
+                    {preview.unmatchedTotal} games not in LumiKin yet
                   </summary>
                   <ul className="mt-2 space-y-0.5 max-h-32 overflow-y-auto">
                     {preview.unmatched.map(u => (

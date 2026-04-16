@@ -37,11 +37,11 @@ function RobloxTile({ exp }: { exp: ExperienceSummary }) {
           </div>
         )}
 
-        {/* Curascore badge — top right */}
+        {/* LumiScore badge — top right */}
         {exp.curascore != null && (
           <span
             className={`absolute top-1.5 right-1.5 ${curascoreBg(exp.curascore)} text-white text-[10px] font-black px-1.5 py-0.5 rounded-full leading-none`}
-            title="Curascore"
+            title="LumiScore"
           >
             {exp.curascore}
           </span>

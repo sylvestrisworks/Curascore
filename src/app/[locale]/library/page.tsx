@@ -11,7 +11,7 @@ import type { GameSummary } from '@/types/game'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { calcAge } from '@/lib/age'
 
-export const metadata = { title: 'My Library — PlaySmart' }
+export const metadata = { title: 'My Library — LumiKin' }
 
 // ─── Skill → score column mapping ────────────────────────────────────────────
 

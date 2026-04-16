@@ -2,7 +2,7 @@
  * GET /api/nintendo/playtime
  *
  * Returns the last 7 days of Nintendo Switch play time for the logged-in user,
- * aggregated by app, with the total minutes per app and matched PlaySmart game slug.
+ * aggregated by app, with the total minutes per app and matched LumiKin game slug.
  */
 
 import { NextResponse } from 'next/server'
@@ -53,7 +53,7 @@ export async function GET() {
     return NextResponse.json({ connected: true, lastSyncedAt: conn.lastSyncedAt, rows: [] })
   }
 
-  // Try to match each Nintendo title against PlaySmart games (fuzzy name match)
+  // Try to match each Nintendo title against LumiKin games (fuzzy name match)
   const enriched = await Promise.all(
     rows.map(async row => {
       const titleWords = row.appTitle.replace(/[^a-z0-9 ]/gi, '').trim()

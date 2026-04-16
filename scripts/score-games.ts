@@ -98,7 +98,7 @@ function buildPrompt(g: GameRow): string {
   const genres    = (g.genres   as string[] ?? []).join(', ') || 'Unknown'
   const year      = g.releaseDate ? new Date(g.releaseDate).getFullYear() : 'Unknown'
 
-  return `Score this game for the PlaySmart rating system.
+  return `Score this game for the LumiKin rating system.
 
 GAME: ${g.title}
 Developer: ${g.developer ?? 'Unknown'}
@@ -354,7 +354,7 @@ async function main() {
   }
 
   console.log('╔══════════════════════════════════════════════════╗')
-  console.log('║   PlaySmart — AI Game Scorer  (Sonnet 4.6)       ║')
+  console.log('║   LumiKin — AI Game Scorer  (Sonnet 4.6)       ║')
   console.log('║   Rubric cached as system prompt (saves ~60%)    ║')
   console.log('╚══════════════════════════════════════════════════╝\n')
 

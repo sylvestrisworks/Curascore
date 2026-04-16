@@ -10,7 +10,7 @@ export const authConfig = {
   providers: [
     Google,
     Credentials({
-      name: 'PlaySmart Reviewer',
+      name: 'LumiKin Reviewer',
       credentials: {
         email:    { label: 'Email',    type: 'email'    },
         password: { label: 'Password', type: 'password' },

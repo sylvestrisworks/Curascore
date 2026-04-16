@@ -8,10 +8,10 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Curascore by Good Game Parent — See exactly how a game impacts your child',
+  title: 'LumiKin — See exactly how a game impacts your child',
   description:
-    'Every Curascore reveals the real impact of a game. We analyze skills built, habits formed, and recommend a daily screen time limit that actually makes sense.',
-  openGraph: { siteName: 'Curascore by Good Game Parent', type: 'website' },
+    'Every LumiScore reveals the real impact of a game. We analyze skills built, habits formed, and recommend a daily screen time limit that actually makes sense.',
+  openGraph: { siteName: 'LumiKin', type: 'website' },
 }
 
 // Root layout — minimal shell. Locale-specific layout lives in [locale]/layout.tsx.
