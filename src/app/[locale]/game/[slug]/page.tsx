@@ -240,7 +240,8 @@ export default async function GamePage({ params }: Props) {
   if (!data) notFound()
 
   // Similar games — same genre, scored, exclude self
-  const similarGames: GameSummary[] = data.game.genres.length > 0
+  const genreList = data.game.genres.slice(0, 3)
+  const similarGames: GameSummary[] = genreList.length > 0
     ? (await db
         .select({
           slug:                     games.slug,
@@ -263,10 +264,7 @@ export default async function GamePage({ params }: Props) {
           isNotNull(gameScores.curascore),
           sql`EXISTS (
             SELECT 1 FROM jsonb_array_elements_text(${games.genres}) ge
-            WHERE ge = ANY(ARRAY[${sql.join(
-              data.game.genres.slice(0, 3).map(g => sql`${g}`),
-              sql`, `
-            )}])
+            WHERE ge = ANY(${genreList}::text[])
           )`
         ))
         .orderBy(desc(gameScores.curascore))
