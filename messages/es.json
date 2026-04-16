@@ -402,7 +402,16 @@
     "debateHide": "Ocultar",
     "compareThis": "Comparar este juego",
     "representationSection": "Representación",
-    "bechdelNa": "N/A — no hay personajes con nombre"
+    "bechdelNa": "N/A — no hay personajes con nombre",
+    "verdictGreat": "EXCELENTE",
+    "verdictGood": "BUENO",
+    "verdictCaution": "PRECAUCIÓN",
+    "verdictAvoid": "EVITAR",
+    "minDayRecommended": "min/día recomendados",
+    "headsUp": "Atención",
+    "monthlyCost": "Coste mensual",
+    "strangerChatEnabled": "Chat con desconocidos activado",
+    "debateDescription": "Dos modelos de IA debatieron esta puntuación en {rounds, plural, one {# ronda} other {# rondas}}: un Defensor argumentando a favor de las puntuaciones más altas posibles, y un Crítico argumentando a favor de las más bajas. La puntuación final es el promedio de sus posiciones en la ronda 2."
   },
   "gameCompact": {
     "minDay": "min/día",

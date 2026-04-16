@@ -415,7 +415,16 @@
     "debateHide": "Hide",
     "compareThis": "Compare this game",
     "representationSection": "Representation",
-    "bechdelNa": "N/A — no named characters"
+    "bechdelNa": "N/A — no named characters",
+    "verdictGreat": "GREAT",
+    "verdictGood": "GOOD",
+    "verdictCaution": "CAUTION",
+    "verdictAvoid": "AVOID",
+    "minDayRecommended": "min/day recommended",
+    "headsUp": "Heads up",
+    "monthlyCost": "Monthly cost",
+    "strangerChatEnabled": "Stranger chat enabled",
+    "debateDescription": "Two AI models debated this score in {rounds, plural, one {# round} other {# rounds}}: an Advocate arguing for the highest defensible scores, and a Critic arguing for the lowest. The final score averages their round-2 positions."
   },
   "gameCompact": {
     "minDay": "min/day",

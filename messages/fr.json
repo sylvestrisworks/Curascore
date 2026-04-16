@@ -402,7 +402,16 @@
     "debateHide": "Masquer",
     "compareThis": "Comparer ce jeu",
     "representationSection": "Représentation",
-    "bechdelNa": "N/A — aucun personnage nommé"
+    "bechdelNa": "N/A — aucun personnage nommé",
+    "verdictGreat": "EXCELLENT",
+    "verdictGood": "BON",
+    "verdictCaution": "PRUDENCE",
+    "verdictAvoid": "ÉVITER",
+    "minDayRecommended": "min/jour recommandés",
+    "headsUp": "Attention",
+    "monthlyCost": "Coût mensuel",
+    "strangerChatEnabled": "Chat avec inconnus activé",
+    "debateDescription": "Deux modèles IA ont débattu de ce score en {rounds, plural, one {# tour} other {# tours}} : un Défenseur argumentant pour les scores les plus élevés défendables, et un Critique argumentant pour les plus bas. Le score final est la moyenne de leurs positions au tour 2."
   },
   "gameCompact": {
     "minDay": "min/jour",

@@ -402,7 +402,16 @@
     "debateHide": "Ausblenden",
     "compareThis": "Dieses Spiel vergleichen",
     "representationSection": "Repräsentation",
-    "bechdelNa": "N/A – keine benannten Charaktere."
+    "bechdelNa": "N/A – keine benannten Charaktere.",
+    "verdictGreat": "SUPER",
+    "verdictGood": "GUT",
+    "verdictCaution": "VORSICHT",
+    "verdictAvoid": "MEIDEN",
+    "minDayRecommended": "Min/Tag empfohlen",
+    "headsUp": "Achtung",
+    "monthlyCost": "Monatliche Kosten",
+    "strangerChatEnabled": "Chat mit Fremden aktiviert",
+    "debateDescription": "Zwei KI-Modelle haben diese Bewertung in {rounds, plural, one {# Runde} other {# Runden}} debattiert: ein Befürworter, der für die höchstmöglichen Punktzahlen argumentierte, und ein Kritiker, der für die niedrigsten argumentierte. Die endgültige Punktzahl ist der Durchschnitt ihrer Positionen in Runde 2."
   },
   "gameCompact": {
     "minDay": "Min./Tag",

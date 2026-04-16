@@ -73,13 +73,13 @@ function riskDetailBarColor(value: number, max: number): string {
   return 'bg-yellow-400'
 }
 
-type StatusVerdict = { label: string; color: string; bg: string; ring: string }
+type StatusVerdict = { labelKey: string; color: string; bg: string; ring: string }
 function getVerdict(score: number | null): StatusVerdict {
   const s = score ?? 0
-  if (s >= 70) return { label: 'GREAT',   color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-900/30',  ring: '#10b981' }
-  if (s >= 50) return { label: 'GOOD',    color: 'text-teal-600 dark:text-teal-400',       bg: 'bg-teal-50 dark:bg-teal-900/30',        ring: '#14b8a6' }
-  if (s >= 35) return { label: 'CAUTION', color: 'text-amber-600 dark:text-amber-400',     bg: 'bg-amber-50 dark:bg-amber-900/30',      ring: '#f59e0b' }
-  return              { label: 'AVOID',   color: 'text-red-600 dark:text-red-400',         bg: 'bg-red-50 dark:bg-red-900/30',          ring: '#ef4444' }
+  if (s >= 70) return { labelKey: 'verdictGreat',   color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-900/30',  ring: '#10b981' }
+  if (s >= 50) return { labelKey: 'verdictGood',    color: 'text-teal-600 dark:text-teal-400',       bg: 'bg-teal-50 dark:bg-teal-900/30',        ring: '#14b8a6' }
+  if (s >= 35) return { labelKey: 'verdictCaution', color: 'text-amber-600 dark:text-amber-400',     bg: 'bg-amber-50 dark:bg-amber-900/30',      ring: '#f59e0b' }
+  return              { labelKey: 'verdictAvoid',   color: 'text-red-600 dark:text-red-400',         bg: 'bg-red-50 dark:bg-red-900/30',          ring: '#ef4444' }
 }
 
 // ─── Risk flag pill colors ────────────────────────────────────────────────────
@@ -684,7 +684,7 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
 
             <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-black uppercase tracking-wide mb-3 ${verdict.bg} ${verdict.color}`}>
               <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: verdict.ring }} />
-              {verdict.label}
+              {t(verdict.labelKey as Parameters<T>[0])}
             </div>
 
             {scores.executiveSummary && (
@@ -696,7 +696,7 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
             {scores.timeRecommendationMinutes != null && (
               <div className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 px-4 py-2 rounded-full mb-4">
                 <Clock size={14} strokeWidth={2.5} className="text-emerald-500" />
-                {scores.timeRecommendationMinutes >= 120 ? '120+' : scores.timeRecommendationMinutes} min/day recommended
+                {scores.timeRecommendationMinutes >= 120 ? '120+' : scores.timeRecommendationMinutes} {t('minDayRecommended')}
               </div>
             )}
 
@@ -783,7 +783,7 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
         if (!highFlags.length && !hasCost && !hasChat) return null
         return (
           <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-3xl px-5 py-4 space-y-3">
-            <p className="text-[10px] font-black uppercase tracking-widest text-amber-700 dark:text-amber-400">Heads up</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-amber-700 dark:text-amber-400">{t('headsUp')}</p>
             {highFlags.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {highFlags.map(p => (
@@ -796,16 +796,16 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
             <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs font-semibold text-amber-900 dark:text-amber-300">
               {hasCost && (
                 <span>
-                  💸 Monthly cost:{' '}
+                  💸 {t('monthlyCost')}:{' '}
                   {review!.estimatedMonthlyCostLow === 0 && review!.estimatedMonthlyCostHigh === 0
-                    ? 'Free'
+                    ? t('free')
                     : review!.estimatedMonthlyCostHigh != null
                     ? `$${review!.estimatedMonthlyCostLow}–$${review!.estimatedMonthlyCostHigh}/mo`
                     : `$${review!.estimatedMonthlyCostLow}/mo`}
                 </span>
               )}
               {hasChat && (
-                <span>💬 Stranger chat enabled</span>
+                <span>💬 {t('strangerChatEnabled')}</span>
               )}
             </div>
           </div>
@@ -889,9 +889,9 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
           )}
           <span className="ml-auto">
             {scores?.calculatedAt
-              ? `${t('reviewed')} ${new Date(scores.calculatedAt).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}`
+              ? `${t('reviewed')} ${new Date(scores.calculatedAt).toLocaleDateString(locale, { month: 'short', year: 'numeric' })}`
               : game.updatedAt
-              ? `${t('updated')} ${new Date(game.updatedAt).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}`
+              ? `${t('updated')} ${new Date(game.updatedAt).toLocaleDateString(locale, { month: 'short', year: 'numeric' })}`
               : null}
           </span>
         </div>
@@ -910,9 +910,7 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
           </summary>
           <div className="px-5 pb-5 pt-1">
             <p className="text-xs text-violet-600 dark:text-violet-400 mb-3 leading-relaxed">
-              Two AI models debated this score in {scores.debateRounds} round{scores.debateRounds !== 1 ? 's' : ''}:
-              an <strong>Advocate</strong> arguing for the highest defensible scores,
-              and a <strong>Critic</strong> arguing for the lowest. The final score averages their round-2 positions.
+              {t('debateDescription', { rounds: scores.debateRounds ?? 0 })}
             </p>
             <pre className="text-xs text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-900 border border-violet-100 dark:border-violet-800 rounded-xl p-4 overflow-x-auto whitespace-pre-wrap leading-relaxed font-mono">
               {scores.debateTranscript}

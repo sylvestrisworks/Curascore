@@ -415,7 +415,16 @@
     "debateHide": "Dölj",
     "compareThis": "Jämför detta spel",
     "representationSection": "Representation",
-    "bechdelNa": "Ej tillämpligt – inga namngivna karaktärer"
+    "bechdelNa": "Ej tillämpligt – inga namngivna karaktärer",
+    "verdictGreat": "UTMÄRKT",
+    "verdictGood": "BRA",
+    "verdictCaution": "VARNING",
+    "verdictAvoid": "UNDVIK",
+    "minDayRecommended": "min/dag rekommenderat",
+    "headsUp": "Obs",
+    "monthlyCost": "Månadskostnad",
+    "strangerChatEnabled": "Chatt med okända aktiverad",
+    "debateDescription": "Två AI-modeller debatterade poängen i {rounds, plural, one {# runda} other {# rundor}}: en Förespråkare som argumenterade för de högst möjliga poängen, och en Kritiker som argumenterade för de lägsta. Slutpoängen är ett medelvärde av deras positioner i runda 2."
   },
   "gameCompact": {
     "minDay": "min/dag",
