@@ -34,8 +34,8 @@ export default async function NavAuthButton() {
     const { name, email, image } = session.user
     return (
       <div className="flex items-center gap-2 shrink-0">
-        {/* Clickable avatar → dashboard */}
-        <a href={`/${locale}/dashboard`} title="Family Dashboard">
+        {/* Clickable avatar → account settings */}
+        <a href={`/${locale}/account`} title="Account settings">
           {image ? (
             <img
               src={image}

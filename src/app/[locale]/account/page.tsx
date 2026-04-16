@@ -1,45 +1,25 @@
-'use client'
-
-import { useState } from 'react'
-import { signOut, useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { redirect } from 'next/navigation'
+import { auth } from '@/auth'
+import { db } from '@/lib/db'
+import { childProfiles } from '@/lib/db/schema'
+import { eq } from 'drizzle-orm'
+import { getLocale, getTranslations } from 'next-intl/server'
 import Link from 'next/link'
-import { useTranslations } from 'next-intl'
+import ProfileManager from '@/components/ProfileManager'
+import AccountActions from '@/components/AccountActions'
 
-export default function AccountPage() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
-  const t = useTranslations('account')
-  const tCommon = useTranslations('common')
-  const [confirming, setConfirming] = useState(false)
-  const [deleting, setDeleting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+export const dynamic = 'force-dynamic'
+export const metadata = { title: 'Account Settings — LumiKin' }
 
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
-        <p className="text-slate-400">{tCommon('loading')}</p>
-      </div>
-    )
-  }
+export default async function AccountPage() {
+  const [session, locale, t] = await Promise.all([auth(), getLocale(), getTranslations('account')])
+  if (!session?.user) redirect(`/${locale}/login`)
 
-  if (!session) {
-    router.replace('/login')
-    return null
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const userId = (session.user as any).id ?? session.user.email!
+  const profiles = await db.select().from(childProfiles).where(eq(childProfiles.userId, userId))
 
-  async function handleDelete() {
-    setDeleting(true)
-    setError(null)
-    try {
-      const res = await fetch('/api/user/delete', { method: 'DELETE' })
-      if (!res.ok) throw new Error('Deletion failed')
-      await signOut({ callbackUrl: '/' })
-    } catch {
-      setError(t('deleteError'))
-      setDeleting(false)
-    }
-  }
+  const { name, email, image } = session.user
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
@@ -47,74 +27,84 @@ export default function AccountPage() {
 
         <h1 className="text-xl font-bold text-slate-900 dark:text-white">{t('title')}</h1>
 
-        {/* Profile */}
+        {/* ── Profile ─────────────────────────────────────────────────────── */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-5 py-4 flex items-center gap-4">
-          {session.user?.image && (
+          {image ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={session.user.image} alt="" className="w-10 h-10 rounded-full shrink-0" />
+            <img src={image} alt="" referrerPolicy="no-referrer" className="w-12 h-12 rounded-full shrink-0 ring-2 ring-indigo-100 dark:ring-indigo-900" />
+          ) : (
+            <div className="w-12 h-12 rounded-full bg-indigo-600 text-white text-sm font-bold flex items-center justify-center shrink-0">
+              {(name ?? email ?? '?').split(' ').slice(0, 2).map(w => w[0]?.toUpperCase()).join('')}
+            </div>
           )}
           <div className="min-w-0">
-            <p className="font-semibold text-slate-900 dark:text-white truncate">{session.user?.name}</p>
-            <p className="text-sm text-slate-400 dark:text-slate-500 truncate">{session.user?.email}</p>
+            {name && <p className="font-semibold text-slate-900 dark:text-white truncate">{name}</p>}
+            <p className="text-sm text-slate-400 dark:text-slate-500 truncate">{email}</p>
           </div>
         </div>
 
-        {/* Connected accounts */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-5 py-4 space-y-2">
-          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">{t('connectedAccounts')}</p>
-          <Link href="/settings/nintendo" className="flex items-center justify-between text-sm text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-            <span className="flex items-center gap-2">🎮 Nintendo Switch</span>
-            <span className="text-slate-400 text-xs">Manage →</span>
-          </Link>
-        </div>
+        {/* ── Child profiles ───────────────────────────────────────────────── */}
+        <section>
+          <h2 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3 px-1">
+            {t('childProfiles')}
+          </h2>
+          <ProfileManager initialProfiles={profiles.map(p => ({
+            id:          p.id,
+            name:        p.name,
+            birthYear:   p.birthYear,
+            birthDate:   p.birthDate ?? null,
+            platforms:   Array.isArray(p.platforms) ? (p.platforms as string[]) : [],
+            focusSkills: Array.isArray(p.focusSkills) ? (p.focusSkills as string[]) : [],
+          }))} />
+        </section>
 
-        {/* Legal links */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-5 py-4 space-y-2">
-          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">Legal</p>
-          <Link href="/privacy" className="block text-sm text-indigo-600 dark:text-indigo-400 hover:underline">Privacy Policy</Link>
-          <Link href="/terms" className="block text-sm text-indigo-600 dark:text-indigo-400 hover:underline">Terms of Service</Link>
-        </div>
-
-        {/* Danger zone */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-red-200 dark:border-red-900 shadow-sm px-5 py-4 space-y-3">
-          <p className="text-xs font-semibold text-red-500 uppercase tracking-widest">{t('dangerZone')}</p>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
-            {t('deleteWarning')}
-          </p>
-
-          {error && (
-            <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-          )}
-
-          {!confirming ? (
-            <button
-              onClick={() => setConfirming(true)}
-              className="text-sm font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
-            >
-              {t('deleteAccount')}
-            </button>
-          ) : (
-            <div className="space-y-2">
-              <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">{t('deleteConfirmPrompt')}</p>
-              <div className="flex gap-3">
-                <button
-                  onClick={handleDelete}
-                  disabled={deleting}
-                  className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors"
-                >
-                  {deleting ? t('deleting') : t('confirmDelete')}
-                </button>
-                <button
-                  onClick={() => setConfirming(false)}
-                  disabled={deleting}
-                  className="px-4 py-2 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 text-sm font-semibold rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-                >
-                  {t('cancel') ?? 'Cancel'}
-                </button>
-              </div>
+        {/* ── Connected accounts ───────────────────────────────────────────── */}
+        <section>
+          <h2 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3 px-1">
+            {t('connectedAccounts')}
+          </h2>
+          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-5 py-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
+                <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                {t('googleAccount')}
+              </span>
+              <span className="text-xs text-slate-400 dark:text-slate-500 truncate max-w-[160px]">{email}</span>
             </div>
-          )}
-        </div>
+            <div className="border-t border-slate-100 dark:border-slate-700 pt-3">
+              <Link
+                href={`/${locale}/settings/nintendo`}
+                className="flex items-center justify-between text-sm text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              >
+                <span className="flex items-center gap-2">🎮 Nintendo Switch</span>
+                <span className="text-slate-400 text-xs">{t('manage')} →</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Legal ────────────────────────────────────────────────────────── */}
+        <section>
+          <h2 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3 px-1">
+            {t('legal')}
+          </h2>
+          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-5 py-4 space-y-2">
+            <Link href={`/${locale}/privacy`} className="block text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
+              {t('privacyPolicy')}
+            </Link>
+            <Link href={`/${locale}/terms`} className="block text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
+              {t('termsOfService')}
+            </Link>
+          </div>
+        </section>
+
+        {/* ── Sign out + Danger zone ───────────────────────────────────────── */}
+        <AccountActions />
 
       </main>
     </div>

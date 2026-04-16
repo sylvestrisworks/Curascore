@@ -558,7 +558,14 @@
     "deleting": "Suppression…",
     "confirmDelete": "Confirmer la suppression",
     "deleteSuccess": "Compte supprimé. Redirection…",
-    "deleteError": "Échec de la suppression. Veuillez réessayer."
+    "deleteError": "Échec de la suppression. Veuillez réessayer.",
+    "childProfiles": "Profils enfants",
+    "signOut": "Se déconnecter",
+    "cancel": "Annuler",
+    "manage": "Gérer",
+    "legal": "Mentions légales",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsOfService": "Conditions d'utilisation"
   },
   "notifications": {
     "title": "Notifications",

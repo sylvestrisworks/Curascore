@@ -571,7 +571,14 @@
     "deleting": "Deleting…",
     "confirmDelete": "Confirm delete",
     "deleteSuccess": "Account deleted. Redirecting…",
-    "deleteError": "Delete failed. Please try again."
+    "deleteError": "Delete failed. Please try again.",
+    "childProfiles": "Child profiles",
+    "signOut": "Sign out",
+    "cancel": "Cancel",
+    "manage": "Manage",
+    "legal": "Legal",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
   },
   "notifications": {
     "title": "Notifications",

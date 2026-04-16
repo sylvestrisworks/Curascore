@@ -558,7 +558,14 @@
     "deleting": "Eliminando…",
     "confirmDelete": "Confirmar eliminación",
     "deleteSuccess": "Cuenta eliminada. Redirigiendo…",
-    "deleteError": "Error al eliminar. Por favor, inténtalo de nuevo."
+    "deleteError": "Error al eliminar. Por favor, inténtalo de nuevo.",
+    "childProfiles": "Perfiles de hijos",
+    "signOut": "Cerrar sesión",
+    "cancel": "Cancelar",
+    "manage": "Gestionar",
+    "legal": "Legal",
+    "privacyPolicy": "Política de privacidad",
+    "termsOfService": "Términos de servicio"
   },
   "notifications": {
     "title": "Notificaciones",

@@ -558,7 +558,14 @@
     "deleting": "Wird gelöscht…",
     "confirmDelete": "Löschen bestätigen",
     "deleteSuccess": "Konto gelöscht. Weiterleitung…",
-    "deleteError": "Löschen fehlgeschlagen. Bitte versuche es erneut."
+    "deleteError": "Löschen fehlgeschlagen. Bitte versuche es erneut.",
+    "childProfiles": "Kinderprofile",
+    "signOut": "Abmelden",
+    "cancel": "Abbrechen",
+    "manage": "Verwalten",
+    "legal": "Rechtliches",
+    "privacyPolicy": "Datenschutz",
+    "termsOfService": "Nutzungsbedingungen"
   },
   "notifications": {
     "title": "Benachrichtigungen",

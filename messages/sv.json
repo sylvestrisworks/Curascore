@@ -571,7 +571,14 @@
     "deleting": "Raderar…",
     "confirmDelete": "Bekräfta radering",
     "deleteSuccess": "Konto raderat. Omdirigerar…",
-    "deleteError": "Radering misslyckades. Försök igen."
+    "deleteError": "Radering misslyckades. Försök igen.",
+    "childProfiles": "Barnprofiler",
+    "signOut": "Logga ut",
+    "cancel": "Avbryt",
+    "manage": "Hantera",
+    "legal": "Juridik",
+    "privacyPolicy": "Integritetspolicy",
+    "termsOfService": "Användarvillkor"
   },
   "notifications": {
     "title": "Aviseringar",
