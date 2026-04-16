@@ -112,7 +112,15 @@ async function fetchUniversesBatch(universeIds: string[]): Promise<RobloxGame[]>
   const results: RobloxGame[] = []
   for (const chunk of chunks) {
     try {
-      const res = await fetch(`https://games.roblox.com/v1/games?universeIds=${chunk.join(',')}`)
+      const res = await fetch(`https://games.roblox.com/v1/games?universeIds=${chunk.join(',')}`, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+          'Accept': 'application/json, text/plain, */*',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Origin': 'https://www.roblox.com',
+          'Referer': 'https://www.roblox.com/',
+        },
+      })
       if (!res.ok) {
         const body = await res.text().catch(() => '')
         console.error(`[fetch-roblox] games batch HTTP ${res.status}: ${body.slice(0, 200)}`)
@@ -141,7 +149,15 @@ async function fetchThumbnailsBatch(universeIds: string[]): Promise<Map<string, 
   for (const chunk of chunks) {
     try {
       const res = await fetch(
-        `https://thumbnails.roblox.com/v1/games/icons?universeIds=${chunk.join(',')}&size=512x512&format=Png&isCircular=false`
+        `https://thumbnails.roblox.com/v1/games/icons?universeIds=${chunk.join(',')}&size=512x512&format=Png&isCircular=false`,
+        {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+            'Accept': 'application/json, text/plain, */*',
+            'Origin': 'https://www.roblox.com',
+            'Referer': 'https://www.roblox.com/',
+          },
+        }
       )
       if (!res.ok) continue
       const data = await res.json() as { data?: Array<{ targetId: number; state: string; imageUrl: string }> }
