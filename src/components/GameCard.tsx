@@ -82,6 +82,31 @@ function getVerdict(score: number | null): StatusVerdict {
   return              { labelKey: 'verdictAvoid',   color: 'text-red-600 dark:text-red-400',         bg: 'bg-red-50 dark:bg-red-900/30',          ring: '#ef4444' }
 }
 
+// ─── topBenefits skill → i18n key map ────────────────────────────────────────
+
+const SKILL_KEY_MAP: Record<string, string> = {
+  'Problem Solving':       'fieldProblemSolving',
+  'Spatial Awareness':     'fieldSpatialAwareness',
+  'Strategic Thinking':    'fieldStrategicThinking',
+  'Critical Thinking':     'fieldCriticalThinking',
+  'Memory & Attention':    'fieldMemoryAttention',
+  'Creativity':            'fieldCreativity',
+  'Reading & Language':    'fieldReadingLanguage',
+  'Math & Systems':        'fieldMathSystems',
+  'Learning Transfer':     'fieldLearningTransfer',
+  'Adaptive Challenge':    'fieldAdaptiveChallenge',
+  'Teamwork':              'fieldTeamwork',
+  'Communication':         'fieldCommunication',
+  'Empathy':               'fieldEmpathy',
+  'Emotional Regulation':  'fieldEmotionalRegulation',
+  'Ethical Reasoning':     'fieldEthicalReasoning',
+  'Positive Social':       'fieldPositiveSocial',
+  'Hand-Eye Coordination': 'fieldHandEye',
+  'Fine Motor':            'fieldFineMotor',
+  'Reaction Time':         'fieldReactionTime',
+  'Physical Activity':     'fieldPhysicalActivity',
+}
+
 // ─── Risk flag pill colors ────────────────────────────────────────────────────
 
 const RISK_FLAG_COLORS: Record<string, string> = {
@@ -243,7 +268,9 @@ function BenefitsTab({ scores, review, t }: { scores: SerializedScores; review: 
           <div className="space-y-2">
             {scores.topBenefits.map((b) => (
               <div key={b.skill} className="flex items-center gap-2">
-                <span className="w-32 sm:w-44 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 shrink-0">{b.skill}</span>
+                <span className="w-32 sm:w-44 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 shrink-0">
+                  {SKILL_KEY_MAP[b.skill] ? t(SKILL_KEY_MAP[b.skill] as Parameters<T>[0]) : b.skill}
+                </span>
                 <SkillDots score={b.score} max={b.maxScore} />
                 <span className="text-xs text-slate-400 dark:text-slate-500 ml-1">{b.score}/{b.maxScore}</span>
               </div>
@@ -297,17 +324,17 @@ function BenefitsTab({ scores, review, t }: { scores: SerializedScores; review: 
               <span className="text-base leading-none mt-0.5">♀</span>
               <div>
                 <p className={`text-xs font-semibold flex items-center gap-1 ${review.bechdelResult === 'pass' ? 'text-violet-800 dark:text-violet-300' : 'text-purple-600 dark:text-purple-400'}`}>
-                  Bechdeltestet
+                  {t('bechdelTitle')}
                   <span className="relative group/btip inline-flex items-center cursor-help">
                     <span className="w-3.5 h-3.5 rounded-full bg-purple-200 dark:bg-purple-800 text-purple-600 dark:text-purple-300 text-[9px] font-black flex items-center justify-center leading-none">
                       ?
                     </span>
                     <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 rounded-xl bg-slate-800 dark:bg-slate-700 px-3 py-2 text-xs text-white leading-snug opacity-0 group-hover/btip:opacity-100 transition-opacity z-50 text-left shadow-lg font-normal">
-                      Bechdeltestet mäter om ett spel har minst två namngivna kvinnliga karaktärer som pratar med varandra om något annat än en man. Används som ett enkelt mått på representation.
+                      {t('bechdelTooltip')}
                     </span>
                   </span>
                   <span className={`ml-1 font-normal ${review.bechdelResult === 'pass' ? 'text-violet-700 dark:text-violet-400' : 'text-purple-500 dark:text-purple-500'}`}>
-                    — {review.bechdelResult === 'pass' ? 'Klarar testet' : review.bechdelResult === 'na' ? t('bechdelNa') : 'Klarar inte testet'}
+                    — {review.bechdelResult === 'pass' ? t('bechdelPass') : review.bechdelResult === 'na' ? t('bechdelNa') : t('bechdelFail')}
                   </span>
                 </p>
                 {review.bechdelNotes && (
@@ -741,7 +768,7 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
                 {scores.topBenefits.slice(0, 3).map((b) => (
                   <li key={b.skill} className="flex items-center gap-1.5 text-xs text-green-800 dark:text-green-300">
                     <CheckCircle2 size={13} className="text-green-500 shrink-0" strokeWidth={2.5} />
-                    {b.skill}
+                    {SKILL_KEY_MAP[b.skill] ? t(SKILL_KEY_MAP[b.skill] as Parameters<T>[0]) : b.skill}
                   </li>
                 ))}
               </ul>

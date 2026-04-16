@@ -424,7 +424,27 @@
     "headsUp": "Heads up",
     "monthlyCost": "Monthly cost",
     "strangerChatEnabled": "Stranger chat enabled",
-    "debateDescription": "Two AI models debated this score in {rounds, plural, one {# round} other {# rounds}}: an Advocate arguing for the highest defensible scores, and a Critic arguing for the lowest. The final score averages their round-2 positions."
+    "debateDescription": "Two AI models debated this score in {rounds, plural, one {# round} other {# rounds}}: an Advocate arguing for the highest defensible scores, and a Critic arguing for the lowest. The final score averages their round-2 positions.",
+    "bechdelTitle": "Bechdel Test",
+    "bechdelTooltip": "The Bechdel Test checks whether a game has at least two named female characters who talk to each other about something other than a man. A simple measure of representation.",
+    "bechdelPass": "Passes the test",
+    "bechdelFail": "Fails the test"
+  },
+  "parentTips": {
+    "heading": "Parent Tips",
+    "noTips": "No tips yet — be the first to help other parents.",
+    "sharePrompt": "Share a tip with other parents",
+    "signIn": "Sign in",
+    "signInPrompt": "to leave a tip or vote.",
+    "typePraise": "Praise",
+    "typeTip": "Tip",
+    "typeWarning": "Warning",
+    "postTip": "Post tip",
+    "posting": "Posting…",
+    "thankYou": "Thanks for the tip! It will appear shortly.",
+    "placeholderWarning": "What should parents watch out for?",
+    "placeholderPraise": "What's great about this game for kids?",
+    "placeholderTip": "Share a helpful tip for other parents…"
   },
   "gameCompact": {
     "minDay": "min/day",

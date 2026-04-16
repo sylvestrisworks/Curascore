@@ -411,7 +411,27 @@
     "headsUp": "Attention",
     "monthlyCost": "Coût mensuel",
     "strangerChatEnabled": "Chat avec inconnus activé",
-    "debateDescription": "Deux modèles IA ont débattu de ce score en {rounds, plural, one {# tour} other {# tours}} : un Défenseur argumentant pour les scores les plus élevés défendables, et un Critique argumentant pour les plus bas. Le score final est la moyenne de leurs positions au tour 2."
+    "debateDescription": "Deux modèles IA ont débattu de ce score en {rounds, plural, one {# tour} other {# tours}} : un Défenseur argumentant pour les scores les plus élevés défendables, et un Critique argumentant pour les plus bas. Le score final est la moyenne de leurs positions au tour 2.",
+    "bechdelTitle": "Test de Bechdel",
+    "bechdelTooltip": "Le test de Bechdel vérifie si un jeu comporte au moins deux personnages féminins nommés qui se parlent d'autre chose qu'un homme. Une mesure simple de la représentation.",
+    "bechdelPass": "Réussit le test",
+    "bechdelFail": "Échoue au test"
+  },
+  "parentTips": {
+    "heading": "Conseils parents",
+    "noTips": "Pas encore de conseils — soyez le premier à aider les autres parents.",
+    "sharePrompt": "Partager un conseil avec d'autres parents",
+    "signIn": "Se connecter",
+    "signInPrompt": "pour laisser un conseil ou voter.",
+    "typePraise": "Éloge",
+    "typeTip": "Conseil",
+    "typeWarning": "Avertissement",
+    "postTip": "Publier le conseil",
+    "posting": "Publication…",
+    "thankYou": "Merci pour le conseil ! Il apparaîtra bientôt.",
+    "placeholderWarning": "À quoi les parents doivent-ils faire attention ?",
+    "placeholderPraise": "Qu'est-ce qui est bien dans ce jeu pour les enfants ?",
+    "placeholderTip": "Partagez un conseil utile avec d'autres parents…"
   },
   "gameCompact": {
     "minDay": "min/jour",

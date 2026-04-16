@@ -411,7 +411,27 @@
     "headsUp": "Atención",
     "monthlyCost": "Coste mensual",
     "strangerChatEnabled": "Chat con desconocidos activado",
-    "debateDescription": "Dos modelos de IA debatieron esta puntuación en {rounds, plural, one {# ronda} other {# rondas}}: un Defensor argumentando a favor de las puntuaciones más altas posibles, y un Crítico argumentando a favor de las más bajas. La puntuación final es el promedio de sus posiciones en la ronda 2."
+    "debateDescription": "Dos modelos de IA debatieron esta puntuación en {rounds, plural, one {# ronda} other {# rondas}}: un Defensor argumentando a favor de las puntuaciones más altas posibles, y un Crítico argumentando a favor de las más bajas. La puntuación final es el promedio de sus posiciones en la ronda 2.",
+    "bechdelTitle": "Test de Bechdel",
+    "bechdelTooltip": "El test de Bechdel comprueba si un juego tiene al menos dos personajes femeninos con nombre que hablan entre sí sobre algo que no sea un hombre. Una medida sencilla de representación.",
+    "bechdelPass": "Supera el test",
+    "bechdelFail": "No supera el test"
+  },
+  "parentTips": {
+    "heading": "Consejos para padres",
+    "noTips": "Aún no hay consejos — sé el primero en ayudar a otros padres.",
+    "sharePrompt": "Comparte un consejo con otros padres",
+    "signIn": "Iniciar sesión",
+    "signInPrompt": "para dejar un consejo o votar.",
+    "typePraise": "Elogio",
+    "typeTip": "Consejo",
+    "typeWarning": "Advertencia",
+    "postTip": "Publicar consejo",
+    "posting": "Publicando…",
+    "thankYou": "¡Gracias por el consejo! Aparecerá en breve.",
+    "placeholderWarning": "¿A qué deben prestar atención los padres?",
+    "placeholderPraise": "¿Qué tiene de bueno este juego para los niños?",
+    "placeholderTip": "Comparte un consejo útil con otros padres…"
   },
   "gameCompact": {
     "minDay": "min/día",

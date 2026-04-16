@@ -424,7 +424,27 @@
     "headsUp": "Obs",
     "monthlyCost": "Månadskostnad",
     "strangerChatEnabled": "Chatt med okända aktiverad",
-    "debateDescription": "Två AI-modeller debatterade poängen i {rounds, plural, one {# runda} other {# rundor}}: en Förespråkare som argumenterade för de högst möjliga poängen, och en Kritiker som argumenterade för de lägsta. Slutpoängen är ett medelvärde av deras positioner i runda 2."
+    "debateDescription": "Två AI-modeller debatterade poängen i {rounds, plural, one {# runda} other {# rundor}}: en Förespråkare som argumenterade för de högst möjliga poängen, och en Kritiker som argumenterade för de lägsta. Slutpoängen är ett medelvärde av deras positioner i runda 2.",
+    "bechdelTitle": "Bechdel-testet",
+    "bechdelTooltip": "Bechdel-testet kontrollerar om spelet har minst två namngivna kvinnliga karaktärer som pratar med varandra om något annat än en man. Ett enkelt mått på representation.",
+    "bechdelPass": "Klarar testet",
+    "bechdelFail": "Klarar inte testet"
+  },
+  "parentTips": {
+    "heading": "Föräldratips",
+    "noTips": "Inga tips ännu — bli den första att hjälpa andra föräldrar.",
+    "sharePrompt": "Dela ett tips med andra föräldrar",
+    "signIn": "Logga in",
+    "signInPrompt": "för att lämna ett tips eller rösta.",
+    "typePraise": "Beröm",
+    "typeTip": "Tips",
+    "typeWarning": "Varning",
+    "postTip": "Publicera tips",
+    "posting": "Publicerar…",
+    "thankYou": "Tack för tipset! Det visas snart.",
+    "placeholderWarning": "Vad bör föräldrar hålla utkik efter?",
+    "placeholderPraise": "Vad är bra med det här spelet för barn?",
+    "placeholderTip": "Dela ett användbart tips med andra föräldrar…"
   },
   "gameCompact": {
     "minDay": "min/dag",

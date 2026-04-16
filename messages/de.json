@@ -411,7 +411,27 @@
     "headsUp": "Achtung",
     "monthlyCost": "Monatliche Kosten",
     "strangerChatEnabled": "Chat mit Fremden aktiviert",
-    "debateDescription": "Zwei KI-Modelle haben diese Bewertung in {rounds, plural, one {# Runde} other {# Runden}} debattiert: ein Befürworter, der für die höchstmöglichen Punktzahlen argumentierte, und ein Kritiker, der für die niedrigsten argumentierte. Die endgültige Punktzahl ist der Durchschnitt ihrer Positionen in Runde 2."
+    "debateDescription": "Zwei KI-Modelle haben diese Bewertung in {rounds, plural, one {# Runde} other {# Runden}} debattiert: ein Befürworter, der für die höchstmöglichen Punktzahlen argumentierte, und ein Kritiker, der für die niedrigsten argumentierte. Die endgültige Punktzahl ist der Durchschnitt ihrer Positionen in Runde 2.",
+    "bechdelTitle": "Bechdel-Test",
+    "bechdelTooltip": "Der Bechdel-Test prüft, ob ein Spiel mindestens zwei benannte weibliche Figuren hat, die miteinander über etwas anderes als einen Mann sprechen. Ein einfaches Maß für Repräsentation.",
+    "bechdelPass": "Besteht den Test",
+    "bechdelFail": "Besteht den Test nicht"
+  },
+  "parentTips": {
+    "heading": "Elterntipps",
+    "noTips": "Noch keine Tipps — sei der Erste, der anderen Eltern hilft.",
+    "sharePrompt": "Teile einen Tipp mit anderen Eltern",
+    "signIn": "Anmelden",
+    "signInPrompt": "um einen Tipp zu hinterlassen oder abzustimmen.",
+    "typePraise": "Lob",
+    "typeTip": "Tipp",
+    "typeWarning": "Warnung",
+    "postTip": "Tipp posten",
+    "posting": "Wird gepostet…",
+    "thankYou": "Danke für den Tipp! Er erscheint in Kürze.",
+    "placeholderWarning": "Worauf sollten Eltern achten?",
+    "placeholderPraise": "Was ist an diesem Spiel gut für Kinder?",
+    "placeholderTip": "Teile einen hilfreichen Tipp mit anderen Eltern…"
   },
   "gameCompact": {
     "minDay": "Min./Tag",
