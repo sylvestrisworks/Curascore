@@ -57,14 +57,14 @@
     "featureTimeBody": "All skärmtid är inte likadan. Vi erbjuder anpassade dagliga tidsgränser baserat på spelets faktiska risker och belöningar. Spel som är bra för hälsan ger mer tid."
   },
   "age": {
-    "earlyYears": "Tidiga åren",
-    "earlyYearsSub": "Ålder 5–7 år",
-    "middleChildhood": "Mellanbarnsåren",
-    "middleChildhoodSub": "Ålder 8–12 år",
-    "earlyTeens": "Tidiga tonåren",
-    "earlyTeensSub": "Ålder 13–15 år",
-    "olderTeens": "Sena tonåren",
-    "olderTeensSub": "Från 16 år"
+    "earlyYears": "Lågstadiet",
+    "earlyYearsSub": "ca 6–9 år",
+    "middleChildhood": "Mellanstadiet",
+    "middleChildhoodSub": "ca 10–12 år",
+    "earlyTeens": "Högstadiet",
+    "earlyTeensSub": "13–15 år",
+    "olderTeens": "Gymnasiet",
+    "olderTeensSub": "16+ år"
   },
   "search": {
     "placeholder": "Sök spel…",
@@ -105,10 +105,10 @@
     "sortNewest": "Nyast",
     "sortAlpha": "A–Ö",
     "sectionAge": "Åldersintervall",
-    "ageEarlyYears": "Små barn (5–7 år)",
-    "ageMiddleChildhood": "Mellanstadieåldern (8–12 år)",
-    "ageEarlyTeens": "Tidiga tonår (13–15 år)",
-    "ageOlderTeens": "Äldre tonår (16+)",
+    "ageEarlyYears": "Lågstadiet (6–9 år)",
+    "ageMiddleChildhood": "Mellanstadiet (10–12 år)",
+    "ageEarlyTeens": "Högstadiet (13–15 år)",
+    "ageOlderTeens": "Gymnasiet (16+)",
     "sectionGenre": "Genre",
     "sectionPlatform": "Plattform",
     "sectionBenefit": "Fokusområde: Fördelar",
