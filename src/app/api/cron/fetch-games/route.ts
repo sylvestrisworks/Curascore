@@ -128,6 +128,7 @@ export async function GET(req: NextRequest) {
                 developer:          data.developer,
                 publisher:          data.publisher,
                 backgroundImage:    data.backgroundImage,
+                rawgAdded:          data.rawgAdded,
                 updatedAt:          new Date(),
                 metadataLastSynced: new Date(),
               },
