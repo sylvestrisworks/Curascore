@@ -15,9 +15,13 @@ const store = new Map<string, Window>()
 function evict() {
   if (store.size < 5000) return
   const now = Date.now()
-  for (const [key, w] of store) {
+  store.forEach((w, key) => {
     if (w.windowEnd < now) store.delete(key)
-    if (store.size < 2500) break
+  })
+  // Trim to half if still over threshold
+  if (store.size >= 2500) {
+    const keys = Array.from(store.keys()).slice(0, store.size - 2500)
+    keys.forEach(k => store.delete(k))
   }
 }
 
