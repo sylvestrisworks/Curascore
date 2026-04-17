@@ -31,6 +31,8 @@ export const games = pgTable('games', {
   // From RAWG/Steam
   metacriticScore: integer('metacritic_score'),
   rawgAdded: integer('rawg_added'),              // total RAWG library adds — popularity signal
+  trendingScore: integer('trending_score'),       // YouTube gaming trending mentions (updated daily)
+  trendingUpdatedAt: timestamp('trending_updated_at'), // when trendingScore was last set
   avgPlaytimeHours: real('avg_playtime_hours'),
   backgroundImage: text('background_image'),
 

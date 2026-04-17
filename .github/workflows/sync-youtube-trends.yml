@@ -1,0 +1,15 @@
+name: Sync YouTube Trends
+
+on:
+  schedule:
+    - cron: '0 6 * * *'   # 06:00 UTC daily
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger sync
+        run: |
+          curl -f -X GET "${{ secrets.APP_URL }}/api/cron/sync-youtube-trends" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"

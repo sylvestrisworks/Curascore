@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
-import { eq, desc, lte, gte, isNotNull, isNull, inArray, sql, and, or, count, type SQL } from 'drizzle-orm'
+import { eq, desc, lte, gte, gt, isNotNull, isNull, inArray, sql, and, or, count, type SQL } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { games, gameScores, platformExperiences, experienceScores } from '@/lib/db/schema'
 import SearchBar from '@/components/SearchBar'
@@ -44,6 +44,7 @@ const BASE_SELECT = {
   backgroundImage: games.backgroundImage,
   metacriticScore: games.metacriticScore,
   rawgAdded:       games.rawgAdded,
+  trendingScore:   games.trendingScore,
   curascore:       gameScores.curascore,
   timeRecommendationMinutes: gameScores.timeRecommendationMinutes,
   timeRecommendationColor:   gameScores.timeRecommendationColor,
@@ -112,9 +113,10 @@ async function getCarouselRows(platforms: string[], age?: string, locale = 'en')
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(and(isNotNull(gameScores.curascore), eq(games.isVr, true), ageFilter)).orderBy(desc(gameScores.curascore)).limit(12),
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(beginnerBase).orderBy(desc(gameScores.curascore)).limit(12),
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(gte(gameScores.curascore, 60))).orderBy(desc(games.releaseDate)).limit(12),
-    // Critically Acclaimed: order by rawgAdded when available, fall back to metacritic
+    // Critically Acclaimed: rawgAdded when available, fall back to metacritic
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(and(base(), isNotNull(games.metacriticScore))).orderBy(desc(games.rawgAdded), desc(games.metacriticScore)).limit(12),
-    Promise.resolve([]), // trending placeholder — re-enable once rawgAdded is backfilled
+    // Trending: YouTube gaming signal — only shows when cron has run
+    db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(and(base(), isNotNull(games.trendingScore), gt(games.trendingScore, 0))).orderBy(desc(games.trendingScore)).limit(12).catch(() => []),
   ])
 
   const browseBase = `/${locale}/browse`
@@ -123,8 +125,9 @@ async function getCarouselRows(platforms: string[], age?: string, locale = 'en')
   const baseParams = `${ageParam}${platformParam}`
 
   const rows: CarouselRowData[] = [
-    { id: 'popular',  title: 'Critically Acclaimed',    emoji: '🏆', browseHref: `${browseBase}?sort=popular${baseParams}`,            games: popular.map(toSummary)       },
-    { id: 'newgood',  title: 'New & Worth Playing',    emoji: '✨', browseHref: `${browseBase}?sort=newest${baseParams}`,             games: newAndGood.map(toSummary)    },
+    { id: 'trending', title: 'Trending',               emoji: '📈', browseHref: `${browseBase}?sort=trending${baseParams}`,          games: trending.map(toSummary)      },
+    { id: 'popular',  title: 'Critically Acclaimed',   emoji: '🏆', browseHref: `${browseBase}?sort=popular${baseParams}`,            games: popular.map(toSummary)       },
+    { id: 'newgood',  title: 'New & Worth Playing',   emoji: '✨', browseHref: `${browseBase}?sort=newest${baseParams}`,             games: newAndGood.map(toSummary)    },
     { id: 'top',      title: 'The Highest Curascores', emoji: '⭐', browseHref: `${browseBase}?sort=curascore${baseParams}`,          games: topRated.map(toSummary)      },
     { id: 'coop',     title: 'Family Co-Op',           emoji: '👨‍👩‍👧', browseHref: `${browseBase}?benefits=teamwork${baseParams}`,       games: coopPlay.map(toSummary)      },
     { id: 'safe',     title: 'Safe & Stress-Free',     emoji: '✅', browseHref: `${browseBase}?risk=low${baseParams}`,                games: lowRisk.map(toSummary)       },
@@ -200,6 +203,7 @@ export default async function HomePage({ params, searchParams }: Props) {
   ])
 
   const CAROUSEL_TITLES: Record<string, string> = {
+    trending: t('carouselTrending'),
     popular:  t('carouselPopular'),
     top:      t('carouselTop'),
     coop:     t('carouselCoop'),
