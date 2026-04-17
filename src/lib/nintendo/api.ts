@@ -82,20 +82,24 @@ export async function exchangeCode(sessionTokenCode: string, verifier: string): 
 
 /** Exchange a session_token for an access_token (expires in ~900s) */
 export async function getAccessToken(sessionToken: string): Promise<{ accessToken: string; expiresAt: Date }> {
+  // Nintendo token endpoint requires form-encoded body (not JSON)
   const res = await fetch(NA_TOKEN, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
       'Accept':       'application/json',
       'User-Agent':   'Dalvik/2.1.0 (Linux; U; Android 8.0.0)',
     },
-    body: JSON.stringify({
+    body: new URLSearchParams({
       client_id:     CLIENT_ID,
       session_token: sessionToken,
       grant_type:    'urn:ietf:params:oauth:grant-type:jwt-bearer-session-token',
     }),
   })
-  if (!res.ok) throw new Error(`Nintendo access_token exchange failed: ${res.status}`)
+  if (!res.ok) {
+    const body = await res.text().catch(() => '')
+    throw new Error(`Nintendo access_token exchange failed: ${res.status} ${body}`)
+  }
   const data = await res.json() as { access_token: string; expires_in: number }
   if (!data.access_token) throw new Error('No access_token in response')
   return {
@@ -114,10 +118,16 @@ export function getNaId(accessToken: string): string {
 // ─── Moon API helpers ─────────────────────────────────────────────────────────
 
 function moonHeaders(accessToken: string) {
-  // Minimal headers to isolate invalid_headers root cause
   return {
-    'Authorization': `Bearer ${accessToken}`,
-    'Accept':        'application/json',
+    'Authorization':              `Bearer ${accessToken}`,
+    'X-Moon-App-Id':              'com.nintendo.znma',
+    'X-Moon-Os':                  'ANDROID',
+    'X-Moon-App-Version':         '1.21.0',
+    'X-Moon-App-Version-Code':    '294',
+    'X-Moon-App-Language':        'en-US',
+    'X-Moon-App-Display-Version': '1.21.0',
+    'Accept':                     'application/json',
+    'Accept-Language':            'en-US',
   }
 }
 

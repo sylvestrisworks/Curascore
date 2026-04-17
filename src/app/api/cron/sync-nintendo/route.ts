@@ -46,8 +46,11 @@ export async function GET(req: NextRequest) {
 
       const { accessToken } = await getAccessToken(conn.sessionToken)
       const freshNaId = getNaId(accessToken)
-      const tokenParts = accessToken.split('.')
-      console.log(`[sync-nintendo] token parts=${tokenParts.length} naId=${freshNaId} stored=${conn.naId}`)
+      // Log JWT payload to diagnose token audience/scope issues
+      try {
+        const payload = JSON.parse(Buffer.from(accessToken.split('.')[1], 'base64url').toString())
+        console.log(`[sync-nintendo] token aud=${JSON.stringify(payload.aud)} scope=${payload.scope} naId=${freshNaId}`)
+      } catch { console.log(`[sync-nintendo] token not a JWT, naId=${freshNaId}`) }
       if (freshNaId !== conn.naId) {
         console.warn(`[sync-nintendo] naId mismatch: stored=${conn.naId} fresh=${freshNaId}`)
       }
