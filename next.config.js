@@ -26,7 +26,7 @@ const nextConfig = {
               "default-src 'self'",
               "script-src 'self' 'unsafe-inline'",
               "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' media.rawg.io images.igdb.com data: blob:",
+              "img-src 'self' media.rawg.io images.igdb.com *.rbxcdn.com tr.rbxcdn.com img2.fortnitemaps.com assets.fortnitecreativehq.com *.fortnite.com data: blob:",
               "font-src 'self'",
               "connect-src 'self'",
               "frame-ancestors 'none'",
