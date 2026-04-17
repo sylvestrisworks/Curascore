@@ -13,6 +13,19 @@ import { calcAge } from '@/lib/age'
 
 export const metadata = { title: 'My Library — LumiKin' }
 
+// ─── ESRB → minimum age fallback ─────────────────────────────────────────────
+
+function esrbToMinAge(rating: string | null | undefined): number | null {
+  switch (rating) {
+    case 'E':   return 0
+    case 'E10': return 10
+    case 'T':   return 13
+    case 'M':   return 17
+    case 'AO':  return 18
+    default:    return null
+  }
+}
+
 // ─── Skill → score column mapping ────────────────────────────────────────────
 
 type ScoreKey = 'cognitiveScore' | 'socialEmotionalScore' | 'motorScore'
@@ -113,8 +126,9 @@ export default async function LibraryPage({
   // ── Child filter ───────────────────────────────────────────────────────────
 
   function isAppropriate(row: typeof rows[0], child: typeof profiles[0]): boolean {
-    const age = calcAge(child.birthDate, child.birthYear)
-    const ageOk = row.recommendedMinAge == null || row.recommendedMinAge <= age
+    const age    = calcAge(child.birthDate, child.birthYear)
+    const minAge = row.recommendedMinAge ?? esrbToMinAge(row.esrbRating)
+    const ageOk  = minAge == null || minAge <= age
 
     const childPlats = (child.platforms as string[]) ?? []
     const gamePlats  = (row.platforms  as string[]) ?? []

@@ -12,12 +12,24 @@ import { getLocale, getTranslations } from 'next-intl/server'
 export const metadata = { title: 'Family Dashboard — LumiKin' }
 export const dynamic = 'force-dynamic'
 
+function esrbToMinAge(rating: string | null | undefined): number | null {
+  switch (rating) {
+    case 'E':   return 0
+    case 'E10': return 10
+    case 'T':   return 13
+    case 'M':   return 17
+    case 'AO':  return 18
+    default:    return null
+  }
+}
+
 type LibraryGame = {
   slug: string
   title: string
   backgroundImage: string | null
   curascore: number | null
   recommendedMinAge: number | null
+  esrbRating: string | null
   platforms: string[]
   timeRecommendationColor: string | null
 }
@@ -37,6 +49,7 @@ export default async function FamilyDashboard() {
         slug:              games.slug,
         title:             games.title,
         backgroundImage:   games.backgroundImage,
+        esrbRating:        games.esrbRating,
         platforms:         games.platforms,
         curascore:         gameScores.curascore,
         recommendedMinAge: gameScores.recommendedMinAge,
@@ -54,7 +67,8 @@ export default async function FamilyDashboard() {
 
   function gamesForChild(age: number, platforms: string[]): LibraryGame[] {
     return owned.filter(g => {
-      const ageOk  = g.recommendedMinAge == null || g.recommendedMinAge <= age
+      const minAge = g.recommendedMinAge ?? esrbToMinAge(g.esrbRating)
+      const ageOk  = minAge == null || minAge <= age
       const platOk = platforms.length === 0 || (g.platforms as string[]).some(gp =>
         platforms.some(cp => gp.toLowerCase().includes(cp.toLowerCase()))
       )
