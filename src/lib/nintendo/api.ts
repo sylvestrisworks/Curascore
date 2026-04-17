@@ -124,7 +124,7 @@ function moonHeaders(accessToken: string) {
     'X-Moon-App-Display-Version': '1.21.0',
     'Accept':                     'application/json',
     'Accept-Language':            'en-US',
-    'Content-Type':               'application/json; charset=utf-8',
+    'User-Agent':                 'moon_ANDROID/1.21.0 (com.nintendo.znma; build:294; Android/14; ONEPLUS A5000)',
   }
 }
 
