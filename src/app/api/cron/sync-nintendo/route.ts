@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
   console.log(`[sync-nintendo] Syncing ${connections.length} connection(s)`)
 
   let synced = 0
-  const errors: string[] = []
+  const errors: Array<{ naId: string; message: string }> = []
 
   for (const conn of connections) {
     try {
@@ -94,10 +94,11 @@ export async function GET(req: NextRequest) {
       synced++
       console.log(`[sync-nintendo] naId ${conn.naId} → ${rowsUpserted} rows upserted`)
     } catch (err) {
-      console.error(`[sync-nintendo] Failed for naId ${conn.naId}:`, err)
-      errors.push(conn.naId)
+      const message = err instanceof Error ? err.message : String(err)
+      console.error(`[sync-nintendo] Failed for naId ${conn.naId}:`, message)
+      errors.push({ naId: conn.naId, message })
     }
   }
 
-  return NextResponse.json({ synced, errors: errors.length, errorIds: errors })
+  return NextResponse.json({ synced, errors: errors.length, errorDetails: errors })
 }
