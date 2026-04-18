@@ -675,6 +675,100 @@ function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
   )
 }
 
+// ─── Curated comparison pairs ────────────────────────────────────────────────
+
+const CURATED_PAIRS = [
+  {
+    label: 'The classic parenting debate',
+    a: { slug: 'fortnite',   name: 'Fortnite' },
+    b: { slug: 'minecraft',  name: 'Minecraft' },
+  },
+  {
+    label: 'Two giants of kids gaming',
+    a: { slug: 'roblox',     name: 'Roblox' },
+    b: { slug: 'minecraft',  name: 'Minecraft' },
+  },
+  {
+    label: 'Family racing showdown',
+    a: { slug: 'mario-kart-8-deluxe', name: 'Mario Kart 8' },
+    b: { slug: 'rocket-league',       name: 'Rocket League' },
+  },
+  {
+    label: 'Chill & creative',
+    a: { slug: 'animal-crossing-new-horizons', name: 'Animal Crossing' },
+    b: { slug: 'stardew-valley',               name: 'Stardew Valley' },
+  },
+  {
+    label: 'Co-op for families',
+    a: { slug: 'split-fiction', name: 'Split Fiction' },
+    b: { slug: 'portal-2',      name: 'Portal 2' },
+  },
+  {
+    label: 'Free-to-play face-off',
+    a: { slug: 'genshin-impact', name: 'Genshin Impact' },
+    b: { slug: 'fortnite',       name: 'Fortnite' },
+  },
+]
+
+function PopularComparisons({
+  onSelectPair,
+}: {
+  onSelectPair: (aSlug: string, bSlug: string) => Promise<void>
+}) {
+  const t = useTranslations('compare')
+  const [loading, setLoading] = useState<string | null>(null)
+
+  async function handlePick(aSlug: string, bSlug: string) {
+    const key = `${aSlug}:${bSlug}`
+    setLoading(key)
+    try {
+      await onSelectPair(aSlug, bSlug)
+    } finally {
+      setLoading(null)
+    }
+  }
+
+  return (
+    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5">
+      <div className="mb-4">
+        <p className="font-semibold text-slate-700 dark:text-slate-200">{t('popularComparisons')}</p>
+        <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{t('popularComparisonsSub')}</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        {CURATED_PAIRS.map(pair => {
+          const key = `${pair.a.slug}:${pair.b.slug}`
+          const isLoading = loading === key
+          return (
+            <button
+              key={key}
+              onClick={() => handlePick(pair.a.slug, pair.b.slug)}
+              disabled={loading !== null}
+              className="group text-left rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-3 hover:border-indigo-300 dark:hover:border-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all disabled:opacity-50"
+            >
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1.5">
+                {pair.label}
+              </p>
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin shrink-0" />
+                  <span className="text-xs text-indigo-600 dark:text-indigo-400">{t('popularLoadingPair')}</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-sm text-slate-800 dark:text-slate-100 truncate">{pair.a.name}</span>
+                  <span className="text-[10px] font-black text-slate-300 dark:text-slate-600 shrink-0">VS</span>
+                  <span className="font-bold text-sm text-slate-800 dark:text-slate-100 truncate">{pair.b.name}</span>
+                  <span className="ml-auto shrink-0 text-slate-300 dark:text-slate-600 group-hover:text-indigo-400 dark:group-hover:text-indigo-500 transition-colors">→</span>
+                </div>
+              )}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 // ─── Suggestion strip ─────────────────────────────────────────────────────────
 
 function SuggestionStrip({ highRiskGame }: { highRiskGame: GameCardProps }) {
@@ -823,6 +917,13 @@ function ComparePageInner() {
   function clearA()                     { setGameA(null); syncUrl(null, gameB) }
   function clearB()                     { setGameB(null); syncUrl(gameA, null) }
 
+  async function selectPair(aSlug: string, bSlug: string) {
+    const [a, b] = await Promise.all([loadGame(aSlug), loadGame(bSlug)])
+    if (a) setGameA(a)
+    if (b) setGameB(b)
+    if (a || b) syncUrl(a, b)
+  }
+
   function copyLink() {
     if (!navigator.clipboard) {
       console.error('Clipboard API not available')
@@ -866,13 +967,9 @@ function ComparePageInner() {
           </div>
         )}
 
-        {/* Empty state */}
+        {/* Empty state / popular pairs */}
         {!gameA && !gameB && (
-          <div className="text-center py-16 text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <p className="text-5xl mb-3">⚖️</p>
-            <p className="font-semibold text-slate-600 dark:text-slate-300">{t('emptyTitle')}</p>
-            <p className="text-sm mt-1 text-slate-400 dark:text-slate-500">{t('emptySub')}</p>
-          </div>
+          <PopularComparisons onSelectPair={selectPair} />
         )}
 
         {/* Single game */}

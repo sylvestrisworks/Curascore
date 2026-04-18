@@ -239,7 +239,10 @@
     "tagsTacticsHeader": "Identifierade designmetoder",
     "tagsBothDevelop": "Båda spelen utvecklar",
     "tagsBothUse": "Båda spelen använder",
-    "tagsOnly": "bara"
+    "tagsOnly": "bara",
+    "popularComparisons": "Populära jämförelser",
+    "popularComparisonsSub": "Tryck på ett par för att ladda det direkt",
+    "popularLoadingPair": "Laddar jämförelse…"
   },
   "faq": {
     "methodology": "Metod",

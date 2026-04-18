@@ -226,7 +226,10 @@
     "tagsTacticsHeader": "Tácticas de diseño detectadas",
     "tagsBothDevelop": "Ambos juegos desarrollan",
     "tagsBothUse": "Ambos juegos usan",
-    "tagsOnly": "solo"
+    "tagsOnly": "solo",
+    "popularComparisons": "Comparaciones populares",
+    "popularComparisonsSub": "Toca un par para cargarlo al instante",
+    "popularLoadingPair": "Cargando comparación…"
   },
   "faq": {
     "methodology": "Metodología",

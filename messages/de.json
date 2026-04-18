@@ -226,7 +226,10 @@
     "tagsTacticsHeader": "Genutzte Spieldesign-Taktiken",
     "tagsBothDevelop": "Beide Spiele fördern",
     "tagsBothUse": "Beide Spiele nutzen",
-    "tagsOnly": "nur"
+    "tagsOnly": "nur",
+    "popularComparisons": "Beliebte Vergleiche",
+    "popularComparisonsSub": "Tippe auf ein Paar, um es sofort zu laden",
+    "popularLoadingPair": "Vergleich wird geladen…"
   },
   "faq": {
     "methodology": "Unsere Methodik",

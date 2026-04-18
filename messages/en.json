@@ -239,7 +239,10 @@
     "tagsTacticsHeader": "Detected design tactics",
     "tagsBothDevelop": "Both games develop",
     "tagsBothUse": "Both games use",
-    "tagsOnly": "only"
+    "tagsOnly": "only",
+    "popularComparisons": "Popular comparisons",
+    "popularComparisonsSub": "Tap a pair to load it instantly",
+    "popularLoadingPair": "Loading comparison…"
   },
   "faq": {
     "methodology": "Methodology",
