@@ -22,7 +22,7 @@ export const maxDuration = 300
 const MAX_PER_RUN  = 10
 const DELAY_MS     = 200
 const BUDGET_MS    = 240_000
-const BEDROCK_MODEL = 'us.anthropic.claude-sonnet-4-5-20250929-v1:0'
+const BEDROCK_MODEL = 'global.anthropic.claude-sonnet-4-6'
 const BEDROCK_URL   = `https://bedrock-runtime.us-east-1.amazonaws.com/model/${BEDROCK_MODEL}/invoke`
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
