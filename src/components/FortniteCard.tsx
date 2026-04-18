@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useTranslations, useLocale } from 'next-intl'
 import { curascoreBg } from '@/lib/ui'
 import type { ExperienceSummary } from '@/components/ExperienceCard'
@@ -29,11 +30,12 @@ export default function FortniteCard({ exp }: { exp: ExperienceSummary }) {
       {/* Thumbnail */}
       <div className="relative h-28 bg-blue-50 dark:bg-blue-900/40 overflow-hidden shrink-0">
         {exp.thumbnailUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={exp.thumbnailUrl}
             alt=""
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            fill
+            sizes="160px"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-violet-100 dark:from-blue-900/40 dark:to-violet-900/40">

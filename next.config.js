@@ -10,6 +10,9 @@ const nextConfig = {
       { protocol: 'https', hostname: 'media.rawg.io' },
       { protocol: 'https', hostname: 'images.igdb.com' },
       { protocol: 'https', hostname: 'cdn.sanity.io' },
+      { protocol: 'https', hostname: 'img2.fortnitemaps.com' },
+      { protocol: 'https', hostname: '*.rbxcdn.com' },
+      { protocol: 'https', hostname: 'tr.rbxcdn.com' },
     ],
   },
   async headers() {
