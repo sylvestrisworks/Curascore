@@ -17,6 +17,8 @@ function getDb(): PostgresJsDatabase<typeof schema> {
     throw new Error("DATABASE_URL is not set");
   }
 
+  const isProd = process.env.NODE_ENV === "production"
+
   const client =
     globalForDb.pgClient ??
     postgres(process.env.DATABASE_URL, {
@@ -24,8 +26,17 @@ function getDb(): PostgresJsDatabase<typeof schema> {
       // of 1 is correct — multiple connections per invocation waste Neon's
       // connection limit. In dev, use 5 to avoid contention across
       // concurrent generateMetadata + page queries during hot-reload.
-      max: process.env.NODE_ENV === "production" ? 1 : 5,
+      max: isProd ? 1 : 5,
       ssl: "require",
+      // Close idle connections quickly so Neon's pooler doesn't exhaust
+      // during traffic spikes (Google crawls, etc.)
+      idle_timeout: isProd ? 20 : 0,
+      // Fail fast rather than hanging — surfaces EBUSY as a 500 instead
+      // of leaving invocations stuck waiting for a connection slot.
+      connect_timeout: 10,
+      // Prepared statements are incompatible with PgBouncer/Neon pooler
+      // and cause connection leaks. Must be false when using the -pooler endpoint.
+      prepare: false,
     });
 
   if (process.env.NODE_ENV !== "production") globalForDb.pgClient = client;
