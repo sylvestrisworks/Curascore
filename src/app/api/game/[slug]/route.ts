@@ -13,7 +13,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   const [game] = await db
     .select()
     .from(games)
-    .where(eq(games.slug, params.slug))
+    .where(eq(games.slug, slug))
     .limit(1)
 
   if (!game) return NextResponse.json({ error: 'Not found' }, { status: 404 })
