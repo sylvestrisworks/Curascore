@@ -19,6 +19,7 @@
     "@google/genai": "^1.48.0",
     "@portabletext/react": "^6.0.3",
     "@sanity/image-url": "^2.1.1",
+    "@sentry/nextjs": "^10.49.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^2.3.3",
     "@vercel/speed-insights": "^2.0.0",

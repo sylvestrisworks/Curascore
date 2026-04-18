@@ -1,4 +1,5 @@
 const createNextIntlPlugin = require('next-intl/plugin')
+const { withSentryConfig } = require('@sentry/nextjs')
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
@@ -39,4 +40,12 @@ const nextConfig = {
   },
 }
 
-module.exports = withNextIntl(nextConfig)
+module.exports = withSentryConfig(withNextIntl(nextConfig), {
+  org: 'lumikin',
+  project: 'lumikin',
+  silent: true,         // suppress build output noise
+  widenClientFileUpload: true,
+  hideSourceMaps: true, // don't ship source maps to client bundle
+  disableLogger: true,
+  automaticVercelMonitors: false,
+})
