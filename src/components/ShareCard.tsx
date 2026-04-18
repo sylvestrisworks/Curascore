@@ -191,10 +191,11 @@ export default function ShareButton({ data }: { data: GameCardProps }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all shadow-sm"
+        className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+        aria-label="Share with a parent"
+        title="Share with a parent"
       >
-        <Share2 size={15} strokeWidth={2.5} />
-        Share with a parent
+        <Share2 size={16} strokeWidth={2} />
       </button>
 
       {open && createPortal(

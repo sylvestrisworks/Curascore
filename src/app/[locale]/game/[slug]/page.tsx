@@ -197,31 +197,43 @@ async function fetchGameData(slug: string): Promise<GameCardProps | null> {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const [game] = await db
-    .select({ title: games.title, description: games.description, backgroundImage: games.backgroundImage })
+    .select({
+      title: games.title,
+      description: games.description,
+      backgroundImage: games.backgroundImage,
+      esrbRating: games.esrbRating,
+      genres: games.genres,
+    })
     .from(games)
     .where(eq(games.slug, slug))
     .limit(1)
 
   if (!game) return { title: 'Game not found — LumiKin' }
 
+  const title = `${game.title} — Is it good for kids? | LumiKin`
   const desc = game.description
-    ? game.description.slice(0, 160)
-    : `See the LumiKin rating for ${game.title} — benefits, risks, and time recommendations for parents.`
+    ? game.description.slice(0, 155) + (game.description.length > 155 ? '…' : '')
+    : `LumiKin rates ${game.title} for parents — benefits, risks, addictive design patterns, and a recommended daily screen time.`
 
-  const ogImage = `${process.env.NEXTAUTH_URL ?? 'https://lumikin.org'}/api/og/game/${slug}`
+  const ogImage = `/api/og/game/${slug}`
+  const canonical = `/game/${slug}`
 
   return {
-    title: `${game.title} — LumiKin`,
+    title,
     description: desc,
+    alternates: {
+      canonical,
+    },
     openGraph: {
-      title: `${game.title} — LumiKin`,
+      title,
       description: desc,
-      images: [{ url: ogImage, width: 1200, height: 630 }],
+      url: canonical,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: `${game.title} — LumiKin rating` }],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${game.title} — LumiKin`,
+      title,
       description: desc,
       images: [ogImage],
     },

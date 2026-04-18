@@ -123,10 +123,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!exp) return { title: 'Experience not found — LumiKin' }
 
+  const title = `${exp.title} on Roblox — Safe for kids? | LumiKin`
+  const desc = exp.description
+    ? exp.description.slice(0, 155) + (exp.description.length > 155 ? '…' : '')
+    : `LumiKin safety rating for ${exp.title} on Roblox — benefits, risks, and screen time guidance for parents.`
+  const canonical = `/game/roblox/${experienceSlug}`
+
   return {
-    title: `${exp.title} (Roblox) — LumiKin`,
-    description: exp.description?.slice(0, 160) ?? `LumiKin safety rating for ${exp.title} on Roblox.`,
-    openGraph: exp.thumbnailUrl ? { images: [exp.thumbnailUrl] } : undefined,
+    title,
+    description: desc,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description: desc,
+      url: canonical,
+      images: exp.thumbnailUrl
+        ? [{ url: exp.thumbnailUrl, width: 512, height: 512, alt: `${exp.title} on Roblox` }]
+        : undefined,
+      type: 'website',
+    },
+    twitter: {
+      card: exp.thumbnailUrl ? 'summary_large_image' : 'summary',
+      title,
+      description: desc,
+      images: exp.thumbnailUrl ? [exp.thumbnailUrl] : undefined,
+    },
   }
 }
 

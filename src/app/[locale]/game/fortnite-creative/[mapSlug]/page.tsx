@@ -115,10 +115,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!exp) return { title: 'Map not found — LumiKin' }
 
+  const title = `${exp.title} (Fortnite Creative) — Safe for kids? | LumiKin`
+  const desc = exp.description
+    ? exp.description.slice(0, 155) + (exp.description.length > 155 ? '…' : '')
+    : `LumiKin safety rating for ${exp.title} on Fortnite Creative — benefits, risks, and screen time guidance for parents.`
+  const canonical = `/game/fortnite-creative/${mapSlug}`
+
   return {
-    title: `${exp.title} (Fortnite Creative) — LumiKin`,
-    description: exp.description?.slice(0, 160) ?? `LumiKin safety rating for ${exp.title} on Fortnite Creative.`,
-    openGraph: exp.thumbnailUrl ? { images: [exp.thumbnailUrl] } : undefined,
+    title,
+    description: desc,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description: desc,
+      url: canonical,
+      images: exp.thumbnailUrl
+        ? [{ url: exp.thumbnailUrl, width: 512, height: 512, alt: `${exp.title} — Fortnite Creative` }]
+        : undefined,
+      type: 'website',
+    },
+    twitter: {
+      card: exp.thumbnailUrl ? 'summary_large_image' : 'summary',
+      title,
+      description: desc,
+      images: exp.thumbnailUrl ? [exp.thumbnailUrl] : undefined,
+    },
   }
 }
 
