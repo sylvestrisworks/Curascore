@@ -22,6 +22,13 @@ export const maxDuration = 60
 const YOUTUBE_API = 'https://www.googleapis.com/youtube/v3/videos'
 const REGIONS     = ['US', 'GB', 'CA', 'AU']  // pool from multiple regions for broader signal
 
+// Game titles that are also common words/names — produce too many false positives
+const TITLE_BLOCKLIST = new Set([
+  'dream', 'everything', 'haven', 'beyond', 'rise', 'fall', 'flow', 'form',
+  'bound', 'echo', 'rift', 'shift', 'drift', 'lift', 'last', 'next', 'prey',
+  'control', 'returnal', 'deliver', 'inside', 'outside',
+])
+
 export async function GET(req: NextRequest) {
   const cronSecret = process.env.CRON_SECRET
   if (!cronSecret) return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 })
@@ -79,19 +86,22 @@ export async function GET(req: NextRequest) {
     const scored: Array<{ id: number; score: number }> = []
 
     for (const game of allGames) {
-      const needle = game.title.toLowerCase()
-      // Skip very short titles that would cause false positives (e.g. "it", "go")
+      const needle    = game.title.toLowerCase()
       if (needle.length < 4) continue
+      if (TITLE_BLOCKLIST.has(needle)) continue
 
-      // Count non-overlapping occurrences
-      let count = 0
-      let pos   = 0
-      while ((pos = combinedText.indexOf(needle, pos)) !== -1) {
-        count++
-        pos += needle.length
-      }
+      // Word-boundary match
+      const escaped   = needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      const re        = new RegExp(`(?<![a-z0-9])${escaped}(?![a-z0-9])`, 'gi')
+      const matches   = combinedText.match(re)
+      const count     = matches?.length ?? 0
+      if (count === 0) continue
 
-      if (count > 0) scored.push({ id: game.id, score: count })
+      // Single plain-word titles (e.g. "Dream", "Waves") need 3+ mentions to
+      // pass — proper game names like "Roblox" or "Fortnite" appear far more often
+      const isSingleWord = /^[a-z]+$/.test(needle)
+      const threshold    = isSingleWord ? 3 : 1
+      if (count >= threshold) scored.push({ id: game.id, score: count })
     }
 
     console.log(`[youtube-trends] Matched ${scored.length} games`)
