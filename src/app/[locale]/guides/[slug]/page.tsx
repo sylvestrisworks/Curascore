@@ -26,7 +26,7 @@ function formatDate(iso?: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const guide = await sanityClient.fetch(guideBySlugQuery, { slug }).catch(() => null)
+  const guide = await sanityClient?.fetch(guideBySlugQuery, { slug }).catch(() => null) ?? null
   if (!guide) return { title: 'Guide not found — LumiKin' }
 
   const title = guide.seoTitle ?? `${guide.title} | LumiKin`
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       url: `/guides/${slug}`,
       images: guide.coverImage?.asset
-        ? [{ url: urlFor(guide.coverImage).width(1200).height(630).auto('format').url() }]
+        ? [{ url: urlFor(guide.coverImage)!.width(1200).height(630).auto('format').url() }]
         : undefined,
     },
   }
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function GuidePage({ params }: Props) {
   const [{ slug }, locale] = await Promise.all([params, getLocale()])
-  const guide = await sanityClient.fetch(guideBySlugQuery, { slug }).catch(() => null)
+  const guide = await sanityClient?.fetch(guideBySlugQuery, { slug }).catch(() => null) ?? null
   if (!guide) notFound()
 
   return (
@@ -90,7 +90,7 @@ export default async function GuidePage({ params }: Props) {
         {guide.coverImage?.asset && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={urlFor(guide.coverImage).width(800).auto('format').url()}
+            src={urlFor(guide.coverImage)!.width(800).auto('format').url()}
             alt={guide.coverImage.alt ?? guide.title}
             className="w-full rounded-2xl mb-8 shadow-sm"
           />

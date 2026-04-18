@@ -119,10 +119,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // ── Sanity content pages ──────────────────────────────────────────────────
   type SanitySlug = { slug: string; locale: string; _updatedAt?: string }
 
-  const [guideSlugs, postSlugs]: [SanitySlug[], SanitySlug[]] = await Promise.all([
-    sanityClient.fetch(allGuideSlugsQuery).catch(() => []),
-    sanityClient.fetch(allPostSlugsQuery).catch(() => []),
-  ])
+  const [guideSlugs, postSlugs]: [SanitySlug[], SanitySlug[]] = sanityClient
+    ? await Promise.all([
+        sanityClient.fetch(allGuideSlugsQuery).catch(() => []),
+        sanityClient.fetch(allPostSlugsQuery).catch(() => []),
+      ])
+    : [[], []]
 
   const guideContentEntries: MetadataRoute.Sitemap = guideSlugs.map((g) => ({
     url: localeUrl((g.locale as Locale) ?? 'en', `/guides/${g.slug}`),

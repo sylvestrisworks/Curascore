@@ -1,4 +1,4 @@
-import { PortableText, type PortableTextComponents } from '@portabletext/react'
+import { PortableText, type PortableTextComponents, type PortableTextBlock } from '@portabletext/react'
 import { urlFor } from '@/sanity/lib/image'
 
 const components: PortableTextComponents = {
@@ -8,7 +8,7 @@ const components: PortableTextComponents = {
       return (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={urlFor(value).width(800).auto('format').url()}
+          src={urlFor(value)!.width(800).auto('format').url()}
           alt={value.alt ?? ''}
           className="w-full rounded-xl my-6"
         />
@@ -46,7 +46,7 @@ const components: PortableTextComponents = {
   },
 }
 
-export default function PortableTextRenderer({ value }: { value: unknown[] }) {
+export default function PortableTextRenderer({ value }: { value: PortableTextBlock[] }) {
   return (
     <div className="prose-like">
       <PortableText value={value} components={components} />

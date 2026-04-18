@@ -19,7 +19,7 @@ function formatDate(iso?: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const post = await sanityClient.fetch(postBySlugQuery, { slug }).catch(() => null)
+  const post = await sanityClient?.fetch(postBySlugQuery, { slug }).catch(() => null) ?? null
   if (!post) return { title: 'Post not found — LumiKin' }
 
   const title = post.seoTitle ?? `${post.title} | LumiKin`
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       url: `/blog/${slug}`,
       images: post.coverImage?.asset
-        ? [{ url: urlFor(post.coverImage).width(1200).height(630).auto('format').url() }]
+        ? [{ url: urlFor(post.coverImage)!.width(1200).height(630).auto('format').url() }]
         : undefined,
     },
   }
@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const [{ slug }, locale] = await Promise.all([params, getLocale()])
-  const post = await sanityClient.fetch(postBySlugQuery, { slug }).catch(() => null)
+  const post = await sanityClient?.fetch(postBySlugQuery, { slug }).catch(() => null) ?? null
   if (!post) notFound()
 
   return (
@@ -89,7 +89,7 @@ export default async function BlogPostPage({ params }: Props) {
         {post.coverImage?.asset && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={urlFor(post.coverImage).width(800).auto('format').url()}
+            src={urlFor(post.coverImage)!.width(800).auto('format').url()}
             alt={post.coverImage.alt ?? post.title}
             className="w-full rounded-2xl mb-8 shadow-sm"
           />

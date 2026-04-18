@@ -32,8 +32,8 @@ function formatDate(iso?: string) {
 export default async function BlogPage() {
   const locale = await getLocale()
   const posts: SanityPost[] = await sanityClient
-    .fetch(postsQuery, { locale })
-    .catch(() => [])
+    ?.fetch(postsQuery, { locale })
+    .catch(() => []) ?? []
 
   const news  = posts.filter((p) => p.postType === 'news')
   const blogs = posts.filter((p) => p.postType !== 'news')
@@ -86,7 +86,7 @@ function PostGrid({ posts, locale }: { posts: SanityPost[]; locale: string }) {
           {post.coverImage?.asset ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={urlFor(post.coverImage).width(200).height(150).auto('format').url()}
+              src={urlFor(post.coverImage)!.width(200).height(150).auto('format').url()}
               alt={post.coverImage.alt ?? post.title}
               className="w-24 h-20 rounded-xl object-cover shrink-0"
             />

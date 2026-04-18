@@ -63,8 +63,9 @@ export default async function LearnPage() {
   const locale = await getLocale()
 
   const data: HubData = await sanityClient
-    .fetch(learnHubQuery, { locale })
+    ?.fetch(learnHubQuery, { locale })
     .catch(() => ({ featuredGuides: [], recentPosts: [], faqCount: 0 }))
+    ?? { featuredGuides: [], recentPosts: [], faqCount: 0 }
 
   const { featuredGuides, recentPosts, faqCount } = data
 
@@ -124,7 +125,7 @@ export default async function LearnPage() {
                   {guide.coverImage?.asset ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={urlFor(guide.coverImage).width(600).height(300).auto('format').url()}
+                      src={urlFor(guide.coverImage)!.width(600).height(300).auto('format').url()}
                       alt={guide.coverImage.alt ?? guide.title}
                       className="w-full h-36 object-cover"
                     />
@@ -165,7 +166,7 @@ export default async function LearnPage() {
                   {post.coverImage?.asset ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={urlFor(post.coverImage).width(160).height(100).auto('format').url()}
+                      src={urlFor(post.coverImage)!.width(160).height(100).auto('format').url()}
                       alt={post.coverImage.alt ?? post.title}
                       className="w-20 h-14 rounded-lg object-cover shrink-0"
                     />

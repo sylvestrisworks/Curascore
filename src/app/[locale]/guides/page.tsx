@@ -45,8 +45,8 @@ function formatDate(iso?: string) {
 export default async function GuidesPage() {
   const locale = await getLocale()
   const guides: SanityGuide[] = await sanityClient
-    .fetch(guidesQuery, { locale })
-    .catch(() => [])
+    ?.fetch(guidesQuery, { locale })
+    .catch(() => []) ?? []
 
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-900">
@@ -74,7 +74,7 @@ export default async function GuidesPage() {
                 {guide.coverImage?.asset ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={urlFor(guide.coverImage).width(600).height(300).auto('format').url()}
+                    src={urlFor(guide.coverImage)!.width(600).height(300).auto('format').url()}
                     alt={guide.coverImage.alt ?? guide.title}
                     className="w-full h-40 object-cover"
                   />
