@@ -271,22 +271,16 @@ export default async function HomePage({ params, searchParams }: Props) {
 
       <main className="max-w-4xl mx-auto px-4 overflow-x-hidden">
 
-        {/* Age + Platform pickers — overlaps hero bottom to bridge into content */}
-        <div className="-mt-5 mb-2">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-lg px-4 pt-4 pb-3 space-y-3">
-            <AgePicker current={age} />
-            <div className="border-t border-slate-100 dark:border-slate-700/60 pt-3">
-              <PlatformPicker current={platforms} />
-            </div>
-            {(platforms.length > 0 || ageParam !== null) && (
-              <div className="text-center pt-0.5">
-                <a href={`/${locale}`} className="text-xs text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors">
-                  {t('clearFilters')}
-                </a>
-              </div>
-            )}
-          </div>
-        </div>
+        {/* Age + Platform pickers */}
+        <section className="pt-6 pb-4 space-y-3 text-center">
+          <AgePicker current={age} />
+          <PlatformPicker current={platforms} />
+          {(platforms.length > 0 || ageParam !== null) && (
+            <a href={`/${locale}`} className="inline-block text-xs text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors">
+              {t('clearFilters')}
+            </a>
+          )}
+        </section>
 
         {/* Carousels */}
         {carousels.length > 0 ? (
