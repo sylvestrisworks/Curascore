@@ -21,17 +21,16 @@
 }
 
 .hero-gradient {
-  background: linear-gradient(135deg, #065f46, #0f766e, #0369a1, #4f46e5, #065f46);
+  background: linear-gradient(135deg, #312e81, #4f46e5, #7c3aed, #2563eb, #312e81);
   background-size: 300% 300%;
-  animation: gradient-shift 10s ease infinite;
+  animation: gradient-shift 12s ease infinite;
   will-change: background-position;
 }
 
-/* Dark mode variant — något ljusare för bättre kontrast */
 .dark .hero-gradient {
-  background: linear-gradient(135deg, #047857, #0d9488, #0284c7, #6366f1, #047857);
+  background: linear-gradient(135deg, #1e1b4b, #4338ca, #6d28d9, #1d4ed8, #1e1b4b);
   background-size: 300% 300%;
-  animation: gradient-shift 10s ease infinite;
+  animation: gradient-shift 12s ease infinite;
   will-change: background-position;
 }
 

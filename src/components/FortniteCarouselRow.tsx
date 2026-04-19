@@ -94,7 +94,7 @@ export default function FortniteCarouselRow({ experiences }: { experiences: Expe
   if (experiences.length === 0) return null
 
   return (
-    <section className="pt-10 border-t border-slate-100 dark:border-slate-700/50">
+    <section className="pt-10">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
           <span className="w-5 h-5 rounded-md bg-blue-100 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-800 flex items-center justify-center shrink-0">

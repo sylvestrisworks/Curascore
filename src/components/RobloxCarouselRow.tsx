@@ -113,7 +113,7 @@ export default function RobloxCarouselRow({ experiences }: { experiences: Experi
   if (experiences.length === 0) return null
 
   return (
-    <section className="pt-10 border-t border-slate-100 dark:border-slate-700/50">
+    <section className="pt-10">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
           <span className="w-5 h-5 rounded-md bg-red-100 dark:bg-red-900/40 border border-red-200 dark:border-red-800 flex items-center justify-center shrink-0">

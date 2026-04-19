@@ -105,7 +105,7 @@ export default function CarouselRow({ emoji, title, browseHref, games, index }: 
   }
 
   return (
-    <section className={index > 0 ? 'pt-10 border-t border-slate-100 dark:border-slate-700/50' : ''}>
+    <section className={index > 0 ? 'pt-10' : ''}>
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
           <span>{emoji}</span>

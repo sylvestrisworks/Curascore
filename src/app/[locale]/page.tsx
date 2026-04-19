@@ -226,13 +226,15 @@ export default async function HomePage({ params, searchParams }: Props) {
     <div className="bg-slate-50 dark:bg-slate-900">
 
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
-      <section className="hero-gradient relative">
-        <div className="hidden sm:block absolute inset-0 pointer-events-none select-none overflow-hidden">
-          <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-white/10 blur-3xl" />
-          <div className="absolute -bottom-10 -right-10 w-64 h-64 rounded-full bg-violet-300/20 blur-3xl" />
+      <section className="hero-gradient relative overflow-hidden">
+        {/* Decorative orbs — visible on all screen sizes */}
+        <div className="absolute inset-0 pointer-events-none select-none">
+          <div className="absolute -top-24 -left-16 w-80 h-80 rounded-full bg-white/10 blur-3xl" />
+          <div className="absolute top-10 right-1/4 w-48 h-48 rounded-full bg-violet-300/15 blur-3xl" />
+          <div className="absolute -bottom-12 -right-16 w-72 h-72 rounded-full bg-blue-400/15 blur-3xl" />
         </div>
 
-        <div className="relative max-w-4xl mx-auto px-4 py-14 sm:py-20 text-center space-y-5">
+        <div className="relative max-w-4xl mx-auto px-4 py-16 sm:py-24 text-center space-y-5">
           <p className="inline-block text-xs font-bold uppercase tracking-widest text-white/70 bg-white/10 px-3 py-1 rounded-full border border-white/20">
             {t('badge')}
           </p>
@@ -241,23 +243,23 @@ export default async function HomePage({ params, searchParams }: Props) {
               yellow: (chunks) => <span className="text-yellow-300 drop-shadow-sm">{chunks}</span>,
             })}
           </h1>
-          <p className="text-white/80 text-lg max-w-xl mx-auto leading-relaxed">
+          <p className="text-white/75 text-base sm:text-lg max-w-lg mx-auto leading-relaxed">
             {t('heroSub')}
           </p>
-          <div className="max-w-xl mx-auto pt-2">
+          <div className="max-w-xl mx-auto pt-1">
             <SearchBar placeholder={t('searchPlaceholder', { count: stats.scoredGames })} />
           </div>
 
           {/* Stats row */}
-          <div className="flex justify-center gap-2 sm:gap-3 pt-4">
+          <div className="flex justify-center gap-2 sm:gap-4 pt-3">
             {[
               { value: stats.scoredGames,  label: t('statsGamesReviewed') },
               { value: '49',               label: t('statsDataPoints') },
               { value: stats.lowRiskGames, label: t('statsLowRisk')       },
             ].map(s => (
-              <div key={s.label} className="stat-shimmer flex flex-col items-center bg-white/10 border border-white/20 rounded-2xl px-3 sm:px-5 py-3 backdrop-blur-sm">
+              <div key={s.label} className="flex flex-col items-center px-3 sm:px-5 py-2.5">
                 <span className="text-xl sm:text-2xl font-extrabold text-white">{s.value}</span>
-                <span className="text-[11px] sm:text-xs text-white/70 font-medium mt-0.5 text-center">{s.label}</span>
+                <span className="text-[11px] sm:text-xs text-white/60 font-medium mt-0.5 text-center">{s.label}</span>
               </div>
             ))}
           </div>
