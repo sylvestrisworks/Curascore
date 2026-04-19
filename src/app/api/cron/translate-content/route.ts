@@ -18,8 +18,8 @@ const LANGUAGE_NAMES: Record<Locale, string> = {
   es: 'Spanish',
 }
 
-const MAX_GAMES_PER_RUN = 10
-const BUDGET_MS         = 240_000
+const MAX_GAMES_PER_RUN = 50
+const BUDGET_MS         = 270_000
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
