@@ -1,13 +1,11 @@
 import type { Metadata } from 'next'
-import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
-// Loaded so the browser has Plus Jakarta Sans available for the logo SVG
-const _plusJakarta = Plus_Jakarta_Sans({ subsets: ['latin'], display: 'swap' })
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://lumikin.org'),
