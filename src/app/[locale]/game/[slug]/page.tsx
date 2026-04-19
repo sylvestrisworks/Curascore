@@ -75,9 +75,10 @@ async function fetchGameData(slug: string): Promise<GameCardProps | null> {
     hasSubscription: game.hasSubscription ?? false,
     hasBattlePass:   game.hasBattlePass ?? false,
     requiresInternet:game.requiresInternet,
-    hasStrangerChat: game.hasStrangerChat ?? false,
-    chatModeration:  game.chatModeration,
-    updatedAt:       game.updatedAt?.toISOString() ?? null,
+    hasStrangerChat:    game.hasStrangerChat ?? false,
+    chatModeration:     game.chatModeration,
+    bundledOnlineNote:  game.bundledOnlineNote ?? null,
+    updatedAt:          game.updatedAt?.toISOString() ?? null,
   }
 
   const serializedScores: SerializedScores | null = score

@@ -35,6 +35,7 @@ export type SerializedGame = {
   requiresInternet: string | null
   hasStrangerChat: boolean
   chatModeration: string | null
+  bundledOnlineNote: string | null
   updatedAt: string | null
 }
 

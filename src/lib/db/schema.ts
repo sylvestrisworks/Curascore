@@ -47,6 +47,7 @@ export const games = pgTable('games', {
   requiresInternet: varchar('requires_internet', { length: 20 }), // always, sometimes, never
   hasStrangerChat: boolean('has_stranger_chat').default(false),
   chatModeration: varchar('chat_moderation', { length: 50 }),     // none, basic, strong
+  bundledOnlineNote: text('bundled_online_note'),                 // manually curated warning for games where a toxic online mode is bundled with a good single-player campaign (e.g. RDR2, GTA V)
 
   // Platform flag — true for apps like Roblox that host UGC experiences
   isPlatform: boolean('is_platform').default(false),

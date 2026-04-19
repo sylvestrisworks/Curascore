@@ -8,14 +8,15 @@ import { eq, desc, and, lte, ilike, isNotNull, inArray, type SQL } from 'drizzle
 import FortniteCard from '@/components/FortniteCard'
 import { curascoreText } from '@/lib/ui'
 import FortniteFilters, { type FortniteFilterState } from '@/components/FortniteFilters'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import Link from 'next/link'
 import type { ExperienceSummary } from '@/components/ExperienceCard'
 
-const FORTNITE_MODE_SLUGS = ['fortnite-battle-royale', 'lego-fortnite', 'fortnite-festival', 'fortnite-rocket-racing'] as const
+// 'fortnite' is the reviewed/scored game — BR is not a separate scored entry
+const FORTNITE_MODE_SLUGS = ['fortnite', 'lego-fortnite', 'fortnite-festival', 'fortnite-rocket-racing'] as const
 
 const MODE_META: Record<string, { initial: string; tagline: string; iconBg: string; iconText: string; hoverBorder: string }> = {
-  'fortnite-battle-royale': {
+  'fortnite': {
     initial: 'BR', tagline: '100-player battle royale',
     iconBg: 'bg-orange-100 dark:bg-orange-900/40', iconText: 'text-orange-600 dark:text-orange-400',
     hoverBorder: 'hover:border-orange-400 dark:hover:border-orange-600',
@@ -45,7 +46,7 @@ export const metadata: Metadata = {
 type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> }
 
 export default async function FortniteCreativeHubPage({ searchParams }: Props) {
-  const [sp, t] = await Promise.all([searchParams, getTranslations('fortnite')])
+  const [sp, t, locale] = await Promise.all([searchParams, getTranslations('fortnite'), getLocale()])
   const filters: FortniteFilterState = {
     q:    typeof sp.q    === 'string' ? sp.q    : '',
     sort: typeof sp.sort === 'string' ? sp.sort : 'curascore',
@@ -53,6 +54,7 @@ export default async function FortniteCreativeHubPage({ searchParams }: Props) {
     time: typeof sp.time === 'string' ? sp.time : '',
   }
   const hasFilters = !!(filters.q || filters.risk || filters.time || (filters.sort && filters.sort !== 'curascore'))
+
 
   // Find Fortnite Creative platform row
   const [fortnitePlatform] = await db
@@ -121,8 +123,10 @@ export default async function FortniteCreativeHubPage({ searchParams }: Props) {
     monetizationScore:         score?.monetizationScore ?? null,
   }))
 
-  const scored   = maps.filter(e => e.curascore != null)
-  const unscored = maps.filter(e => e.curascore == null)
+  // Only show maps that have a thumbnail — no-image cards look broken
+  const visibleMaps = maps.filter(e => e.thumbnailUrl)
+  const scored   = visibleMaps.filter(e => e.curascore != null)
+  const unscored = visibleMaps.filter(e => e.curascore == null)
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
@@ -190,7 +194,7 @@ export default async function FortniteCreativeHubPage({ searchParams }: Props) {
                 return (
                   <div key={mode.slug} className="snap-start shrink-0 w-36 sm:w-auto">
                   <Link
-                    href={`/game/${mode.slug}`}
+                    href={`/${locale}/game/${mode.slug}`}
                     className={`group block rounded-xl border border-slate-200 dark:border-slate-700 p-3 bg-white dark:bg-slate-800 hover:shadow-md transition-all ${meta.hoverBorder}`}
                   >
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-2.5 ${meta.iconBg}`}>
@@ -231,7 +235,7 @@ export default async function FortniteCreativeHubPage({ searchParams }: Props) {
           maps.length > 0 ? (
             <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory sm:mx-0 sm:px-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0 sm:snap-none">
               {maps.map(exp => (
-                <div key={exp.slug} className="snap-start shrink-0 w-40 sm:w-auto">
+                <div key={exp.slug} className="snap-start shrink-0 w-36 sm:w-auto">
                   <FortniteCard exp={exp} />
                 </div>
               ))}
@@ -250,7 +254,7 @@ export default async function FortniteCreativeHubPage({ searchParams }: Props) {
                 </h2>
                 <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory sm:mx-0 sm:px-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0 sm:snap-none">
                   {scored.map(exp => (
-                    <div key={exp.slug} className="snap-start shrink-0 w-40 sm:w-auto">
+                    <div key={exp.slug} className="snap-start shrink-0 w-36 sm:w-auto">
                       <FortniteCard exp={exp} />
                     </div>
                   ))}
@@ -265,7 +269,7 @@ export default async function FortniteCreativeHubPage({ searchParams }: Props) {
                 </h2>
                 <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory sm:mx-0 sm:px-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0 sm:snap-none">
                   {unscored.map(exp => (
-                    <div key={exp.slug} className="snap-start shrink-0 w-40 sm:w-auto">
+                    <div key={exp.slug} className="snap-start shrink-0 w-36 sm:w-auto">
                       <FortniteCard exp={exp} />
                     </div>
                   ))}
@@ -281,14 +285,26 @@ export default async function FortniteCreativeHubPage({ searchParams }: Props) {
           </>
         )}
 
-        {/* Parent guidance footer */}
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl px-5 py-4 text-sm text-blue-800 dark:text-blue-300">
-          <p className="font-semibold mb-1">About Fortnite Creative ratings</p>
-          <p className="text-blue-700 dark:text-blue-400 leading-relaxed">
-            Each map is independently rated by our AI. Because Fortnite Creative is user-generated, map content can change.
-            We recommend reviewing which maps your child plays and enabling parental controls in Epic Games account settings.
-          </p>
-        </div>
+        {/* Parent guidance — collapsible BLUF panel */}
+        <details className="group/panel">
+          <summary className="flex items-center justify-between gap-2 cursor-pointer list-none select-none py-2 text-xs font-semibold text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+            <span className="flex items-center gap-1.5">
+              <span className="text-blue-400">ℹ</span>
+              Fortnite parent guide
+            </span>
+            <span className="transition-transform group-open/panel:rotate-180 text-slate-300 dark:text-slate-600">▾</span>
+          </summary>
+          <div className="mt-2 rounded-xl border border-blue-100 dark:border-blue-900/40 bg-blue-50/60 dark:bg-blue-950/30 px-4 py-3 text-xs text-slate-600 dark:text-slate-400 space-y-2.5 leading-relaxed">
+            <p className="font-semibold text-slate-700 dark:text-slate-300 text-[11px] uppercase tracking-wide">Bottom line first</p>
+            <p><strong className="text-slate-700 dark:text-slate-200">Fortnite Battle Royale has unfiltered voice chat with strangers enabled by default.</strong> Go to Epic Games account settings → Parental Controls and disable voice chat, or set it to friends-only, before your child plays any online mode.</p>
+            <p><strong className="text-slate-700 dark:text-slate-200">Fortnite is five different games in one launcher.</strong> Battle Royale, LEGO Fortnite, Festival, Rocket Racing, and Creative each have different age-appropriateness and risk profiles. Your child may start in LEGO Fortnite and drift into Battle Royale — check which modes they're actually playing.</p>
+            <p><strong className="text-slate-700 dark:text-slate-200">V-Bucks are the shared currency across all modes.</strong> The Battle Pass, cosmetic bundles, and in-map purchases all use V-Bucks. Many Creative maps surface V-Buck spending prompts. Set spending limits in Epic Games account settings or use a prepaid card with a fixed balance.</p>
+            <p><strong className="text-slate-700 dark:text-slate-200">Creative map content can change after our rating.</strong> Each map is rated by our AI at a point in time — creators can update maps. We recommend periodically checking which maps your child plays and watching a few minutes of gameplay with them.</p>
+            <p className="pt-0.5 border-t border-blue-100 dark:border-blue-900/40 text-slate-500 dark:text-slate-400">
+              <strong className="text-slate-600 dark:text-slate-300">Action:</strong> Epic Games account → Parental Controls → set a PIN, disable voice chat, and cap monthly V-Buck spending. Takes under 5 minutes and significantly reduces risk across all Fortnite modes.
+            </p>
+          </div>
+        </details>
       </main>
     </div>
   )
