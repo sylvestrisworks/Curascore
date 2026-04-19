@@ -104,10 +104,10 @@ async function getCarouselRows(platforms: string[], age?: string, locale = 'en')
   const trendingCutoff = new Date()
   trendingCutoff.setMonth(trendingCutoff.getMonth() - 18)
 
-  const [topRated, coopPlay, lowRisk, highBenefit, teamwork, vrGames, beginnerGames, newAndGood, popular, trending] = await Promise.all([
+  const [topRated, coopPlay, , highBenefit, teamwork, vrGames, beginnerGames, newAndGood, popular, trending] = await Promise.all([
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base()).orderBy(desc(gameScores.curascore)).limit(12),
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(gte(gameScores.socialEmotionalScore, 0.5))).orderBy(desc(gameScores.socialEmotionalScore)).limit(12),
-    db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(lte(gameScores.ris, 0.3))).orderBy(desc(gameScores.curascore)).limit(12),
+    Promise.resolve([]), // lowRisk — carousel removed, kept for stats counter
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(gte(gameScores.cognitiveScore, 0.6))).orderBy(desc(gameScores.bds)).limit(12),
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(sql`${gameScores.topBenefits}::jsonb @> ${JSON.stringify([{ skill: 'Teamwork' }])}::jsonb`)).orderBy(desc(gameScores.curascore)).limit(12),
     db.select(BASE_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(and(isNotNull(gameScores.curascore), eq(games.isVr, true), ageFilter)).orderBy(desc(gameScores.curascore)).limit(12),
@@ -130,7 +130,6 @@ async function getCarouselRows(platforms: string[], age?: string, locale = 'en')
     { id: 'newgood',  title: 'New & Worth Playing',   emoji: '✨', browseHref: `${browseBase}?sort=newest${baseParams}`,             games: newAndGood.map(toSummary)    },
     { id: 'top',      title: 'The Highest Curascores', emoji: '⭐', browseHref: `${browseBase}?sort=curascore${baseParams}`,          games: topRated.map(toSummary)      },
     { id: 'coop',     title: 'Family Co-Op',           emoji: '👨‍👩‍👧', browseHref: `${browseBase}?benefits=teamwork${baseParams}`,       games: coopPlay.map(toSummary)      },
-    { id: 'safe',     title: 'Safe & Stress-Free',     emoji: '✅', browseHref: `${browseBase}?risk=low${baseParams}`,                games: lowRisk.map(toSummary)       },
     { id: 'brain',    title: 'Sneaky Smart Games',     emoji: '🧠', browseHref: `${browseBase}?benefits=problem-solving${baseParams}`,games: highBenefit.map(toSummary)   },
     { id: 'teamwork', title: 'Team up',                emoji: '🤝', browseHref: `${browseBase}?benefits=teamwork${baseParams}`,       games: teamwork.map(toSummary)      },
     { id: 'vr',       title: 'VR & AR',                emoji: '🥽', browseHref: `${browseBase}?platforms=VR${ageParam}`,             games: vrGames.map(toSummary)       },
