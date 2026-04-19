@@ -19,15 +19,15 @@ export const maxDuration = 300
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
-const MAX_DEBATES_PER_RUN = 8
-const DELAY_MS            = 300
+const MAX_DEBATES_PER_RUN = 4    // 4 debates × 4 calls = 16 Gemini calls per run
+const DELAY_MS            = 5000 // 5s between calls → ~12 RPM, under free-tier 15 RPM limit
 const BUDGET_MS           = 240_000
-const BEDROCK_MODEL       = 'global.anthropic.claude-sonnet-4-6'
-const BEDROCK_URL         = `https://bedrock-runtime.us-east-1.amazonaws.com/model/${BEDROCK_MODEL}/invoke`
+const GEMINI_MODEL        = 'gemini-2.5-flash'
+const GEMINI_URL          = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`
 const CRITIC_WEIGHT       = 0.60
 const MAX_AUTO_SWING      = 20
 const DEBATE_MIN_SCORE    = 35
-const DEBATE_MAX_SCORE    = 55
+const DEBATE_MAX_SCORE    = 60
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
 
@@ -139,25 +139,30 @@ function criticPrompt(gameInfo: string, round: number, advocateScores?: DebateSc
   return `${role}\n\n${rubricsBlock()}\n\n## GAME\n${gameInfo}\n\n## ADVOCATE'S POSITION\nScores:\n${scoresBlock(advocateScores!)}\nAdvocate's reasoning: "${advocateReasoning}"\n\nChallenge the weakest claims. Call submit_scores with your revised scores and rebuttal.`
 }
 
-// ─── Bedrock caller ───────────────────────────────────────────────────────────
+// ─── Gemini caller ────────────────────────────────────────────────────────────
 
-async function callBedrockDebate(
+async function callGeminiDebate(
   prompt: string,
   attempt = 0
 ): Promise<{ scores: DebateScores; reasoning: string }> {
+  const url = `${GEMINI_URL}?key=${process.env.GEMINI_API_KEY}`
   try {
-    const res = await fetch(BEDROCK_URL, {
+    const res = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.AWS_BEARER_TOKEN_BEDROCK}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        anthropic_version: 'bedrock-2023-05-31',
-        max_tokens: 4096,
-        tools: [DEBATE_TOOL],
-        tool_choice: { type: 'tool', name: 'submit_scores' },
-        messages: [{ role: 'user', content: prompt }],
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        tools: [{
+          functionDeclarations: [{
+            name: DEBATE_TOOL.name,
+            description: DEBATE_TOOL.description,
+            parameters: DEBATE_TOOL.input_schema,
+          }],
+        }],
+        tool_config: {
+          function_calling_config: { mode: 'ANY', allowed_function_names: ['submit_scores'] },
+        },
+        generationConfig: { temperature: 0.4 },
       }),
     })
 
@@ -165,22 +170,24 @@ async function callBedrockDebate(
       const errText = await res.text()
       if ((res.status === 429 || res.status === 503) && attempt < 3) {
         await sleep(Math.pow(2, attempt) * 5000)
-        return callBedrockDebate(prompt, attempt + 1)
+        return callGeminiDebate(prompt, attempt + 1)
       }
-      throw new Error(`Bedrock ${res.status}: ${errText}`)
+      throw new Error(`Gemini ${res.status}: ${errText}`)
     }
 
     const data = await res.json()
-    const toolUse = data.content?.find((c: { type: string }) => c.type === 'tool_use')
-    if (!toolUse?.input) {
+    const part = data.candidates?.[0]?.content?.parts?.find(
+      (p: { functionCall?: unknown }) => p.functionCall
+    )
+    if (!part?.functionCall?.args) {
       if (attempt < 3) {
         await sleep(Math.pow(2, attempt) * 5000)
-        return callBedrockDebate(prompt, attempt + 1)
+        return callGeminiDebate(prompt, attempt + 1)
       }
-      throw new Error('Bedrock did not return tool_use block')
+      throw new Error('Gemini did not return a function call')
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const a = toolUse.input as any
+    const a = part.functionCall.args as any
     return {
       scores: { b1: a.b1, b2: a.b2, b3: a.b3, r1: a.r1, r2: a.r2, r3: a.r3 },
       reasoning: a.reasoning,
@@ -189,7 +196,7 @@ async function callBedrockDebate(
     const isTransient = String(err).includes('fetch failed') || String(err).includes('ECONNRESET')
     if (isTransient && attempt < 3) {
       await sleep(Math.pow(2, attempt) * 5000)
-      return callBedrockDebate(prompt, attempt + 1)
+      return callGeminiDebate(prompt, attempt + 1)
     }
     throw err
   }
@@ -227,15 +234,15 @@ async function runDebate(
   const gInfo = gameBlock(game)
 
   // Round 1 — opening positions
-  const r1adv  = await callBedrockDebate(advocatePrompt(gInfo, 1))
+  const r1adv  = await callGeminiDebate(advocatePrompt(gInfo, 1))
   await sleep(DELAY_MS)
-  const r1crit = await callBedrockDebate(criticPrompt(gInfo, 1))
+  const r1crit = await callGeminiDebate(criticPrompt(gInfo, 1))
   await sleep(DELAY_MS)
 
   // Round 2 — rebuttals
-  const r2adv  = await callBedrockDebate(advocatePrompt(gInfo, 2, r1crit.scores, r1crit.reasoning))
+  const r2adv  = await callGeminiDebate(advocatePrompt(gInfo, 2, r1crit.scores, r1crit.reasoning))
   await sleep(DELAY_MS)
-  const r2crit = await callBedrockDebate(criticPrompt(gInfo, 2, r1adv.scores, r1adv.reasoning))
+  const r2crit = await callGeminiDebate(criticPrompt(gInfo, 2, r1adv.scores, r1adv.reasoning))
 
   const finalScores = weightedDebateScores(r2adv.scores, r2crit.scores)
   const { bds, ris, curascore } = computeDebateCurascore(finalScores)
@@ -280,8 +287,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  if (!process.env.AWS_BEARER_TOKEN_BEDROCK) {
-    return NextResponse.json({ error: 'AWS_BEARER_TOKEN_BEDROCK not set' }, { status: 500 })
+  if (!process.env.GEMINI_API_KEY) {
+    return NextResponse.json({ error: 'GEMINI_API_KEY not set' }, { status: 500 })
   }
 
   try {
