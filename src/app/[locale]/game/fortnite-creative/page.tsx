@@ -71,18 +71,27 @@ export default async function FortniteCreativeHubPage({ searchParams }: Props) {
         .limit(1)
     : [null]
 
-  // Fetch standalone Fortnite game modes
+  // Fetch standalone Fortnite game modes (include backgroundImage for thumbnails)
   const gameModeRows = await db
     .select({
       slug:                    games.slug,
       title:                   games.title,
       esrbRating:              games.esrbRating,
+      backgroundImage:         games.backgroundImage,
       curascore:               gameScores.curascore,
       timeRecommendationLabel: gameScores.timeRecommendationLabel,
     })
     .from(games)
     .leftJoin(gameScores, eq(gameScores.gameId, games.id))
     .where(inArray(games.slug, [...FORTNITE_MODE_SLUGS]))
+
+  // Use Fortnite BR background as header fallback if fortnite-creative has none
+  const headerBg: string | null = fortnitePlatform?.backgroundImage ?? (await db
+    .select({ backgroundImage: games.backgroundImage })
+    .from(games)
+    .where(eq(games.slug, 'fortnite'))
+    .limit(1)
+    .then(r => r[0]?.backgroundImage ?? null))
 
   // Sort to match the canonical order
   const orderedModes = FORTNITE_MODE_SLUGS
@@ -134,10 +143,10 @@ export default async function FortniteCreativeHubPage({ searchParams }: Props) {
 
         {/* Platform header */}
         <div className="relative rounded-2xl overflow-hidden border border-slate-700 shadow-lg bg-slate-900">
-          {fortnitePlatform?.backgroundImage && (
+          {headerBg && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={fortnitePlatform.backgroundImage}
+              src={headerBg}
               alt=""
               className="absolute inset-0 w-full h-full object-cover opacity-30"
             />
@@ -187,35 +196,48 @@ export default async function FortniteCreativeHubPage({ searchParams }: Props) {
             <h2 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">
               Fortnite Game Modes
             </h2>
-            <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory sm:mx-0 sm:px-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:pb-0 sm:snap-none">
+            <div className="flex items-stretch gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory sm:mx-0 sm:px-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:pb-0 sm:snap-none">
               {orderedModes.map(mode => {
                 const meta = MODE_META[mode.slug]
                 if (!meta) return null
                 return (
-                  <div key={mode.slug} className="snap-start shrink-0 w-44 sm:w-auto">
+                  <div key={mode.slug} className="snap-start shrink-0 w-44 sm:w-auto h-full">
                   <Link
                     href={`/${locale}/game/${mode.slug}`}
-                    className={`group block rounded-xl border border-slate-200 dark:border-slate-700 p-3 bg-white dark:bg-slate-800 hover:shadow-md transition-all ${meta.hoverBorder}`}
+                    className={`group flex flex-col rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden bg-white dark:bg-slate-800 hover:shadow-md transition-all h-full ${meta.hoverBorder}`}
                   >
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-2.5 ${meta.iconBg}`}>
-                      <span className={`text-sm font-black ${meta.iconText}`}>{meta.initial}</span>
+                    {/* Thumbnail */}
+                    <div className="relative h-20 shrink-0 overflow-hidden">
+                      {mode.backgroundImage ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={mode.backgroundImage} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                      ) : (
+                        <div className={`w-full h-full ${meta.iconBg}`} />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                      <div className={`absolute bottom-2 left-2 w-7 h-7 rounded-lg flex items-center justify-center ${meta.iconBg} shadow`}>
+                        <span className={`text-[11px] font-black ${meta.iconText}`}>{meta.initial}</span>
+                      </div>
                     </div>
-                    <div className="text-sm font-semibold text-slate-800 dark:text-white leading-tight">{mode.title}</div>
-                    <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">{meta.tagline}</div>
-                    <div className="flex items-center gap-1.5 mt-2 flex-wrap">
-                      {mode.esrbRating && (
-                        <span className="text-[10px] bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 px-1.5 py-0.5 rounded font-medium">
-                          {mode.esrbRating}
+                    {/* Content */}
+                    <div className="p-3 flex flex-col flex-1">
+                      <div className="text-sm font-semibold text-slate-800 dark:text-white leading-tight">{mode.title}</div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-tight line-clamp-1">{meta.tagline}</div>
+                      <div className="flex items-center gap-1.5 mt-auto pt-2 flex-wrap">
+                        {mode.esrbRating && (
+                          <span className="text-[10px] bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 px-1.5 py-0.5 rounded font-medium">
+                            {mode.esrbRating}
+                          </span>
+                        )}
+                        <span className="text-[10px] bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.5 rounded font-medium">
+                          Free
                         </span>
-                      )}
-                      <span className="text-[10px] bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.5 rounded font-medium">
-                        Free
-                      </span>
-                      {mode.curascore != null && (
-                        <span className={`text-[10px] font-bold ${curascoreText(mode.curascore)}`}>
-                          {mode.curascore}
-                        </span>
-                      )}
+                        {mode.curascore != null && (
+                          <span className={`text-[10px] font-bold ${curascoreText(mode.curascore)}`}>
+                            {mode.curascore}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </Link>
                   </div>
