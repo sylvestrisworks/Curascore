@@ -126,25 +126,6 @@ export default function FortniteCarouselRow({ experiences }: { experiences: Expe
         </div>
       </div>
 
-      {/* Parent guidance — collapsible BLUF panel */}
-      <details className="group/panel mt-3">
-        <summary className="flex items-center justify-between gap-2 cursor-pointer list-none select-none py-2 text-xs font-semibold text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
-          <span className="flex items-center gap-1.5">
-            <span className="text-blue-400">ℹ</span>
-            Fortnite parent guide
-          </span>
-          <span className="transition-transform group-open/panel:rotate-180 text-slate-300 dark:text-slate-600">▾</span>
-        </summary>
-        <div className="mt-2 rounded-xl border border-blue-100 dark:border-blue-900/40 bg-blue-50/60 dark:bg-blue-950/30 px-4 py-3 text-xs text-slate-600 dark:text-slate-400 space-y-2.5 leading-relaxed">
-          <p className="font-semibold text-slate-700 dark:text-slate-300 text-[11px] uppercase tracking-wide">Bottom line first</p>
-          <p><strong className="text-slate-700 dark:text-slate-200">Proximity voice chat with strangers is on by default across all Fortnite modes.</strong> Disable it in Epic parental controls before your child plays anything in the Fortnite launcher.</p>
-          <p><strong className="text-slate-700 dark:text-slate-200">Fortnite is five different games in one launcher</strong> — Battle Royale (competitive shooter, T-rated), LEGO Fortnite (family survival, E10+), Festival (rhythm game), Rocket Racing (arcade racing), and Creative (user-made maps, quality varies wildly). Each has a different risk profile.</p>
-          <p><strong className="text-slate-700 dark:text-slate-200">V-Bucks and the item shop are always visible</strong> regardless of which mode your child plays. Cosmetics are the only spend — no gameplay advantage — but peer pressure around skins is real and documented. Set spending expectations before the first session.</p>
-          <p className="pt-0.5 border-t border-blue-100 dark:border-blue-900/40 text-slate-500 dark:text-slate-400">
-            <strong className="text-slate-600 dark:text-slate-300">Action:</strong> Epic Games account → Parental Controls → set a PIN, disable voice chat, enable daily playtime limits. Takes 3 minutes.
-          </p>
-        </div>
-      </details>
     </section>
   )
 }
