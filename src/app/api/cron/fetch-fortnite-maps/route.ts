@@ -551,7 +551,8 @@ async function handler(): Promise<NextResponse> {
         title:        map.title,
         description:  map.description,
         creatorName:  map.creatorName,
-        thumbnailUrl: map.thumbnailUrl,
+        // Only overwrite thumbnailUrl if we have one — preserve any URL set externally (e.g. fix-fortnite-thumbnails script)
+        ...(map.thumbnailUrl !== null ? { thumbnailUrl: map.thumbnailUrl } : {}),
         genre:        map.genre,
         ...(contentChanged ? { needsRescore: true } : {}),
         updatedAt:    new Date(),
