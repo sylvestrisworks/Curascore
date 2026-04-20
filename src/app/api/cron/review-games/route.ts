@@ -394,7 +394,30 @@ export async function GET(req: NextRequest) {
   try {
     // Fetch unreviewed games OR games flagged for rescore (RAWG update / age sweep)
     const pending = await db
-      .select()
+      .select({
+        games: {
+          id:                 games.id,
+          slug:               games.slug,
+          title:              games.title,
+          developer:          games.developer,
+          publisher:          games.publisher,
+          description:        games.description,
+          genres:             games.genres,
+          platforms:          games.platforms,
+          esrbRating:         games.esrbRating,
+          metacriticScore:    games.metacriticScore,
+          basePrice:          games.basePrice,
+          hasMicrotransactions: games.hasMicrotransactions,
+          hasLootBoxes:       games.hasLootBoxes,
+          hasBattlePass:      games.hasBattlePass,
+          hasSubscription:    games.hasSubscription,
+          requiresInternet:   games.requiresInternet,
+          hasStrangerChat:    games.hasStrangerChat,
+          chatModeration:     games.chatModeration,
+          needsRescore:       games.needsRescore,
+        },
+        gameScores: { id: gameScores.id },
+      })
       .from(games)
       .leftJoin(gameScores, eq(gameScores.gameId, games.id))
       .where(or(isNull(gameScores.id), eq(games.needsRescore, true)))
