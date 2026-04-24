@@ -561,7 +561,10 @@
     "loading": "Cargando…",
     "error": "Algo salió mal",
     "back": "Volver",
-    "learnMore": "Aprende más"
+    "learnMore": "Aprende más",
+    "errorGameBody": "No pudimos cargar esta página del juego. Esto suele ser un problema temporal.",
+    "tryAgain": "Intenta de nuevo",
+    "goHome": "Ir a inicio"
   },
   "dashboard": {
     "title": "Panel familiar",
@@ -795,5 +798,39 @@
     "cancel": "Cancelar",
     "successSub": "Tu biblioteca ha sido actualizada.",
     "nothingNew": "No hay nada nuevo que agregar."
+  },
+  "learn": {
+    "title": "Aprende",
+    "subtitle": "Guías, noticias y respuestas para ayudarte a tomar decisiones seguras sobre los videojuegos.",
+    "guidesTitle": "Guías para padres",
+    "guidesSub": "Guías detalladas sobre el tiempo de pantalla, la seguridad en los juegos y las opciones adecuadas para cada edad.",
+    "blogTitle": "Blog y Noticias",
+    "blogSub": "Noticias, novedades y comentarios sobre videojuegos desde una perspectiva parental.",
+    "faqTitle": "Preguntas Frecuentes",
+    "faqSub": "Cómo funciona el LumiScore, qué significan nuestras calificaciones y cómo puntuamos los juegos.",
+    "featuredGuides": "Guías destacadas",
+    "allGuides": "Todas las guías",
+    "latestBlog": "Lo último del Blog",
+    "allPosts": "Todas las publicaciones",
+    "comingSoon": "Contenido próximamente.",
+    "catScreenTime": "Tiempo de Pantalla",
+    "catGameSafety": "Seguridad en los Juegos",
+    "catAgeGuide": "Guía por Edad",
+    "catParentingTips": "Consejos para Padres"
+  },
+  "blog": {
+    "breadcrumbLearn": "Aprende",
+    "title": "Blog y Noticias",
+    "subtitle": "Videojuegos desde una perspectiva parental.",
+    "comingSoon": "Publicaciones próximamente.",
+    "news": "Noticias",
+    "posts": "Blog"
+  },
+  "guides": {
+    "breadcrumbLearn": "Aprende",
+    "breadcrumbCurrent": "Guías",
+    "title": "Guías para Padres",
+    "subtitle": "Artículos detallados para ayudarte a navegar el mundo de los videojuegos con tus hijos.",
+    "comingSoon": "Próximamente, más guías."
   }
 }
