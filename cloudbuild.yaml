@@ -1,0 +1,24 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - build
+  - -f
+  - jobs/Dockerfile
+  - --build-arg
+  - JOB=review-games
+  - -t
+  - us-central1-docker.pkg.dev/curametrics-492614/lumikin-jobs/review-games:latest
+  - .
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - build
+  - -f
+  - jobs/Dockerfile
+  - --build-arg
+  - JOB=translate-messages
+  - -t
+  - us-central1-docker.pkg.dev/curametrics-492614/lumikin-jobs/translate-messages:latest
+  - .
+images:
+- us-central1-docker.pkg.dev/curametrics-492614/lumikin-jobs/review-games:latest
+- us-central1-docker.pkg.dev/curametrics-492614/lumikin-jobs/translate-messages:latest

@@ -127,7 +127,12 @@ type ReviewInput = {
   narratives: { benefitsNarrative: string; risksNarrative: string; parentTip: string; parentTipBenefits: string }
 }
 
-type GameRow = typeof games.$inferSelect
+type GameRow = Pick<typeof games.$inferSelect,
+  'id' | 'slug' | 'title' | 'developer' | 'publisher' | 'description' |
+  'genres' | 'platforms' | 'esrbRating' | 'metacriticScore' | 'basePrice' |
+  'hasMicrotransactions' | 'hasLootBoxes' | 'hasBattlePass' | 'hasSubscription' |
+  'requiresInternet' | 'hasStrangerChat' | 'chatModeration' | 'needsRescore'
+>
 
 // ─── Prompt builder ───────────────────────────────────────────────────────────
 

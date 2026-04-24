@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { games, gameScores, reviews, gameTranslations } from '@/lib/db/schema'
-import { eq, and, notExists, isNotNull } from 'drizzle-orm'
+import { eq, and, isNotNull, sql } from 'drizzle-orm'
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -15,9 +15,12 @@ const LANGUAGE_NAMES: Record<Locale, string> = {
   sv: 'Swedish',
   de: 'German',
   fr: 'French',
-  es: 'Spanish',
+  es: 'Spanish (Latin American)',
 }
 
+// 50 games × 4 parallel locale calls × ~4s each ≈ 200s — fits Vercel's 300s limit.
+// At 84 runs/week this clears ~16 800 translations, enough to close the full backlog
+// of ~16 000 in under a week.
 const MAX_GAMES_PER_RUN = 50
 const BUDGET_MS         = 270_000
 
@@ -41,7 +44,6 @@ async function translateToLocale(
   locale: Locale,
   attempt = 0
 ): Promise<TranslationResult | null> {
-  // Only translate fields that have content
   const toTranslate: Partial<TranslatableContent> = {}
   for (const [k, v] of Object.entries(content)) {
     if (v && v.trim()) toTranslate[k as keyof TranslatableContent] = v
@@ -85,8 +87,6 @@ ${JSON.stringify(toTranslate, null, 2)}`
 
     const data = await res.json()
     const text = data.content?.[0]?.text ?? ''
-
-    // Extract JSON from response (model might wrap in ```json ... ```)
     const jsonMatch = text.match(/\{[\s\S]*\}/)
     if (!jsonMatch) {
       console.error(`[translate] No JSON in response for ${locale}:`, text.slice(0, 200))
@@ -125,98 +125,91 @@ export async function GET(req: Request) {
   let skipped = 0
   let errors = 0
 
-  // Find games that have scores but are missing at least one locale translation
-  // Process one locale at a time to keep queries simple
-  for (const locale of LOCALES) {
+  // Fetch games that are missing at least one locale translation.
+  // Outer loop is now games (not locales) so all locales run in parallel per game,
+  // giving each locale equal throughput instead of sv exhausting the time budget.
+  const pending = await db
+    .select({
+      gameId:           games.id,
+      slug:             games.slug,
+      executiveSummary: gameScores.executiveSummary,
+      reviewId:         gameScores.reviewId,
+    })
+    .from(games)
+    .innerJoin(gameScores, eq(gameScores.gameId, games.id))
+    .where(and(
+      isNotNull(gameScores.curascore),
+      sql`(
+        SELECT COUNT(*) FROM game_translations gt
+        WHERE gt.game_id = ${games.id}
+          AND gt.locale = ANY(ARRAY['sv','de','fr','es'])
+      ) < 4`
+    ))
+    .orderBy(gameScores.curascore)
+    .limit(MAX_GAMES_PER_RUN)
+
+  for (const row of pending) {
     if (Date.now() - startedAt > BUDGET_MS) {
-      console.log(`[translate] Budget reached — stopping at locale ${locale}`)
+      console.log(`[translate] Budget reached after ${translated} translations`)
       break
     }
 
-    // Games scored but not yet translated for this locale
-    const untranslated = await db
-      .select({
-        gameId:            games.id,
-        slug:              games.slug,
-        executiveSummary:  gameScores.executiveSummary,
-        reviewId:          gameScores.reviewId,
-      })
-      .from(games)
-      .innerJoin(gameScores, eq(gameScores.gameId, games.id))
+    // Which locales does this game already have?
+    const done = await db
+      .select({ locale: gameTranslations.locale })
+      .from(gameTranslations)
       .where(and(
-        isNotNull(gameScores.curascore),
-        notExists(
-          db.select({ id: gameTranslations.id })
-            .from(gameTranslations)
-            .where(and(
-              eq(gameTranslations.gameId, games.id),
-              eq(gameTranslations.locale, locale),
-            ))
-        )
+        eq(gameTranslations.gameId, row.gameId),
+        sql`${gameTranslations.locale} = ANY(ARRAY['sv','de','fr','es'])`
       ))
-      .limit(MAX_GAMES_PER_RUN)
+    const doneSet = new Set(done.map(r => r.locale))
+    const missing = LOCALES.filter(l => !doneSet.has(l))
 
-    for (const row of untranslated) {
-      if (Date.now() - startedAt > BUDGET_MS) break
+    if (missing.length === 0) { skipped++; continue }
 
-      // Fetch review narratives if available
-      let benefitsNarrative: string | null = null
-      let risksNarrative:    string | null = null
-      let parentTip:         string | null = null
-      let parentTipBenefits: string | null = null
-      let bechdelNotes:      string | null = null
+    // Fetch review narratives once, shared across all locale calls
+    let content: TranslatableContent = {
+      executiveSummary:  row.executiveSummary,
+      benefitsNarrative: null,
+      risksNarrative:    null,
+      parentTip:         null,
+      parentTipBenefits: null,
+      bechdelNotes:      null,
+    }
 
-      if (row.reviewId) {
-        const [review] = await db
-          .select({
-            benefitsNarrative: reviews.benefitsNarrative,
-            risksNarrative:    reviews.risksNarrative,
-            parentTip:         reviews.parentTip,
-            parentTipBenefits: reviews.parentTipBenefits,
-            bechdelNotes:      reviews.bechdelNotes,
-          })
-          .from(reviews)
-          .where(eq(reviews.id, row.reviewId))
-          .limit(1)
+    if (row.reviewId) {
+      const [review] = await db
+        .select({
+          benefitsNarrative: reviews.benefitsNarrative,
+          risksNarrative:    reviews.risksNarrative,
+          parentTip:         reviews.parentTip,
+          parentTipBenefits: reviews.parentTipBenefits,
+          bechdelNotes:      reviews.bechdelNotes,
+        })
+        .from(reviews)
+        .where(eq(reviews.id, row.reviewId))
+        .limit(1)
+      if (review) content = { ...content, ...review }
+    }
 
-        if (review) {
-          benefitsNarrative = review.benefitsNarrative
-          risksNarrative    = review.risksNarrative
-          parentTip         = review.parentTip
-          parentTipBenefits = review.parentTipBenefits
-          bechdelNotes      = review.bechdelNotes
-        }
-      }
+    const hasContent = Object.values(content).some(v => v && v.trim())
+    if (!hasContent) {
+      // Nothing to translate — mark all missing locales as done so we skip next time
+      await Promise.all(missing.map(locale =>
+        db.insert(gameTranslations).values({ gameId: row.gameId, locale }).onConflictDoNothing()
+      ))
+      skipped += missing.length
+      continue
+    }
 
-      const content: TranslatableContent = {
-        executiveSummary:  row.executiveSummary,
-        benefitsNarrative,
-        risksNarrative,
-        parentTip,
-        parentTipBenefits,
-        bechdelNotes,
-      }
+    // Translate all missing locales in parallel
+    console.log(`[translate] ${row.slug} → ${missing.join(', ')}`)
+    const results = await Promise.all(
+      missing.map(async locale => ({ locale, result: await translateToLocale(content, locale) }))
+    )
 
-      // Skip if nothing to translate
-      const hasContent = Object.values(content).some(v => v && v.trim())
-      if (!hasContent) {
-        skipped++
-        // Insert empty row so we don't revisit this game
-        await db.insert(gameTranslations).values({
-          gameId: row.gameId,
-          locale,
-        }).onConflictDoNothing()
-        continue
-      }
-
-      console.log(`[translate] ${row.slug} → ${locale}`)
-      const result = await translateToLocale(content, locale)
-
-      if (!result) {
-        errors++
-        continue
-      }
-
+    for (const { locale, result } of results) {
+      if (!result) { errors++; continue }
       await db.insert(gameTranslations).values({
         gameId:            row.gameId,
         locale,
@@ -227,7 +220,6 @@ export async function GET(req: Request) {
         parentTipBenefits: result.parentTipBenefits,
         bechdelNotes:      result.bechdelNotes,
       }).onConflictDoNothing()
-
       translated++
     }
   }
