@@ -2,12 +2,12 @@ export const revalidate = 3600
 
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { eq, and, or, ne, isNotNull, desc, sql } from 'drizzle-orm'
+import { eq, and } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { games, gameScores, reviews, darkPatterns, complianceStatus, userGames, childProfiles, gameTranslations } from '@/lib/db/schema'
 import GameCard from '@/components/GameCard'
-import GameCompactCard from '@/components/GameCompactCard'
-import type { GameSummary } from '@/types/game'
+import { RelatedGameCard } from '@/components/RelatedGameCard'
+import { fetchRelatedGames } from '@/lib/related-games'
 import LibraryButton from '@/components/LibraryButton'
 import ParentTips from '@/components/ParentTips'
 import ShareButton from '@/components/ShareButton'
@@ -68,6 +68,7 @@ async function fetchGameData(slug: string): Promise<GameCardProps | null> {
     genres:          Array.isArray(game.genres) ? (game.genres as string[]) : [],
     platforms:       Array.isArray(game.platforms) ? (game.platforms as string[]) : [],
     esrbRating:      game.esrbRating,
+    pegiRating:      game.pegiRating ?? null,
     metacriticScore: game.metacriticScore,
     avgPlaytimeHours:game.avgPlaytimeHours,
     backgroundImage: game.backgroundImage,
@@ -104,6 +105,7 @@ async function fetchGameData(slug: string): Promise<GameCardProps | null> {
         endlessDesignRisk:        score.endlessDesignRisk ?? null,
         representationScore:      score.representationScore ?? null,
         propagandaLevel:          score.propagandaLevel ?? null,
+        recommendedMinAge:        score.recommendedMinAge ?? null,
         executiveSummary:         score.executiveSummary ?? null,
         calculatedAt:             score.calculatedAt?.toISOString() ?? null,
         debateTranscript:         score.debateTranscript ?? null,
@@ -291,53 +293,19 @@ export default async function GamePage({ params }: Props) {
     }
   }
 
-  // Similar games — same genre, scored, exclude self
-  const genreList = data.game.genres.slice(0, 3)
-  let similarGames: GameSummary[] = []
-  if (genreList.length > 0) {
-    try {
-      const rows = await db
-        .select({
-          slug:                     games.slug,
-          title:                    games.title,
-          developer:                games.developer,
-          backgroundImage:          games.backgroundImage,
-          genres:                   games.genres,
-          platforms:                games.platforms,
-          esrbRating:               games.esrbRating,
-          hasLootBoxes:             games.hasLootBoxes,
-          hasMicrotransactions:     games.hasMicrotransactions,
-          curascore:                gameScores.curascore,
-          timeRecommendationMinutes: gameScores.timeRecommendationMinutes,
-          timeRecommendationColor:  gameScores.timeRecommendationColor,
-        })
-        .from(games)
-        .leftJoin(gameScores, eq(gameScores.gameId, games.id))
-        .where(and(
-          ne(games.slug, slug),
-          isNotNull(gameScores.curascore),
-          or(...genreList.map(g => sql`${games.genres} @> jsonb_build_array(${g})`)),
-        ))
-        .orderBy(desc(gameScores.curascore))
-        .limit(6)
-      similarGames = rows.map(r => ({
-        slug:                     r.slug,
-        title:                    r.title,
-        developer:                r.developer,
-        backgroundImage:          r.backgroundImage,
-        genres:                   Array.isArray(r.genres) ? (r.genres as string[]) : [],
-        platforms:                Array.isArray(r.platforms) ? (r.platforms as string[]) : [],
-        esrbRating:               r.esrbRating,
-        hasLootBoxes:             r.hasLootBoxes ?? false,
-        hasMicrotransactions:     r.hasMicrotransactions ?? false,
-        curascore:                r.curascore ?? null,
-        timeRecommendationMinutes: r.timeRecommendationMinutes ?? null,
-        timeRecommendationColor:  (r.timeRecommendationColor as GameSummary['timeRecommendationColor']) ?? null,
-      }))
-    } catch (e) {
-      console.error('[similar-games] query failed:', e instanceof Error ? e.message : String(e))
-    }
-  }
+  // Related games — platform + score + age bucket match, 24h cache
+  const relatedGames = data.scores?.curascore != null
+    ? await fetchRelatedGames(
+        slug,
+        data.scores.curascore,
+        data.game.platforms,
+        data.game.esrbRating,
+        data.game.pegiRating,
+      ).catch((e: unknown) => {
+        console.error('[related-games]', e instanceof Error ? e.message : String(e))
+        return []
+      })
+    : []
 
   const { game, scores } = data
 
@@ -483,15 +451,15 @@ export default async function GamePage({ params }: Props) {
             )
           })()}
 
-          {/* Similar games */}
-          {similarGames.length > 0 && (
+          {/* Explore more */}
+          {relatedGames.length > 0 && (
             <div className="mt-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-5 py-4">
-              <h2 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">
-                {t('similarGames')}
+              <h2 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">
+                Explore more
               </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {similarGames.map(g => (
-                  <GameCompactCard key={g.slug} game={g} />
+              <div className="divide-y divide-slate-100 dark:divide-slate-700">
+                {relatedGames.map(g => (
+                  <RelatedGameCard key={g.slug} game={g} />
                 ))}
               </div>
             </div>

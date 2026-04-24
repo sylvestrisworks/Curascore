@@ -51,6 +51,7 @@ export default async function ReviewPage({ params }: { params: { gameSlug: strin
     genres:               (game.genres as string[]) ?? [],
     platforms:            (game.platforms as string[]) ?? [],
     esrbRating:           game.esrbRating ?? null,
+    pegiRating:           game.pegiRating ?? null,
     metacriticScore:      game.metacriticScore ?? null,
     avgPlaytimeHours:     game.avgPlaytimeHours ?? null,
     backgroundImage:      game.backgroundImage ?? null,

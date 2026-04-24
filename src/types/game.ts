@@ -24,6 +24,7 @@ export type SerializedGame = {
   genres: string[]
   platforms: string[]
   esrbRating: string | null
+  pegiRating: number | null
   metacriticScore: number | null
   avgPlaytimeHours: number | null
   backgroundImage: string | null
@@ -59,6 +60,7 @@ export type SerializedScores = {
   endlessDesignRisk: number | null
   representationScore: number | null
   propagandaLevel: number | null
+  recommendedMinAge: number | null
   executiveSummary: string | null
   calculatedAt: string | null
   debateTranscript: string | null

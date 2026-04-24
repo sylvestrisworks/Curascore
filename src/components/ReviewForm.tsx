@@ -200,6 +200,7 @@ function makeSerializedScores(computed: ReturnType<typeof calculateGameScores>):
     timeRecommendationReasoning: computed.timeRecommendation.reasoning,
     timeRecommendationColor:   computed.timeRecommendation.color,
     topBenefits:               computed.topBenefits,
+    recommendedMinAge:         null,
     accessibilityRisk:         null,
     endlessDesignRisk:         null,
     representationScore:       null,

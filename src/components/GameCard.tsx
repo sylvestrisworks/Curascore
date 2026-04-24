@@ -9,6 +9,9 @@ import { esrbToAge, ageBadgeColor } from '@/lib/ui'
 import DarkPatternPills from './DarkPatternPills'
 import ComplianceBadges from './ComplianceBadges'
 import ShareButton from './ShareCard'
+import { LumiScoreHero } from './LumiScoreHero'
+import { SubDimensionBreakdown } from './SubDimensionBreakdown'
+import { ScoreMetaLine } from './ScoreMetaLine'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -698,56 +701,48 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
         </div>
       </div>
 
-      {/* ── 2. SCORE CARD ──────────────────────────────────────────────────────── */}
-      {hasReview && scores.curascore != null ? (() => {
-        const verdict = getVerdict(scores.curascore)
-        return (
-          <div className="relative bg-white dark:bg-slate-800 rounded-3xl shadow-sm px-6 pt-5 pb-6 text-center border border-slate-100 dark:border-slate-700">
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center justify-center gap-1">
-              {t('curascore')}
-              <Tooltip text="Our 0–100 score for how developmentally beneficial and low-risk this game is for children. Higher is better." />
-            </p>
-
-            <div className="flex justify-center mb-3">
-              <HorseshoeRing score={scores.curascore} />
+      {/* ── 2. LUMISCORE HERO ────────────────────────────────────────────────────── */}
+      {hasReview && scores.curascore != null ? (
+        <LumiScoreHero
+          curascore={scores.curascore}
+          recommendedMinAge={scores.recommendedMinAge}
+          esrbRating={game.esrbRating}
+          pegiRating={game.pegiRating}
+          executiveSummary={scores.executiveSummary}
+          action={<ShareButton data={{ game, scores, review, darkPatterns, compliance }} />}
+        >
+          {scores.timeRecommendationMinutes != null && (
+            <div className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 px-4 py-2 rounded-full">
+              <Clock size={14} strokeWidth={2.5} className="text-emerald-500" />
+              {scores.timeRecommendationMinutes >= 120 ? '120+' : scores.timeRecommendationMinutes} {t('minDayRecommended')}
             </div>
-
-            <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-black uppercase tracking-wide mb-3 ${verdict.bg} ${verdict.color}`}>
-              <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: verdict.ring }} />
-              {t(verdict.labelKey as Parameters<T>[0])}
+          )}
+          {scores.debateRounds != null && (
+            <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-violet-50 dark:bg-violet-900/30 border border-violet-200 dark:border-violet-700 text-xs font-semibold text-violet-700 dark:text-violet-300">
+              <span>⚖️</span>
+              {t('adversarialDebate', { rounds: scores.debateRounds ?? 0 })}
             </div>
-
-            {scores.executiveSummary && (
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-snug mb-4 max-w-xs mx-auto">
-                {scores.executiveSummary}
-              </p>
-            )}
-
-            {scores.timeRecommendationMinutes != null && (
-              <div className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 px-4 py-2 rounded-full mb-4">
-                <Clock size={14} strokeWidth={2.5} className="text-emerald-500" />
-                {scores.timeRecommendationMinutes >= 120 ? '120+' : scores.timeRecommendationMinutes} {t('minDayRecommended')}
-              </div>
-            )}
-
-            <div className="absolute top-3 right-3">
-              <ShareButton data={{ game, scores, review, darkPatterns, compliance }} />
-            </div>
-
-            {scores.debateRounds != null && (
-              <div className="mt-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-violet-50 dark:bg-violet-900/30 border border-violet-200 dark:border-violet-700 text-xs font-semibold text-violet-700 dark:text-violet-300">
-                <span>⚖️</span>
-                {t('adversarialDebate', { rounds: scores.debateRounds ?? 0 })}
-              </div>
-            )}
-          </div>
-        )
-      })() : (
+          )}
+        </LumiScoreHero>
+      ) : (
         <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl p-6 text-center">
           <p className="text-sm font-semibold text-slate-400 dark:text-slate-500">{t('ratingPending')}</p>
           <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{t('ratingPendingSub')}</p>
         </div>
       )}
+
+      {/* ── 2b. SCORE METADATA ───────────────────────────────────────────────────── */}
+      {scores?.calculatedAt && (
+        <ScoreMetaLine
+          calculatedAt={scores.calculatedAt}
+          methodologyVersion={scores.methodologyVersion}
+          updatedAt={game.updatedAt}
+          locale={locale}
+        />
+      )}
+
+      {/* ── 2c. SUB-DIMENSION BREAKDOWN ──────────────────────────────────────────── */}
+      {scores && <SubDimensionBreakdown scores={scores} locale={locale} />}
 
       {/* ── BUNDLED ONLINE WARNING ─────────────────────────────────────────────── */}
       {game.bundledOnlineNote && (
