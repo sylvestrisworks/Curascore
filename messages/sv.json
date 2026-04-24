@@ -561,7 +561,10 @@
     "loading": "Laddar…",
     "error": "Något gick fel",
     "back": "Tillbaka",
-    "learnMore": "Läs mer"
+    "learnMore": "Läs mer",
+    "errorGameBody": "Vi kunde inte ladda den här spelsidan. Det här är oftast ett tillfälligt problem.",
+    "tryAgain": "Försök igen",
+    "goHome": "Till startsidan"
   },
   "dashboard": {
     "title": "Familjens instrumentpanel",
@@ -795,5 +798,39 @@
     "cancel": "Avbryt",
     "successSub": "Ditt bibliotek har uppdaterats.",
     "nothingNew": "Inget nytt att lägga till."
+  },
+  "learn": {
+    "title": "Lär dig mer",
+    "subtitle": "Guider, nyheter och svar för att hjälpa dig fatta trygga beslut om spel.",
+    "guidesTitle": "Föräldraguider",
+    "guidesSub": "Fördjupande guider om skärmtid, spelsäkerhet och åldersanpassade val.",
+    "blogTitle": "Blogg & Nyheter",
+    "blogSub": "Spelnyheter, uppdateringar och kommentarer ur ett föräldraperspektiv.",
+    "faqTitle": "Vanliga frågor",
+    "faqSub": "Hur LumiScore fungerar, vad våra betyg betyder och hur vi betygsätter spel.",
+    "featuredGuides": "Utvalda guider",
+    "allGuides": "Alla guider",
+    "latestBlog": "Senaste från bloggen",
+    "allPosts": "Alla inlägg",
+    "comingSoon": "Innehåll kommer snart.",
+    "catScreenTime": "Skärmtid",
+    "catGameSafety": "Spelsäkerhet",
+    "catAgeGuide": "Åldersguide",
+    "catParentingTips": "Föräldratips"
+  },
+  "blog": {
+    "breadcrumbLearn": "Lär dig mer",
+    "title": "Blogg & Nyheter",
+    "subtitle": "Spel ur ett föräldraperspektiv.",
+    "comingSoon": "Inlägg kommer snart.",
+    "news": "Nyheter",
+    "posts": "Blogg"
+  },
+  "guides": {
+    "breadcrumbLearn": "Kunskap",
+    "breadcrumbCurrent": "Guider",
+    "title": "Föräldraguider",
+    "subtitle": "Djupgående artiklar som hjälper dig att hitta rätt i spelvärlden tillsammans med dina barn.",
+    "comingSoon": "Guider kommer snart."
   }
 }
