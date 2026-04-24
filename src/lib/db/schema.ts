@@ -255,6 +255,9 @@ export const gameScores = pgTable('game_scores', {
   debateTranscript: text('debate_transcript'),       // full round-by-round transcript
   debateRounds:     integer('debate_rounds'),         // number of rounds completed
 
+  // Methodology traceability
+  methodologyVersion: varchar('methodology_version', { length: 10 }),
+
   // Timestamps
   calculatedAt: timestamp('calculated_at').defaultNow(),
 });

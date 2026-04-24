@@ -14,6 +14,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { games, gameScores, reviews, userGames, notifications } from '@/lib/db/schema'
+import { CURRENT_METHODOLOGY_VERSION } from '@/lib/methodology'
 import { eq, isNull, or } from 'drizzle-orm'
 import { calculateGameScores } from '@/lib/scoring/engine'
 
@@ -353,6 +354,7 @@ async function saveReview(game: GameRow, r: ReviewInput): Promise<{ reviewId: nu
     representationScore:         (r.representation.repGenderBalance + r.representation.repEthnicDiversity) / 6,
     propagandaLevel:             r.propaganda.propagandaLevel,
     bechdelResult:               r.bechdel.result,
+    methodologyVersion:          CURRENT_METHODOLOGY_VERSION,
     calculatedAt:                new Date(),
   }
 

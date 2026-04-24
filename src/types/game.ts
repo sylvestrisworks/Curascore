@@ -63,6 +63,7 @@ export type SerializedScores = {
   calculatedAt: string | null
   debateTranscript: string | null
   debateRounds: number | null
+  methodologyVersion: string | null
 }
 
 export type SerializedReview = {
