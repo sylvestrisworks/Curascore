@@ -6,10 +6,10 @@
     "browse": "Stöbern",
     "compare": "Vergleichen",
     "learn": "Lernen",
+    "library": "Bibliothek",
     "openMenu": "Menü öffnen",
     "closeMenu": "Menü schließen",
-    "search": "Suchen",
-    "library": "Bibliothek"
+    "search": "Suchen"
   },
   "footer": {
     "brand": "LumiKin",
@@ -50,8 +50,8 @@
     "carouselTeamwork": "Spielt im Team",
     "carouselVr": "VR & AR",
     "carouselBeginner": "Für Gaming-Einsteiger",
-    "carouselNewGood": "Neu und empfehlenswert",
     "carouselDopamine": "Dopamin-Fallen",
+    "carouselNewGood": "Neu und empfehlenswert",
     "featureScience": "Wissenschaftlich fundierte Bewertungen",
     "featureScienceBody": "Wir übersetzen komplexe kognitive Wissenschaft, Verhaltenspsychologie und soziales und emotionales Lernen in eine klare, verlässliche Bewertung.",
     "featureAgenda": "Ohne versteckte Absichten",
@@ -77,6 +77,10 @@
   },
   "browse": {
     "title": "Spiele durchstöbern",
+    "searchPlaceholder": "Spiele suchen…",
+    "searchButton": "Suchen",
+    "forChild": "Für:",
+    "forEveryone": "Alle",
     "gamesCount": "{count, plural, one {# Spiel} other {# Spiele}}",
     "filtersActive": "{count, plural, one {# Filter aktiv} other {# Filter aktiv}}",
     "pageOf": "Seite {current} von {total}",
@@ -90,6 +94,9 @@
   "filters": {
     "heading": "Filter",
     "clearAll": "Alle löschen",
+    "close": "Schließen",
+    "viewList": "Listenansicht",
+    "viewGrid": "Kachelansicht",
     "showGames": "{count, plural, one {# Spiel anzeigen} other {# Spiele anzeigen}}",
     "gamesFound": "{count, plural, one {# Spiel gefunden} other {# Spiele gefunden}}",
     "sortBy": "Sortieren nach",
@@ -120,6 +127,9 @@
     "riskLow": "Nur niedrig (RIS ≤ 0.30)",
     "riskMedium": "Niedrig + Mittel (RIS ≤ 0.60)",
     "sectionTime": "Min. tägliche Zeit",
+    "timeUpTo30": "Bis zu 30 Min./Tag",
+    "timeUpTo60": "Bis zu 60 Min./Tag",
+    "timeUpTo90": "Bis zu 90 Min./Tag",
     "sectionPrice": "Preis",
     "priceFree": "Kostenlos spielbar",
     "priceUnder20": "Unter 20 $",
@@ -133,7 +143,10 @@
     "sectionBechdel": "Bechdel-Test",
     "bechdelPass": "Besteht den Bechdel-Test",
     "bechdelNote": "Weibliche Charaktere unterhalten sich über etwas anderes als einen Mann",
-    "sectionCompliance": "Konformität"
+    "sectionCompliance": "Konformität",
+    "complianceDsa": "DSA-konform",
+    "complianceGdprk": "GDPR-K-konform",
+    "complianceOdds": "ODDS-konform"
   },
   "discover": {
     "tagline": "Fundiert in kindlicher Entwicklung",
