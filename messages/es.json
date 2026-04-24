@@ -832,5 +832,34 @@
     "title": "Guías para Padres",
     "subtitle": "Artículos detallados para ayudarte a navegar el mundo de los videojuegos con tus hijos.",
     "comingSoon": "Próximamente, más guías."
+  },
+  "banner": {
+    "betaTitle": "LumiKin está en beta",
+    "betaBody": "Aún estamos construyendo. Espera algunos detalles por pulir, juegos faltantes y funciones en desarrollo.",
+    "shareFeedback": "Danos tu opinión"
+  },
+  "cookie": {
+    "title": "Logro desbloqueado: Aviso de cookies",
+    "body": "A diferencia de algunos juegos que reseñamos, solo usamos <bold>una cookie</bold> — una cookie de sesión que te mantiene conectado. Sin rastreo. Sin anuncios. Sin probabilidades de cajas de botín. Cero patrones oscuros.",
+    "statSession": "Sesión: 1",
+    "statAnalytics": "Analíticas: sin cookies",
+    "statAds": "Anuncios: 0",
+    "accept": "¡Listo! — reclamar recompensa"
+  },
+  "feedback": {
+    "triggerLabel": "¿No estás de acuerdo con esta puntuación?",
+    "title": "Danos tu opinión sobre esta puntuación",
+    "thanks": "Gracias — tu opinión nos ayuda a mantener las puntuaciones precisas.",
+    "placeholder": "¿Algún detalle? (opcional)",
+    "submit": "Enviar",
+    "submitting": "Enviando…",
+    "cancel": "Cancelar",
+    "anonymous": "Anónimo",
+    "errorRetry": "Algo salió mal — por favor, inténtalo de nuevo.",
+    "typeTooHigh": "La puntuación parece muy alta",
+    "typeTooLow": "La puntuación parece muy baja",
+    "typeOutdated": "La puntuación está desactualizada",
+    "typeMissing": "Falta información",
+    "typeOther": "Otra cosa"
   }
 }
