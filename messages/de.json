@@ -561,7 +561,10 @@
     "loading": "Wird geladen…",
     "error": "Etwas ist schiefgelaufen",
     "back": "Zurück",
-    "learnMore": "Mehr erfahren"
+    "learnMore": "Mehr erfahren",
+    "errorGameBody": "Wir konnten diese Spielseite nicht laden. Das ist meistens nur ein vorübergehendes Problem.",
+    "tryAgain": "Nochmal versuchen",
+    "goHome": "Zur Startseite"
   },
   "dashboard": {
     "title": "Familien-Dashboard",
@@ -795,5 +798,39 @@
     "cancel": "Abbrechen",
     "successSub": "Deine Bibliothek wurde aktualisiert.",
     "nothingNew": "Nichts Neues hinzuzufügen."
+  },
+  "learn": {
+    "title": "Wissen",
+    "subtitle": "Anleitungen, Neuigkeiten und Antworten, damit du sichere Entscheidungen rund ums Gaming treffen kannst.",
+    "guidesTitle": "Eltern-Ratgeber",
+    "guidesSub": "Ausführliche Ratgeber zu Bildschirmzeit, Spielsicherheit und altersgerechten Entscheidungen.",
+    "blogTitle": "Blog & Neuigkeiten",
+    "blogSub": "Gaming-Neuigkeiten, Updates und Kommentare aus Elternsicht.",
+    "faqTitle": "FAQ",
+    "faqSub": "Wie der LumiScore funktioniert, was unsere Bewertungen bedeuten und wie wir Spiele bewerten.",
+    "featuredGuides": "Empfohlene Ratgeber",
+    "allGuides": "Alle Ratgeber",
+    "latestBlog": "Neueste Blogbeiträge",
+    "allPosts": "Alle Beiträge",
+    "comingSoon": "Inhalte folgen in Kürze.",
+    "catScreenTime": "Bildschirmzeit",
+    "catGameSafety": "Spielsicherheit",
+    "catAgeGuide": "Altersleitfaden",
+    "catParentingTips": "Eltern-Tipps"
+  },
+  "blog": {
+    "breadcrumbLearn": "Wissen",
+    "title": "Blog & Neuigkeiten",
+    "subtitle": "Gaming aus Elternsicht.",
+    "comingSoon": "Beiträge folgen in Kürze.",
+    "news": "Neuigkeiten",
+    "posts": "Blog"
+  },
+  "guides": {
+    "breadcrumbLearn": "Wissen",
+    "breadcrumbCurrent": "Ratgeber",
+    "title": "Eltern-Ratgeber",
+    "subtitle": "Ausführliche Artikel, die dir helfen, Gaming mit deinen Kindern besser zu verstehen und zu begleiten.",
+    "comingSoon": "Ratgeber folgen bald."
   }
 }
