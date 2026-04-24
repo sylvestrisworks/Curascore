@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 const STORAGE_KEY = 'lumikin_beta_dismissed'
 
 export default function BetaBanner() {
+  const t = useTranslations('banner')
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -26,13 +28,12 @@ export default function BetaBanner() {
       <div className="max-w-2xl mx-auto bg-slate-900 dark:bg-slate-800 text-white rounded-2xl shadow-xl px-5 py-4 flex items-center gap-4 pointer-events-auto border border-slate-700">
         <span className="text-lg">🚧</span>
         <p className="flex-1 text-sm text-slate-200">
-          <span className="font-semibold text-white">LumiKin is in beta</span> — we&apos;re still building.
-          Expect rough edges, missing games, and features in progress.{' '}
+          <span className="font-semibold text-white">{t('betaTitle')}</span> &mdash; {t('betaBody')}{' '}
           <a
             href="/review/feedback"
             className="underline text-indigo-400 hover:text-indigo-300 transition-colors"
           >
-            Share feedback
+            {t('shareFeedback')}
           </a>
         </p>
         <button

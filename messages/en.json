@@ -832,5 +832,34 @@
     "title": "Parental Guides",
     "subtitle": "In-depth articles to help you navigate gaming with your kids.",
     "comingSoon": "Guides coming soon."
+  },
+  "banner": {
+    "betaTitle": "LumiKin is in beta",
+    "betaBody": "we're still building. Expect rough edges, missing games, and features in progress.",
+    "shareFeedback": "Share feedback"
+  },
+  "cookie": {
+    "title": "Achievement unlocked: Cookie notice",
+    "body": "Unlike some of the games we review, we only use <bold>one cookie</bold> — a session cookie that keeps you logged in. No tracking. No ads. No loot box odds. Zero dark patterns.",
+    "statSession": "Session: 1",
+    "statAnalytics": "Analytics: cookie-free",
+    "statAds": "Ads: 0",
+    "accept": "Got it — claim reward"
+  },
+  "feedback": {
+    "triggerLabel": "Disagree with this score?",
+    "title": "Share feedback on this score",
+    "thanks": "Thanks — your feedback helps us keep scores accurate.",
+    "placeholder": "Any details? (optional)",
+    "submit": "Submit",
+    "submitting": "Sending…",
+    "cancel": "Cancel",
+    "anonymous": "Anonymous",
+    "errorRetry": "Something went wrong — please try again.",
+    "typeTooHigh": "Score seems too high",
+    "typeTooLow": "Score seems too low",
+    "typeOutdated": "Score is outdated",
+    "typeMissing": "Missing information",
+    "typeOther": "Something else"
   }
 }
