@@ -189,6 +189,10 @@ export const reviews = pgTable('reviews', {
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
   approvedAt: timestamp('approved_at'),
+
+  // AI provenance
+  aiModel: varchar('ai_model', { length: 100 }),
+  reviewedAt: timestamp('reviewed_at'),
 }, (table) => ({
   gameIdx: index('review_game_idx').on(table.gameId),
   statusIdx: index('review_status_idx').on(table.status),

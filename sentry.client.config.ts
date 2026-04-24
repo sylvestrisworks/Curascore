@@ -6,9 +6,5 @@ Sentry.init({
   // Capture 10% of transactions for performance monitoring
   tracesSampleRate: 0.1,
 
-  // Replay only on errors (free tier friendly)
-  replaysOnErrorSampleRate: 1.0,
-  replaysSessionSampleRate: 0.01,
-
-  integrations: [Sentry.replayIntegration()],
+  integrations: [],
 })

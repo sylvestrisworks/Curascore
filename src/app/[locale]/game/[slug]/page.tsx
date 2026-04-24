@@ -17,14 +17,16 @@ import { Suspense } from 'react'
 import { getTranslations, getLocale } from 'next-intl/server'
 import type { ComplianceBadge, DarkPattern, GameCardProps, SerializedGame, SerializedScores, SerializedReview } from '@/types/game'
 
-type Props = { params: Promise<{ slug: string }> }
+type Props = { params: Promise<{ locale: string; slug: string }> }
 
 async function fetchGameData(slug: string): Promise<GameCardProps | null> {
-  const [game] = await db
-    .select()
-    .from(games)
-    .where(eq(games.slug, slug))
-    .limit(1)
+  let game: typeof games.$inferSelect | undefined
+  try {
+    ;[game] = await db.select().from(games).where(eq(games.slug, slug)).limit(1)
+  } catch (err) {
+    console.error('[fetchGameData] db error:', err instanceof Error ? err.message : String(err))
+    throw err // let error.tsx handle it — don't silently 404 a real game
+  }
 
   if (!game) return null
 
@@ -196,18 +198,24 @@ async function fetchGameData(slug: string): Promise<GameCardProps | null> {
 // ─── Metadata ────────────────────────────────────────────────────────────────
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  const [game] = await db
-    .select({
-      title: games.title,
-      description: games.description,
-      backgroundImage: games.backgroundImage,
-      esrbRating: games.esrbRating,
-      genres: games.genres,
-    })
-    .from(games)
-    .where(eq(games.slug, slug))
-    .limit(1)
+  const { slug, locale } = await params
+
+  let game: { title: string; description: string | null; backgroundImage: string | null; esrbRating: string | null; genres: unknown } | undefined
+  try {
+    ;[game] = await db
+      .select({
+        title: games.title,
+        description: games.description,
+        backgroundImage: games.backgroundImage,
+        esrbRating: games.esrbRating,
+        genres: games.genres,
+      })
+      .from(games)
+      .where(eq(games.slug, slug))
+      .limit(1)
+  } catch {
+    return { title: 'LumiKin' }
+  }
 
   if (!game) return { title: 'Game not found — LumiKin' }
 
@@ -217,13 +225,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : `LumiKin rates ${game.title} for parents — benefits, risks, addictive design patterns, and a recommended daily screen time.`
 
   const ogImage = `/api/og/game/${slug}`
-  const canonical = `/game/${slug}`
+  const canonical = `/${locale}/game/${slug}`
 
   return {
     title,
     description: desc,
     alternates: {
       canonical,
+      languages: {
+        'en':        `/en/game/${slug}`,
+        'sv':        `/sv/game/${slug}`,
+        'de':        `/de/game/${slug}`,
+        'es':        `/es/game/${slug}`,
+        'fr':        `/fr/game/${slug}`,
+        'x-default': `/en/game/${slug}`,
+      },
     },
     openGraph: {
       title,

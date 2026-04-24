@@ -200,14 +200,19 @@ Every map gets two independent profiles: a Benefits Profile (what the child deve
 Extend one tier if benefits are strong (creativityScore + learningScore + socialScore ≥ 6).
 
 ## CALIBRATION EXAMPLES
+Reference: Fortnite Battle Royale itself scores 42 on LumiKin. Most Creative maps should sit in the 35–60 range. Only exceptional experiences with strong creative, cooperative, AND learning dimensions should approach 70+.
+
 | Map type | What it is | Key scores | Curascore |
 |---|---|---|---|
-| Zone Wars | Rotating storm, skill practice, competitive | creativity 0, social 1, learning 2 / dopamine 2, stranger 1, monetization 0 | ~58 |
-| Box Fight 1v1 | Aim trainer, structured duels, no monetization | creativity 0, social 1, learning 2 / dopamine 1, stranger 1, monetization 0 | ~65 |
-| Deathrun (hard) | Obstacle course, puzzle-solving, solo | creativity 0, social 0, learning 2 / dopamine 1, stranger 0, monetization 0 | ~70 |
-| Creative Sandbox | Open building, world creation tools | creativity 3, social 2, learning 2 / dopamine 1, stranger 2, monetization 0 | ~72 |
-| Prop Hunt | Social hide-and-seek, large lobbies, chat | creativity 1, social 3, learning 0 / dopamine 1, stranger 2, monetization 0 | ~55 |
-| XP Farm | Infinite loop designed to grind XP/Battle Pass | creativity 0, social 0, learning 0 / dopamine 3, stranger 0, monetization 2 | ~18 |
+| Zone Wars | Rotating storm, skill practice, competitive | creativity 0, social 1, learning 2 / dopamine 2, stranger 1, monetization 0 | ~44 |
+| Box Fight / Aim Trainer | Aim trainer, structured duels, no real creativity | creativity 0, social 1, learning 2 / dopamine 1, stranger 1, monetization 0 | ~48 |
+| Deathrun | Obstacle course, memorisation, solo | creativity 0, social 0, learning 2 / dopamine 1, stranger 0, monetization 0 | ~52 |
+| Puzzle / Escape Room | Spatial reasoning, story, problem-solving | creativity 1, social 1, learning 3 / dopamine 1, stranger 1, monetization 0 | ~58 |
+| Creative Sandbox | Open building, world creation tools, full editor | creativity 3, social 2, learning 2 / dopamine 1, stranger 2, monetization 0 | ~68 |
+| Prop Hunt | Social hide-and-seek, large lobbies, text chat | creativity 1, social 3, learning 0 / dopamine 1, stranger 2, monetization 0 | ~48 |
+| XP Farm | Infinite loop designed purely to grind Battle Pass | creativity 0, social 0, learning 0 / dopamine 3, stranger 0, monetization 2 | ~15 |
+
+IMPORTANT: Aim training courses and combat maps (box fights, zone wars, deathrun) should score 40–55 unless they have a strong cooperative or creative element. Do not inflate learningScore for maps that only develop hand-eye coordination in an aim-trainer context — that is a 1, not a 3.
 
 ## MAP TO EVALUATE
 Title: ${e.title}

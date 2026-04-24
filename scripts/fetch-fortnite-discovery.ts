@@ -1,15 +1,15 @@
 /**
- * Scrapes the Fortnite Creative discovery surface using a real Chromium browser
- * (Playwright) to bypass Cloudflare. Captures all panel responses and:
+ * Scrapes the Fortnite Creative discovery surface using a real Chrome browser
+ * to bypass Cloudflare. Captures all panel responses and:
  *
  *   1. Updates thumbnailUrl + activePlayers for existing curated maps
  *   2. Discovers new popular islands and inserts them as unscored entries
  *
- * Run with:
- *   npx playwright install chromium --with-deps
+ * Run locally (Chrome must be installed):
  *   npx tsx scripts/fetch-fortnite-discovery.ts
  *
- * Requires DATABASE_URL in env.
+ * A Chrome window will open, navigate fortnite.com/creative, then close.
+ * Requires DATABASE_URL in env (copy from .env.local).
  */
 
 import { chromium } from 'playwright'
@@ -78,30 +78,17 @@ function slugify(str: string): string {
 }
 
 async function main() {
+  // Use installed Chrome (not Playwright's Chromium) — real Chrome passes
+  // Cloudflare's TLS + fingerprint checks that headless Chromium fails.
   const browser = await chromium.launch({
-    headless: true,
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--disable-blink-features=AutomationControlled',
-      '--disable-features=IsolateOrigins,site-per-process',
-    ],
+    headless: false,
+    channel: 'chrome',
+    args: ['--disable-blink-features=AutomationControlled'],
   })
 
   const context = await browser.newContext({
-    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-    viewport:  { width: 1920, height: 1080 },
-    locale:    'en-US',
-    extraHTTPHeaders: {
-      'Accept-Language': 'en-US,en;q=0.9',
-    },
-  })
-
-  // Hide headless signals from JS fingerprinting
-  await context.addInitScript(() => {
-    Object.defineProperty(navigator, 'webdriver', { get: () => undefined })
-    Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3] })
+    viewport: { width: 1280, height: 900 },
+    locale:   'en-US',
   })
 
   const page = await context.newPage()
@@ -127,17 +114,18 @@ async function main() {
     }
   })
 
-  console.log('Launching browser and navigating to Fortnite Creative…')
+  console.log('Opening Chrome and navigating to Fortnite Creative…')
+  console.log('(A Chrome window will appear — do not close it)')
   await page.goto(CREATIVE_URL, { waitUntil: 'domcontentloaded', timeout: 60_000 })
 
-  // Wait for Cloudflare challenge to resolve and actual content to appear.
-  // The discovery grid has a data attribute or we fall back to a fixed wait.
+  // Wait for the actual discovery content to load past any Cloudflare challenge
+  console.log('Waiting for discovery grid to load…')
   try {
-    await page.waitForSelector('[data-testid="discovery-panel"], [class*="CreativeDiscovery"], [class*="island-card"]', { timeout: 30_000 })
+    await page.waitForSelector('a[href*="/creative/islands"], [class*="island"], [class*="Island"]', { timeout: 45_000 })
     console.log('Discovery grid detected')
   } catch {
-    console.log('Selector not found — waiting 20s for content to load anyway')
-    await page.waitForTimeout(20_000)
+    console.log('Grid selector not found — waiting 15s anyway')
+    await page.waitForTimeout(15_000)
   }
 
   // Scroll to trigger lazy-loaded panels
