@@ -49,7 +49,7 @@ async function runQuery(
       lte(gameScores.curascore, maxScore),
       excludeSlugs.length > 0 ? notInArray(games.slug, excludeSlugs) : undefined,
       platforms && platforms.length > 0
-        ? sql`${games.platforms} && ${JSON.stringify(platforms)}::jsonb`
+        ? sql`(${sql.join(platforms.map(p => sql`${games.platforms} @> ${JSON.stringify([p])}::jsonb`), sql` OR `)})`
         : undefined,
       bucket
         ? sql`CASE
