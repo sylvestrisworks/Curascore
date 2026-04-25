@@ -10,8 +10,12 @@
 // Adjustments applied in order:
 //   1. BDS ≥ 0.60 extends one tier (more time) — unless RIS > 0.70
 //   2. BDS < 0.20 AND RIS > 0.30 drops one tier (less time)
+//   3. Age adjustment (optional childAge param, applied at render time, not stored):
+//      - childAge < 6:  halve minutes, cap at 30
+//      - childAge 13–17 AND contentRisk < 0.60:  extend one tier
 //
-// R4 (contentRisk) does NOT affect the tier — it is used only in reasoning text.
+// R4 (contentRisk) does NOT affect the base tier — it is used in reasoning text
+// and to gate the 13–17 age extension.
 
 import type { TimeRecommendation } from './types'
 
@@ -44,6 +48,11 @@ function buildLabel(tier: Tier, ageRating?: string | null): string {
     return 'Not recommended for children'
   }
   return tier.baseLabel
+}
+
+function under6Label(minutes: number): string {
+  if (minutes <= 15) return '15 min max/day'
+  return '30 min max/day'
 }
 
 function buildReasoning(
@@ -98,6 +107,7 @@ export function deriveTimeRecommendation(
   bds: number,
   contentRisk: number,
   ageRating?: string | null,
+  childAge?: number | null,
 ): TimeRecommendation {
   const baseIndex = baseTierIndex(ris)
   let finalIndex = baseIndex
@@ -112,12 +122,30 @@ export function deriveTimeRecommendation(
     finalIndex = Math.min(TIERS.length - 1, finalIndex + 1)
   }
 
+  // Rule 3a: Age 13–17 — extend one tier if content-appropriate
+  if (childAge != null && childAge >= 13 && childAge <= 17 && contentRisk < 0.6) {
+    finalIndex = Math.max(0, finalIndex - 1)
+  }
+
   const tier = TIERS[finalIndex]
+  const reasoning = buildReasoning(ris, bds, contentRisk, finalIndex, baseIndex)
+
+  // Rule 3b: Under 6 — halve minutes, cap at 30 (applied after tier is resolved)
+  if (childAge != null && childAge < 6) {
+    const halved  = Math.floor(tier.minutes / 2)
+    const minutes = Math.min(halved, 30)
+    return {
+      minutes,
+      label:     under6Label(minutes),
+      reasoning: reasoning + ' Time halved and capped at 30 min for under-6.',
+      color:     minutes <= 15 ? 'red' : 'amber',
+    }
+  }
 
   return {
     minutes: tier.minutes,
-    label: buildLabel(tier, ageRating),
-    reasoning: buildReasoning(ris, bds, contentRisk, finalIndex, baseIndex),
-    color: tier.color,
+    label:   buildLabel(tier, ageRating),
+    reasoning,
+    color:   tier.color,
   }
 }
