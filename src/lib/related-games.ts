@@ -99,19 +99,27 @@ async function _fetchRelatedGames(
   ))
   if (found.length >= 4) return found.slice(0, 5)
 
-  // Pass 2: any platform + ±10 + same age bucket
+  // Pass 2: any platform + ±15 + same age bucket
   collect(await runQuery(
     Array.from(seen),
-    Math.max(0, curascore - 10), Math.min(100, curascore + 10),
+    Math.max(0, curascore - 15), Math.min(100, curascore + 15),
     null, bucket, 5 - found.length,
   ))
   if (found.length >= 4) return found.slice(0, 5)
 
-  // Pass 3: any platform + ±20 + same age bucket
+  // Pass 3: any platform + ±25 + same age bucket
   collect(await runQuery(
     Array.from(seen),
-    Math.max(0, curascore - 20), Math.min(100, curascore + 20),
+    Math.max(0, curascore - 25), Math.min(100, curascore + 25),
     null, bucket, 5 - found.length,
+  ))
+  if (found.length >= 4) return found.slice(0, 5)
+
+  // Pass 4: any platform + ±35 + no bucket filter (catches unrated games and edge cases)
+  collect(await runQuery(
+    Array.from(seen),
+    Math.max(0, curascore - 35), Math.min(100, curascore + 35),
+    null, null, 5 - found.length,
   ))
 
   return found.slice(0, 5)
