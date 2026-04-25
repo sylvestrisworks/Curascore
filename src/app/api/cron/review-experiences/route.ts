@@ -331,6 +331,68 @@ async function saveScore(experience: ExperienceRow, eval_: EvalInput): Promise<n
   return row.curascore
 }
 
+// ─── Rescore existing entries under new formula ───────────────────────────────
+//
+// Picks up experience_scores rows where dopamine_risk IS NULL — these were
+// written under the old equal-weight formula before Fix 3. Recomputes all
+// derived values from the already-stored 0–3 dimensional scores; no AI call.
+// 50 rows per cron run; 227 rows clears in ~5 runs at the normal schedule.
+
+const RESCORE_BATCH = 50
+
+async function rescoreExisting(): Promise<number> {
+  const stale = await db
+    .select()
+    .from(experienceScores)
+    .where(isNull(experienceScores.dopamineRisk))
+    .limit(RESCORE_BATCH)
+
+  let count = 0
+  for (const row of stale) {
+    const risk = calculateExperienceRisk({
+      dopamineTrapScore: row.dopamineTrapScore,
+      toxicityScore:     row.toxicityScore,
+      ugcContentRisk:    row.ugcContentRisk,
+      strangerRisk:      row.strangerRisk,
+      monetizationScore: row.monetizationScore,
+      privacyRisk:       row.privacyRisk,
+    })
+    const benefit = calculateExperienceBenefits(
+      row.creativityScore ?? 0,
+      row.socialScore     ?? 0,
+      row.learningScore   ?? 0,
+    )
+    const timeRec   = deriveTimeRecommendation(risk.ris, benefit.bds, risk.contentRisk, null)
+    const safety    = 1 - risk.ris
+    const denom     = benefit.bds + safety
+    const curascore = denom > 0 ? Math.round((2 * benefit.bds * safety) / denom * 100) : 0
+
+    await db.update(experienceScores).set({
+      dopamineRisk:               risk.dopamine,
+      monetizationRisk:           risk.monetization,
+      socialRisk:                 risk.social,
+      contentRisk:                risk.contentRisk,
+      riskScore:                  risk.ris,
+      benefitScore:               benefit.bds,
+      curascore,
+      timeRecommendationMinutes:  timeRec.minutes,
+      timeRecommendationLabel:    timeRec.label,
+      timeRecommendationColor:    timeRec.color,
+      timeRecommendationReasoning: timeRec.reasoning,
+      methodologyVersion:         CURRENT_METHODOLOGY_VERSION,
+      scoringMethod:              'ugc_adapted' as const,
+      updatedAt:                  new Date(),
+    }).where(eq(experienceScores.id, row.id))
+
+    count++
+  }
+
+  if (count > 0) {
+    console.log(`[review-experiences] Rescored ${count} existing entries under Fix-3 formula`)
+  }
+  return count
+}
+
 // ─── Handler ──────────────────────────────────────────────────────────────────
 
 export async function GET(req: NextRequest) {
@@ -341,11 +403,15 @@ export async function GET(req: NextRequest) {
   if (req.headers.get('authorization') !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
-  if (!process.env.AWS_BEARER_TOKEN_BEDROCK) {
-    return NextResponse.json({ error: 'AWS_BEARER_TOKEN_BEDROCK not set' }, { status: 500 })
-  }
 
   try {
+    // Phase 1: rescore old-formula rows (no AI, runs every time)
+    const rescored = await rescoreExisting()
+
+    if (!process.env.AWS_BEARER_TOKEN_BEDROCK) {
+      return NextResponse.json({ rescored, message: 'AWS_BEARER_TOKEN_BEDROCK not set — skipping new evaluations' })
+    }
+
     const pending = await db
       .select({ exp: platformExperiences, platformSlug: games.slug })
       .from(platformExperiences)
@@ -355,7 +421,7 @@ export async function GET(req: NextRequest) {
       .limit(MAX_PER_RUN)
 
     if (pending.length === 0) {
-      return NextResponse.json({ message: 'No unscored experiences', evaluated: 0 })
+      return NextResponse.json({ rescored, message: 'No unscored experiences', evaluated: 0 })
     }
 
     console.log(`[review-experiences] Found ${pending.length} unscored experiences`)
@@ -389,7 +455,7 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    return NextResponse.json({ evaluated: evaluated.length, errors: errors.length, slugs: evaluated })
+    return NextResponse.json({ rescored, evaluated: evaluated.length, errors: errors.length, slugs: evaluated })
 
   } catch (err) {
     console.error('[review-experiences] Fatal:', err)
