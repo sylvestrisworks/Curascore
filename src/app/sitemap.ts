@@ -1,4 +1,7 @@
 import type { MetadataRoute } from 'next'
+
+export const dynamic = 'force-dynamic'
+
 import { db } from '@/lib/db'
 import { games, gameScores, platformExperiences, experienceScores } from '@/lib/db/schema'
 import { and, eq, isNotNull } from 'drizzle-orm'
