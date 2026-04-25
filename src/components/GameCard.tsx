@@ -736,6 +736,7 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
         <ScoreMetaLine
           calculatedAt={scores.calculatedAt}
           methodologyVersion={scores.methodologyVersion}
+          scoringMethod={scores.scoringMethod}
           updatedAt={game.updatedAt}
           locale={locale}
         />

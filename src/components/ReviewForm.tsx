@@ -210,6 +210,7 @@ function makeSerializedScores(computed: ReturnType<typeof calculateGameScores>):
     debateTranscript:          null,
     debateRounds:              null,
     methodologyVersion:        null,
+    scoringMethod:             null,
   }
 }
 

@@ -260,6 +260,7 @@ export const gameScores = pgTable('game_scores', {
 
   // Methodology traceability
   methodologyVersion: varchar('methodology_version', { length: 10 }),
+  scoringMethod: varchar('scoring_method', { length: 20 }), // 'full_rubric' | 'ugc_adapted' | 'hand_curated'
 
   // Timestamps
   calculatedAt: timestamp('calculated_at').defaultNow(),
@@ -502,9 +503,16 @@ export const experienceScores = pgTable('experience_scores', {
   riskScore:    real('risk_score'),    // weighted average of risk dimensions
   benefitScore: real('benefit_score'), // weighted average of benefit dimensions
 
+  // Rubric-mapped normalized composites (0–1, same scale as game_scores)
+  dopamineRisk:    real('dopamine_risk'),       // R1: dopamineTrapScore / 3
+  monetizationRisk: real('monetization_risk'), // R2: monetizationScore / 3
+  socialRisk:      real('social_risk'),         // R3: toxicity×0.4 + stranger×0.4 + privacy×0.2
+  contentRisk:     real('content_risk'),        // R4: ugcContentRisk / 3 (display only)
+
   // Time recommendation
   timeRecommendationMinutes: integer('time_rec_minutes'),
   timeRecommendationLabel:   varchar('time_rec_label', { length: 100 }),
+  timeRecommendationReasoning: text('time_rec_reasoning'),
   timeRecommendationColor:   varchar('time_rec_color', { length: 10 }),
 
   // Narrative output
@@ -516,8 +524,12 @@ export const experienceScores = pgTable('experience_scores', {
   // Recommended minimum age
   recommendedMinAge: integer('recommended_min_age'),
 
-  // Methodology traceability (matches game_scores.methodologyVersion)
+  // AI curascore kept for monitoring; displayed value is formula-derived
+  curascoreAiSuggested: integer('curascore_ai_suggested'),
+
+  // Methodology traceability
   methodologyVersion: varchar('methodology_version', { length: 10 }),
+  scoringMethod: varchar('scoring_method', { length: 20 }), // 'ugc_adapted' | 'hand_curated'
 
   // Timestamps
   calculatedAt: timestamp('calculated_at').defaultNow(),

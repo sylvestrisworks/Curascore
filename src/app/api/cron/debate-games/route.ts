@@ -270,6 +270,7 @@ async function runDebate(
     bds, ris, curascore,
     debateTranscript:   transcript,
     debateRounds:       2,
+    scoringMethod:      'full_rubric' as const,
     methodologyVersion: CURRENT_METHODOLOGY_VERSION,
     calculatedAt:       new Date(),
   }).where(eq(gameScores.gameId, game.id))

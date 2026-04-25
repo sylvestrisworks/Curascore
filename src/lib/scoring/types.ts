@@ -98,6 +98,29 @@ export type TopBenefit = {
   maxScore: number
 }
 
+export type ExperienceRiskInput = {
+  dopamineTrapScore?: number | null  // 0–3
+  monetizationScore?: number | null  // 0–3
+  toxicityScore?: number | null      // 0–3
+  strangerRisk?: number | null       // 0–3
+  privacyRisk?: number | null        // 0–3
+  ugcContentRisk?: number | null     // 0–3
+}
+
+export type ExperienceRiskResult = {
+  dopamine: number      // 0–1, R1 normalized — comparable to RiskResult.dopamine
+  monetization: number  // 0–1, R2 normalized — comparable to RiskResult.monetization
+  social: number        // 0–1, R3 normalized — comparable to RiskResult.social
+  contentRisk: number   // 0–1, R4 display only — not in ris
+  ris: number           // 0–1, R1×0.45 + R2×0.30 + R3×0.25 — comparable to RiskResult.ris
+}
+
+export type ExperienceBenefitResult = {
+  cognitive: number       // 0–1, (learning + creativity×0.5) / 3
+  socialEmotional: number // 0–1, (social + creativity×0.5) / 3
+  bds: number             // 0–1, cognitive×0.50 + socialEmotional×0.30 (motor=0)
+}
+
 export type GameScoresResult = {
   cognitiveScore: number
   socialEmotionalScore: number

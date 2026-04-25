@@ -15,6 +15,8 @@ import { db } from '@/lib/db'
 import { platformExperiences, experienceScores, games } from '@/lib/db/schema'
 import { eq, isNull, or } from 'drizzle-orm'
 import { CURRENT_METHODOLOGY_VERSION } from '@/lib/methodology'
+import { calculateExperienceRisk, calculateExperienceBenefits } from '@/lib/scoring/experience-risk'
+import { deriveTimeRecommendation } from '@/lib/scoring/time'
 
 export const maxDuration = 300
 
@@ -71,15 +73,10 @@ const EVAL_TOOL = {
       },
       recommendation: {
         type: 'object',
-        required: ['recommendedMinAge','timeRecommendationMinutes','timeRecommendationLabel','timeRecommendationColor','curascore'],
+        required: ['recommendedMinAge'],
         properties: {
-          curascore: { type: 'integer', minimum: 0, maximum: 100,
-            description: 'Overall LumiKin score (0–100). Treat benefits and risks as independent profiles — a game can score high on both. 70–100 = recommended, 40–69 = with guidance, 0–39 = limit or avoid.' },
-          recommendedMinAge:         { type: 'integer', minimum: 3, maximum: 18 },
-          timeRecommendationMinutes: { type: 'integer', enum: [15, 30, 60, 90, 120] },
-          timeRecommendationLabel:   { type: 'string',
-            description: 'e.g. "60 min/day" or "Not recommended for under 10"' },
-          timeRecommendationColor:   { type: 'string', enum: ['green','amber','red'] },
+          recommendedMinAge: { type: 'integer', minimum: 3, maximum: 18,
+            description: 'Minimum age you recommend for this experience.' },
         },
       },
       narratives: {
@@ -104,10 +101,7 @@ type EvalInput = {
     strangerRisk: number; monetizationScore: number; privacyRisk: number
   }
   benefits: { creativityScore: number; socialScore: number; learningScore: number }
-  recommendation: {
-    curascore: number; recommendedMinAge: number
-    timeRecommendationMinutes: number; timeRecommendationLabel: string; timeRecommendationColor: string
-  }
+  recommendation: { recommendedMinAge: number }
   narratives: { summary: string; benefitsNarrative: string; risksNarrative: string; parentTip: string }
 }
 
@@ -141,12 +135,7 @@ The time recommendation is derived from risk intensity, then modulated upward by
 - **monetizationScore**: Robux pressure built into the experience: pay-to-win, exclusive gated items, social spending comparison.
 - **privacyRisk**: Experience actively prompts children to share real name, age, location, or external links.
 
-### Time recommendation formula
-Base on risk intensity:
-- Low risk (dopamine+stranger+monetization all ≤ 1): up to 90–120 min
-- Moderate risk (some 2s): up to 60 min
-- High risk (any 3, or multiple 2s): 15–30 min
-Extend one tier if benefits are strong (creativityScore + learningScore + socialScore ≥ 6).
+**Do not output a time recommendation or curascore — the engine derives both from your dimensional scores.**
 
 ## CALIBRATION EXAMPLES
 | Experience | What it is | Key scores | Curascore |
@@ -197,11 +186,7 @@ Every map gets two independent profiles: a Benefits Profile (what the child deve
 - **monetizationScore**: V-Buck pressure built into the map — cosmetic requirements, pay-to-win map items, social comparison of skins.
 - **privacyRisk**: Map prompts players to share real info or join external Discord/social accounts.
 
-### Time recommendation formula
-- Low risk (dopamine+stranger+monetization all ≤ 1): up to 90–120 min
-- Moderate risk (some 2s): up to 60 min
-- High risk (any 3, or multiple 2s): 15–30 min
-Extend one tier if benefits are strong (creativityScore + learningScore + socialScore ≥ 6).
+**Do not output a time recommendation or curascore — the engine derives both from your dimensional scores.**
 
 ## CALIBRATION EXAMPLES
 Reference: Fortnite Battle Royale itself scores 42 on LumiKin. Most Creative maps should sit in the 35–60 range. Only exceptional experiences with strong creative, cooperative, AND learning dimensions should approach 70+.
@@ -272,30 +257,33 @@ async function callBedrock(prompt: string, attempt = 0): Promise<EvalInput> {
   return toolUse.input as EvalInput
 }
 
-// ─── Compute normalized scores ────────────────────────────────────────────────
-
-function computeScores(e: EvalInput) {
-  const { risks, benefits } = e
-  // Normalize risks to 0–1 (each dimension max 3, 6 dimensions = max 18)
-  const riskRaw = risks.dopamineTrapScore + risks.toxicityScore + risks.ugcContentRisk
-    + risks.strangerRisk + risks.monetizationScore + risks.privacyRisk
-  const riskScore = riskRaw / 18
-
-  // Normalize benefits to 0–1 (each max 3, 3 dimensions = max 9)
-  const benefitRaw = benefits.creativityScore + benefits.socialScore + benefits.learningScore
-  const benefitScore = benefitRaw / 9
-
-  return { riskScore, benefitScore }
-}
-
 // ─── Save to DB ───────────────────────────────────────────────────────────────
 
 async function saveScore(experience: ExperienceRow, eval_: EvalInput): Promise<number> {
-  const { riskScore, benefitScore } = computeScores(eval_)
+  // Fix 3: rubric-weighted risk and benefit composites
+  const risk    = calculateExperienceRisk(eval_.risks)
+  const benefit = calculateExperienceBenefits(
+    eval_.benefits.creativityScore,
+    eval_.benefits.socialScore,
+    eval_.benefits.learningScore,
+  )
+
+  // Fix 4: engine-derived time recommendation (same function as standalone games)
+  const timeRec = deriveTimeRecommendation(risk.ris, benefit.bds, risk.contentRisk, null)
+
+  // Fix 5: formula-derived curascore (harmonic mean of BDS and Safety, identical to engine.ts)
+  const safety   = 1 - risk.ris
+  const denom    = benefit.bds + safety
+  const curascore = denom > 0 ? Math.round((2 * benefit.bds * safety) / denom * 100) : 0
+
+  if (Math.abs(curascore - 50) > 10) {
+    // Log divergence between formula and a naive midpoint for monitoring
+    console.log(`[review-experiences] ${experience.slug} curascore=${curascore} ris=${risk.ris.toFixed(3)} bds=${benefit.bds.toFixed(3)}`)
+  }
 
   const row = {
     experienceId:              experience.id,
-    curascore:                 eval_.recommendation.curascore,
+    curascore,
     dopamineTrapScore:         eval_.risks.dopamineTrapScore,
     toxicityScore:             eval_.risks.toxicityScore,
     ugcContentRisk:            eval_.risks.ugcContentRisk,
@@ -305,16 +293,24 @@ async function saveScore(experience: ExperienceRow, eval_: EvalInput): Promise<n
     creativityScore:           eval_.benefits.creativityScore,
     socialScore:               eval_.benefits.socialScore,
     learningScore:             eval_.benefits.learningScore,
-    riskScore,
-    benefitScore,
-    timeRecommendationMinutes: eval_.recommendation.timeRecommendationMinutes,
-    timeRecommendationLabel:   eval_.recommendation.timeRecommendationLabel,
-    timeRecommendationColor:   eval_.recommendation.timeRecommendationColor,
+    // Fix 3: rubric-mapped normalized sub-components
+    dopamineRisk:              risk.dopamine,
+    monetizationRisk:          risk.monetization,
+    socialRisk:                risk.social,
+    contentRisk:               risk.contentRisk,
+    riskScore:                 risk.ris,
+    benefitScore:              benefit.bds,
+    // Fix 4: engine-derived time recommendation
+    timeRecommendationMinutes: timeRec.minutes,
+    timeRecommendationLabel:   timeRec.label,
+    timeRecommendationReasoning: timeRec.reasoning,
+    timeRecommendationColor:   timeRec.color,
     summary:                   eval_.narratives.summary,
     benefitsNarrative:         eval_.narratives.benefitsNarrative,
     risksNarrative:            eval_.narratives.risksNarrative,
     parentTip:                 eval_.narratives.parentTip,
     recommendedMinAge:         eval_.recommendation.recommendedMinAge,
+    scoringMethod:             'ugc_adapted' as const,   // Fix 6
     methodologyVersion:        CURRENT_METHODOLOGY_VERSION,
     calculatedAt:              new Date(),
     updatedAt:                 new Date(),
@@ -332,7 +328,7 @@ async function saveScore(experience: ExperienceRow, eval_: EvalInput): Promise<n
     await db.insert(experienceScores).values(row)
   }
 
-  return eval_.recommendation.curascore
+  return row.curascore
 }
 
 // ─── Handler ──────────────────────────────────────────────────────────────────

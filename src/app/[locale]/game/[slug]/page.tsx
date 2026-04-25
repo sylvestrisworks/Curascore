@@ -111,6 +111,7 @@ async function fetchGameData(slug: string): Promise<GameCardProps | null> {
         debateTranscript:         score.debateTranscript ?? null,
         debateRounds:             score.debateRounds ?? null,
         methodologyVersion:       score.methodologyVersion ?? null,
+        scoringMethod:            score.scoringMethod ?? null,
       }
     : null
 

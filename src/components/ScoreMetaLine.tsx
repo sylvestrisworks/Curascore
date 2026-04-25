@@ -13,16 +13,24 @@ function relativeDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en', { month: 'short', year: 'numeric' })
 }
 
+const SCORING_METHOD_LABEL: Record<string, { label: string; tooltip: string }> = {
+  full_rubric:  { label: '49-dim rubric',  tooltip: 'Scored across 49 dimensions by the standard LumiKin rubric.' },
+  ugc_adapted:  { label: 'UGC adapted',    tooltip: 'Scored on 9 dimensions adapted from the standard rubric. Risk and benefit weights match; granularity is coarser.' },
+  hand_curated: { label: 'Hand-curated',   tooltip: 'Scored by an editor rather than the automated pipeline.' },
+}
+
 type Props = {
   calculatedAt: string
   methodologyVersion: string | null
+  scoringMethod: string | null
   updatedAt: string | null
   locale: string
 }
 
-export function ScoreMetaLine({ calculatedAt, methodologyVersion, updatedAt, locale }: Props) {
-  const scoredLabel   = relativeDate(calculatedAt)
-  const updatedLabel  = updatedAt ? relativeDate(updatedAt) : null
+export function ScoreMetaLine({ calculatedAt, methodologyVersion, scoringMethod, updatedAt, locale }: Props) {
+  const scoredLabel  = relativeDate(calculatedAt)
+  const updatedLabel = updatedAt ? relativeDate(updatedAt) : null
+  const method       = scoringMethod ? SCORING_METHOD_LABEL[scoringMethod] : null
 
   return (
     <p className="text-[13px] text-slate-400 dark:text-slate-500 text-center leading-relaxed">
@@ -36,6 +44,17 @@ export function ScoreMetaLine({ calculatedAt, methodologyVersion, updatedAt, loc
           >
             Methodology v{methodologyVersion}
           </Link>
+        </>
+      )}
+      {method && (
+        <>
+          {' · '}
+          <span
+            title={method.tooltip}
+            className="cursor-help underline underline-offset-2 decoration-dotted decoration-slate-300 dark:decoration-slate-600"
+          >
+            {method.label}
+          </span>
         </>
       )}
       {updatedLabel && (

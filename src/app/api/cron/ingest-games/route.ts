@@ -433,6 +433,7 @@ async function saveReview(game: GameRow, r: ReviewInput): Promise<{ reviewId: nu
     representationScore:         (r.representation.repGenderBalance + r.representation.repEthnicDiversity) / 6,
     propagandaLevel:             r.propaganda.propagandaLevel,
     bechdelResult:               r.bechdel.result,
+    scoringMethod:               'full_rubric' as const,
     methodologyVersion:          CURRENT_METHODOLOGY_VERSION,
     calculatedAt:                new Date(),
   }
@@ -481,6 +482,7 @@ async function runDebate(game: GameRow, currentCurascore: number): Promise<{ new
     bds, ris, curascore,
     debateTranscript:   transcript,
     debateRounds:       2,
+    scoringMethod:      'full_rubric' as const,
     methodologyVersion: CURRENT_METHODOLOGY_VERSION,
     calculatedAt:       new Date(),
   }).where(eq(gameScores.gameId, game.id))

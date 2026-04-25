@@ -312,6 +312,15 @@ export default async function FortniteMapPage({ params }: Props) {
           </div>
         )}
 
+        {/* ── Scoring method note (Fix 8) ────────────────────────────────────── */}
+        {score && (
+          <p className="text-[11px] text-slate-400 dark:text-slate-500 leading-relaxed px-1">
+            This experience is scored on 9 dimensions adapted from the 49-dimension LumiKin rubric.
+            Risk category weights match the rubric (Dopamine 45%, Monetization 30%, Social 25%);
+            per-category sub-items are aggregated into a single score.
+          </p>
+        )}
+
         {/* ── Parent tip ─────────────────────────────────────────────────────── */}
         {score?.parentTip && (
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl px-5 py-4">

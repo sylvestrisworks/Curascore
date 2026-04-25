@@ -97,6 +97,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
     debateTranscript:          score.debateTranscript ?? null,
     debateRounds:              score.debateRounds ?? null,
     methodologyVersion:        score.methodologyVersion ?? null,
+    scoringMethod:             score.scoringMethod ?? null,
   } : null
 
   const serializedReview: SerializedReview | null = review ? {

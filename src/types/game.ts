@@ -66,6 +66,7 @@ export type SerializedScores = {
   debateTranscript: string | null
   debateRounds: number | null
   methodologyVersion: string | null
+  scoringMethod: string | null
 }
 
 export type SerializedReview = {
