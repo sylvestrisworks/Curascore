@@ -37,7 +37,6 @@ export type SiteStats = {
   scored_last_30_days: number
   platforms: PlatformStat[]
   languages: LanguageStat[]
-  recent_scores: RecentScore[]
 
   // UGC coverage
   total_ugc_experiences_scored: number
@@ -48,6 +47,10 @@ export type SiteStats = {
   // To enable this metric, add platformPublishedAt to platform_experiences and backfill
   // from the Roblox API (games.v1 `created` field) or Fortnite map metadata.
   median_hours_publish_to_score_ugc: null
+}
+
+export type RecentScores = {
+  recent_scores: RecentScore[]
   recent_ugc_scores: RecentUgcScore[]
 }
 
@@ -62,12 +65,10 @@ async function computeSiteStats(): Promise<SiteStats> {
     last30Result,
     platformRows,
     translationRows,
-    recentRows,
     ugcTotalResult,
     ugcLast7Result,
     ugcLast30Result,
     ugcByPlatformRows,
-    recentUgcRows,
   ] = await Promise.all([
     // ── Standalone / platform game stats ──────────────────────────────────────
 
@@ -100,21 +101,6 @@ async function computeSiteStats(): Promise<SiteStats> {
       .from(gameTranslations)
       .groupBy(gameTranslations.locale),
 
-    // 10 most recently scored games
-    db.select({
-      game_id:   games.id,
-      name:      games.title,
-      slug:      games.slug,
-      score:     gameScores.curascore,
-      scored_at: gameScores.calculatedAt,
-      platform:  sql<string | null>`CASE WHEN jsonb_typeof(${games.platforms}) = 'array' THEN ${games.platforms}->>0 ELSE NULL END`,
-    })
-      .from(gameScores)
-      .innerJoin(games, eq(games.id, gameScores.gameId))
-      .where(isNotNull(gameScores.curascore))
-      .orderBy(desc(gameScores.calculatedAt))
-      .limit(10),
-
     // ── UGC experience stats ───────────────────────────────────────────────────
 
     db.select({ count: sql<number>`count(*)` })
@@ -139,22 +125,6 @@ async function computeSiteStats(): Promise<SiteStats> {
       GROUP BY g.title
       ORDER BY count DESC
     `),
-
-    // 10 most recently scored UGC experiences
-    db.select({
-      id:              platformExperiences.id,
-      name:            platformExperiences.title,
-      slug:            platformExperiences.slug,
-      score:           experienceScores.curascore,
-      scored_at:       experienceScores.calculatedAt,
-      parent_platform: games.title,
-    })
-      .from(experienceScores)
-      .innerJoin(platformExperiences, eq(platformExperiences.id, experienceScores.experienceId))
-      .innerJoin(games, eq(games.id, platformExperiences.platformId))
-      .where(isNotNull(experienceScores.curascore))
-      .orderBy(desc(experienceScores.calculatedAt))
-      .limit(10),
   ])
 
   const totalScored = Number(totalResult[0]?.count ?? 0)
@@ -174,14 +144,6 @@ async function computeSiteStats(): Promise<SiteStats> {
       count: Number(r.count),
     })),
     languages,
-    recent_scores: recentRows.map(r => ({
-      game_id:   r.game_id,
-      name:      r.name,
-      slug:      r.slug,
-      score:     r.score ?? null,
-      scored_at: r.scored_at ? new Date(r.scored_at).toISOString() : null,
-      platform:  r.platform ?? null,
-    })),
 
     total_ugc_experiences_scored: Number(ugcTotalResult[0]?.count ?? 0),
     ugc_scored_last_7_days:       Number(ugcLast7Result[0]?.count  ?? 0),
@@ -191,6 +153,56 @@ async function computeSiteStats(): Promise<SiteStats> {
       count: Number(r.count),
     })),
     median_hours_publish_to_score_ugc: null,
+  }
+}
+
+export const fetchSiteStats = unstable_cache(
+  computeSiteStats,
+  ['site-stats'],
+  { revalidate: 3600 },
+)
+
+async function computeRecentScores(): Promise<RecentScores> {
+  const [recentRows, recentUgcRows] = await Promise.all([
+    db.select({
+      game_id:   games.id,
+      name:      games.title,
+      slug:      games.slug,
+      score:     gameScores.curascore,
+      scored_at: gameScores.calculatedAt,
+      platform:  sql<string | null>`CASE WHEN jsonb_typeof(${games.platforms}) = 'array' THEN ${games.platforms}->>0 ELSE NULL END`,
+    })
+      .from(gameScores)
+      .innerJoin(games, eq(games.id, gameScores.gameId))
+      .where(isNotNull(gameScores.curascore))
+      .orderBy(desc(gameScores.calculatedAt))
+      .limit(10),
+
+    db.select({
+      id:              platformExperiences.id,
+      name:            platformExperiences.title,
+      slug:            platformExperiences.slug,
+      score:           experienceScores.curascore,
+      scored_at:       experienceScores.calculatedAt,
+      parent_platform: games.title,
+    })
+      .from(experienceScores)
+      .innerJoin(platformExperiences, eq(platformExperiences.id, experienceScores.experienceId))
+      .innerJoin(games, eq(games.id, platformExperiences.platformId))
+      .where(isNotNull(experienceScores.curascore))
+      .orderBy(desc(experienceScores.calculatedAt))
+      .limit(10),
+  ])
+
+  return {
+    recent_scores: recentRows.map(r => ({
+      game_id:   r.game_id,
+      name:      r.name,
+      slug:      r.slug,
+      score:     r.score ?? null,
+      scored_at: r.scored_at ? new Date(r.scored_at).toISOString() : null,
+      platform:  r.platform ?? null,
+    })),
     recent_ugc_scores: recentUgcRows.map(r => ({
       id:              r.id,
       name:            r.name,
@@ -202,8 +214,8 @@ async function computeSiteStats(): Promise<SiteStats> {
   }
 }
 
-export const fetchSiteStats = unstable_cache(
-  computeSiteStats,
-  ['site-stats'],
-  { revalidate: 3600 },
+export const fetchRecentScores = unstable_cache(
+  computeRecentScores,
+  ['recent-scores'],
+  { revalidate: 300 },
 )

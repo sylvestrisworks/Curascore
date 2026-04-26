@@ -1,8 +1,8 @@
-export const revalidate = 3600
+export const revalidate = 300
 
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { fetchSiteStats } from '@/lib/stats'
+import { fetchSiteStats, fetchRecentScores } from '@/lib/stats'
 import { CURRENT_METHODOLOGY_VERSION } from '@/lib/methodology'
 import CoverageStrip from './partners/_components/CoverageStrip'
 import RecentlyScored from './_components/RecentlyScored'
@@ -51,7 +51,7 @@ export default async function HomePage({ params, searchParams }: Props) {
     redirect(`/${locale}/browse?${qs.toString()}`)
   }
 
-  const stats = await fetchSiteStats()
+  const [stats, recentScores] = await Promise.all([fetchSiteStats(), fetchRecentScores()])
 
   return (
     <div className="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
@@ -74,7 +74,7 @@ export default async function HomePage({ params, searchParams }: Props) {
       <CoverageStrip stats={stats} />
 
       {/* ── Recently scored ──────────────────────────────────────────────────── */}
-      <RecentlyScored scores={stats.recent_scores} locale={locale} />
+      <RecentlyScored scores={recentScores.recent_scores} locale={locale} />
 
       {/* ── Three paths ──────────────────────────────────────────────────────── */}
       <section className="border-t border-zinc-200 dark:border-zinc-800">
