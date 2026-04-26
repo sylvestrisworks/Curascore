@@ -714,7 +714,7 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
           {scores.timeRecommendationMinutes != null && (
             <div className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 px-4 py-2 rounded-full">
               <Clock size={14} strokeWidth={2.5} className="text-emerald-500" />
-              {scores.timeRecommendationMinutes >= 120 ? '120+' : scores.timeRecommendationMinutes} {t('minDayRecommended')}
+              {scores.timeRecommendationMinutes} {t('minDayRecommended')}
             </div>
           )}
           {scores.debateRounds != null && (

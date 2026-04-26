@@ -27,10 +27,10 @@ type Tier = {
 
 // Ordered best → worst (index 0 = most time, index 4 = least)
 const TIERS: Tier[] = [
-  { minutes: 120, baseLabel: 'Up to 2 hours/day',   color: 'green' },
+  { minutes: 120, baseLabel: 'Up to 120 min/day',   color: 'green' },
   { minutes:  90, baseLabel: 'Up to 90 min/day',    color: 'green' },
-  { minutes:  60, baseLabel: 'Up to 1 hour/day',    color: 'amber' },
-  { minutes:  30, baseLabel: '30 min max/day',       color: 'amber' },
+  { minutes:  60, baseLabel: 'Up to 60 min/day',    color: 'amber' },
+  { minutes:  30, baseLabel: 'Up to 30 min/day',    color: 'amber' },
   { minutes:  15, baseLabel: 'Not recommended',      color: 'red'   },
 ]
 
@@ -51,8 +51,8 @@ function buildLabel(tier: Tier, ageRating?: string | null): string {
 }
 
 function under6Label(minutes: number): string {
-  if (minutes <= 15) return '15 min max/day'
-  return '30 min max/day'
+  if (minutes <= 15) return 'Up to 15 min/day'
+  return 'Up to 30 min/day'
 }
 
 function buildReasoning(

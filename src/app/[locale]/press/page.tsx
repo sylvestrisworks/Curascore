@@ -28,7 +28,7 @@ const ONE_LINE =
   'LumiKin rates video games on developmental benefits and design risks, giving parents a single evidence-based time recommendation for every title.'
 
 const ONE_PARAGRAPH =
-  `LumiKin is a structured game-rating engine for parents. Every game in the database is scored across ${RUBRIC_DIMENSION_COUNT} dimensions — covering cognitive skills, social-emotional growth, motor development, and design risks including dopamine manipulation, monetisation pressure, and social risk. The output is a single LumiScore (0–100), a daily time recommendation, and a set of machine-readable flags. Ratings are produced against the PlaySmart methodology, a versioned open rubric, and are available both via a consumer website and a structured API for parental-control vendors and platform operators.`
+  `LumiKin is a structured game-rating engine for parents. Every game in the database is scored across ${RUBRIC_DIMENSION_COUNT} dimensions — covering cognitive skills, social-emotional growth, motor development, and design risks including dopamine manipulation, monetisation pressure, and social risk. The output is a single LumiScore (0–100), a daily time recommendation, and a set of machine-readable flags. Ratings are produced against the LumiKin methodology, a versioned open rubric, and are available both via a consumer website and a structured API for parental-control vendors and platform operators.`
 
 const PALETTE = [
   { name: 'Indigo',      hex: '#4f46e5', textClass: 'text-white', usage: 'Logo mark, primary links, CTAs'    },
@@ -59,7 +59,7 @@ const QUOTABLE_FACTS: { fact: string; source: string | null; sourceLabel: string
     sourceLabel: null,
   },
   {
-    fact: '[Placeholder — e.g. "The average daily-time recommendation produced by LumiKin\'s PlaySmart model is X minutes — compared to the X–X minutes parents report their children actually play."]',
+    fact: '[Placeholder — e.g. "The average daily-time recommendation produced by LumiKin\'s scoring model is X minutes — compared to the X–X minutes parents report their children actually play."]',
     source: null,
     sourceLabel: null,
   },
@@ -89,7 +89,7 @@ export default async function PressPage({ params }: Props) {
     { label: 'Languages',            value: languageCount.toLocaleString('en')                   },
     { label: 'Founded',              value: FOUNDING_YEAR                                         },
     { label: 'Founder',              value: FOUNDER_NAME                                          },
-    { label: 'Methodology version',  value: `PlaySmart v${CURRENT_METHODOLOGY_VERSION}`           },
+    { label: 'Methodology version',  value: `LumiKin v${CURRENT_METHODOLOGY_VERSION}`              },
     { label: 'Location',             value: LOCATION                                              },
   ]
 
@@ -319,7 +319,7 @@ export default async function PressPage({ params }: Props) {
             Methodology
           </p>
           <p className="text-zinc-600 dark:text-zinc-300 max-w-2xl leading-relaxed mb-8">
-            LumiKin scores are produced against the PlaySmart framework, a structured rubric covering
+            LumiKin scores are produced against the LumiKin rubric, a structured framework covering
             developmental benefits (BDS) and design risks (RIS). Every score carries a methodology version
             identifier. The full rubric is publicly available.
           </p>
@@ -328,7 +328,7 @@ export default async function PressPage({ params }: Props) {
               href={`/${locale}/methodology`}
               className="inline-flex items-center rounded-md bg-zinc-900 dark:bg-zinc-100 px-5 py-2.5 text-sm font-semibold text-white dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-300 transition-colors"
             >
-              Read PlaySmart v{CURRENT_METHODOLOGY_VERSION} →
+              Read methodology v{CURRENT_METHODOLOGY_VERSION} →
             </Link>
             <a
               href={`/lumikin-methodology-v${CURRENT_METHODOLOGY_VERSION}.pdf`}

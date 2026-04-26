@@ -459,7 +459,7 @@ function Scorecard({ a, b }: { a: GameCardProps; b: GameCardProps }) {
 
   const timeLabel = (s: typeof aScore) =>
     s?.timeRecommendationMinutes != null
-      ? `${s.timeRecommendationMinutes >= 120 ? '120+' : s.timeRecommendationMinutes}m`
+      ? `${s.timeRecommendationMinutes}m`
       : null
 
   const aMonth = a.review?.estimatedMonthlyCostLow != null

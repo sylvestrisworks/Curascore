@@ -17,9 +17,9 @@ const lora = Lora({
 
 export function generateMetadata(): Metadata {
   return {
-    title: `LumiKin Methodology v${CURRENT_METHODOLOGY_VERSION} — PlaySmart rating framework`,
+    title: `LumiKin Methodology v${CURRENT_METHODOLOGY_VERSION} — scoring rubric`,
     description:
-      'The full PlaySmart scoring methodology: how LumiKin rates games on cognitive benefits, social-emotional development, dopamine manipulation design, and monetization pressure.',
+      'The full LumiKin scoring methodology: how LumiKin rates games on cognitive benefits, social-emotional development, dopamine manipulation design, and monetization pressure.',
   }
 }
 
@@ -55,7 +55,7 @@ export default async function MethodologyPage({
         {/* ── Document header (screen) ─────────────────────────────────────── */}
         <div className="mb-12 pb-8 border-b border-zinc-200 dark:border-zinc-800 print:hidden">
           <p className="text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-3">
-            LumiKin · PlaySmart Framework
+            LumiKin · Scoring Methodology
           </p>
           <h1 className="text-3xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">
             Methodology

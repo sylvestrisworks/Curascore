@@ -38,7 +38,7 @@ const ORG_SCHEMA = {
   name: 'LumiKin',
   url: SITE_URL,
   description:
-    'LumiKin provides structured child-safety ratings and a game analysis API for parental control vendors, ISPs, app stores, and education platforms. The PlaySmart methodology scores games on developmental benefits and design risks, producing versioned, machine-readable ratings.',
+    'LumiKin provides structured child-safety ratings and a game analysis API for parental control vendors, ISPs, app stores, and education platforms. The LumiKin methodology scores games on developmental benefits and design risks, producing versioned, machine-readable ratings.',
   logo: `${SITE_URL}/lumikin-logo.svg`,
   contactPoint: {
     '@type': 'ContactPoint',
@@ -58,7 +58,7 @@ const SERVICE_SCHEMA = {
   '@type': 'Service',
   name: 'LumiKin Game Rating API',
   description:
-    'A structured API providing child-safety ratings for video games and UGC platforms. Covers cognitive development, social-emotional benefits, dopamine manipulation design, monetization pressure, and social risk. Every score is versioned against the PlaySmart methodology.',
+    'A structured API providing child-safety ratings for video games and UGC platforms. Covers cognitive development, social-emotional benefits, dopamine manipulation design, monetization pressure, and social risk. Every score is versioned against the LumiKin methodology.',
   serviceType: 'API',
   provider: {
     '@type': 'Organization',
@@ -166,7 +166,7 @@ export default async function PartnersPage({ params }: { params: Promise<{ local
           </h2>
           <div className="max-w-2xl space-y-5 text-zinc-600 dark:text-zinc-300 leading-relaxed">
             <p>
-              Every game is evaluated against the PlaySmart framework — a structured rubric
+              Every game is evaluated against the LumiKin rubric — a structured framework
               covering ten cognitive dimensions (problem solving, spatial awareness, strategic
               thinking, creativity, and more), six social-emotional dimensions (teamwork,
               communication, empathy, ethical reasoning), and four motor dimensions. Each

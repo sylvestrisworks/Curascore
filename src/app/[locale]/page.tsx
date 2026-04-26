@@ -115,7 +115,7 @@ export default async function HomePage({ params, searchParams }: Props) {
           </p>
           <div className="max-w-2xl space-y-5 text-zinc-600 dark:text-zinc-300 leading-relaxed">
             <p>
-              Every game is evaluated against the PlaySmart framework — a structured rubric covering
+              Every game is evaluated against the LumiKin rubric — a structured framework covering
               ten cognitive dimensions (problem solving, spatial awareness, strategic thinking,
               creativity, and more), six social-emotional dimensions (teamwork, communication,
               empathy, ethical reasoning), and four motor dimensions. Each dimension is scored

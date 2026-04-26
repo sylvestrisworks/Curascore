@@ -8,7 +8,7 @@ const SAMPLE_REQUEST = `curl -s https://api.lumikin.com/v1/games/minecraft`
 const SAMPLE_RESPONSE = `{
   "slug": "minecraft",
   "title": "Minecraft",
-  "methodology_version": "playsmart-0.1",
+  "methodology_version": "1.0",
   "scored_at": "2026-04-20T14:33:00Z",
   "score": {
     "curascore": 0.22,
