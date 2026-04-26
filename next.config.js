@@ -1,7 +1,14 @@
 const createNextIntlPlugin = require('next-intl/plugin')
 const { withSentryConfig } = require('@sentry/nextjs')
+const createMDX = require('@next/mdx')
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: [require('remark-gfm')],
+    rehypePlugins: [require('rehype-slug')],
+  },
+})
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -56,7 +63,7 @@ const nextConfig = {
   },
 }
 
-module.exports = withSentryConfig(withNextIntl(nextConfig), {
+module.exports = withSentryConfig(withMDX(withNextIntl(nextConfig)), {
   org: 'lumikin',
   project: 'lumikin',
   silent: true,         // suppress build output noise

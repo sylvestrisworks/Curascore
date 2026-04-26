@@ -327,6 +327,22 @@ export const reviewers = pgTable('reviewers', {
   createdAt: timestamp('created_at').defaultNow(),
 });
 
+
+// ============================================
+// PARTNER INQUIRIES
+// ============================================
+
+export const partnerInquiries = pgTable('partner_inquiries', {
+  id:          serial('id').primaryKey(),
+  name:        varchar('name', { length: 255 }).notNull(),
+  company:     varchar('company', { length: 255 }).notNull(),
+  role:        varchar('role', { length: 255 }).notNull(),
+  email:       varchar('email', { length: 255 }).notNull(),
+  usecase:     text('usecase').notNull(),
+  submittedAt: timestamp('submitted_at').defaultNow(),
+  emailSent:   boolean('email_sent').notNull().default(false),
+});
+
 // ============================================
 // AUTH.JS v5 — User persistence tables
 // ============================================
