@@ -66,7 +66,7 @@ export function LumiScoreHero({ curascore, recommendedMinAge, esrbRating, pegiRa
         out of 100
       </p>
 
-      <p className="mt-3 text-sm font-medium text-slate-700 dark:text-slate-200">
+      <p className={`mt-3 text-xl font-black tracking-tight ${scoreColor}`}>
         {verdict}
       </p>
 

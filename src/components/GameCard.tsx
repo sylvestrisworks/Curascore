@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import Link from 'next/link'
-import { Lightbulb, Sparkles, Zap, Clock, CheckCircle2, User, GitCompareArrows, AlertTriangle } from 'lucide-react'
+import { Lightbulb, Sparkles, Zap, Clock, CheckCircle2, User, GitCompareArrows, AlertTriangle, Info } from 'lucide-react'
 import type { DarkPattern, GameCardProps, SerializedReview, SerializedScores } from '@/types/game'
 import { esrbToAge, ageBadgeColor } from '@/lib/ui'
 import DarkPatternPills from './DarkPatternPills'
@@ -33,8 +33,8 @@ function pct(value: number | null | undefined): string {
 // ─── Risk bar colors — gul/orange/röd skala ───────────────────────────────────
 function riskBarColor(value: number | null): string {
   const v = value ?? 0
-  if (v < 0.3) return 'bg-yellow-400'
-  if (v < 0.6) return 'bg-orange-500'
+  if (v < 0.3) return 'bg-emerald-400'
+  if (v < 0.6) return 'bg-amber-400'
   return 'bg-red-600'
 }
 
@@ -43,13 +43,13 @@ function riskLevel(value: number | null): { labelKey: 'riskLow' | 'riskModerate'
   const v = value ?? 0
   if (v < 0.3) return {
     labelKey: 'riskLow',
-    color: 'text-yellow-800 dark:text-yellow-200',
-    bg:    'bg-yellow-100 dark:bg-yellow-900/50 border border-yellow-300 dark:border-yellow-700',
+    color: 'text-emerald-800 dark:text-emerald-200',
+    bg:    'bg-emerald-100 dark:bg-emerald-900/50 border border-emerald-300 dark:border-emerald-700',
   }
   if (v < 0.6) return {
     labelKey: 'riskModerate',
-    color: 'text-orange-800 dark:text-orange-200',
-    bg:    'bg-orange-100 dark:bg-orange-900/50 border border-orange-300 dark:border-orange-600',
+    color: 'text-amber-800 dark:text-amber-200',
+    bg:    'bg-amber-100 dark:bg-amber-900/50 border border-amber-300 dark:border-amber-600',
   }
   return {
     labelKey: 'riskHigh',
@@ -60,11 +60,11 @@ function riskLevel(value: number | null): { labelKey: 'riskLow' | 'riskModerate'
 
 // ─── Bar colors ───────────────────────────────────────────────────────────────
 
-// Benefit bars — blå/grön, högre = bättre
+// Benefit bars — emerald scale, higher = better
 function benefitBarColor(value: number | null): string {
   const v = value ?? 0
   if (v >= 0.7) return 'bg-emerald-400'
-  if (v >= 0.4) return 'bg-blue-400'
+  if (v >= 0.4) return 'bg-emerald-300'
   return 'bg-slate-300 dark:bg-slate-600'
 }
 
@@ -164,8 +164,8 @@ function HorseshoeRing({ score }: { score: number | null }) {
 function Tooltip({ text }: { text: string }) {
   return (
     <span className="relative group/tip inline-flex items-center ml-1">
-      <span className="w-3.5 h-3.5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 text-[9px] font-black flex items-center justify-center cursor-help leading-none">
-        ?
+      <span className="w-5 h-5 -m-0.5 p-0.5 rounded-full flex items-center justify-center cursor-help hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+        <Info size={13} className="text-slate-400 dark:text-slate-500" />
       </span>
       <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-52 rounded-xl bg-slate-800 dark:bg-slate-700 px-3 py-2 text-xs text-white leading-snug opacity-0 group-hover/tip:opacity-100 transition-opacity z-50 text-center shadow-lg">
         {text}
@@ -349,16 +349,6 @@ function BenefitsTab({ scores, review, t }: { scores: SerializedScores; review: 
         </div>
       )}
 
-      {review?.parentTipBenefits && (
-        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-5">
-          <div className="flex items-center gap-2 mb-2">
-            <Lightbulb size={14} className="text-blue-600 dark:text-blue-400 shrink-0" strokeWidth={2.5} />
-            <h3 className="text-xs font-black uppercase tracking-widest text-blue-700 dark:text-blue-400">{t('parentProTip')}</h3>
-          </div>
-          <p className="text-sm text-blue-900 dark:text-blue-200 leading-relaxed">{review.parentTipBenefits}</p>
-        </div>
-      )}
-
       {review?.benefitsNarrative && (
         <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl p-5">
           <h3 className="text-sm font-semibold text-emerald-800 dark:text-emerald-300 mb-1">{t('whatChildDevelops')}</h3>
@@ -446,13 +436,18 @@ function RisksTab({ scores, game, review, darkPatterns, t }: {
   )
 }
 
-function FullScoresTab({ scores, review, t }: { scores: SerializedScores; review: SerializedReview | null; t: T }) {
+function FullScoresTab({ scores, review, t, metaLine }: { scores: SerializedScores; review: SerializedReview | null; t: T; metaLine?: ReactNode }) {
   const [expanded, setExpanded] = useState(false)
 
   if (!review) return <p className="text-sm text-slate-400 dark:text-slate-500">{t('noReviewData')}</p>
 
   return (
     <div className="space-y-6">
+      {metaLine && (
+        <div className="border-b border-slate-100 dark:border-slate-700 pb-4">
+          {metaLine}
+        </div>
+      )}
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-3 text-emerald-800 dark:text-emerald-300">
           <p className="text-xs font-semibold mb-0.5">{t('bdsLabel')}</p>
@@ -712,9 +707,14 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
           action={<ShareButton data={{ game, scores, review, darkPatterns, compliance }} />}
         >
           {scores.timeRecommendationMinutes != null && (
-            <div className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 px-4 py-2 rounded-full">
-              <Clock size={14} strokeWidth={2.5} className="text-emerald-500" />
-              {scores.timeRecommendationMinutes} {t('minDayRecommended')}
+            <div className="flex items-center justify-center gap-2">
+              <Clock size={20} strokeWidth={2.5} className="text-emerald-500 shrink-0" />
+              <span className="text-2xl font-black text-slate-800 dark:text-slate-100 tabular-nums">
+                {scores.timeRecommendationMinutes}
+              </span>
+              <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
+                {t('minDayRecommended')}
+              </span>
             </div>
           )}
           {scores.debateRounds != null && (
@@ -731,16 +731,42 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
         </div>
       )}
 
-      {/* ── 2b. SCORE METADATA ───────────────────────────────────────────────────── */}
-      {scores?.calculatedAt && (
-        <ScoreMetaLine
-          calculatedAt={scores.calculatedAt}
-          methodologyVersion={scores.methodologyVersion}
-          scoringMethod={scores.scoringMethod}
-          updatedAt={game.updatedAt}
-          locale={locale}
-        />
-      )}
+      {/* ── 2b. VITALS STRIP — flags / cost / stranger chat ──────────────────────── */}
+      {hasReview && (() => {
+        const highFlags = darkPatterns.filter(p => p.severity === 'high')
+        const hasCost   = review?.estimatedMonthlyCostLow != null
+        const hasChat   = game.hasStrangerChat
+        if (!highFlags.length && !hasCost && !hasChat) return null
+        return (
+          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-3xl px-5 py-4 space-y-3">
+            <p className="text-[10px] font-black uppercase tracking-widest text-amber-700 dark:text-amber-400">{t('headsUp')}</p>
+            {highFlags.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {highFlags.map(p => (
+                  <span key={p.patternId} className="text-xs font-semibold bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700 px-2.5 py-1 rounded-full">
+                    {t(`dp${p.patternId.slice(2)}Label` as Parameters<typeof t>[0])}
+                  </span>
+                ))}
+              </div>
+            )}
+            <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs font-semibold text-amber-900 dark:text-amber-300">
+              {hasCost && (
+                <span>
+                  💸 {t('monthlyCost')}:{' '}
+                  {review!.estimatedMonthlyCostLow === 0 && review!.estimatedMonthlyCostHigh === 0
+                    ? t('free')
+                    : review!.estimatedMonthlyCostHigh != null
+                    ? `$${review!.estimatedMonthlyCostLow}–$${review!.estimatedMonthlyCostHigh}/mo`
+                    : `$${review!.estimatedMonthlyCostLow}/mo`}
+                </span>
+              )}
+              {hasChat && (
+                <span>💬 {t('strangerChatEnabled')}</span>
+              )}
+            </div>
+          </div>
+        )
+      })()}
 
       {/* ── 2c. SUB-DIMENSION BREAKDOWN ──────────────────────────────────────────── */}
       {scores && <SubDimensionBreakdown scores={scores} locale={locale} />}
@@ -778,16 +804,6 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
               <span className="text-base font-bold text-green-600 dark:text-green-400">/100</span>
             </p>
             <p className="text-xs font-semibold text-green-700 dark:text-green-400 -mt-1">{t('growthValue')}</p>
-            {scores.topBenefits && scores.topBenefits.length > 0 && (
-              <ul className="space-y-1.5 pt-1">
-                {scores.topBenefits.slice(0, 3).map((b) => (
-                  <li key={b.skill} className="flex items-center gap-1.5 text-xs text-green-800 dark:text-green-300">
-                    <CheckCircle2 size={13} className="text-green-500 shrink-0" strokeWidth={2.5} />
-                    {SKILL_KEY_MAP[b.skill] ? t(SKILL_KEY_MAP[b.skill] as Parameters<T>[0]) : b.skill}
-                  </li>
-                ))}
-              </ul>
-            )}
           </div>
 
           {/* Addictive Hooks */}
@@ -817,44 +833,7 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
         </div>
       )}
 
-      {/* ── 4. VITALS STRIP ────────────────────────────────────────────────────── */}
-      {hasReview && (() => {
-        const highFlags = darkPatterns.filter(p => p.severity === 'high')
-        const hasCost   = review?.estimatedMonthlyCostLow != null
-        const hasChat   = game.hasStrangerChat
-        if (!highFlags.length && !hasCost && !hasChat) return null
-        return (
-          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-3xl px-5 py-4 space-y-3">
-            <p className="text-[10px] font-black uppercase tracking-widest text-amber-700 dark:text-amber-400">{t('headsUp')}</p>
-            {highFlags.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {highFlags.map(p => (
-                  <span key={p.patternId} className="text-xs font-semibold bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700 px-2.5 py-1 rounded-full">
-                    {t(`dp${p.patternId.slice(2)}Label` as Parameters<typeof t>[0])}
-                  </span>
-                ))}
-              </div>
-            )}
-            <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs font-semibold text-amber-900 dark:text-amber-300">
-              {hasCost && (
-                <span>
-                  💸 {t('monthlyCost')}:{' '}
-                  {review!.estimatedMonthlyCostLow === 0 && review!.estimatedMonthlyCostHigh === 0
-                    ? t('free')
-                    : review!.estimatedMonthlyCostHigh != null
-                    ? `$${review!.estimatedMonthlyCostLow}–$${review!.estimatedMonthlyCostHigh}/mo`
-                    : `$${review!.estimatedMonthlyCostLow}/mo`}
-                </span>
-              )}
-              {hasChat && (
-                <span>💬 {t('strangerChatEnabled')}</span>
-              )}
-            </div>
-          </div>
-        )
-      })()}
-
-      {/* ── 5. PARENT TIP ──────────────────────────────────────────────────────── */}
+      {/* ── 4. PARENT TIP ──────────────────────────────────────────────────────── */}
       {review?.parentTip && (
         <div className="bg-blue-50 dark:bg-blue-900/20 rounded-3xl p-5">
           <div className="flex items-center gap-2 mb-2">
@@ -905,7 +884,20 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
           ) : activeTab === 'risks' ? (
             <RisksTab scores={scores} game={game} review={review} darkPatterns={darkPatterns} t={t} />
           ) : (
-            <FullScoresTab scores={scores} review={review} t={t} />
+            <FullScoresTab
+              scores={scores}
+              review={review}
+              t={t}
+              metaLine={scores?.calculatedAt ? (
+                <ScoreMetaLine
+                  calculatedAt={scores.calculatedAt}
+                  methodologyVersion={scores.methodologyVersion}
+                  scoringMethod={scores.scoringMethod}
+                  updatedAt={game.updatedAt}
+                  locale={locale}
+                />
+              ) : undefined}
+            />
           )}
         </div>
 
