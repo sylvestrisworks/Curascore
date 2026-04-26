@@ -303,8 +303,7 @@ export default async function PartnersPage({ params }: { params: Promise<{ local
           <a href={`/${locale}/methodology`} className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
             Methodology
           </a>
-          {/* TODO (Step 14): /press-kit */}
-          <a href={`/${locale}/press-kit`} className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
+          <a href={`/${locale}/methodology`} className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
             Press kit
           </a>
           <a href={`/${locale}/browse`} className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
