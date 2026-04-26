@@ -1,10 +1,14 @@
 export const revalidate = 3600
 
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { fetchSiteStats } from '@/lib/stats'
 import { CURRENT_METHODOLOGY_VERSION } from '@/lib/methodology'
 import CoverageStrip from './partners/_components/CoverageStrip'
 import RecentlyScored from './_components/RecentlyScored'
+
+// Old homepage catalog params — redirect to /browse
+const CATALOG_PARAMS = ['age', 'platform', 'platforms', 'sort', 'genres', 'benefits', 'risk']
 
 const PATH_CARDS = [
   {
@@ -32,10 +36,21 @@ const PATH_CARDS = [
 
 type Props = {
   params: Promise<{ locale: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
-export default async function HomePage({ params }: Props) {
+export default async function HomePage({ params, searchParams }: Props) {
   const { locale } = await params
+  const sp = await searchParams
+
+  if (CATALOG_PARAMS.some(p => sp[p] !== undefined)) {
+    const qs = new URLSearchParams()
+    for (const [k, v] of Object.entries(sp)) {
+      if (typeof v === 'string') qs.set(k, v)
+    }
+    redirect(`/${locale}/browse?${qs.toString()}`)
+  }
+
   const stats = await fetchSiteStats()
 
   return (

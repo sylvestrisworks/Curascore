@@ -209,6 +209,7 @@ export type GameSummary = {
   timeRecommendationMinutes: number | null
   timeRecommendationColor: 'green' | 'amber' | 'red' | null
   curascore?: number | null
+  calculatedAt?: string | null
   bds?: number | null
   ris?: number | null
   hasMicrotransactions?: boolean

@@ -27,11 +27,11 @@ export default function SiteNav({ authSlot, notifSlot }: { authSlot?: React.Reac
 
   const collapseNavSearch = isHomepage && atTop
 
-  const NAV_LINKS = [
-    { href: `/${locale}/discover`,   label: t('discover')  },
-    { href: `/${locale}/browse`,     label: t('browse')    },
-    { href: `/${locale}/learn`,      label: t('learn')     },
-    { href: `/${locale}/dashboard`,  label: t('library')   },
+  const NAV_LINKS: { href: string; label: string; prominent?: boolean }[] = [
+    { href: `/${locale}/browse`,     label: t('browse'),   prominent: true  },
+    { href: `/${locale}/discover`,   label: t('discover')                   },
+    { href: `/${locale}/learn`,      label: t('learn')                      },
+    { href: `/${locale}/dashboard`,  label: t('library')                    },
   ]
 
   function focusHeroSearch() {
@@ -89,7 +89,12 @@ export default function SiteNav({ authSlot, notifSlot }: { authSlot?: React.Reac
         {/* Desktop nav links */}
         <nav className="hidden sm:flex items-center gap-5 text-sm font-medium text-slate-600 dark:text-slate-300 ml-auto shrink-0">
           {NAV_LINKS.map(l => (
-            <a key={l.href} href={l.href} className="hover:text-indigo-700 dark:hover:text-indigo-400 transition-colors">
+            <a key={l.href} href={l.href}
+              className={l.prominent
+                ? 'text-indigo-700 dark:text-indigo-400 font-semibold hover:text-indigo-900 dark:hover:text-indigo-200 transition-colors'
+                : 'hover:text-indigo-700 dark:hover:text-indigo-400 transition-colors'
+              }
+            >
               {l.label}
             </a>
           ))}

@@ -7,9 +7,25 @@ import type { GameSummary } from '@/types/game'
 import { curascoreBg, esrbToAge, ageBadgeColor } from '@/lib/ui'
 import Icon, { type IconName } from '@/components/Icon'
 
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+const FOURTEEN_DAYS_MS = 14 * 24 * 60 * 60 * 1000
+
+function recentLabel(iso: string | null | undefined): string | null {
+  if (!iso) return null
+  const diff = Date.now() - new Date(iso).getTime()
+  if (diff >= FOURTEEN_DAYS_MS) return null
+  const hrs  = Math.floor(diff / 3_600_000)
+  if (hrs < 1)  return 'just now'
+  if (hrs < 24) return `${hrs}h ago`
+  return `${Math.floor(hrs / 24)}d ago`
+}
+
 // ─── Tile ─────────────────────────────────────────────────────────────────────
 
 function CarouselTile({ game }: { game: GameSummary }) {
+  const scoredLabel = recentLabel(game.calculatedAt)
+
   return (
     <Link href={`/game/${game.slug}`} className="group/tile shrink-0 w-44 sm:w-52 snap-start">
       {/* Image */}
@@ -29,9 +45,9 @@ function CarouselTile({ game }: { game: GameSummary }) {
           </div>
         )}
 
-        {/* LumiScore badge — top right */}
+        {/* LumiScore badge — top right, larger and clearer */}
         {game.curascore != null && (
-          <span className={`absolute top-1.5 right-1.5 ${curascoreBg(game.curascore)} text-white text-[10px] font-black px-1.5 py-0.5 rounded-full leading-none`}
+          <span className={`absolute top-1.5 right-1.5 ${curascoreBg(game.curascore)} text-white text-xs font-black px-2 py-1 rounded-lg leading-none tabular-nums`}
             title="LumiScore — developmental benefit vs. design risk">
             {game.curascore}
           </span>
@@ -65,6 +81,11 @@ function CarouselTile({ game }: { game: GameSummary }) {
       <p className="text-[10px] text-slate-400 dark:text-slate-500 truncate mt-0.5">
         {game.genres[0] ?? game.developer ?? ''}
       </p>
+      {scoredLabel && (
+        <p className="text-[9px] text-teal-600 dark:text-teal-400 font-semibold mt-0.5 leading-none">
+          Scored {scoredLabel}
+        </p>
+      )}
     </Link>
   )
 }

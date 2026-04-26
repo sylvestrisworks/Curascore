@@ -3,16 +3,23 @@ export const dynamic = 'force-dynamic'
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
-import { eq, desc, asc, sql, and, lte, gte, ilike, inArray, isNull, isNotNull, or, type SQL } from 'drizzle-orm'
+import { eq, desc, asc, sql, and, lte, gte, gt, ilike, inArray, isNull, isNotNull, or, type SQL } from 'drizzle-orm'
 import { curascoreBg } from '@/lib/ui'
 import type { Metadata } from 'next'
 import { db } from '@/lib/db'
-import { games, gameScores, childProfiles, platformExperiences } from '@/lib/db/schema'
+import { games, gameScores, childProfiles, platformExperiences, experienceScores } from '@/lib/db/schema'
 import BrowseFilters, { ViewToggle, type ActiveFilters } from '@/components/BrowseFilters'
 import GameCompactCard from '@/components/GameCompactCard'
 import BrowseSearch from '@/components/BrowseSearch'
+import CarouselRow from '@/components/CarouselRow'
+import RobloxCarouselRow from '@/components/RobloxCarouselRow'
+import FortniteCarouselRow from '@/components/FortniteCarouselRow'
+import AgePicker from '@/components/AgePicker'
+import PlatformPicker from '@/components/PlatformPicker'
+import { type ExperienceSummary } from '@/components/ExperienceCard'
 import { auth } from '@/auth'
 import { calcAge } from '@/lib/age'
+import type { GameSummary } from '@/types/game'
 
 export const metadata: Metadata = {
   title: 'Browse Games — LumiKin',
@@ -62,6 +69,104 @@ const GENRE_KEYWORDS: Record<string, string[]> = {
   Educational: ['Educational'],
   Arcade:      ['Arcade'],
   Card:        ['Card'],
+}
+
+// ─── Shelf mode: carousel data ───────────────────────────────────────────────
+
+type CarouselRowData = {
+  id: string
+  title: string
+  iconName: string
+  browseHref: string
+  games: GameSummary[]
+}
+
+const CAROUSEL_SELECT = {
+  slug:            games.slug,
+  title:           games.title,
+  developer:       games.developer,
+  genres:          games.genres,
+  esrbRating:      games.esrbRating,
+  backgroundImage: games.backgroundImage,
+  rawgAdded:       games.rawgAdded,
+  trendingScore:   games.trendingScore,
+  curascore:       gameScores.curascore,
+  calculatedAt:    gameScores.calculatedAt,
+  timeRecommendationMinutes: gameScores.timeRecommendationMinutes,
+  timeRecommendationColor:   gameScores.timeRecommendationColor,
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function toCarouselGame(r: any): GameSummary {
+  return {
+    slug:            r.slug,
+    title:           r.title,
+    developer:       r.developer ?? null,
+    genres:          Array.isArray(r.genres) ? (r.genres as string[]) : [],
+    esrbRating:      r.esrbRating ?? null,
+    backgroundImage: r.backgroundImage ?? null,
+    curascore:       r.curascore ?? null,
+    calculatedAt:    r.calculatedAt ? new Date(r.calculatedAt).toISOString() : null,
+    timeRecommendationMinutes: r.timeRecommendationMinutes ?? null,
+    timeRecommendationColor:   (r.timeRecommendationColor ?? null) as 'green' | 'amber' | 'red' | null,
+  }
+}
+
+const SHELF_ESRB: Record<string, string[]> = {
+  E:   ['E'],
+  E10: ['E', 'E10+'],
+  T:   ['E', 'E10+', 'T'],
+  M:   ['E', 'E10+', 'T', 'M'],
+}
+
+function escapeIlike(s: string): string {
+  return s.replace(/[\\%_]/g, ch => '\\' + ch)
+}
+
+async function getCarouselRows(platforms: string[], age: string | undefined, locale: string): Promise<CarouselRowData[]> {
+  const platformFilter: SQL | undefined = platforms.length > 0
+    ? or(...platforms.map(p => sql`${games.platforms}::text ILIKE ${'%' + escapeIlike(p) + '%'}`))
+    : undefined
+
+  const ratings = age ? (SHELF_ESRB[age] ?? ['E', 'E10+', 'T']) : null
+  const ageFilter: SQL = age && ratings
+    ? inArray(games.esrbRating, ratings)
+    : or(isNull(games.esrbRating), inArray(games.esrbRating, ['E', 'E10+', 'T', 'M']))!
+
+  const base = (extra?: SQL) => and(isNotNull(gameScores.curascore), platformFilter, ageFilter, extra)
+
+  const trendingCutoff = new Date()
+  trendingCutoff.setMonth(trendingCutoff.getMonth() - 18)
+
+  const [topRated, coopPlay, highBenefit, teamwork, vrGames, beginnerGames, newAndGood, popular, trending] = await Promise.all([
+    db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base()).orderBy(desc(gameScores.curascore), sql`${games.rawgAdded} DESC NULLS LAST`).limit(12),
+    db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(gte(gameScores.socialEmotionalScore, 0.5))).orderBy(desc(gameScores.socialEmotionalScore)).limit(12),
+    db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(gte(gameScores.cognitiveScore, 0.6))).orderBy(desc(gameScores.bds)).limit(12),
+    db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(sql`${gameScores.topBenefits}::jsonb @> ${JSON.stringify([{ skill: 'Teamwork' }])}::jsonb`)).orderBy(desc(gameScores.curascore)).limit(12),
+    db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(and(isNotNull(gameScores.curascore), eq(games.isVr, true), ageFilter)).orderBy(desc(gameScores.curascore)).limit(12),
+    db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(and(isNotNull(gameScores.curascore), platformFilter, inArray(games.esrbRating, ['E', 'E10+']), lte(gameScores.ris, 0.25), gte(gameScores.curascore, 55))).orderBy(desc(gameScores.curascore)).limit(12),
+    db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(gte(gameScores.curascore, 60))).orderBy(desc(games.releaseDate)).limit(12),
+    db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(and(base(), isNotNull(games.metacriticScore))).orderBy(desc(games.rawgAdded), desc(games.metacriticScore)).limit(12),
+    db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(and(base(), isNotNull(games.trendingScore), gt(games.trendingScore, 0))).orderBy(desc(games.trendingScore)).limit(12).catch(() => []),
+  ])
+
+  const b = `/${locale}/browse`
+  const ap = age ? `&age=${age}` : ''
+  const pp = platforms.length > 0 ? `&platforms=${platforms.join(',')}` : ''
+
+  const rows: CarouselRowData[] = [
+    { id: 'trending', title: 'Trending',               iconName: 'trending',  browseHref: `${b}?sort=trending${ap}${pp}`,           games: trending.map(toCarouselGame)     },
+    { id: 'popular',  title: 'Critically Acclaimed',   iconName: 'acclaimed', browseHref: `${b}?sort=popular${ap}${pp}`,             games: popular.map(toCarouselGame)      },
+    { id: 'newgood',  title: 'New & Worth Playing',    iconName: 'new',       browseHref: `${b}?sort=newest${ap}${pp}`,              games: newAndGood.map(toCarouselGame)   },
+    { id: 'top',      title: 'The Highest LumiScores', iconName: 'topscore',  browseHref: `${b}?sort=curascore${ap}${pp}`,           games: topRated.map(toCarouselGame)     },
+    { id: 'coop',     title: 'Family Co-Op',           iconName: 'family',    browseHref: `${b}?benefits=teamwork${ap}${pp}`,        games: coopPlay.map(toCarouselGame)     },
+    { id: 'brain',    title: 'Sneaky Smart Games',     iconName: 'smart',     browseHref: `${b}?benefits=problem-solving${ap}${pp}`, games: highBenefit.map(toCarouselGame)  },
+    { id: 'teamwork', title: 'Team Up',                iconName: 'teamwork',  browseHref: `${b}?benefits=teamwork${ap}${pp}`,        games: teamwork.map(toCarouselGame)     },
+    { id: 'vr',       title: 'VR & AR',                iconName: 'vr',        browseHref: `${b}?platforms=VR${ap}`,                  games: vrGames.map(toCarouselGame)      },
+    { id: 'beginner', title: 'New to Gaming',          iconName: 'beginner',  browseHref: `${b}?age=E10&risk=low${pp}`,              games: beginnerGames.map(toCarouselGame)},
+  ]
+
+  return rows.filter(r => r.games.length > 0)
 }
 
 // ─── Age → ESRB mapping ───────────────────────────────────────────────────────
@@ -421,14 +526,73 @@ export default async function BrowsePage({ params, searchParams }: Props) {
     ? { age: selectedChild.age, platforms: selectedChild.platforms }
     : undefined
 
-  const [{ rows, total }, ugcPlatforms] = await Promise.all([
-    queryGames(filters, childFilter),
-    db
-      .selectDistinct({ slug: games.slug, title: games.title })
-      .from(games)
-      .innerJoin(platformExperiences, eq(platformExperiences.platformId, games.id))
-      .where(eq(games.contentType, 'platform')),
-  ])
+  // Shelf mode: no search query, no sorting/filtering beyond age+platforms
+  const isShelfMode = !filters.q &&
+    filters.genres.length === 0 &&
+    filters.benefits.length === 0 &&
+    filters.compliance.length === 0 &&
+    !filters.risk && !filters.time && !filters.price &&
+    !filters.rep && !filters.noProp && !filters.bechdel &&
+    filters.sort === 'curascore'
+
+  // UGC platform chips — always needed
+  const ugcPlatformsPromise = db
+    .selectDistinct({ slug: games.slug, title: games.title })
+    .from(games)
+    .innerJoin(platformExperiences, eq(platformExperiences.platformId, games.id))
+    .where(eq(games.contentType, 'platform'))
+
+  // Shelf mode: fetch carousels + Roblox/Fortnite
+  let carousels: CarouselRowData[] = []
+  let robloxExperiences: ExperienceSummary[] = []
+  let fortniteExperiences: ExperienceSummary[] = []
+  let rows: Row[] = []
+  let total = 0
+
+  const ugcPlatforms = await ugcPlatformsPromise
+
+  if (isShelfMode) {
+    const [robloxRow, fortniteRow] = await Promise.all([
+      db.select({ id: games.id }).from(games).where(eq(games.slug, 'roblox')).limit(1).then(r => r[0] ?? null),
+      db.select({ id: games.id }).from(games).where(eq(games.slug, 'fortnite-creative')).limit(1).then(r => r[0] ?? null),
+    ])
+
+    const expSelect = {
+      slug:          platformExperiences.slug,
+      title:         platformExperiences.title,
+      thumbnailUrl:  platformExperiences.thumbnailUrl,
+      creatorName:   platformExperiences.creatorName,
+      activePlayers: platformExperiences.activePlayers,
+      visitCount:    platformExperiences.visitCount,
+      curascore:     experienceScores.curascore,
+      timeRecommendationMinutes: experienceScores.timeRecommendationMinutes,
+      recommendedMinAge:         experienceScores.recommendedMinAge,
+      strangerRisk:              experienceScores.strangerRisk,
+      monetizationScore:         experienceScores.monetizationScore,
+    }
+
+    ;[carousels, robloxExperiences, fortniteExperiences] = await Promise.all([
+      getCarouselRows(filters.platforms, filters.age, locale),
+      robloxRow
+        ? db.select(expSelect).from(platformExperiences)
+            .leftJoin(experienceScores, eq(experienceScores.experienceId, platformExperiences.id))
+            .where(eq(platformExperiences.platformId, robloxRow.id))
+            .orderBy(desc(platformExperiences.activePlayers))
+            .limit(8)
+        : Promise.resolve([]),
+      fortniteRow
+        ? db.select(expSelect).from(platformExperiences)
+            .leftJoin(experienceScores, eq(experienceScores.experienceId, platformExperiences.id))
+            .where(and(eq(platformExperiences.platformId, fortniteRow.id), isNotNull(platformExperiences.thumbnailUrl)))
+            .orderBy(desc(experienceScores.curascore))
+            .limit(8)
+        : Promise.resolve([]),
+    ])
+  } else {
+    const result = await queryGames(filters, childFilter)
+    rows  = result.rows
+    total = result.total
+  }
 
   const totalPages  = Math.ceil(total / PAGE_SIZE)
   const currentPage = filters.page ?? 1
@@ -451,12 +615,56 @@ export default async function BrowsePage({ params, searchParams }: Props) {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
       <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
 
-        {/* ── Search bar ─────────────────────────────────────────────────── */}
+        {/* ── Search bar — always visible ────────────────────────────────── */}
         <div className="mb-4 sm:mb-6">
           <Suspense>
             <BrowseSearch initialValue={filters.q ?? ''} />
           </Suspense>
         </div>
+
+        {/* ── Shelf mode ─────────────────────────────────────────────────── */}
+        {isShelfMode ? (
+          <div className="max-w-4xl mx-auto overflow-x-hidden">
+
+            {/* Age + Platform pickers */}
+            <div className="space-y-3 text-center mb-6">
+              <Suspense>
+                <AgePicker current={filters.age} />
+              </Suspense>
+              <Suspense>
+                <PlatformPicker current={filters.platforms} />
+              </Suspense>
+              {(filters.platforms.length > 0 || filters.age !== undefined) && (
+                <a href={`/${locale}/browse`} className="inline-block text-xs text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors">
+                  Clear filters
+                </a>
+              )}
+            </div>
+
+            {/* Carousel rows */}
+            {carousels.length > 0 && (
+              <div className="pb-10">
+                {carousels.map((row, i) => (
+                  <CarouselRow
+                    key={row.id}
+                    index={i}
+                    iconName={row.iconName}
+                    title={row.title}
+                    browseHref={row.browseHref}
+                    games={row.games}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Roblox */}
+            <RobloxCarouselRow experiences={robloxExperiences as ExperienceSummary[]} />
+
+            {/* Fortnite Creative */}
+            <FortniteCarouselRow experiences={fortniteExperiences as ExperienceSummary[]} />
+
+          </div>
+        ) : (
 
         <div className="lg:flex gap-6 xl:gap-8">
 
@@ -709,6 +917,9 @@ export default async function BrowsePage({ params, searchParams }: Props) {
 
           </main>
         </div>
+
+        )} {/* end filter mode */}
+
       </div>
     </div>
   )

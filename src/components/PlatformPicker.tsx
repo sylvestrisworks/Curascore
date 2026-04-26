@@ -25,9 +25,9 @@ function PlatformPickerInner({ current }: { current: string[] }) {
 
     const params = new URLSearchParams(searchParams.toString())
     if (next.length === 0) {
-      params.delete('platform')
+      params.delete('platforms')
     } else {
-      params.set('platform', next.join(','))
+      params.set('platforms', next.join(','))
     }
     const qs = params.toString()
     router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false })
