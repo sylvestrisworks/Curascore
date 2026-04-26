@@ -138,11 +138,10 @@ async function getCarouselRows(platforms: string[], age: string | undefined, loc
   const trendingCutoff = new Date()
   trendingCutoff.setMonth(trendingCutoff.getMonth() - 18)
 
-  const [topRated, coopPlay, highBenefit, teamwork, vrGames, beginnerGames, newAndGood, popular, trending] = await Promise.all([
+  const [topRated, coopPlay, highBenefit, vrGames, beginnerGames, newAndGood, popular, trending] = await Promise.all([
     db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base()).orderBy(desc(gameScores.curascore), sql`${games.rawgAdded} DESC NULLS LAST`).limit(12),
     db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(gte(gameScores.socialEmotionalScore, 0.5))).orderBy(desc(gameScores.socialEmotionalScore)).limit(12),
     db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(gte(gameScores.cognitiveScore, 0.6))).orderBy(desc(gameScores.bds)).limit(12),
-    db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(sql`${gameScores.topBenefits}::jsonb @> ${JSON.stringify([{ skill: 'Teamwork' }])}::jsonb`)).orderBy(desc(gameScores.curascore)).limit(12),
     db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(and(isNotNull(gameScores.curascore), eq(games.isVr, true), ageFilter)).orderBy(desc(gameScores.curascore)).limit(12),
     db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(and(isNotNull(gameScores.curascore), platformFilter, inArray(games.esrbRating, ['E', 'E10+']), lte(gameScores.ris, 0.25), gte(gameScores.curascore, 55))).orderBy(desc(gameScores.curascore)).limit(12),
     db.select(CAROUSEL_SELECT).from(games).innerJoin(gameScores, eq(gameScores.gameId, games.id)).where(base(gte(gameScores.curascore, 60))).orderBy(desc(games.releaseDate)).limit(12),
@@ -158,10 +157,9 @@ async function getCarouselRows(platforms: string[], age: string | undefined, loc
     { id: 'trending', title: 'Trending',               iconName: 'trending',  browseHref: `${b}?sort=trending${ap}${pp}`,           games: trending.map(toCarouselGame)     },
     { id: 'popular',  title: 'Critically Acclaimed',   iconName: 'acclaimed', browseHref: `${b}?sort=popular${ap}${pp}`,             games: popular.map(toCarouselGame)      },
     { id: 'newgood',  title: 'New & Worth Playing',    iconName: 'new',       browseHref: `${b}?sort=newest${ap}${pp}`,              games: newAndGood.map(toCarouselGame)   },
-    { id: 'top',      title: 'The Highest LumiScores', iconName: 'topscore',  browseHref: `${b}?sort=curascore${ap}${pp}`,           games: topRated.map(toCarouselGame)     },
+    { id: 'top',      title: 'Top Rated',              iconName: 'topscore',  browseHref: `${b}?sort=curascore${ap}${pp}`,           games: topRated.map(toCarouselGame)     },
     { id: 'coop',     title: 'Family Co-Op',           iconName: 'family',    browseHref: `${b}?benefits=teamwork${ap}${pp}`,        games: coopPlay.map(toCarouselGame)     },
     { id: 'brain',    title: 'Sneaky Smart Games',     iconName: 'smart',     browseHref: `${b}?benefits=problem-solving${ap}${pp}`, games: highBenefit.map(toCarouselGame)  },
-    { id: 'teamwork', title: 'Team Up',                iconName: 'teamwork',  browseHref: `${b}?benefits=teamwork${ap}${pp}`,        games: teamwork.map(toCarouselGame)     },
     { id: 'vr',       title: 'VR & AR',                iconName: 'vr',        browseHref: `${b}?platforms=VR${ap}`,                  games: vrGames.map(toCarouselGame)      },
     { id: 'beginner', title: 'New to Gaming',          iconName: 'beginner',  browseHref: `${b}?age=E10&risk=low${pp}`,              games: beginnerGames.map(toCarouselGame)},
   ]
@@ -624,10 +622,13 @@ export default async function BrowsePage({ params, searchParams }: Props) {
 
         {/* ── Shelf mode ─────────────────────────────────────────────────── */}
         {isShelfMode ? (
-          <div className="max-w-4xl mx-auto overflow-x-hidden">
+          <div className="max-w-6xl mx-auto overflow-x-hidden">
 
-            {/* Age + Platform pickers */}
+            {/* Heading + pickers */}
             <div className="space-y-3 text-center mb-6">
+              <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+                {t('title')}
+              </h1>
               <Suspense>
                 <AgePicker current={filters.age} />
               </Suspense>
@@ -641,7 +642,13 @@ export default async function BrowsePage({ params, searchParams }: Props) {
               )}
             </div>
 
-            {/* Carousel rows */}
+            {/* Roblox — top of shelf, most parents arrive for this */}
+            <RobloxCarouselRow experiences={robloxExperiences as ExperienceSummary[]} />
+
+            {/* Fortnite Creative */}
+            <FortniteCarouselRow experiences={fortniteExperiences as ExperienceSummary[]} />
+
+            {/* Curated carousels */}
             {carousels.length > 0 && (
               <div className="pb-10">
                 {carousels.map((row, i) => (
@@ -656,12 +663,6 @@ export default async function BrowsePage({ params, searchParams }: Props) {
                 ))}
               </div>
             )}
-
-            {/* Roblox */}
-            <RobloxCarouselRow experiences={robloxExperiences as ExperienceSummary[]} />
-
-            {/* Fortnite Creative */}
-            <FortniteCarouselRow experiences={fortniteExperiences as ExperienceSummary[]} />
 
           </div>
         ) : (
@@ -724,6 +725,13 @@ export default async function BrowsePage({ params, searchParams }: Props) {
               </div>
             )}
 
+            {/* Back to browse */}
+            <div className="mb-3">
+              <Link href={`/${locale}/browse`} className="text-xs text-slate-400 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                ← {t('backToBrowse')}
+              </Link>
+            </div>
+
             {/* Header row */}
             <div className="flex items-center justify-between mb-4 gap-3">
               <div>
@@ -747,7 +755,7 @@ export default async function BrowsePage({ params, searchParams }: Props) {
             {ugcPlatforms.length > 0 && (
               <div className="flex items-center gap-2 flex-wrap mb-4">
                 <span className="text-xs text-slate-400 dark:text-slate-500 font-medium shrink-0">
-                  UGC platforms:
+                  Also on:
                 </span>
                 {ugcPlatforms.map(p => (
                   <Link

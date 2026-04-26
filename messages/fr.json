@@ -89,7 +89,8 @@
     "noGamesRisk": "Les filtres de risque et de bénéfice s'appliquent uniquement aux jeux évalués.",
     "clearAllFilters": "Effacer tous les filtres →",
     "prevPage": "Précédent",
-    "nextPage": "Suivant"
+    "nextPage": "Suivant",
+    "backToBrowse": "Back to browse"
   },
   "filters": {
     "heading": "Filtres",
@@ -146,7 +147,8 @@
     "sectionCompliance": "Conformité",
     "complianceDsa": "Conforme au DSA",
     "complianceGdprk": "Conforme au GDPR-K",
-    "complianceOdds": "Conforme à l'ODDS"
+    "complianceOdds": "Conforme à l'ODDS",
+    "advancedFilters": "More filters"
   },
   "discover": {
     "tagline": "Ancré dans le développement de l'enfant",

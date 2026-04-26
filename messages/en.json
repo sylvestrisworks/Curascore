@@ -89,7 +89,8 @@
     "noGamesRisk": "Risk and benefit filters only apply to reviewed games.",
     "clearAllFilters": "Clear all filters →",
     "prevPage": "Previous",
-    "nextPage": "Next"
+    "nextPage": "Next",
+    "backToBrowse": "Back to browse"
   },
   "filters": {
     "heading": "Filters",
@@ -98,6 +99,7 @@
     "viewList": "List view",
     "viewGrid": "Grid view",
     "showGames": "{count, plural, one {Show # game} other {Show # games}}",
+    "advancedFilters": "More filters",
     "gamesFound": "{count, plural, one {# game found} other {# games found}}",
     "sortBy": "Sort by",
     "sortCurascore": "LumiScore",

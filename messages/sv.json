@@ -89,7 +89,8 @@
     "noGamesRisk": "Risk- och nyttofilter gäller endast för recenserade spel.",
     "clearAllFilters": "Rensa alla filter →",
     "prevPage": "Föregående",
-    "nextPage": "Nästa"
+    "nextPage": "Nästa",
+    "backToBrowse": "Back to browse"
   },
   "filters": {
     "heading": "Filter",
@@ -146,7 +147,8 @@
     "sectionCompliance": "Efterlevnad",
     "complianceDsa": "DSA-kompatibel",
     "complianceGdprk": "GDPR-K-kompatibel",
-    "complianceOdds": "ODDS-kompatibel"
+    "complianceOdds": "ODDS-kompatibel",
+    "advancedFilters": "More filters"
   },
   "discover": {
     "tagline": "Med grund i barns utveckling",

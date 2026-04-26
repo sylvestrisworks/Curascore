@@ -89,7 +89,8 @@
     "noGamesRisk": "Los filtros de riesgo y beneficio solo aplican a juegos reseñados.",
     "clearAllFilters": "Limpiar todos los filtros →",
     "prevPage": "Anterior",
-    "nextPage": "Siguiente"
+    "nextPage": "Siguiente",
+    "backToBrowse": "Back to browse"
   },
   "filters": {
     "heading": "Filtros",
@@ -146,7 +147,8 @@
     "sectionCompliance": "Cumplimiento",
     "complianceDsa": "Compatible con DSA",
     "complianceGdprk": "Compatible con GDPR-K",
-    "complianceOdds": "Compatible con ODDS"
+    "complianceOdds": "Compatible con ODDS",
+    "advancedFilters": "More filters"
   },
   "discover": {
     "tagline": "Basado en el desarrollo infantil",

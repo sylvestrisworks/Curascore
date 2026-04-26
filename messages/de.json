@@ -89,7 +89,8 @@
     "noGamesRisk": "Risiko- und Nutzenfilter gelten nur für bewertete Spiele.",
     "clearAllFilters": "Alle Filter löschen →",
     "prevPage": "Zurück",
-    "nextPage": "Weiter"
+    "nextPage": "Weiter",
+    "backToBrowse": "Back to browse"
   },
   "filters": {
     "heading": "Filter",
@@ -146,7 +147,8 @@
     "sectionCompliance": "Konformität",
     "complianceDsa": "DSA-konform",
     "complianceGdprk": "GDPR-K-konform",
-    "complianceOdds": "ODDS-konform"
+    "complianceOdds": "ODDS-konform",
+    "advancedFilters": "More filters"
   },
   "discover": {
     "tagline": "Fundiert in kindlicher Entwicklung",

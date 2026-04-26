@@ -82,6 +82,9 @@ export default function BrowseFilters({ active, totalCount, childId, childName }
   const pathname = usePathname()
   const t        = useTranslations('filters')
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [showAdvanced, setShowAdvanced] = useState(
+    !!(active.rep || active.noProp || active.bechdel || active.compliance.length)
+  )
 
   const push = useCallback((updates: Partial<ActiveFilters>) => {
     const merged = { ...active, ...updates, page: undefined }
@@ -184,6 +187,8 @@ export default function BrowseFilters({ active, totalCount, childId, childName }
       childId={childId}
       childName={childName}
       removeChild={removeChild}
+      showAdvanced={showAdvanced}
+      setShowAdvanced={setShowAdvanced}
     />
   )
 
@@ -291,7 +296,7 @@ export default function BrowseFilters({ active, totalCount, childId, childName }
 // ─── Filter panel (shared between desktop + mobile) ───────────────────────────
 
 function FilterPanel({
-  t, active, totalCount, activeCount, sortOptions, riskOptions, timeOptions, priceOptions, push, toggle, clearAll, childId, childName, removeChild,
+  t, active, totalCount, activeCount, sortOptions, riskOptions, timeOptions, priceOptions, push, toggle, clearAll, childId, childName, removeChild, showAdvanced, setShowAdvanced,
 }: {
   t: T
   active: ActiveFilters
@@ -307,6 +312,8 @@ function FilterPanel({
   childId?: number
   childName?: string
   removeChild: () => void
+  showAdvanced: boolean
+  setShowAdvanced: (v: boolean) => void
 }) {
   return (
     <div className="space-y-5">
@@ -475,49 +482,69 @@ function FilterPanel({
         </div>
       </FilterSection>
 
-      {/* Representation */}
-      <FilterSection title={t('sectionRepresentation')} note={t('displayOnly')}>
-        <InlineChip
-          label={t('repGood')}
-          active={active.rep === 'good'}
-          onClick={() => push({ rep: active.rep === 'good' ? undefined : 'good' })}
-        />
-        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1.5">{t('repGoodNote')}</p>
-      </FilterSection>
+      {/* Advanced filters toggle */}
+      <div>
+        <button
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          className="flex items-center gap-1.5 text-xs font-semibold text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
+        >
+          <span>{showAdvanced ? '▾' : '▸'}</span>
+          {t('advancedFilters')}
+          {(active.rep || active.noProp || active.bechdel || active.compliance.length > 0) && (
+            <span className="bg-indigo-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full">
+              {[active.rep, active.noProp, active.bechdel, ...active.compliance].filter(Boolean).length}
+            </span>
+          )}
+        </button>
+      </div>
 
-      {/* Ideology */}
-      <FilterSection title={t('sectionIdeology')} note={t('displayOnly')}>
-        <InlineChip
-          label={t('ideologyExclude')}
-          active={active.noProp === 'true'}
-          onClick={() => push({ noProp: active.noProp === 'true' ? undefined : 'true' })}
-        />
-        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1.5">{t('ideologyNote')}</p>
-      </FilterSection>
-
-      {/* Bechdel */}
-      <FilterSection title={t('sectionBechdel')} note={t('displayOnly')}>
-        <InlineChip
-          label={t('bechdelPass')}
-          active={active.bechdel === 'pass'}
-          onClick={() => push({ bechdel: active.bechdel === 'pass' ? undefined : 'pass' })}
-        />
-        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1.5">{t('bechdelNote')}</p>
-      </FilterSection>
-
-      {/* Compliance */}
-      <FilterSection title={t('sectionCompliance')} note={t('estimated')}>
-        <div className="flex flex-wrap gap-1.5">
-          {COMPLIANCE_OPTIONS.map(o => (
+      {showAdvanced && (
+        <>
+          {/* Representation */}
+          <FilterSection title={t('sectionRepresentation')} note={t('displayOnly')}>
             <InlineChip
-              key={o.value}
-              label={t(o.labelKey as Parameters<T>[0])}
-              active={active.compliance.includes(o.value)}
-              onClick={() => toggle('compliance', o.value)}
+              label={t('repGood')}
+              active={active.rep === 'good'}
+              onClick={() => push({ rep: active.rep === 'good' ? undefined : 'good' })}
             />
-          ))}
-        </div>
-      </FilterSection>
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1.5">{t('repGoodNote')}</p>
+          </FilterSection>
+
+          {/* Ideology */}
+          <FilterSection title={t('sectionIdeology')} note={t('displayOnly')}>
+            <InlineChip
+              label={t('ideologyExclude')}
+              active={active.noProp === 'true'}
+              onClick={() => push({ noProp: active.noProp === 'true' ? undefined : 'true' })}
+            />
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1.5">{t('ideologyNote')}</p>
+          </FilterSection>
+
+          {/* Bechdel */}
+          <FilterSection title={t('sectionBechdel')} note={t('displayOnly')}>
+            <InlineChip
+              label={t('bechdelPass')}
+              active={active.bechdel === 'pass'}
+              onClick={() => push({ bechdel: active.bechdel === 'pass' ? undefined : 'pass' })}
+            />
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1.5">{t('bechdelNote')}</p>
+          </FilterSection>
+
+          {/* Compliance */}
+          <FilterSection title={t('sectionCompliance')} note={t('estimated')}>
+            <div className="flex flex-wrap gap-1.5">
+              {COMPLIANCE_OPTIONS.map(o => (
+                <InlineChip
+                  key={o.value}
+                  label={t(o.labelKey as Parameters<T>[0])}
+                  active={active.compliance.includes(o.value)}
+                  onClick={() => toggle('compliance', o.value)}
+                />
+              ))}
+            </div>
+          </FilterSection>
+        </>
+      )}
 
       <p className="text-xs text-slate-400 dark:text-slate-500 pt-2 border-t border-slate-100 dark:border-slate-700">
         {t('gamesFound', { count: totalCount })}
