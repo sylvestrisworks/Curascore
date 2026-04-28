@@ -73,9 +73,10 @@ export async function GET(req: NextRequest) {
         .filter(Boolean)
     )
 
-    const inserted: string[] = []
-    const skipped:  string[] = []
-    const errors:   string[] = []
+    const inserted:    string[] = []
+    const skipped:     string[] = []
+    const errors:      string[] = []
+    const errorDetails: string[] = []
 
     let currentPage        = page
     let currentGenreIndex  = genreIndex
@@ -98,6 +99,7 @@ export async function GET(req: NextRequest) {
         const msg = err instanceof RawgError ? err.message : String(err)
         console.error(`[fetch-games] RAWG list failed for ${currentGenre} p${currentPage}: ${msg}`)
         errors.push(`${currentGenre}:p${currentPage}`)
+        errorDetails.push(msg)
         // Advance past the failed page so the cursor doesn't stall permanently
         currentPage = 1
         currentGenreIndex++
@@ -189,6 +191,7 @@ export async function GET(req: NextRequest) {
       inserted: inserted.length,
       skipped:  skipped.length,
       errors:   errors.length,
+      ...(errorDetails.length > 0 && { errorDetails }),
       cursor: {
         nextGenreIndex: currentGenreIndex,
         nextPage:       currentPage,
