@@ -58,6 +58,15 @@ function riskLevel(value: number | null): { labelKey: 'riskLow' | 'riskModerate'
   }
 }
 
+// ─── BDS verdict — higher is better ─────────────────────────────────────────
+function bdsVerdict(value: number | null): { labelKey: 'bdsStrong' | 'bdsGood' | 'bdsDeveloping' | 'bdsLimited'; color: string } {
+  const v = value ?? 0
+  if (v >= 0.70) return { labelKey: 'bdsStrong',     color: 'text-emerald-700 dark:text-emerald-400' }
+  if (v >= 0.50) return { labelKey: 'bdsGood',       color: 'text-teal-700 dark:text-teal-400' }
+  if (v >= 0.35) return { labelKey: 'bdsDeveloping', color: 'text-amber-700 dark:text-amber-400' }
+  return              { labelKey: 'bdsLimited',   color: 'text-slate-500 dark:text-slate-400' }
+}
+
 // ─── Bar colors ───────────────────────────────────────────────────────────────
 
 // Benefit bars — emerald scale, higher = better
@@ -579,7 +588,8 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
   const gradient = placeholderGradient(game.title)
   const abbr = game.title.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('')
   const hasReview = scores !== null
-  const risk = hasReview ? riskLevel(scores.ris) : null
+  const risk    = hasReview ? riskLevel(scores.ris)   : null
+  const bdsVerd = hasReview ? bdsVerdict(scores.bds)  : null
 
   const tabClass = (tab: Tab) =>
     `px-4 py-2.5 text-sm font-semibold tracking-tight transition-colors rounded-xl ${
@@ -728,7 +738,8 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
               {Math.round((scores.bds ?? 0) * 100)}
               <span className="text-base font-bold text-green-600 dark:text-green-400">/100</span>
             </p>
-            <p className="text-xs font-semibold text-green-700 dark:text-green-400 -mt-1">{t('growthValue')}</p>
+            {bdsVerd && <p className={`text-sm font-bold -mt-1 ${bdsVerd.color}`}>{t(bdsVerd.labelKey)}</p>}
+            <p className="text-xs font-semibold text-green-700 dark:text-green-400">{t('growthValue')}</p>
           </div>
 
           {/* Addictive Hooks */}
@@ -741,19 +752,14 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
             </div>
             {risk && (
               <>
-                <p className={`text-3xl font-black tracking-tighter ${risk.color}`}>
-                  {t(risk.labelKey)}
+                <p className="text-3xl font-black tracking-tighter text-orange-900 dark:text-orange-200">
+                  {Math.round((scores.ris ?? 0) * 100)}
+                  <span className="text-base font-bold text-orange-600 dark:text-orange-400">/100</span>
                 </p>
-                <p className="text-xs font-semibold text-orange-700 dark:text-orange-400 -mt-1">{t('engagementPatterns')}</p>
+                <p className={`text-sm font-bold -mt-1 ${risk.color}`}>{t(risk.labelKey)}</p>
               </>
             )}
-            <p className="text-xs text-orange-800 dark:text-orange-300 leading-snug pt-1">
-              {(scores.ris ?? 0) < 0.3
-                ? t('risMinimal')
-                : (scores.ris ?? 0) < 0.6
-                ? t('risSome')
-                : t('risNotable')}
-            </p>
+            <p className="text-xs font-semibold text-orange-700 dark:text-orange-400">{t('engagementPatterns')}</p>
           </div>
         </div>
       )}
