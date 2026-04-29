@@ -11,7 +11,6 @@ import DarkPatternPills from './DarkPatternPills'
 import ComplianceBadges from './ComplianceBadges'
 import ShareButton from './ShareCard'
 import { LumiScoreHero } from './LumiScoreHero'
-import { SubDimensionBreakdown } from './SubDimensionBreakdown'
 import { ScoreMetaLine } from './ScoreMetaLine'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -772,8 +771,12 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
         </div>
       )}
 
-      {/* ── SCORE BREAKDOWN ──────────────────────────────────────────────────────── */}
-      {scores && <SubDimensionBreakdown scores={scores} locale={locale} />}
+      {/* ── METHODOLOGY LINK ─────────────────────────────────────────────────────── */}
+      <div className="text-center">
+        <Link href={`/${locale}/methodology`} className="text-xs text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">
+          {t('howScoresCalculated')} →
+        </Link>
+      </div>
 
       {/* ── BUNDLED ONLINE WARNING ─────────────────────────────────────────────── */}
       {game.bundledOnlineNote && (
