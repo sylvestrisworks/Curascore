@@ -145,6 +145,11 @@ export const reviews = pgTable('reviews', {
   substanceRef: integer('substance_ref'),             // R4.4
   fearHorror: integer('fear_horror'),                 // R4.5
 
+  // R4 context modifiers — feed into age-floor computation (see src/lib/scoring/age-floors.ts)
+  trivialized: boolean('trivialized').default(false),             // violence/sex played for laughs or with no consequences
+  defencelessTarget: boolean('defenceless_target').default(false), // violence against non-combatants/helpless characters
+  mixedSexualViolent: boolean('mixed_sexual_violent').default(false), // sex + violence combined in same scene/context
+
   // ---- PRACTICAL INFO ----
   estimatedMonthlyCostLow: real('est_monthly_cost_low'),
   estimatedMonthlyCostHigh: real('est_monthly_cost_high'),
@@ -230,8 +235,9 @@ export const gameScores = pgTable('game_scores', {
   timeRecommendationReasoning: text('time_rec_reasoning'),
   timeRecommendationColor: varchar('time_rec_color', { length: 10 }), // green, amber, red
 
-  // Age recommendation (our own, may differ from ESRB/PEGI)
+  // Age recommendation — derived by scoring engine from R4 scores + modifiers, independent of ESRB/PEGI
   recommendedMinAge: integer('recommended_min_age'),
+  ageFloorReason: text('age_floor_reason'),  // e.g. "R4.1=2 + trivialized"
 
   // R5/R6 normalized (display only — not in RIS formula)
   accessibilityRisk: real('accessibility_risk'),

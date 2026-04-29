@@ -16,6 +16,11 @@ export class RawgError extends Error {
 
 type QueryParams = Record<string, string | number | boolean | undefined>
 
+// Retry on transient server errors (502/503/504) with exponential backoff.
+// 429 rate-limit is also retried — RAWG doesn't send Retry-After headers.
+const RETRYABLE = new Set([429, 502, 503, 504])
+const RETRY_DELAYS = [1_000, 3_000, 8_000] // 3 attempts after the first
+
 async function rawgFetch<T>(path: string, params: QueryParams = {}): Promise<T> {
   const apiKey = process.env.RAWG_API_KEY
   if (!apiKey) throw new RawgError('RAWG_API_KEY is not set in environment')
@@ -27,20 +32,27 @@ async function rawgFetch<T>(path: string, params: QueryParams = {}): Promise<T> 
     if (v !== undefined) url.searchParams.set(k, String(v))
   }
 
-  const res = await fetch(url.toString(), {
-    headers: { Accept: 'application/json' },
-    // Bypass any Next.js data cache — we manage caching in the DB ourselves
-    cache: 'no-store',
-  })
+  let lastErr: RawgError | undefined
 
-  if (!res.ok) {
-    throw new RawgError(
-      `RAWG ${res.status}: ${res.statusText} — ${path}`,
-      res.status,
-    )
+  for (let attempt = 0; attempt <= RETRY_DELAYS.length; attempt++) {
+    if (attempt > 0) {
+      await new Promise(r => setTimeout(r, RETRY_DELAYS[attempt - 1]))
+    }
+
+    const res = await fetch(url.toString(), {
+      headers: { Accept: 'application/json' },
+      // Bypass any Next.js data cache — we manage caching in the DB ourselves
+      cache: 'no-store',
+    })
+
+    if (res.ok) return res.json() as Promise<T>
+
+    lastErr = new RawgError(`RAWG ${res.status}: ${res.statusText} — ${path}`, res.status)
+
+    if (!RETRYABLE.has(res.status)) break
   }
 
-  return res.json() as Promise<T>
+  throw lastErr
 }
 
 // ─── Exported fetch functions ─────────────────────────────────────────────────

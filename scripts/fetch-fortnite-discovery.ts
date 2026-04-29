@@ -1,151 +1,203 @@
 /**
- * Scrapes the Fortnite Creative discovery surface using a real Chrome browser
- * to bypass Cloudflare. Captures all panel responses and:
+ * Fetches Fortnite Creative discovery data directly from Epic's backend API —
+ * no browser, no Cloudflare.
  *
- *   1. Updates thumbnailUrl + activePlayers for existing curated maps
- *   2. Discovers new popular islands and inserts them as unscored entries
+ * Auth: machine-level client_credentials token using EPIC_CLIENT_ID /
+ * EPIC_CLIENT_SECRET (same credentials used by sync-epic-library).
  *
- * Run locally (Chrome must be installed):
- *   npx tsx scripts/fetch-fortnite-discovery.ts
+ * Data source: links.community-svc.ol.epicgames.com — the same endpoint the
+ * Fortnite game client calls to populate the Creative discovery surface panels.
  *
- * A Chrome window will open, navigate fortnite.com/creative, then close.
- * Requires DATABASE_URL in env (copy from .env.local).
+ * Run locally:
+ *   node node_modules/tsx/dist/cli.cjs scripts/fetch-fortnite-discovery.ts
+ *
+ * Requires in env: DATABASE_URL, EPIC_CLIENT_ID, EPIC_CLIENT_SECRET
  */
 
-import { chromium } from 'playwright'
+import { config } from 'dotenv'
+import { resolve } from 'path'
+config({ path: resolve(process.cwd(), '.env.local') })
+config({ path: resolve(process.cwd(), '.env') })
+
 import { db } from '@/lib/db'
 import { platformExperiences, games } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 
-const CREATIVE_URL = 'https://www.fortnite.com/creative'
-const PANEL_PATTERN = /paginated-islands\.data/
+// ─── Epic API ─────────────────────────────────────────────────────────────────
 
-// Island code pattern for user-created maps (not Epic's own playlist_ codes)
+const TOKEN_URL = 'https://account-public-service-prod.ol.epicgames.com/account/api/oauth/token'
+
+// Discovery surface panel mnemonics — each is a section on the Creative tab
+const PANELS = [
+  'CREATIVE:featured:br',
+  'CREATIVE:hot:br',
+  'CREATIVE:new:br',
+  'CREATIVE:recommended:br',
+]
+
+const FORTNITE_UA = 'Fortnite/++Fortnite+Release-33.00-CL-38383825 Windows/10.0.22631.1.0.0.256.64bit'
+
+// User-created island codes follow this pattern (Epic-owned use playlist_ or similar)
 const USER_ISLAND_CODE = /^\d{4}-\d{4}-\d{4}$/
 
-type DiscoveryIsland = {
-  title:       string
-  label?:      string
-  ccu?:        number
-  imgSrc?:     string
-  imgAlt?:     string
-  islandCode:  string
-  islandUrl?:  string
-  hasParentalLock?: boolean
-  ageRatingTextAbbr?: string
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type IslandEntry = {
+  code:         string
+  title:        string
+  thumbnailUrl: string | null
+  ccu:          number | null
 }
 
-// Parse Remix TurboStream / JSON response — extract all objects with islandCode
-function extractIslands(raw: string): DiscoveryIsland[] {
-  const islands: DiscoveryIsland[] = []
-  const seen = new Set<string>()
+// ─── Auth ─────────────────────────────────────────────────────────────────────
 
-  // Strategy 1: find JSON objects containing islandCode
-  const matches = raw.matchAll(/\{[^{}]*"islandCode"[^{}]*\}/g)
-  for (const match of matches) {
-    try {
-      const obj = JSON.parse(match[0]) as DiscoveryIsland
-      if (obj.islandCode && !seen.has(obj.islandCode)) {
-        seen.add(obj.islandCode)
-        islands.push(obj)
-      }
-    } catch {
-      // partial match — skip
-    }
+async function getClientToken(): Promise<string> {
+  const clientId     = process.env.EPIC_CLIENT_ID
+  const clientSecret = process.env.EPIC_CLIENT_SECRET
+  if (!clientId || !clientSecret) throw new Error('EPIC_CLIENT_ID / EPIC_CLIENT_SECRET not set')
+
+  const creds = Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
+  const res = await fetch(TOKEN_URL, {
+    method:  'POST',
+    headers: { Authorization: `Basic ${creds}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+    body:    new URLSearchParams({ grant_type: 'client_credentials' }),
+  })
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(`Epic OAuth failed (${res.status}): ${text.slice(0, 300)}`)
   }
-
-  // Strategy 2: if strategy 1 finds nothing, try parsing full response as JSON
-  if (islands.length === 0) {
-    try {
-      const parsed = JSON.parse(raw)
-      const candidates = Array.isArray(parsed) ? parsed : [parsed]
-      for (const item of candidates) {
-        if (item?.islandCode && !seen.has(item.islandCode)) {
-          seen.add(item.islandCode)
-          islands.push(item as DiscoveryIsland)
-        }
-      }
-    } catch {
-      // not JSON
-    }
-  }
-
-  return islands
+  const data = await res.json() as { access_token: string }
+  console.log('[fortnite-discovery] OAuth token acquired')
+  return data.access_token
 }
+
+// ─── Fetch one panel ──────────────────────────────────────────────────────────
+
+async function fetchPanel(mnemonic: string, token: string): Promise<IslandEntry[]> {
+  const url = `https://links.community-svc.ol.epicgames.com/links/api/fn/mnemonic?category=${encodeURIComponent(mnemonic)}&start=0&count=40`
+
+  let raw: unknown
+  try {
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}`, 'User-Agent': FORTNITE_UA },
+      signal:  AbortSignal.timeout(10_000),
+    })
+    if (!res.ok) {
+      console.warn(`[fortnite-discovery] ${mnemonic}: HTTP ${res.status}`)
+      return []
+    }
+    raw = await res.json()
+  } catch (err) {
+    console.error(`[fortnite-discovery] ${mnemonic}: fetch error`, err)
+    return []
+  }
+
+  // Log the raw shape once so we can see what Epic returns on first run
+  console.log(`[fortnite-discovery] ${mnemonic}: raw shape keys = ${Object.keys(raw as object).join(', ')}`)
+
+  const items = extractItems(raw)
+  console.log(`[fortnite-discovery] ${mnemonic}: extracted ${items.length} islands`)
+  return items
+}
+
+// ─── Parse response ───────────────────────────────────────────────────────────
+// Epic's API shape has varied over time. We try several known structures and
+// log what we see so any format change is immediately visible in CI logs.
+
+function extractItems(raw: unknown): IslandEntry[] {
+  if (!raw || typeof raw !== 'object') return []
+
+  const candidates: unknown[] = []
+
+  // Shape A: { elements: [...] }
+  if (Array.isArray((raw as Record<string, unknown>).elements)) {
+    candidates.push(...((raw as Record<string, unknown[]>).elements))
+  }
+  // Shape B: { results: [...] }
+  if (Array.isArray((raw as Record<string, unknown>).results)) {
+    candidates.push(...((raw as Record<string, unknown[]>).results))
+  }
+  // Shape C: { data: { elements: [...] } }
+  const data = (raw as Record<string, unknown>).data
+  if (data && typeof data === 'object') {
+    if (Array.isArray((data as Record<string, unknown>).elements)) {
+      candidates.push(...((data as Record<string, unknown[]>).elements))
+    }
+  }
+  // Shape D: root is an array
+  if (Array.isArray(raw)) candidates.push(...raw)
+
+  if (candidates.length === 0) {
+    // Log a snippet to help diagnose unexpected shapes
+    console.warn('[fortnite-discovery] Unknown response shape:', JSON.stringify(raw).slice(0, 500))
+    return []
+  }
+
+  const results: IslandEntry[] = []
+  for (const item of candidates) {
+    const entry = parseItem(item)
+    if (entry) results.push(entry)
+  }
+  return results
+}
+
+function parseItem(item: unknown): IslandEntry | null {
+  if (!item || typeof item !== 'object') return null
+  const o = item as Record<string, unknown>
+
+  // mnemonic may be at root level or nested under linkData
+  const linkData = o.linkData as Record<string, unknown> | undefined
+  const meta     = (o.metadata ?? linkData?.metadata) as Record<string, unknown> | undefined
+
+  const code = (o.mnemonic ?? o.islandCode ?? linkData?.mnemonic) as string | undefined
+  if (!code || !USER_ISLAND_CODE.test(code)) return null
+
+  const title       = (meta?.title ?? o.title ?? linkData?.['tagline']) as string | undefined
+  const thumbnailUrl = (meta?.image_url ?? meta?.imageUrl ?? o.image_url ?? o.imageUrl) as string | null | undefined
+  const ccu          = (meta?.ccu ?? o.ccu ?? o.activePlayers) as number | null | undefined
+
+  if (!title) return null
+
+  return {
+    code,
+    title:        String(title).trim(),
+    thumbnailUrl: thumbnailUrl ?? null,
+    ccu:          typeof ccu === 'number' ? ccu : null,
+  }
+}
+
+// ─── Slug helper ──────────────────────────────────────────────────────────────
 
 function slugify(str: string): string {
   return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 255)
 }
 
+// ─── Main ─────────────────────────────────────────────────────────────────────
+
 async function main() {
-  // Use installed Chrome (not Playwright's Chromium) — real Chrome passes
-  // Cloudflare's TLS + fingerprint checks that headless Chromium fails.
-  const browser = await chromium.launch({
-    headless: false,
-    channel: 'chrome',
-    args: ['--disable-blink-features=AutomationControlled'],
-  })
+  const token = await getClientToken()
 
-  const context = await browser.newContext({
-    viewport: { width: 1280, height: 900 },
-    locale:   'en-US',
-  })
+  // Collect islands from all panels, deduping by island code
+  const seen    = new Set<string>()
+  const islands: IslandEntry[] = []
 
-  const page = await context.newPage()
-
-  // Collect all panel responses
-  const allIslands: DiscoveryIsland[] = []
-  const seen = new Set<string>()
-
-  page.on('response', async (response) => {
-    if (!PANEL_PATTERN.test(response.url())) return
-    try {
-      const text = await response.text()
-      const islands = extractIslands(text)
-      for (const island of islands) {
-        if (!seen.has(island.islandCode)) {
-          seen.add(island.islandCode)
-          allIslands.push(island)
-        }
+  for (const panel of PANELS) {
+    const entries = await fetchPanel(panel, token)
+    for (const entry of entries) {
+      if (!seen.has(entry.code)) {
+        seen.add(entry.code)
+        islands.push(entry)
       }
-      console.log(`[panel] ${response.url().split('panelName=')[1]?.split('&')[0] ?? '?'} → ${islands.length} islands`)
-    } catch {
-      // ignore
     }
-  })
-
-  console.log('Opening Chrome and navigating to Fortnite Creative…')
-  console.log('(A Chrome window will appear — do not close it)')
-  await page.goto(CREATIVE_URL, { waitUntil: 'domcontentloaded', timeout: 60_000 })
-
-  // Wait for the actual discovery content to load past any Cloudflare challenge
-  console.log('Waiting for discovery grid to load…')
-  try {
-    await page.waitForSelector('a[href*="/creative/islands"], [class*="island"], [class*="Island"]', { timeout: 45_000 })
-    console.log('Discovery grid detected')
-  } catch {
-    console.log('Grid selector not found — waiting 15s anyway')
-    await page.waitForTimeout(15_000)
   }
 
-  // Scroll to trigger lazy-loaded panels
-  console.log('Scrolling to trigger all panels…')
-  for (let i = 0; i < 8; i++) {
-    await page.evaluate(() => window.scrollBy(0, window.innerHeight * 1.5))
-    await page.waitForTimeout(1500)
-  }
-
-  // Wait for any lingering requests
-  await page.waitForTimeout(3000)
-  await browser.close()
-
-  console.log(`\nTotal unique islands captured: ${allIslands.length}`)
-  if (allIslands.length === 0) {
-    console.error('No islands found — Cloudflare may have blocked the request. Try running with PWDEBUG=1 to inspect.')
+  console.log(`\n[fortnite-discovery] Total unique islands: ${islands.length}`)
+  if (islands.length === 0) {
+    console.error('[fortnite-discovery] No islands found — check API response shape in logs above')
     process.exit(1)
   }
 
-  // Look up the fortnite-creative platform row
+  // Load fortnite-creative platform row
   const [platform] = await db
     .select({ id: games.id })
     .from(games)
@@ -153,13 +205,13 @@ async function main() {
     .limit(1)
 
   if (!platform) {
-    console.error('fortnite-creative platform row not found')
+    console.error('[fortnite-discovery] fortnite-creative platform row not found')
     process.exit(1)
   }
 
-  // Load existing curated maps keyed by island code
+  // Load existing entries keyed by island code (placeId)
   const existing = await db
-    .select({ id: platformExperiences.id, placeId: platformExperiences.placeId, title: platformExperiences.title, thumbnailUrl: platformExperiences.thumbnailUrl })
+    .select({ id: platformExperiences.id, placeId: platformExperiences.placeId, thumbnailUrl: platformExperiences.thumbnailUrl })
     .from(platformExperiences)
     .where(eq(platformExperiences.platformId, platform.id))
 
@@ -169,51 +221,48 @@ async function main() {
   let updatedCCU        = 0
   let inserted          = 0
 
-  for (const island of allIslands) {
-    const existing_ = existingByCode.get(island.islandCode)
+  for (const island of islands) {
+    const existing_ = existingByCode.get(island.code)
 
     if (existing_) {
-      // Update thumbnail + CCU for existing curated maps
       const updates: Record<string, unknown> = { updatedAt: new Date() }
-      if (island.imgSrc && island.imgSrc !== existing_.thumbnailUrl) {
-        updates.thumbnailUrl = island.imgSrc
+      if (island.thumbnailUrl && island.thumbnailUrl !== existing_.thumbnailUrl) {
+        updates.thumbnailUrl = island.thumbnailUrl
         updatedThumbnails++
       }
-      if (typeof island.ccu === 'number') {
+      if (island.ccu != null) {
         updates.activePlayers = island.ccu
         updatedCCU++
       }
       await db.update(platformExperiences).set(updates).where(eq(platformExperiences.id, existing_.id))
-      console.log(`↻  ${island.title} (${island.islandCode}) — thumbnail + CCU updated`)
-    } else if (USER_ISLAND_CODE.test(island.islandCode)) {
-      // New user-created island — insert as unscored for the review pipeline
+      console.log(`↻  ${island.title} (${island.code})`)
+    } else {
       let slug = slugify(island.title)
       const [collision] = await db
         .select({ id: platformExperiences.id })
         .from(platformExperiences)
         .where(eq(platformExperiences.slug, slug))
         .limit(1)
-      if (collision) slug = `${slug}-${island.islandCode.replace(/-/g, '').slice(0, 8)}`
+        .catch(() => [])
+      if (collision) slug = `${slug}-${island.code.replace(/-/g, '').slice(0, 8)}`
 
       await db.insert(platformExperiences).values({
         slug,
         platformId:    platform.id,
-        placeId:       island.islandCode,
+        placeId:       island.code,
         universeId:    null,
         title:         island.title,
         description:   null,
         creatorName:   null,
-        thumbnailUrl:  island.imgSrc ?? null,
+        thumbnailUrl:  island.thumbnailUrl,
         genre:         null,
         isPublic:      true,
+        activePlayers: island.ccu,
         lastFetchedAt: new Date(),
       }).onConflictDoNothing()
 
-      console.log(`+  ${island.title} (${island.islandCode}) — inserted as unscored`)
+      console.log(`+  ${island.title} (${island.code})`)
       inserted++
-    } else {
-      // Epic-owned playlist (playlist_sprout etc.) — skip, not user-created Creative maps
-      console.log(`–  ${island.title} (${island.islandCode}) — Epic playlist, skipping`)
     }
   }
 

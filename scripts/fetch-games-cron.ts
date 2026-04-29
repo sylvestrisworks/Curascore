@@ -24,6 +24,7 @@ import { games, ingestCursor } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { rawgGetByGenre, rawgGetDetail, RawgError } from '@/lib/rawg/client'
 import { mapDetailToInsert } from '@/lib/rawg/mapper'
+import { logCronRun } from '@/lib/cron-logger'
 
 // ─── Config (mirrors Vercel route) ────────────────────────────────────────────
 
@@ -48,6 +49,8 @@ const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
+const runStartedAt = new Date()
+
 async function main() {
   if (!process.env.RAWG_API_KEY)   { console.error('RAWG_API_KEY not set');   process.exit(1) }
   if (!process.env.DATABASE_URL)   { console.error('DATABASE_URL not set');    process.exit(1) }
@@ -71,6 +74,7 @@ async function main() {
   console.log(`${existingRawgIds.size} games already in DB`)
 
   const inserted: string[] = []
+  const skipped:  string[] = []
   const errors:   string[] = []
   const MAX_ITERATIONS = GENRES.length * MAX_PAGES_PER_GENRE
   let iterations = 0
@@ -100,8 +104,9 @@ async function main() {
     const candidates = listResponse.results.filter(c =>
       c.esrb_rating?.slug !== 'adults-only' && !existingRawgIds.has(c.id)
     )
-    const skippedCount = listResponse.results.length - candidates.length
-    console.log(`[${genre} p${page}] ${candidates.length} new, ${skippedCount} already in DB`)
+    const pageSkipped = listResponse.results.filter(c => existingRawgIds.has(c.id)).map(c => c.slug)
+    skipped.push(...pageSkipped)
+    console.log(`[${genre} p${page}] ${candidates.length} new, ${pageSkipped.length} already in DB`)
 
     for (const candidate of candidates) {
       if (inserted.length >= MAX_GAMES_PER_RUN) break
@@ -166,7 +171,20 @@ async function main() {
   const total = (cursor.totalImported ?? 0) + inserted.length
   console.log(`Done — inserted: ${inserted.length}, errors: ${errors.length}, total: ${total}`)
 
+  await logCronRun('fetch-games', runStartedAt, {
+    itemsProcessed: inserted.length,
+    itemsSkipped:   skipped.length,
+    errors:         errors.length,
+    meta:           errors.length > 0 ? { failed: errors } : undefined,
+  })
+
   process.exit(errors.length > 0 && inserted.length === 0 ? 1 : 0)
 }
 
-main().catch(e => { console.error('Fatal:', e); process.exit(1) })
+main().catch(async e => {
+  console.error('Fatal:', e)
+  await logCronRun('fetch-games', runStartedAt, {
+    itemsProcessed: 0, errors: 1, meta: { error: String(e) },
+  }).catch(() => {})
+  process.exit(1)
+})

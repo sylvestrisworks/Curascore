@@ -4,6 +4,7 @@
 import { calculateBDS, getTopBenefits } from './benefits'
 import { calculateRIS } from './risks'
 import { deriveTimeRecommendation } from './time'
+import { computeAgeFloor } from './age-floors'
 import type { GameScoresResult, ReviewInput } from './types'
 
 export function calculateGameScores(review: ReviewInput): GameScoresResult {
@@ -25,6 +26,12 @@ export function calculateGameScores(review: ReviewInput): GameScoresResult {
     ? Math.round((2 * benefits.bds * safety) / denom * 100)
     : 0
 
+  const ageFloor = computeAgeFloor(review.violenceLevel, review.sexualContent, {
+    trivialized:       review.trivialized,
+    defencelessTarget: review.defencelessTarget,
+    mixedSexualViolent: review.mixedSexualViolent,
+  })
+
   return {
     cognitiveScore:      benefits.cognitive,
     socialEmotionalScore: benefits.socialEmotional,
@@ -38,5 +45,7 @@ export function calculateGameScores(review: ReviewInput): GameScoresResult {
     curascore,
     timeRecommendation,
     topBenefits,
+    recommendedMinAge:  ageFloor.recommendedMinAge,
+    ageFloorReason:     ageFloor.ageFloorReason,
   }
 }

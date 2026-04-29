@@ -24,11 +24,9 @@ export const maxDuration = 300
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
-const MAX_REVIEWS_PER_RUN = 20
-const DELAY_MS            = 200
+const MAX_REVIEWS_PER_RUN = 50
+const BATCH_SIZE          = 5   // concurrent Gemini calls per batch
 const BUDGET_MS           = 240_000 // bail at 240s — leaves 60s buffer before Vercel's 300s kill
-
-const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
 
 // ─── Rubric field definitions ─────────────────────────────────────────────────
 
@@ -57,7 +55,7 @@ const REVIEW_TOOL = {
   description: 'Submit a completed LumiKin rubric review for a game.',
   input_schema: {
     type: 'object',
-    required: ['b1_cognitive','b2_social','b3_motor','r1_dopamine','r2_monetization','r3_social','r4_content','representation','propaganda','bechdel','practical','narratives'],
+    required: ['b1_cognitive','b2_social','b3_motor','r1_dopamine','r2_monetization','r3_social','r4_content','r4_modifiers','representation','propaganda','bechdel','practical','narratives'],
     properties: {
       b1_cognitive:    scoreGroup(B1_FIELDS, 5, 'B1 cognitive scores, each 0–5'),
       b2_social:       scoreGroup(B2_FIELDS, 5, 'B2 social-emotional scores, each 0–5'),
@@ -66,6 +64,16 @@ const REVIEW_TOOL = {
       r2_monetization: scoreGroup(R2_FIELDS, 3, 'R2 monetization pressure scores, each 0–3'),
       r3_social:       scoreGroup(R3_FIELDS, 3, 'R3 social/emotional risk scores, each 0–3'),
       r4_content:      scoreGroup(R4_FIELDS, 3, 'R4 content risk scores, each 0–3'),
+      r4_modifiers: {
+        type: 'object' as const,
+        description: 'Context modifiers that raise the minimum-age floor above the base R4 scores. Set each to true only if it clearly applies.',
+        required: ['trivialized', 'defencelessTarget', 'mixedSexualViolent'],
+        properties: {
+          trivialized:        { type: 'boolean' as const, description: 'Violence or sexual content is played for laughs, titillation, or shown without consequences (e.g. cartoon gore with no weight, sexualised humour).' },
+          defencelessTarget:  { type: 'boolean' as const, description: 'Violence is directed at non-combatants, surrendered, or helpless characters (civilians, children, restrained NPCs). Violence dimension only.' },
+          mixedSexualViolent: { type: 'boolean' as const, description: 'Sexual and violent content appear in the same scene or context (e.g. sexual violence, torture with sexualised framing). Only true when both R4.1 > 0 and R4.2 > 0.' },
+        },
+      },
       representation:  scoreGroup(REP_FIELDS, 3, 'REP representation scores, each 0–3'),
       propaganda: {
         type: 'object', required: ['propagandaLevel','propagandaNotes'],
@@ -117,6 +125,7 @@ type ReviewInput = {
   r2_monetization: Record<string, number>
   r3_social:       Record<string, number>
   r4_content:      Record<string, number>
+  r4_modifiers:    { trivialized: boolean; defencelessTarget: boolean; mixedSexualViolent: boolean }
   representation:  Record<string, number>
   propaganda:      { propagandaLevel: number; propagandaNotes: string }
   bechdel:         { result: 'pass' | 'fail' | 'na'; notes: string }
@@ -250,12 +259,18 @@ async function saveReview(game: GameRow, r: ReviewInput): Promise<{ reviewId: nu
   const computed = calculateGameScores({
     ...r.b1_cognitive, ...r.b2_social, ...r.b3_motor,
     ...r.r1_dopamine, ...r.r2_monetization, ...r.r3_social, ...r.r4_content,
+    trivialized:        r.r4_modifiers.trivialized,
+    defencelessTarget:  r.r4_modifiers.defencelessTarget,
+    mixedSexualViolent: r.r4_modifiers.mixedSexualViolent,
   })
 
   const reviewData = {
     gameId: game.id, reviewTier: 'automated' as const, status: 'approved' as const,
     ...r.b1_cognitive, ...r.b2_social, ...r.b3_motor,
     ...r.r1_dopamine, ...r.r2_monetization, ...r.r3_social, ...r.r4_content,
+    trivialized:               r.r4_modifiers.trivialized,
+    defencelessTarget:         r.r4_modifiers.defencelessTarget,
+    mixedSexualViolent:        r.r4_modifiers.mixedSexualViolent,
     ...r.representation,
     propagandaLevel:           r.propaganda.propagandaLevel,
     propagandaNotes:           r.propaganda.propagandaNotes || null,
@@ -312,6 +327,8 @@ async function saveReview(game: GameRow, r: ReviewInput): Promise<{ reviewId: nu
     representationScore:         (r.representation.repGenderBalance + r.representation.repEthnicDiversity) / 6,
     propagandaLevel:             r.propaganda.propagandaLevel,
     bechdelResult:               r.bechdel.result,
+    recommendedMinAge:           computed.recommendedMinAge,
+    ageFloorReason:              computed.ageFloorReason,
     scoringMethod:               'full_rubric' as const,
     methodologyVersion:          CURRENT_METHODOLOGY_VERSION,
     calculatedAt:                new Date(),
@@ -402,32 +419,30 @@ export async function GET(req: NextRequest) {
     const errors:   string[] = []
     const startedAt = Date.now()
 
-    for (const row of pending) {
-      if (Date.now() - startedAt > BUDGET_MS) {
-        console.log('[review-games] Budget reached — stopping early')
-        break
-      }
-
+    const processGame = async (row: typeof pending[number]) => {
       const game = row.games
       try {
-        await sleep(DELAY_MS)
         console.log(`[review-games] Reviewing: ${game.title}`)
-
         const prompt      = buildReviewPrompt(game)
         const reviewInput = await callGeminiReview(prompt)
         const { curascore } = await saveReview(game, reviewInput)
-
-        // Clear rescore flag if it was set
         if (game.needsRescore) {
           await db.update(games).set({ needsRescore: false }).where(eq(games.id, game.id))
         }
-
         reviewed.push(game.slug)
         console.log(`[review-games] ${game.title} → curascore ${curascore}${game.needsRescore ? ' (rescore)' : ''}`)
       } catch (err) {
         console.error(`[review-games] Failed for ${game.slug}:`, err)
         errors.push(game.slug)
       }
+    }
+
+    for (let i = 0; i < pending.length; i += BATCH_SIZE) {
+      if (Date.now() - startedAt > BUDGET_MS) {
+        console.log('[review-games] Budget reached — stopping early')
+        break
+      }
+      await Promise.allSettled(pending.slice(i, i + BATCH_SIZE).map(processGame))
     }
 
     await logCronRun('review-games', runStartedAt, {

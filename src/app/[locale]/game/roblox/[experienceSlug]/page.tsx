@@ -124,6 +124,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .from(platformExperiences)
     .where(eq(platformExperiences.slug, experienceSlug))
     .limit(1)
+    .catch(() => [])
 
   if (!exp) return { title: 'Experience not found — LumiKin' }
 
@@ -170,6 +171,7 @@ export default async function ExperiencePage({ params }: Props) {
     .from(platformExperiences)
     .where(eq(platformExperiences.slug, experienceSlug))
     .limit(1)
+    .catch(() => [])
 
   if (!exp) notFound()
 
@@ -177,7 +179,8 @@ export default async function ExperiencePage({ params }: Props) {
     db.select()
       .from(experienceScores)
       .where(eq(experienceScores.experienceId, exp.id))
-      .limit(1),
+      .limit(1)
+      .catch(() => []),
     db.select({
         slug:        games.slug,
         title:       games.title,
@@ -186,7 +189,8 @@ export default async function ExperiencePage({ params }: Props) {
       })
       .from(games)
       .where(eq(games.id, exp.platformId))
-      .limit(1),
+      .limit(1)
+      .catch(() => []),
   ])
 
   const verdict = score?.curascore != null ? getVerdict(score.curascore) : null

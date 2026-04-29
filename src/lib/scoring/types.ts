@@ -65,6 +65,11 @@ export type ReviewInput = {
   substanceRef?: number | null
   fearHorror?: number | null
 
+  // R4 context modifiers — raise the age floor above the base R4 score
+  trivialized?: boolean | null        // violence/sex played for laughs or with no consequences
+  defencelessTarget?: boolean | null  // violence against non-combatants/helpless characters (violence only)
+  mixedSexualViolent?: boolean | null // sex and violence combined in same scene/context
+
   // Optional context used for labelling, not for score calculation
   esrbRating?: string | null
   pegiRating?: number | null
@@ -134,4 +139,6 @@ export type GameScoresResult = {
   curascore: number   // harmonic mean of BDS and Safety (1-RIS), scaled 0-100
   timeRecommendation: TimeRecommendation
   topBenefits: TopBenefit[]
+  recommendedMinAge: number
+  ageFloorReason: string
 }

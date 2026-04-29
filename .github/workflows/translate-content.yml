@@ -2,7 +2,7 @@ name: Translate Content
 
 on:
   schedule:
-    - cron: '5 */2 * * *'  # :05 every 2h — runs 20 min after debate-games (:45) settles
+    - cron: '20 * * * *'   # :20 every hour — offset from review-games (:05/:35) to avoid Vertex contention
   workflow_dispatch:
 
 jobs:

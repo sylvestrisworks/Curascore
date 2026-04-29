@@ -17,8 +17,9 @@ const LANGUAGE_NAMES: Record<Locale, string> = {
   es: 'Spanish (Latin American)',
 }
 
-// 25 games × 4 parallel locale calls × ~5s each ≈ 125s — leaves ample margin inside the 300s wall.
-const MAX_GAMES_PER_RUN = 25
+// 60 games in batches of 5 × 4 parallel locale calls × ~5s each ≈ 60s — well inside the 300s wall.
+const MAX_GAMES_PER_RUN = 60
+const BATCH_SIZE        = 5
 const BUDGET_MS         = 220_000
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -122,13 +123,7 @@ export async function GET(req: Request) {
     .orderBy(gameScores.curascore)
     .limit(MAX_GAMES_PER_RUN)
 
-  for (const row of pending) {
-    if (Date.now() - startedAt > BUDGET_MS) {
-      console.log(`[translate] Budget reached after ${translated} translations`)
-      break
-    }
-
-    // Which locales does this game already have?
+  const processGame = async (row: typeof pending[number]) => {
     const done = await db
       .select({ locale: gameTranslations.locale })
       .from(gameTranslations)
@@ -139,9 +134,8 @@ export async function GET(req: Request) {
     const doneSet = new Set(done.map(r => r.locale))
     const missing = LOCALES.filter(l => !doneSet.has(l))
 
-    if (missing.length === 0) { skipped++; continue }
+    if (missing.length === 0) { skipped++; return }
 
-    // Fetch review narratives once, shared across all locale calls
     let content: TranslatableContent = {
       executiveSummary:  row.executiveSummary,
       benefitsNarrative: null,
@@ -168,15 +162,13 @@ export async function GET(req: Request) {
 
     const hasContent = Object.values(content).some(v => v && v.trim())
     if (!hasContent) {
-      // Nothing to translate — mark all missing locales as done so we skip next time
       await Promise.all(missing.map(locale =>
         db.insert(gameTranslations).values({ gameId: row.gameId, locale }).onConflictDoNothing()
       ))
       skipped += missing.length
-      continue
+      return
     }
 
-    // Translate all missing locales in parallel
     console.log(`[translate] ${row.slug} → ${missing.join(', ')}`)
     const results = await Promise.all(
       missing.map(async locale => ({ locale, result: await translateToLocale(content, locale) }))
@@ -196,6 +188,14 @@ export async function GET(req: Request) {
       }).onConflictDoNothing()
       translated++
     }
+  }
+
+  for (let i = 0; i < pending.length; i += BATCH_SIZE) {
+    if (Date.now() - startedAt > BUDGET_MS) {
+      console.log(`[translate] Budget reached after ${translated} translations`)
+      break
+    }
+    await Promise.allSettled(pending.slice(i, i + BATCH_SIZE).map(processGame))
   }
 
   await logCronRun('translate-content', runStartedAt, {

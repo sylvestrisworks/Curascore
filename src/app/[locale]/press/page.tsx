@@ -2,7 +2,7 @@ export const revalidate = 3600
 
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { fetchSiteStats } from '@/lib/stats'
+import { fetchSiteStats, type SiteStats } from '@/lib/stats'
 import { CURRENT_METHODOLOGY_VERSION, RUBRIC_DIMENSION_COUNT } from '@/lib/methodology'
 import PlausibleGoal from '@/components/PlausibleGoal'
 
@@ -72,11 +72,18 @@ const QUOTABLE_FACTS: { fact: string; source: string | null; sourceLabel: string
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
+const FALLBACK_STATS: SiteStats = {
+  total_games_scored: 0, scored_last_7_days: 0, scored_last_30_days: 0,
+  platforms: [], languages: [],
+  total_ugc_experiences_scored: 0, ugc_scored_last_7_days: 0, ugc_scored_last_30_days: 0,
+  ugc_by_parent_platform: [], median_hours_publish_to_score_ugc: null,
+}
+
 type Props = { params: Promise<{ locale: string }> }
 
 export default async function PressPage({ params }: Props) {
   const { locale } = await params
-  const stats = await fetchSiteStats()
+  const stats = await fetchSiteStats().catch(() => FALLBACK_STATS)
 
   const totalTitles   = stats.total_games_scored + stats.total_ugc_experiences_scored
   const platformCount = stats.platforms.length

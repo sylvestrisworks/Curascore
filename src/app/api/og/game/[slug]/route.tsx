@@ -70,146 +70,169 @@ export async function GET(
   const timeBg = timeColor === 'green' ? '#d1fae5' : timeColor === 'amber' ? '#fef3c7' : '#fee2e2'
   const timeFg = timeColor === 'green' ? '#065f46' : timeColor === 'amber' ? '#92400e' : '#991b1b'
 
-  return new ImageResponse(
-    (
-      <div
-        style={{
-          display: 'flex',
-          width: '1200px',
-          height: '630px',
-          background: '#0f172a',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Background image with dark overlay */}
-        {bgImage && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={bgImage}
-            alt=""
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              opacity: 0.25,
-            }}
-          />
-        )}
+  // Pre-fetch the background image ourselves so Satori never makes an
+  // uncontrolled outbound request. If RAWG CDN is slow or unreachable we
+  // just render without it rather than crashing the whole response.
+  let resolvedBgImage: string | null = null
+  if (bgImage) {
+    try {
+      const imgRes = await fetch(bgImage, { signal: AbortSignal.timeout(3000) })
+      if (imgRes.ok) resolvedBgImage = bgImage
+    } catch {
+      // swallow — render without background
+    }
+  }
 
-        {/* Gradient overlay */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.7) 100%)',
-          display: 'flex',
-        }} />
+  try {
+    return new ImageResponse(
+      (
+        <div
+          style={{
+            display: 'flex',
+            width: '1200px',
+            height: '630px',
+            background: '#0f172a',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          {/* Background image with dark overlay */}
+          {resolvedBgImage && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={resolvedBgImage}
+              alt=""
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                opacity: 0.25,
+              }}
+            />
+          )}
 
-        {/* Content */}
-        <div style={{
-          position: 'relative',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          padding: '60px 72px',
-          width: '100%',
-        }}>
+          {/* Gradient overlay */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.7) 100%)',
+            display: 'flex',
+          }} />
 
-          {/* Top: branding */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{
-              background: '#6366f1',
-              borderRadius: '10px',
-              padding: '6px 14px',
-              color: 'white',
-              fontSize: '18px',
-              fontWeight: 700,
-              letterSpacing: '-0.3px',
-            }}>
-              LumiKin
-            </div>
-            <div style={{ color: '#94a3b8', fontSize: '16px' }}>for parents</div>
-          </div>
+          {/* Content */}
+          <div style={{
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            padding: '60px 72px',
+            width: '100%',
+          }}>
 
-          {/* Middle: title + meta */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {(genre || esrb) && (
-              <div style={{ display: 'flex', gap: '12px' }}>
-                {genre && (
-                  <span style={{
-                    background: 'rgba(99,102,241,0.2)',
-                    border: '1px solid rgba(99,102,241,0.4)',
-                    color: '#a5b4fc',
-                    borderRadius: '999px',
-                    padding: '4px 14px',
-                    fontSize: '16px',
-                  }}>{genre}</span>
-                )}
-                {esrb && (
-                  <span style={{
-                    background: 'rgba(255,255,255,0.1)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    color: '#cbd5e1',
-                    borderRadius: '999px',
-                    padding: '4px 14px',
-                    fontSize: '16px',
-                  }}>{esrb}</span>
-                )}
+            {/* Top: branding */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{
+                background: '#6366f1',
+                borderRadius: '10px',
+                padding: '6px 14px',
+                color: 'white',
+                fontSize: '18px',
+                fontWeight: 700,
+                letterSpacing: '-0.3px',
+              }}>
+                LumiKin
               </div>
-            )}
-            <div style={{
-              color: 'white',
-              fontSize: title.length > 30 ? '52px' : '64px',
-              fontWeight: 800,
-              lineHeight: 1.1,
-              letterSpacing: '-1px',
-            }}>
-              {title}
+              <div style={{ color: '#94a3b8', fontSize: '16px' }}>for parents</div>
             </div>
-          </div>
 
-          {/* Bottom: score + time */}
-          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-            {curascore != null ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <div style={{
-                    fontSize: '88px',
-                    fontWeight: 900,
-                    color: curascoreColor(curascore),
-                    lineHeight: 1,
-                  }}>
-                    {curascore}
-                  </div>
-                  <div style={{ color: '#64748b', fontSize: '16px', letterSpacing: '2px', textTransform: 'uppercase' }}>
-                    LumiScore
-                  </div>
+            {/* Middle: title + meta */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {(genre || esrb) && (
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  {genre && (
+                    <span style={{
+                      background: 'rgba(99,102,241,0.2)',
+                      border: '1px solid rgba(99,102,241,0.4)',
+                      color: '#a5b4fc',
+                      borderRadius: '999px',
+                      padding: '4px 14px',
+                      fontSize: '16px',
+                    }}>{genre}</span>
+                  )}
+                  {esrb && (
+                    <span style={{
+                      background: 'rgba(255,255,255,0.1)',
+                      border: '1px solid rgba(255,255,255,0.2)',
+                      color: '#cbd5e1',
+                      borderRadius: '999px',
+                      padding: '4px 14px',
+                      fontSize: '16px',
+                    }}>{esrb}</span>
+                  )}
                 </div>
-
-                {timeMins && (
-                  <div style={{
-                    background: timeBg,
-                    borderRadius: '14px',
-                    padding: '12px 20px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                  }}>
-                    <div style={{ fontSize: '28px', fontWeight: 800, color: timeFg }}>{timeLabel(timeMins)}</div>
-                    <div style={{ fontSize: '13px', color: timeFg, opacity: 0.7, marginTop: '2px' }}>recommended</div>
-                  </div>
-                )}
+              )}
+              <div style={{
+                color: 'white',
+                fontSize: title.length > 30 ? '52px' : '64px',
+                fontWeight: 800,
+                lineHeight: 1.1,
+                letterSpacing: '-1px',
+              }}>
+                {title}
               </div>
-            ) : (
-              <div style={{ color: '#475569', fontSize: '24px' }}>Not yet scored</div>
-            )}
+            </div>
 
-            <div style={{ color: '#334155', fontSize: '15px' }}>lumikin.org</div>
+            {/* Bottom: score + time */}
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+              {curascore != null ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{
+                      fontSize: '88px',
+                      fontWeight: 900,
+                      color: curascoreColor(curascore),
+                      lineHeight: 1,
+                    }}>
+                      {curascore}
+                    </div>
+                    <div style={{ color: '#64748b', fontSize: '16px', letterSpacing: '2px', textTransform: 'uppercase' }}>
+                      LumiScore
+                    </div>
+                  </div>
+
+                  {timeMins && (
+                    <div style={{
+                      background: timeBg,
+                      borderRadius: '14px',
+                      padding: '12px 20px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                    }}>
+                      <div style={{ fontSize: '28px', fontWeight: 800, color: timeFg }}>{timeLabel(timeMins)}</div>
+                      <div style={{ fontSize: '13px', color: timeFg, opacity: 0.7, marginTop: '2px' }}>recommended</div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div style={{ color: '#475569', fontSize: '24px' }}>Not yet scored</div>
+              )}
+
+              <div style={{ color: '#334155', fontSize: '15px' }}>lumikin.org</div>
+            </div>
           </div>
         </div>
-      </div>
-    ),
-    { width: 1200, height: 630 },
-  )
+      ),
+      { width: 1200, height: 630 },
+    )
+  } catch (err) {
+    console.error('[og/game] ImageResponse error:', err)
+    return new ImageResponse(
+      (<div style={{ display: 'flex', width: '1200px', height: '630px', background: '#0f172a', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ color: 'white', fontSize: '48px', fontWeight: 700 }}>LumiKin</div>
+      </div>),
+      { width: 1200, height: 630 },
+    )
+  }
 }
