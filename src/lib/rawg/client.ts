@@ -76,12 +76,14 @@ export async function rawgGetByGenre(
   page = 1,
   pageSize = 40,
   ordering = '-metacritic',
+  platforms?: string,
 ): Promise<RawgListResponse> {
   return rawgFetch<RawgListResponse>('/games', {
     genres: genreSlug,
     page,
     page_size: pageSize,
     ordering,
+    platforms,
   })
 }
 

@@ -29,11 +29,15 @@ const GENRES = [
   'casual', 'indie', 'fighting', 'educational', 'arcade', 'card',
 ]
 
-const SWEEP_ORDERINGS: Record<number, string> = {
-  1: '-metacritic',
-  2: '-added',
-  3: '-released',
-}
+// Mobile (iOS=3, Android=21) sweeps run first — highest parent concern.
+// All-platform sweeps follow for breadth.
+const SWEEPS = [
+  { ordering: '-added',      platforms: '3,21', label: 'mobile-new'    },
+  { ordering: '-metacritic', platforms: '3,21', label: 'mobile-rated'  },
+  { ordering: '-metacritic',                    label: 'all-rated'     },
+  { ordering: '-added',                         label: 'all-new'       },
+  { ordering: '-released',                      label: 'all-released'  },
+] as const
 
 const MAX_GAMES_PER_RUN   = 25
 const PAGE_SIZE           = 40
@@ -92,24 +96,23 @@ export async function GET(req: NextRequest) {
 
     while (inserted.length < MAX_GAMES_PER_RUN && iterations < MAX_ITERATIONS) {
       iterations++
-      const currentGenre    = GENRES[currentGenreIndex]
-      const currentOrdering = SWEEP_ORDERINGS[currentSweep] ?? '-metacritic'
+      const currentGenre  = GENRES[currentGenreIndex]
+      const sweepConfig   = SWEEPS[(currentSweep - 1) % SWEEPS.length]
 
       let listResponse
       try {
-        listResponse = await rawgGetByGenre(currentGenre, currentPage, PAGE_SIZE, currentOrdering)
+        listResponse = await rawgGetByGenre(currentGenre, currentPage, PAGE_SIZE, sweepConfig.ordering, sweepConfig.platforms)
       } catch (err) {
         const msg = err instanceof RawgError ? err.message : String(err)
-        console.error(`[fetch-games] RAWG list failed for ${currentGenre} p${currentPage}: ${msg}`)
+        console.error(`[fetch-games] RAWG list failed for ${currentGenre} p${currentPage} sweep=${sweepConfig.label}: ${msg}`)
         errors.push(`${currentGenre}:p${currentPage}`)
         errorDetails.push(msg)
-        // Advance past the failed page so the cursor doesn't stall permanently
         currentPage = 1
         currentGenreIndex++
         if (currentGenreIndex >= GENRES.length) {
           currentGenreIndex = 0
           currentSweep++
-          if (currentSweep > Object.keys(SWEEP_ORDERINGS).length) currentSweep = 1
+          if (currentSweep > SWEEPS.length) currentSweep = 1
         }
         break
       }
@@ -165,9 +168,7 @@ export async function GET(req: NextRequest) {
         if (currentGenreIndex >= GENRES.length) {
           currentGenreIndex = 0
           currentSweep++
-          if (currentSweep > Object.keys(SWEEP_ORDERINGS).length) {
-            currentSweep = 1
-          }
+          if (currentSweep > SWEEPS.length) currentSweep = 1
         }
       } else {
         currentPage++
@@ -194,6 +195,7 @@ export async function GET(req: NextRequest) {
       itemsProcessed: inserted.length,
       itemsSkipped:   skipped.length,
       errors:         errors.length,
+      meta:           errorDetails.length > 0 ? { failed: errors, details: errorDetails } : undefined,
     })
     return NextResponse.json({
       inserted: inserted.length,

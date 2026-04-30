@@ -34,11 +34,15 @@ const GENRES = [
   'casual', 'indie', 'fighting', 'educational', 'arcade', 'card',
 ]
 
-const SWEEP_ORDERINGS: Record<number, string> = {
-  1: '-metacritic',
-  2: '-added',
-  3: '-released',
-}
+// Mobile (iOS=3, Android=21) sweeps run first — highest parent concern.
+// All-platform sweeps follow for breadth.
+const SWEEPS = [
+  { ordering: '-added',      platforms: '3,21', label: 'mobile-new'    },
+  { ordering: '-metacritic', platforms: '3,21', label: 'mobile-rated'  },
+  { ordering: '-metacritic',                    label: 'all-rated'     },
+  { ordering: '-added',                         label: 'all-new'       },
+  { ordering: '-released',                      label: 'all-released'  },
+] as const
 
 const MAX_GAMES_PER_RUN   = 25
 const PAGE_SIZE           = 40
@@ -52,8 +56,14 @@ const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
 const runStartedAt = new Date()
 
 async function main() {
-  if (!process.env.RAWG_API_KEY)   { console.error('RAWG_API_KEY not set');   process.exit(1) }
-  if (!process.env.DATABASE_URL)   { console.error('DATABASE_URL not set');    process.exit(1) }
+  if (!process.env.DATABASE_URL) { console.error('DATABASE_URL not set'); process.exit(1) }
+  if (!process.env.RAWG_API_KEY) {
+    console.error('RAWG_API_KEY not set')
+    await logCronRun('fetch-games', runStartedAt, {
+      itemsProcessed: 0, errors: 1, meta: { error: 'RAWG_API_KEY not set in environment' },
+    }).catch(() => {})
+    process.exit(1)
+  }
 
   // Read cursor
   let [cursor] = await db.select().from(ingestCursor).where(eq(ingestCursor.id, 1))
@@ -81,22 +91,22 @@ async function main() {
 
   while (inserted.length < MAX_GAMES_PER_RUN && iterations < MAX_ITERATIONS) {
     iterations++
-    const genre    = GENRES[genreIndex]
-    const ordering = SWEEP_ORDERINGS[sweep] ?? '-metacritic'
+    const genre       = GENRES[genreIndex]
+    const sweepConfig = SWEEPS[(sweep - 1) % SWEEPS.length]
 
     let listResponse
     try {
-      listResponse = await rawgGetByGenre(genre, page, PAGE_SIZE, ordering)
+      listResponse = await rawgGetByGenre(genre, page, PAGE_SIZE, sweepConfig.ordering, sweepConfig.platforms)
     } catch (err) {
       const msg = err instanceof RawgError ? err.message : String(err)
-      console.error(`RAWG list failed [${genre} p${page} sweep${sweep}]: ${msg}`)
+      console.error(`RAWG list failed [${genre} p${page} sweep=${sweepConfig.label}]: ${msg}`)
       errors.push(`${genre}:p${page}`)
       page = 1
       genreIndex++
       if (genreIndex >= GENRES.length) {
         genreIndex = 0
         sweep++
-        if (sweep > Object.keys(SWEEP_ORDERINGS).length) sweep = 1
+        if (sweep > SWEEPS.length) sweep = 1
       }
       break
     }
@@ -147,7 +157,7 @@ async function main() {
       if (genreIndex >= GENRES.length) {
         genreIndex = 0
         sweep++
-        if (sweep > Object.keys(SWEEP_ORDERINGS).length) sweep = 1
+        if (sweep > SWEEPS.length) sweep = 1
       }
     } else {
       page++
