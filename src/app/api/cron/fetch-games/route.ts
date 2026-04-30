@@ -31,13 +31,13 @@ const GENRES = [
 
 // Mobile (iOS=3, Android=21) sweeps run first — highest parent concern.
 // All-platform sweeps follow for breadth.
-const SWEEPS = [
+const SWEEPS: Array<{ ordering: string; platforms?: string; label: string }> = [
   { ordering: '-added',      platforms: '3,21', label: 'mobile-new'    },
   { ordering: '-metacritic', platforms: '3,21', label: 'mobile-rated'  },
   { ordering: '-metacritic',                    label: 'all-rated'     },
   { ordering: '-added',                         label: 'all-new'       },
   { ordering: '-released',                      label: 'all-released'  },
-] as const
+]
 
 const MAX_GAMES_PER_RUN   = 25
 const PAGE_SIZE           = 40
