@@ -17,7 +17,7 @@ import { games, gameScores, reviews, userGames, notifications } from '@/lib/db/s
 import { CURRENT_METHODOLOGY_VERSION } from '@/lib/methodology'
 import { eq, isNotNull, isNull, or } from 'drizzle-orm'
 import { calculateGameScores } from '@/lib/scoring/engine'
-import { callGeminiTool } from '@/lib/vertex-ai'
+import { callGeminiTool, GEMINI_FLASH } from '@/lib/vertex-ai'
 import { logCronRun } from '@/lib/cron-logger'
 
 export const maxDuration = 300
@@ -287,6 +287,8 @@ async function saveReview(game: GameRow, r: ReviewInput): Promise<{ reviewId: nu
     parentTip:                 r.narratives.parentTip,
     parentTipBenefits:         r.narratives.parentTipBenefits,
     approvedAt:                new Date(),
+    aiModel:                   GEMINI_FLASH,
+    reviewedAt:                new Date(),
   }
 
   const [existingReview] = await db
@@ -327,8 +329,8 @@ async function saveReview(game: GameRow, r: ReviewInput): Promise<{ reviewId: nu
     representationScore:         (r.representation.repGenderBalance + r.representation.repEthnicDiversity) / 6,
     propagandaLevel:             r.propaganda.propagandaLevel,
     bechdelResult:               r.bechdel.result,
-    recommendedMinAge:           computed.recommendedMinAge,
-    ageFloorReason:              computed.ageFloorReason,
+    recommendedMinAge:           computed.recommendedMinAge > 0 ? computed.recommendedMinAge : null,
+    ageFloorReason:              computed.recommendedMinAge > 0 ? computed.ageFloorReason : null,
     scoringMethod:               'full_rubric' as const,
     methodologyVersion:          CURRENT_METHODOLOGY_VERSION,
     calculatedAt:                new Date(),
