@@ -37,6 +37,7 @@ const TARGETS: { slug: string; note: string; franchise: string }[] = [
   { slug: 'ea-sports-fc-25',   note: FUT_NOTE,   franchise: 'EA FC / FIFA' },
   { slug: 'ea-sports-fc-24',   note: FUT_NOTE,   franchise: 'EA FC / FIFA' },
   { slug: 'fifa-22',           note: FUT_NOTE,   franchise: 'EA FC / FIFA' },
+  { slug: 'fifa-22-xbox-one', note: FUT_NOTE,   franchise: 'EA FC / FIFA' },
   { slug: 'fifa-13',           note: FUT_NOTE,   franchise: 'EA FC / FIFA' },
   // Madden NFL
   { slug: 'madden-nfl-24',     note: MUT_NOTE,   franchise: 'Madden NFL' },
