@@ -1,0 +1,30 @@
+name: Fix Fortnite Thumbnails
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'  # Weekly on Monday at 8am UTC
+  workflow_dispatch:
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fix null thumbnails via Epic links API
+        env:
+          DATABASE_URL:         ${{ secrets.DATABASE_URL }}
+          EPIC_CLIENT_ID:       ${{ secrets.EPIC_CLIENT_ID }}
+          EPIC_CLIENT_SECRET:   ${{ secrets.EPIC_CLIENT_SECRET }}
+          BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
+        run: node node_modules/tsx/dist/cli.cjs scripts/fix-fortnite-thumbnails.ts
