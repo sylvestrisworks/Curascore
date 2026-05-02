@@ -25,6 +25,7 @@ import { eq } from 'drizzle-orm'
 import { rawgGetByGenre, rawgGetDetail, RawgError } from '@/lib/rawg/client'
 import { mapDetailToInsert } from '@/lib/rawg/mapper'
 import { logCronRun } from '@/lib/cron-logger'
+import { uploadFromUrl, gameThumbPath } from '@/lib/gcs'
 
 // ─── Config (mirrors Vercel route) ────────────────────────────────────────────
 
@@ -124,6 +125,16 @@ async function main() {
       try {
         const detail = await rawgGetDetail(candidate.id)
         const data   = mapDetailToInsert(detail)
+
+        // Upload thumbnail to GCS (non-blocking — falls back to RAWG URL on failure)
+        if (data.backgroundImage && process.env.BLOB_READ_WRITE_TOKEN) {
+          const blobUrl = await uploadFromUrl(
+            data.backgroundImage,
+            gameThumbPath(data.slug, data.backgroundImage),
+          )
+          if (blobUrl) data.backgroundImage = blobUrl
+        }
+
         await db.insert(games)
           .values(data)
           .onConflictDoUpdate({

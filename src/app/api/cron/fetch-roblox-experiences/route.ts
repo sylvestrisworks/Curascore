@@ -21,6 +21,7 @@ import { db } from '@/lib/db'
 import { platformExperiences, experienceScores, games } from '@/lib/db/schema'
 import { eq, inArray, sql, lt } from 'drizzle-orm'
 import { logCronRun } from '@/lib/cron-logger'
+import { uploadFromUrl, experienceThumbPath } from '@/lib/gcs'
 
 const STALE_SCORE_DAYS    = 90
 const DISCOVERY_SAMPLE    = 25   // how many existing games to crawl per run
@@ -317,8 +318,14 @@ async function handler(req: NextRequest): Promise<NextResponse> {
 
     for (const exp of existing) {
       if (!exp.universeId || exp.thumbnailUrl) continue
-      const url = existingThumbMap.get(exp.universeId)
+      let url = existingThumbMap.get(exp.universeId)
       if (!url) continue
+
+      if (process.env.BLOB_READ_WRITE_TOKEN) {
+        const blobUrl = await uploadFromUrl(url, experienceThumbPath('roblox', exp.universeId))
+        if (blobUrl) url = blobUrl
+      }
+
       try {
         await db.update(platformExperiences)
           .set({ thumbnailUrl: url, updatedAt: new Date() })
@@ -374,7 +381,17 @@ async function handler(req: NextRequest): Promise<NextResponse> {
     if (!game || !isValidGame(game)) continue
 
     try {
-      const thumbnailUrl = thumbnailMap.get(universeId) ?? null
+      let thumbnailUrl = thumbnailMap.get(universeId) ?? null
+
+      // Mirror thumbnail to GCS so we own a stable copy
+      if (thumbnailUrl && process.env.BLOB_READ_WRITE_TOKEN) {
+        const blobUrl = await uploadFromUrl(
+          thumbnailUrl,
+          experienceThumbPath('roblox', universeId),
+        )
+        if (blobUrl) thumbnailUrl = blobUrl
+      }
+
       let slug = slugify(game.name)
 
       // Resolve slug collision
