@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { db } from '@/lib/db'
 import { games, gameScores, platformExperiences, experienceScores } from '@/lib/db/schema'
-import { and, asc, eq, isNotNull } from 'drizzle-orm'
+import { and, asc, eq, isNotNull, isNull, ne, or } from 'drizzle-orm'
 import { sanityClient } from '@/sanity/lib/client'
 import { allGuideSlugsQuery, allPostSlugsQuery } from '@/sanity/lib/queries'
 
@@ -65,7 +65,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .select({ slug: games.slug, calculatedAt: gameScores.calculatedAt })
     .from(games)
     .innerJoin(gameScores, eq(gameScores.gameId, games.id))
-    .where(isNotNull(gameScores.curascore))
+    .where(and(
+      isNotNull(gameScores.curascore),
+      or(isNull(games.contentType), ne(games.contentType, 'platform')),
+    ))
     .orderBy(asc(games.id))
 
   const gameEntries: MetadataRoute.Sitemap = allGames.flatMap((g) =>
@@ -94,10 +97,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ),
   )
 
-  // One hub page entry per platform that has scored experiences
+  // UGC platform hub pages (Roblox, Fortnite Creative, etc.)
   const platformDbSlugs = Array.from(new Set(allUgc.map((e) => e.platformSlug)))
   const platformHubEntries: MetadataRoute.Sitemap = platformDbSlugs.flatMap((dbSlug) =>
     multiLocaleEntry(`/platform/${DB_TO_URL_SLUG[dbSlug] ?? dbSlug}`, 0.8, 'weekly'),
+  )
+
+  // Traditional platform landing pages (PlayStation, Xbox, Nintendo Switch, iOS, Android, PC)
+  const traditionalPlatformSlugs = ['playstation', 'xbox', 'nintendo-switch', 'ios', 'android', 'pc']
+  const traditionalPlatformEntries: MetadataRoute.Sitemap = traditionalPlatformSlugs.flatMap((slug) =>
+    multiLocaleEntry(`/platform/${slug}`, 0.8, 'weekly'),
   )
 
   // ── Sanity content pages ──────────────────────────────────────────────────
@@ -128,6 +137,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...gameEntries,
     ...ugcEntries,
     ...platformHubEntries,
+    ...traditionalPlatformEntries,
     ...guideEntries,
     ...postEntries,
   ]
