@@ -58,7 +58,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...multiLocaleEntry('/terms',                  0.3, 'yearly'),
     ...multiLocaleEntry('/game/roblox',            0.8, 'daily'),
     ...multiLocaleEntry('/game/fortnite-creative', 0.8, 'weekly'),
+    ...multiLocaleEntry('/age',                    0.8, 'weekly'),
   ]
+
+  // Age-specific discovery pages: /age/4 ... /age/17
+  const ageEntries: MetadataRoute.Sitemap = Array.from({ length: 14 }, (_, i) => i + 4)
+    .flatMap((age) => multiLocaleEntry(`/age/${age}`, 0.7, 'weekly'))
 
   // ── Scored games — lastModified = calculatedAt from the score row ────────
   const allGames = await db
@@ -134,6 +139,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticEntries,
+    ...ageEntries,
     ...gameEntries,
     ...ugcEntries,
     ...platformHubEntries,

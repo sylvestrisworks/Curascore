@@ -635,6 +635,12 @@ export default async function BrowsePage({ params, searchParams }: Props) {
               <Suspense>
                 <PlatformPicker current={filters.platforms} />
               </Suspense>
+              <p className="text-xs text-slate-400 dark:text-slate-500">
+                {t('byAgePrompt')}{' '}
+                <Link href={`/${locale}/age`} className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium">
+                  {t('byAgeLink')}
+                </Link>
+              </p>
               {(filters.platforms.length > 0 || filters.age !== undefined) && (
                 <a href={`/${locale}/browse`} className="inline-block text-xs text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors">
                   Clear filters

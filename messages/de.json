@@ -90,7 +90,9 @@
     "clearAllFilters": "Alle Filter löschen →",
     "prevPage": "Zurück",
     "nextPage": "Weiter",
-    "backToBrowse": "Back to browse"
+    "backToBrowse": "Back to browse",
+    "byAgePrompt": "Looking for games for a specific age?",
+    "byAgeLink": "Browse by age →"
   },
   "filters": {
     "heading": "Filter",
@@ -896,5 +898,30 @@
     "editorial_ios": "The App Store labels many games \"free\", but the real cost is often attention, in-app purchases, or intrusive ads. iOS games range from genuinely educational apps to highly optimized engagement loops. LumiKin scores flag monetization pressure and dopamine-trap mechanics so you can tell the difference before downloading.",
     "editorial_android": "Android gaming spans high-quality ports, indie gems, and heavily monetized free-to-play titles — often hard to tell apart from the Play Store listing alone. Google's content ratings cover subject matter, not design patterns. LumiKin scores go deeper, surfacing which games are built for benefit and which are built for maximum session length.",
     "editorial_pc": "PC gaming offers the widest catalogue of any platform, from calm educational puzzlers to massive online worlds. Steam family controls and library sharing features help, but the sheer volume makes curation difficult. LumiKin scores sort the catalogue by benefit-to-risk ratio so you can build a quality family library without trial and error."
+  },
+  "ageHub": {
+    "indexMetaTitle": "Browse games by age — LumiKin",
+    "indexMetaDescription": "Find great games matched to your child's age. Curated picks from age 4 through 17, scored on developmental benefits and design risks.",
+    "indexTitle": "Browse by age",
+    "indexSubtitle": "Pick your child's age to see games matched to where they are right now.",
+    "indexFooter": "You know your child best — these are starting points, not gates.",
+    "yearsOld": "yrs",
+    "metaTitle": "Best games for {age}-year-olds — LumiKin",
+    "metaDescription": "Curated games for {age}-year-olds, scored on developmental benefits and design risks. Picks parents trust, with daily time recommendations.",
+    "eyebrow": "Curated picks",
+    "title": "Great games for {age}-year-olds",
+    "subtitle": "Sorted by LumiScore. Each game has a daily time recommendation based on its actual benefits and risks.",
+    "perfectFit": "Perfect fit",
+    "perfectFitNote": "Recommended for age {age} and under",
+    "stretchPicks": "Slight stretch",
+    "stretchNote": "These are rated a year or two older. Many {age}-year-olds are ready for them — you know your child best.",
+    "strictOff": "Hide games rated older than {age}",
+    "strictOn": "Showing only age {age} and under — tap to include stretch picks",
+    "openInBrowse": "Open in advanced filters →",
+    "noGames": "No games found at this age yet.",
+    "tryAnotherAge": "Try another age →",
+    "switchAge": "Or browse a different age",
+    "ageLink": "Age {age}",
+    "backToAges": "All ages"
   }
 }
