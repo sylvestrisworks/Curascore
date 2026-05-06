@@ -1,0 +1,1367 @@
+gameId,name,slug,lumikinAge,r41Score,r42Score,modifiers,flags,flagCount,inPriorityReview,scoredAt,methodologyVersion
+1048,Dying Light: The Following - Enhanced Edition,dying-light-the-following-enhanced-edition,17,3,0,defenceless_target,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-05-01T02:11:31.579Z,1.0
+1119,Yakuza: Like a Dragon,yakuza-7,17,3,2,trivialized,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-04-30T12:23:08.196Z,1.0
+1132,Hotline Miami,hotline-miami,17,3,1,trivialized|defenceless_target,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-05-01T02:12:12.340Z,1.0
+1156,Turbo Dismount,turbo-dismount,17,2,0,trivialized,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-05-01T02:43:49.252Z,1.0
+1343,Metal Gear Solid 2: Substance,metal-gear-solid-2-substance,17,3,1,defenceless_target,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-04-30T18:21:55.141Z,1.0
+1414,Red Orchestra: Ostfront 41-45,red-orchestra-ostfront-41-45,17,3,0,defenceless_target,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-05-01T03:26:58.175Z,1.0
+1428,GoldenEye 007 (Wii),goldeneye-007,17,3,0,defenceless_target,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-04-30T18:41:48.420Z,1.0
+1622,Little Nightmares,little-nightmares,17,3,0,defenceless_target,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-04-30T09:49:42.226Z,1.0
+1656,Visage,visage,17,2,0,defenceless_target,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-04-30T12:48:12.855Z,1.0
+1885,Serious Sam's Bogus Detour,serious-sams-bogus-detour,17,3,0,trivialized,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-04-30T09:50:03.876Z,1.0
+2121,The Uncertain: Light At The End,the-uncertain,17,3,0,defenceless_target,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-04-30T16:55:00.277Z,1.0
+2520,Disgaea 2 PC,disgaea-2,17,3,1,trivialized,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-04-30T16:55:23.339Z,1.0
+2821,Disgaea 6: Defiance of Destiny,disgaea-6-defiance-of-destiny,17,3,1,trivialized,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-04-30T16:20:30.315Z,1.0
+4420,Cuties Monster Girl,cuties-monster-girl,17,0,3,trivialized,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-04-30T21:29:18.788Z,1.0
+4484,Disc Room,disc-room-2,17,3,0,trivialized,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-04-30T21:29:55.905Z,1.0
+4592,Resonance: A Plague Tale Legacy,resonance-a-plague-tale-legacy,17,3,0,defenceless_target,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-04-30T21:29:03.766Z,1.0
+4629,Our Darker Purpose,our-darker-purpose,17,3,0,defenceless_target,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-04-30T22:01:14.438Z,1.0
+4791,Dingleberries,dingleberries,17,3,0,trivialized,high_age_no_external_check|modifier_active_no_external_check|at_methodology_extremes|recently_scored_unrated,4,yes,2026-04-30T23:22:21.623Z,1.0
+65,Batman: Arkham Asylum Game of the Year Edition,batman-aa-goty,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T00:14:18.575Z,1.0
+77,Broforce,broforce,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T03:27:52.620Z,1.0
+82,Diablo II,diablo-2,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T02:00:51.858Z,1.0
+87,Katana ZERO,katana-zero,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T22:24:53.518Z,1.0
+145,Total War: SHOGUN 2,total-war-shogun-2,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T00:30:48.386Z,1.0
+154,Inscryption,inscryption,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T03:38:34.537Z,1.0
+158,The Last of Us: Left Behind,the-last-of-us-left-behind,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T00:23:22.429Z,1.0
+162,Castlevania: Symphony of the Night,castlevania-sotn,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T03:35:43.859Z,1.0
+163,Company of Heroes,company-of-heroes,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T08:09:40.420Z,1.0
+171,Diablo,diablo,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T04:10:14.203Z,1.0
+178,Tom Clancy's Splinter Cell,splinter-cell,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T22:27:43.953Z,1.0
+180,Quake,quake,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T01:11:18.256Z,1.0
+217,Salt and Sanctuary,salt-and-sanctuary,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T23:36:49.957Z,1.0
+228,Total War: WARHAMMER,total-war-warhammer,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T23:18:14.724Z,1.0
+234,Diablo IV,diablo-iv,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-07T19:16:28.295Z,1.0
+262,Total War: WARHAMMER II,total-war-warhammer-ii,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T01:35:18.635Z,1.0
+274,Company of Heroes: Opposing Fronts,company-of-heroes-opposing-fronts,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T08:20:17.145Z,1.0
+275,Rome: Total War - Collection,rome-total-war-collection,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T08:14:51.483Z,1.0
+388,Soulcalibur,soulcalibur,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T00:07:56.901Z,1.0
+427,Total Annihilation,total-annihilation,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T08:07:56.146Z,1.0
+442,Medieval: Total War,medieval-total-war,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T02:05:45.080Z,1.0
+478,Medieval: Total War - Collection,medieval-total-war-collection,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T23:23:03.927Z,1.0
+482,Diablo III: Ultimate Evil Edition,diablo-iii-ultimate-evil-edition,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-07T19:16:04.517Z,1.0
+487,Total War: Shogun 2 - Fall of the Samurai,total-war-shogun-2-fall-of-the-samurai,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T02:13:50.053Z,1.0
+535,Asgard's Wrath,asgards-wrath,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T03:10:07.871Z,1.0
+558,Myth: The Fallen Lords,myth-the-fallen-lords,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T21:32:19.116Z,1.0
+563,NieR:Automata BECOME AS GODS Edition,nierautomata-become-as-gods-edition,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T08:03:50.158Z,1.0
+594,ARK: Survival Evolved,ark-survival-evolved,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T05:31:57.545Z,1.0
+603,Assassin's Creed Valhalla,assassins-creed-valhalla,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T01:36:19.719Z,1.0
+608,Battlefield 1,battlefield-1,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T00:56:21.175Z,1.0
+613,Bayonetta 3,bayonetta-3,17,3,3,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T01:06:49.067Z,1.0
+649,Diablo: Immortal,diablo-immortal,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T22:01:28.295Z,1.0
+662,Dying Light 2 Stay Human,dying-light-2,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T05:56:00.981Z,1.0
+665,Escape from Tarkov,escape-from-tarkov,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T09:49:42.456Z,1.0
+693,Garena Free Fire,garena-free-fire,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T06:01:58.974Z,1.0
+695,Gears 5,gears-5,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T06:02:43.738Z,1.0
+700,God of War Ragnarok: Valhalla,god-of-war-ragnarok-valhalla,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T06:03:44.541Z,1.0
+711,Halo: The Master Chief Collection,halo-the-master-chief-collection,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T06:05:33.959Z,1.0
+715,Hearts of Iron IV,hearts-of-iron-iv,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T06:06:15.233Z,1.0
+762,METAL GEAR SOLID V: THE DEFINITIVE EXPERIENCE,metal-gear-solid-the-definitive-experience,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-09T11:36:49.111Z,1.0
+771,Monster Hunter Rise,monster-hunter-rise,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T02:11:01.544Z,1.0
+772,Mortal Kombat,mortal-kombat,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T23:36:10.485Z,1.0
+791,Palworld,palworld,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T06:37:57.006Z,1.0
+794,Path of Exile,path-of-exile,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T20:34:57.946Z,1.0
+801,PlayerUnknown’s Battlegrounds,playerunknowns-battlegrounds,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T06:38:31.689Z,1.0
+812,Project Zomboid,project-zomboid,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-09T11:55:13.506Z,1.0
+819,Resident Evil 2 Remake,resident-evil-2-remake,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T11:03:47.055Z,1.0
+822,Resident Evil: Village,resident-evil-village,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T07:03:17.494Z,1.0
+823,Returnal,returnal,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T07:03:43.121Z,1.0
+836,Sifu,sifu,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T04:21:51.424Z,1.0
+858,Street Fighter 6,street-fighter-6,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T20:05:32.444Z,1.0
+870,Tekken 8,tekken-8,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T07:18:46.815Z,1.0
+877,The Outer Worlds,the-outer-worlds,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T07:19:53.242Z,1.0
+889,Total War: Rome II,total-war-rome-ii,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T21:14:38.960Z,1.0
+901,Warframe,warframe,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T20:44:36.564Z,1.0
+903,XERA: Survival,xera-survival,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-18T21:48:54.583Z,1.0
+965,OMORI,omori,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T08:28:15.619Z,1.0
+997,Tactical Breach Wizards,tactical-breach-wizards,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T02:13:24.498Z,1.0
+998,SCP: Containment Breach,scp-containment-breach,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T08:37:20.378Z,1.0
+1013,Descent 2 (1996),descent-2-1996,17,2,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T10:10:56.253Z,1.0
+1018,Counter-Strike,counter-strike,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-16T12:24:23.387Z,1.0
+1060,Commandos 2: Men of Courage,commandos-2-men-of-courage,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T12:26:30.035Z,1.0
+1068,Battlefield: Bad Company 2 - Vietnam,battlefield-bad-company-2-vietnam-2,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T09:49:04.866Z,1.0
+1073,Assassin's Creed 2 Deluxe Edition,assassins-creed-2-deluxe-edition,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T09:49:26.643Z,1.0
+1080,Rise of the Tomb Raider,rise-of-the-tomb-raider,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T21:58:43.465Z,1.0
+1092,Black Mesa,black-mesa,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T02:16:28.917Z,1.0
+1115,The Binding of Isaac: Afterbirth+,the-binding-of-isaac-afterbirth,17,2,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T09:49:22.367Z,1.0
+1139,BIOHAZARD 7 resident evil グロテスクVer.,biohazard-7-resident-evil-gurotesukuver,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T02:11:51.091Z,1.0
+1143,Aliens Versus Predator 2,aliens-versus-predator-2,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T21:31:58.963Z,1.0
+1152,Far Cry 3: Classic Edition,far-cry-3-classic-edition-2,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T17:15:08.693Z,1.0
+1157,Tom Clancy's Rainbow Six 3 Gold,tom-clancys-rainbow-six-3-gold,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T03:06:48.420Z,1.0
+1158,Soul Calibur IV,soulcalibur-iv,17,3,2,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T02:12:04.771Z,1.0
+1159,Amid Evil,amid-evil,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T15:19:14.473Z,1.0
+1172,Far Cry Instincts,far-cry-instincts,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T11:05:26.190Z,1.0
+1182,Onimusha 2: Samurai's Destiny,onimusha-2-samurais-destiny,17,2,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T03:03:16.756Z,1.0
+1210,Dark Souls II: Crown of the Ivory King,dark-souls-ii-crown-of-the-ivory-king,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T05:54:29.460Z,1.0
+1211,Ape Out,ape-out,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T18:05:09.269Z,1.0
+1222,Dark Souls: Remastered,dark-souls8482-remastered,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T16:20:45.557Z,1.0
+1240,The Binding of Isaac,the-binding-of-isaac,17,2,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T03:15:05.242Z,1.0
+1260,N.O.V.A. 3: Near Orbit Vanguard Alliance,nova-3-near-orbit-vanguard-alliance,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T03:12:29.487Z,1.0
+1261,Resident Evil 4 Ultimate HD Edition,resident-evil-4-ultimate-hd-edition,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T16:55:16.656Z,1.0
+1274,Don't Starve Together,dont-starve-together,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T12:22:39.384Z,1.0
+1289,Grim Dawn,grim-dawn,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T17:12:59.304Z,1.0
+1291,Brothers In Arms 2: Global Front,brothers-in-arms-2-global-front,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T14:49:46.099Z,1.0
+1313,Tom Clancy’s The Division 2,division-2,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T03:26:33.122Z,1.0
+1327,Risk of Rain 2,risk-of-rain-2,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T03:26:19.180Z,1.0
+1336,Rising Storm Game of the Year Edition,rising-storm-game-of-the-year-edition,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T07:06:58.986Z,1.0
+1355,Tom Clancy's Ghost Recon: Desert Siege,tom-clancys-ghost-recon-desert-siege,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T18:34:00.900Z,1.0
+1384,Dark Souls II: Crown of the Sunken King,dark-souls-ii-crown-of-the-sunken-king,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T09:15:28.022Z,1.0
+1385,Tom Clancy's Ghost Recon Island Thunder,tom-clancys-ghost-recon-island-thunder,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T01:00:13.474Z,1.0
+1409,Rising Storm 2: VIETNAM,rising-storm-2-vietnam,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-16T14:48:07.651Z,1.0
+1415,One Finger Death Punch 2,one-finger-death-punch-2-2,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T19:46:44.956Z,1.0
+1417,Curse of the Dead Gods,curse-of-the-dead-gods,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T15:18:08.846Z,1.0
+1418,Star Wars Jedi Knight: Jedi Academy,star-wars-jedi-knight-jedi-academy,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T18:41:34.975Z,1.0
+1429,Jamestown: Legend of the Lost Colony,jamestown-2,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T03:26:56.821Z,1.0
+1431,Zombie Night Terror,zombie-night-terror,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-20T19:44:50.423Z,1.0
+1473,Rebel Galaxy Outlaw,rebel-galaxy-outlaw,17,2,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T19:17:12.875Z,1.0
+1479,DOOM II RPG,doom-ii-rpg,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T02:13:08.223Z,1.0
+1492,Intrusion 2,intrusion-2,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T20:10:18.963Z,1.0
+1499,Resident Evil 5: Lost in Nightmares,resident-evil-5-lost-in-nightmares,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T08:36:53.813Z,1.0
+1505,Red Steel 2,red-steel-2,17,2,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T20:15:38.349Z,1.0
+1513,Day of Defeat: Source,day-of-defeat-source,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T12:44:07.779Z,1.0
+1517,Natural Selection 2,natural-selection-2,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T20:06:29.903Z,1.0
+1524,Sunless Skies,sunless-skies,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T23:23:05.347Z,1.0
+1543,Tales from the Borderlands: A Telltale Game Series,tales-from-the-borderlands,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T20:06:36.119Z,1.0
+1619,Dragon Age 2,dragon-age-2,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T09:49:05.469Z,1.0
+1651,NARUTO SHIPPUDEN: Ultimate Ninja STORM 3 Full Burst,naruto-shippuden-ultimate-ninja-storm-3-full-burst,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T12:42:08.304Z,1.0
+1681,Assassin's Creed: Director's Cut Edition,assassins-creed-directors-cut-edition,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T14:13:10.594Z,1.0
+1718,Metal: Hellsinger,metal-hellsinger,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T03:35:11.808Z,1.0
+1735,"Guns, Gore and Cannoli 2",guns-gore-cannoli-2,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T17:06:29.793Z,1.0
+1741,System Shock,system-shock,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T17:44:38.392Z,1.0
+1745,LISA,lisa,17,3,3,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T17:46:20.663Z,1.0
+1747,GTFO,gtfo,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T07:03:01.951Z,1.0
+1779,Far Cry Instincts: Evolution,far-cry-instincts-evolution,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T23:23:26.249Z,1.0
+1789,Magical Eyes - Red is for Anguish,magical-eyes-red-is-for-anguish,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T09:22:38.960Z,1.0
+1815,BPM: BULLETS PER MINUTE,bpm-bullets-per-minute,17,2,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T15:17:46.959Z,1.0
+1864,Rune,rune-halls-of-valhalla,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T12:22:53.286Z,1.0
+1919,Far Cry 6,far-cry-6,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T06:19:21.118Z,1.0
+2073,The Escapists: The Walking Dead,the-escapists-the-walking-dead,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T08:37:36.080Z,1.0
+2077,Ray's The Dead,rays-the-dead,17,2,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T19:12:39.818Z,1.0
+2081,Rusty Lake Hotel,rusty-lake-hotel,17,2,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T19:12:52.329Z,1.0
+2125,Terminator 3: Rise of the Machines,terminator-3-rise-of-the-machines,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T12:52:10.468Z,1.0
+2282,標本少女 | Hyouhon Shoujo | Specimen Girl,biao-ben-shao-nu-hyouhon-shoujo-specimen-girl,17,0,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T02:09:55.808Z,1.0
+2466,"Warhammer 40,000: Dawn of War II",warhammer-40k-dawn-of-war-ii,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T14:06:31.289Z,1.0
+2504,Fallout Tactics: Brotherhood of Steel,fallout-tactics-brotherhood-of-steel,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T16:17:50.800Z,1.0
+2513,The Life and Suffering of Sir Brante,the-life-and-suffering-of-sir-brante,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T16:54:26.231Z,1.0
+2544,Tyranny,tyranny,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T04:22:25.548Z,1.0
+2560,Battle Brothers,battle-brothers,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-20T19:40:20.355Z,1.0
+2564,Dungeon Siege 2,dungeon-siege-2,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T08:02:46.608Z,1.0
+2580,NieR:Automata™ - 3C3C1D119440927,nierautomatatm-3c3c1d119440927,17,3,3,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T19:14:06.420Z,1.0
+2601,Summoner,summoner,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T23:23:19.262Z,1.0
+2616,Shin Megami Tensei: Digital Devil Saga,shin-megami-tensei-digital-devil-saga,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T00:09:40.503Z,1.0
+2660,The Ship: Murder Party,the-ship-murder-party,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T04:11:37.027Z,1.0
+2666,Darksiders Genesis,darksiders-genesis,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T16:22:20.682Z,1.0
+2686,Shadowrun Returns,shadowrun-returns,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T20:13:05.616Z,1.0
+2690,Vindictus,vindictus,17,3,2,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T04:11:21.282Z,1.0
+2714,Borderlands: The Pre-Sequel,borderlands-the-pre-sequel,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T15:15:46.138Z,1.0
+2734,Darksiders II Deathinitive Edition,darksiders-ii-deathinitive-edition,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T17:11:53.635Z,1.0
+2759,SpellForce - Platinum Edition,spellforce-platinum,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T17:20:02.198Z,1.0
+2764,Mordheim: City of the Damned,mordheim-city-of-the-damned,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T18:02:38.180Z,1.0
+2775,Shadows: Heretic Kingdoms,shadows-heretic-kingdoms,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T18:04:52.841Z,1.0
+2783,Expeditions: Viking,expeditions-viking,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T18:07:00.352Z,1.0
+2813,The Outer Worlds: Peril on Gorgon,the-outer-worlds-peril-on-gordon,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T18:22:36.454Z,1.0
+2830,Encased: a sci-fi post-apocalyptic RPG,encased-a-sci-fi-post-apocalyptic-rpg,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T22:21:56.134Z,1.0
+2848,Dark Souls III: Ashes of Ariandel,dark-souls-iii-ashes-of-ariandel,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T18:41:48.878Z,1.0
+2858,Conan Chop Chop,conan-chop-chop,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T01:18:54.228Z,1.0
+2863,Code Vein,code-vein,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T15:09:53.289Z,1.0
+2869,DC Universe Online,dc-universe-online,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T16:04:16.111Z,1.0
+2948,RONIN,ronin,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T10:07:10.721Z,1.0
+2950,BUTCHER,butcher,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T20:09:36.432Z,1.0
+2982,99 Levels To Hell,99-levels-to-hell,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T20:19:50.271Z,1.0
+3070,Li'l Hatchling,lil-hatchling,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T09:49:33.842Z,1.0
+3118,Fury Unleashed: Prologue,fury-unleashed-prologue,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T21:41:01.522Z,1.0
+3138,RESOP PAZ [ENG],resop-paz-eng,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T21:51:38.790Z,1.0
+3164,Jordan and his Gun,jordan-and-his-gun,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T22:02:27.497Z,1.0
+3184,Astoria Legends,astoria-legends,17,2,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T15:08:19.067Z,1.0
+3192,God's Dare,gods-dare,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T22:12:59.120Z,1.0
+3238,Cool Kid Alarm: Definitive Edition,cool-kid-alarm-definitive-edition,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T22:23:03.934Z,1.0
+3260,Space Fish in Space,space-fish-in-space,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-21T23:13:28.369Z,1.0
+3397,Agent Z: Zombie Rescue Service Ranger,agent-z-zombie-rescue-service-ranger,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T03:06:09.950Z,1.0
+3433,Hotline Madness,hotline-madness,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T01:05:36.481Z,1.0
+3481,DEFCON VR,defcon-vr,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T01:10:00.599Z,1.0
+3523,Dominions 3: The Awakening,dominions-3-the-awakening,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T02:17:12.906Z,1.0
+3573,Full Spectrum Warrior,full-spectrum-warrior,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T02:44:33.508Z,1.0
+3574,Brutal Legend,brutal-legend,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T02:44:55.685Z,1.0
+3603,Tom Clancy's Rainbow Six Vegas 2,tom-clancys-rainbow-six-vegas-2-2,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T03:03:11.456Z,1.0
+3628,Friday the 13th: Killer Puzzle,friday-the-13th-killer-puzzle,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T19:14:58.053Z,1.0
+3632,Iratus: Lord of the Dead,iratus-lord-of-the-dead,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T03:12:02.276Z,1.0
+3645,Hell Let Loose,hell-let-loose,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T03:17:02.036Z,1.0
+3658,Battlefleet Gothic: Armada,battlefleet-gothic-armada,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T04:03:47.773Z,1.0
+3687,Rush for Berlin Gold,rush-for-berlin-gold,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T04:14:56.578Z,1.0
+3688,American Conquest,american-conquest,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T04:15:21.723Z,1.0
+3720,Cossacks: European Wars,cossacks-european-wars,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T05:11:01.586Z,1.0
+3727,Domina,domina,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T05:13:15.487Z,1.0
+3770,"Warhammer 40,000: Battlesector",warhammer-40000-battlesector,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-17T00:11:48.850Z,1.0
+3791,"Warhammer 40,000: Regicide",warhammer-40000-regicide,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T06:10:45.527Z,1.0
+3804,Nuclear Dawn,nuclear-dawn,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T06:14:42.413Z,1.0
+3806,"Warhammer 40,000: Gladius - Relics of War",warhammer-40000-gladius-relics-of-war,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T06:15:25.607Z,1.0
+3810,Police Stories,police-stories,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T06:16:54.873Z,1.0
+3826,World War III: Black Gold,world-war-iii-black-gold,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T07:04:48.268Z,1.0
+3830,Chaos Overlords,chaos-overlords,17,3,3,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T07:06:16.820Z,1.0
+3839,Starship Troopers - Terran Command,starship-troopers-terran-command,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T22:16:24.397Z,1.0
+3843,Party Hard 2,party-hard-2,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T07:09:23.277Z,1.0
+3850,Company of Heroes: Tales of Valor,company-of-heroes-tales-of-valor,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T07:12:29.036Z,1.0
+3852,Verdun,verdun,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T07:13:02.234Z,1.0
+3865,Dead State: Reanimated,dead-state-reanimated,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T07:17:15.856Z,1.0
+3921,Men of War: Assault Squad 2,men-of-war-assault-squad-2,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T08:15:43.078Z,1.0
+3923,Joint Task Force,joint-task-force,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T08:16:27.334Z,1.0
+3962,Pacific Storm,pacific-storm,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T09:12:51.259Z,1.0
+3963,Shattered Union,shattered-union,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T09:13:17.888Z,1.0
+4139,WWE 2K16,wwe-2k16,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-22T12:15:34.916Z,1.0
+4178,GoldenEye 007 (1997),goldeneye-007-1997,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T19:58:37.384Z,1.0
+4196,America's Army,americas-army,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T04:11:13.550Z,1.0
+4257,Tekken 2 (1995),tekken-2,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T20:31:00.919Z,1.0
+4263,God of Blades,god-of-blades,17,2,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-05-01T02:11:36.126Z,1.0
+4304,Fallout,fallout-a-post-nuclear-role-playing-game,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T20:31:25.339Z,1.0
+4325,Enclave,enclave,17,2,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T21:02:59.712Z,1.0
+4386,The Ratline,the-ratline,17,2,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T21:14:56.412Z,1.0
+4389,Extinction Day,extinction-day,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T21:59:19.480Z,1.0
+4408,Project Stalin,project-stalin,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T10:09:51.296Z,1.0
+4413,Beautiful Light,beautiful-light,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T21:12:43.565Z,1.0
+4422,Humanity Echo: Cyberpunk Tactical RPG,humanity-echo-cyberpunk-tactical-rpg,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T10:13:57.522Z,1.0
+4482,Act of War: Direct Action,act-of-war-direct-action,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T21:29:48.760Z,1.0
+4486,Signalis,signalis,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T22:05:33.814Z,1.0
+4488,Dark Souls II: Crown of the Old Iron King,dark-souls-ii-crown-of-the-old-iron-king,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T22:05:54.964Z,1.0
+4508,Pillars of Eternity II Deadfire - The Forgotten Sanctum,pillars-of-eternity-ii-deadfire-the-forgotten-sanc,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T22:00:18.525Z,1.0
+4513,Pathfinder: Wrath of the Righteous,pathfinder-wrath-of-the-righteous,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T22:08:13.265Z,1.0
+4523,The Elder Scrolls Online: Summerset,the-elder-scrolls-online-summerset,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T22:00:18.424Z,1.0
+4554,Insurgency: Sandstorm,insurgency-sandstorm,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T20:03:17.448Z,1.0
+4556,Call of Duty: Modern Warfare (2019),call-of-duty-modern-warfare,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T20:06:49.983Z,1.0
+4561,Heavy Metal: F.A.K.K.2,heavy-metal-fakk2,17,3,2,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T20:13:44.917Z,1.0
+4563,Doom Eternal: The Ancient Gods - Part Two,doom-eternal-the-ancient-gods-part-two,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-29T20:18:10.195Z,1.0
+4591,Tomb Raider: Catalyst,tomb-raider-catalyst,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T21:29:04.477Z,1.0
+4593,Halo Campaign Evolved,halo-campaign-evolved,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T21:29:03.243Z,1.0
+4594,Gears of War: E-Day,gears-of-war-e-day,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T21:29:03.834Z,1.0
+4596,Control Resonant,control-resonant,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T21:29:12.086Z,1.0
+4597,Phantom Blade Zero,phantom-blade-zero,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T21:29:11.486Z,1.0
+4598,Assassin's Creed Back Flag Resynced,assassins-creed-back-flag-resynced,17,3,1,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T21:29:10.554Z,1.0
+4607,Gothic II: Gold Edition,gothic-ii-gold-edition,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T22:00:46.387Z,1.0
+4633,"Warhammer 40,000: Deathwatch - Enhanced Edition",warhammer-40000-deathwatch-enhanced-edition,17,3,0,,high_age_no_external_check|at_methodology_extremes|recently_scored_unrated,3,yes,2026-04-30T22:01:21.850Z,1.0
+1446,The Bug Butcher,the-bug-butcher,15,2,0,trivialized,high_age_no_external_check|modifier_active_no_external_check|recently_scored_unrated,3,yes,2026-04-30T18:42:23.082Z,1.0
+4250,Penarium,penarium,15,2,0,trivialized,high_age_no_external_check|modifier_active_no_external_check|recently_scored_unrated,3,yes,2026-04-30T20:30:43.227Z,1.0
+1704,Sam & Max: Episode 203 - Night of the Raving Dead,sam-max-beyond-time-and-space-ep-3,9,2,0,trivialized,low_age_with_content_score|modifier_active_no_external_check|recently_scored_unrated,3,yes,2026-04-30T15:12:28.786Z,1.0
+64,XCOM: Enemy Unknown,xcom-enemy-unknown,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T23:15:53.113Z,1.0
+134,Pillars of Eternity,pillars-of-eternity,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T07:35:59.507Z,1.0
+142,Disco Elysium: Final Cut,disco-elysium-final-cut,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T02:07:03.002Z,1.0
+150,RimWorld,rimworld,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-05T19:47:38.593Z,1.0
+185,Crusader Kings III,crusader-kings-iii,13,2,2,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-09T11:54:54.098Z,1.0
+188,Age of Empires II: Age of Kings,age-of-empires-ii-age-of-kings,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T07:23:47.063Z,1.0
+213,Shadowrun: Dragonfall - Director's Cut,shadowrun-dragonfall-dc,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T02:11:23.060Z,1.0
+233,Guacamelee! Gold Edition,guacamelee-gold-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T01:06:00.499Z,1.0
+248,Empire: Total War,empire-total-war,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T00:42:49.781Z,1.0
+249,Sid Meier's Pirates!,pirates-3,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T01:08:08.628Z,1.0
+256,Metroid Prime,metroid-prime,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T23:35:26.204Z,1.0
+259,ROME: Total War,rome-total-war,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T15:01:33.701Z,1.0
+261,The Legend of Zelda: The Wind Waker HD,the-legend-of-zelda-the-wind-waker-hd,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T03:05:32.946Z,1.0
+302,Rise of Nations: Extended Edition,rise-of-nations-extended-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T22:17:32.425Z,1.0
+313,Civilization IV: Beyond the Sword,civilization-iv-beyond-the-sword,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T01:16:49.718Z,1.0
+325,Age of Mythology,age-of-mythology,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T08:04:40.103Z,1.0
+326,Divide By Sheep,divide-by-sheep,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T22:21:35.616Z,1.0
+331,Spelunky 2,spelunky-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T03:27:33.108Z,1.0
+334,Xenoblade Chronicles: Definitive Edition,xenoblade-chronicles-definitive-edition,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T02:11:41.323Z,1.0
+337,Detention,detention,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T23:09:39.985Z,1.0
+354,Cuphead: The Delicious Last Course,cuphead-the-delicious-last-course,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T04:05:00.251Z,1.0
+379,Dwarf Fortress,dwarf-fortress,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T21:32:50.573Z,1.0
+380,Ender Lilies: Quietus of the Knights,ender-lilies-quietus-of-the-knights,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T23:08:50.761Z,1.0
+386,Metroid Prime 2: Echoes,metroid-prime-2-echoes,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T08:12:47.364Z,1.0
+397,Death Road to Canada,death-road-to-canada,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T08:13:11.790Z,1.0
+399,"Time Gentlemen, Please! and Ben There, Dan That! Special Edition Double Pack",time-gentlemen-please-and-ben-there-dan-that-speci,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T03:12:21.880Z,1.0
+420,Metroid Prime: Trilogy,metroid-prime-trilogy,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T00:38:38.408Z,1.0
+422,Thief: The Dark Project,thief-the-dark-project,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T04:09:42.686Z,1.0
+424,Fire Emblem Fates: Revelation,fire-emblem-fates-revelation,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T06:16:48.013Z,1.0
+438,Paradigm,paradigm,13,2,2,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T01:37:05.810Z,1.0
+439,Bulb Boy,bulb-boy,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T02:07:42.996Z,1.0
+447,Valdis Story: Abyssal City,valdis-story-abyssal-city,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T23:36:40.006Z,1.0
+457,Age of Wonders II: The Wizard's Throne,age-of-wonders-ii-the-wizards-throne,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T08:07:06.747Z,1.0
+538,Guild Wars - Game of the Year Edition,guild-warssup-sup-game-of-the-year-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T07:16:26.385Z,1.0
+546,Myth 2: Soulblighter,myth-2-soulblighter,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T08:18:11.519Z,1.0
+562,Ticket to Earth,ticket-to-earth,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T04:52:52.354Z,1.0
+569,The Last Friend,the-last-friend,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T04:23:06.338Z,1.0
+583,Rogue Legacy 2,rogue-legacy-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T05:22:06.748Z,1.0
+657,Dota 2,dota-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T05:54:13.879Z,1.0
+664,Lethe - Episode One,lethe-episode-one,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T05:56:41.556Z,1.0
+671,Factorio,factorio,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T05:57:50.971Z,1.0
+694,Garry's Mod,garrys-mod,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T06:02:16.738Z,1.0
+741,Lethal Company,lethal-company,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T03:28:10.837Z,1.0
+743,Lords Mobile,lords-mobile,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T12:37:19.417Z,1.0
+757,MARVEL Contest of Champions,marvel-contest-of-champions,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-09T06:39:50.651Z,1.0
+759,MARVEL Strike Force,marvel-strike-force,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T06:15:13.886Z,1.0
+763,Metroid Dread,metroid-dread,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-09T06:40:08.089Z,1.0
+766,Mini Militia,mini-militia,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T06:18:13.067Z,1.0
+767,Mobile Legends: Bang bang,mobile-legends-bang-bang,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-09T06:40:52.849Z,1.0
+770,Monster Hunter Generations Ultimate,monster-hunter-generations-ultimate,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T06:20:27.171Z,1.0
+797,Phasmophobia,phasmophobia,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T00:41:59.174Z,1.0
+816,RAID: Shadow Legends,raid-shadow-legends,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T07:02:36.996Z,1.0
+828,Satisfactory,satisfactory,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T07:04:39.191Z,1.0
+833,Shadow Fight 3,shadow-fight-3,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T07:06:10.150Z,1.0
+840,SMITE,smite,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T07:09:32.692Z,1.0
+854,StarCraft,starcraft,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T23:12:22.699Z,1.0
+869,Teamfight Tactics,teamfight-tactics,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T07:18:27.221Z,1.0
+895,Valheim,valheim,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T07:22:45.075Z,1.0
+927,Brotato,brotato,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T07:14:45.646Z,1.0
+943,Hades II,hades-ii,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T08:27:58.847Z,1.0
+964,Norco,norco,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T08:28:10.138Z,1.0
+967,Pacific Drive,pacific-drive,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T08:28:21.233Z,1.0
+989,Vampire Survivors,vampire-survivors,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T20:03:51.540Z,1.0
+994,Wuthering Waves,wuthering-waves,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-09T13:24:22.404Z,1.0
+1006,Descent 3,descent-3,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T22:16:35.364Z,1.0
+1070,DRAGON BALL FighterZ,dragon-ball-fighterz,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T20:31:03.859Z,1.0
+1072,Tribes: Ascend,tribes-ascend,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-15T20:54:12.397Z,1.0
+1076,Until You Fall,until-you-fall,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T10:02:59.996Z,1.0
+1103,Horn,horn,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T22:18:13.115Z,1.0
+1104,XCOM: Enemy Within,xcom-enemy-within,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-16T18:07:18.658Z,1.0
+1123,Roche Fusion,roche-fusion,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:31:19.813Z,1.0
+1127,Castlevania: Order of Ecclesia,castlevania-order-of-ecclesia,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T13:17:16.611Z,1.0
+1136,Unsighted,unsighted,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T14:26:32.495Z,1.0
+1186,ICEY,icey,13,3,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T15:24:03.647Z,1.0
+1191,Sub Command,sub-command,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T16:17:23.909Z,1.0
+1206,Xenoblade Chronicles X,xenoblade-chronicles-x,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T16:20:11.322Z,1.0
+1226,Guild Wars Nightfall,guild-wars-nightfallsup-sup,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T02:11:44.712Z,1.0
+1244,Beyond Sol,beyond-sol,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T16:54:25.633Z,1.0
+1245,DarkMaus,darkmaus,13,3,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T03:17:25.153Z,1.0
+1265,Gunpoint,gunpoint,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T16:55:22.966Z,1.0
+1267,Devil Daggers,devil-daggers,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T03:13:14.222Z,1.0
+1270,Orcs Must Die! 2,orcs-must-die-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:03:10.470Z,1.0
+1277,Space Marshals,space-marshals,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T21:26:39.277Z,1.0
+1278,Bleed 2,bleed-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:05:52.587Z,1.0
+1279,Crimson Skies,crimson-skies,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-19T20:55:44.089Z,1.0
+1280,Silent Storm Gold Edition,silent-storm-gold-edition,13,3,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:08:02.185Z,1.0
+1288,Collection of Mana,collection-of-mana,13,1,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:13:34.362Z,1.0
+1294,Steel Division: Normandy 44,steel-division-normandy-44,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-19T21:51:55.312Z,1.0
+1296,The End Is Nigh,the-end-is-nigh,13,3,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T03:07:45.722Z,1.0
+1304,Frozen Synapse Prime,frozen-synapse-prime,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T06:13:34.122Z,1.0
+1361,Momodora: Reverie Under the Moonlight,momodora-reverie-under-the-moonlight,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T18:17:28.226Z,1.0
+1389,Persona 4 Arena Ultimax,p4au,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T18:02:41.585Z,1.0
+1394,Barotrauma,barotrauma,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:17:19.608Z,1.0
+1395,Don't Starve: Shipwrecked,dont-starve-shipwrecked,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:37:40.576Z,1.0
+1403,Jagged Alliance 3,jagged-alliance-3,13,3,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T03:18:53.207Z,1.0
+1445,Marvel Heroes,marvel-heroes-omega,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-14T09:19:31.703Z,1.0
+1464,Noitu Love 2: Devolution,noitu-love-2-devolution,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T14:25:44.113Z,1.0
+1466,Hover Junkers,hover-junkers,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T19:07:53.587Z,1.0
+1468,Interstate '76,interstate-76,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-20T20:00:19.136Z,1.0
+1490,Rampage Knights,rampage-knights,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T04:12:16.297Z,1.0
+1504,Odallus: The Dark Call,odallus-the-dark-call,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T04:10:58.828Z,1.0
+1514,Late Shift,late-shift,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T04:12:32.258Z,1.0
+1528,Devotion,devotion-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T06:20:08.633Z,1.0
+1546,Persona 3 Portable,persona-3-portable,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T23:23:28.963Z,1.0
+1550,The Walking Dead: The Telltale Definitive Series,the-walking-dead-the-telltale-definitive-series,13,3,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T04:17:09.607Z,1.0
+1556,TRIANGLE STRATEGY,project-triangle-strategy,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T20:10:53.710Z,1.0
+1573,Broken Sword 3 - The Sleeping Dragon,broken-sword-3-the-sleeping-dragon,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T04:07:36.843Z,1.0
+1577,Sam & Max: Episode 201 - Ice Station Santa,sam-max-201-ice-station-santa,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T17:02:29.370Z,1.0
+1579,Demeo,demeo,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:07:35.409Z,1.0
+1590,The Last Express Gold Edition,the-last-express-gold-edition,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T03:04:35.529Z,1.0
+1593,Gloomhaven,gloomhaven,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:18:52.694Z,1.0
+1598,Shadowrun: Hong Kong - Extended Edition,shadowrun-hong-kong-extended-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T04:13:10.380Z,1.0
+1607,Torment: Tides of Numenera,torment-tides-of-numenera,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:36:16.273Z,1.0
+1629,Icewind Dale: Enhanced Edition,icewind-dale-enhanced-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T10:07:38.389Z,1.0
+1641,Bravely Default II,bravely-default-ii,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-18T15:46:25.763Z,1.0
+1650,Don't Starve: Pocket Edition,dont-starve-pocket-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T12:41:45.124Z,1.0
+1664,DATE A LIVE: RIO-Reincarnation,date-a-live-rio-reincarnation,13,1,2,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T12:37:19.150Z,1.0
+1670,UnderMine,undermine,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T13:07:57.636Z,1.0
+1679,Heat Signature,heat-signature,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T14:10:51.628Z,1.0
+1694,Stealth Inc 2: A Game of Clones,stealth-inc-2-game-of-clones,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:05:01.282Z,1.0
+1709,Sang-Froid - Tales of Werewolves,sang-froid-tales-of-werewolves,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:09:33.009Z,1.0
+1734,Etherlords II,etherlords-ii,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:19:12.093Z,1.0
+1737,Doki Doki Literature Club!,doki-doki-literature-club,13,3,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:17:55.581Z,1.0
+1739,Xanadu Next,xanadu-next,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T06:15:38.366Z,1.0
+1743,Immortals: Fenyx Rising,gods-monsters,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:45:59.736Z,1.0
+1744,Green Hell,green-hell,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-20T04:27:04.645Z,1.0
+1771,Hand of Fate,hand-of-fate,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T18:42:08.670Z,1.0
+1773,Revita,revita,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T19:10:19.966Z,1.0
+1777,Dungeon Fighter Online,dungeon-fighter-online,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T01:01:04.322Z,1.0
+1791,Strangeland,strangeland,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:18:33.407Z,1.0
+1805,Budget Cuts,budget-cuts,13,3,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T12:43:45.459Z,1.0
+1843,Volgarr the Viking,volgarr-the-viking,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:37:21.086Z,1.0
+1846,Noita,noita,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:42:37.137Z,1.0
+1854,Galaxy on Fire 2 Full HD,galaxy-on-fire-2-full-hd,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T01:04:53.166Z,1.0
+1858,Luckslinger,luckslinger,13,3,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T12:28:31.106Z,1.0
+1865,The Fall,the-fall,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T16:19:47.104Z,1.0
+1867,Pumpkin Jack,pumpkin-jack,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T01:06:22.791Z,1.0
+1905,Not A Hero,not-a-hero,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T00:42:19.810Z,1.0
+1909,Extreme Exorcism,extreme-exorcism,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T06:11:02.102Z,1.0
+1910,Vagante,vagante,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T06:36:50.580Z,1.0
+1950,Whispers of a Machine,whispers-of-a-machine,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T12:38:16.719Z,1.0
+1965,Might and Magic Clash of Heroes,might-and-magic-clash-of-heroes,13,1,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T10:16:27.231Z,1.0
+2000,Lara Croft and the Temple of Osiris,lara-croft-and-the-temple-of-osiris,13,1,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T11:07:05.787Z,1.0
+2013,Hack 'n' Slash,hack-n-slash,13,1,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T19:18:15.060Z,1.0
+2015,Dungeon Hearts,dungeon-hearts,13,1,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T19:15:19.414Z,1.0
+2017,Prison Princess,prison-princess,13,1,2,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-16T17:51:32.737Z,1.0
+2024,Bridge Constructor: The Walking Dead,bridge-constructor-the-walking-dead,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T00:05:06.571Z,1.0
+2047,Albert and Otto,albert-and-otto,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T13:18:43.461Z,1.0
+2052,Puzzle Quest 3,puzzle-quest-3,13,1,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:20:46.602Z,1.0
+2106,Decay: The Mare,decay-the-mare,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T01:19:52.002Z,1.0
+2138,The 7th Guest Part 3: The Collector,the-7th-guest-part-3-the-collector,13,1,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:09:33.261Z,1.0
+2251,The Lost Heir 2,the-lost-heir-2,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T02:07:24.629Z,1.0
+2279,Project Nostalgia: Two Worlds | One Soul,project-nostalgia-two-worlds-one-soul,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T02:09:42.172Z,1.0
+2296,Jailbreak Craft,jailbreak-craft,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T11:14:44.757Z,1.0
+2383,Allomancy,allomancy,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T16:18:29.659Z,1.0
+2389,Laozi,laozi,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T04:30:23.114Z,1.0
+2402,Necore Tower (Outback Games),necore-tower-outback-games,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T22:16:17.203Z,1.0
+2456,Dungeon Siege,dungeon-siege,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T13:15:27.516Z,1.0
+2457,Final Fantasy XIV: Heavensward,final-fantasy-xiv-heavensward,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T13:15:57.324Z,1.0
+2465,EverQuest (1999),everquest,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T14:05:39.510Z,1.0
+2473,Guild Wars Factions,guild-wars-factionssup-sup,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T14:15:14.412Z,1.0
+2485,EverQuest II Free-To-Play. Your Way.,everquest-ii-free-to-play-your-way,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T15:02:33.512Z,1.0
+2496,Endless Legend,endless-legend,13,1,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T16:07:17.001Z,1.0
+2511,Tails of Iron,tails-of-iron,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T16:54:10.419Z,1.0
+2515,The Last Spell,the-last-spell,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-19T18:54:56.454Z,1.0
+2516,Avadon 2: The Corruption,avadon-2-the-corruption,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T16:54:45.713Z,1.0
+2519,The Banner Saga 2,banner-saga-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T16:55:07.309Z,1.0
+2531,Fire Emblem: Shadow Dragon,fire-emblem-shadow-dragon,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:18:48.708Z,1.0
+2532,Children of Zodiarcs,children-of-zodiarcs,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:19:14.813Z,1.0
+2534,The Banner Saga,banner-saga,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:29:27.015Z,1.0
+2536,The Age of Decadence,the-age-of-decadence,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-20T01:49:47.626Z,1.0
+2537,Trials of Fire,trials-of-fire,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:34:17.243Z,1.0
+2539,The Legend of Heroes: Trails of Cold Steel IV,the-legend-of-heroes-trails-of-cold-steel-iv,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:36:21.434Z,1.0
+2540,Leap of Fate,leap-of-fate,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:37:17.832Z,1.0
+2547,SpellForce 2 Anniversary Edition,spellforce-2-gold-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T07:05:02.951Z,1.0
+2550,Age of Wonders III,age-of-wonders-iii,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T18:22:53.132Z,1.0
+2554,Ys SEVEN,ys-seven-2,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-20T19:00:34.786Z,1.0
+2561,SpellForce 3: Soul Harvest,spellforce-3-soul-harvest,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T18:41:42.229Z,1.0
+2570,Guild Wars: Eye of the North,guild-wars-eye-of-the-north,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T18:42:29.265Z,1.0
+2572,Roguebook,roguebook,13,1,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T19:04:53.727Z,1.0
+2584,Kingsway,kingsway,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T19:18:55.729Z,1.0
+2594,Depths of Peril,depths-of-peril,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T20:06:22.375Z,1.0
+2595,Operencia: The Stolen Sun,operencia-the-stolen-sun,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T20:06:29.661Z,1.0
+2607,Elemental: Fallen Enchantress,fallen-enchantress,13,1,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T00:03:28.243Z,1.0
+2608,Shadow Empire,shadow-empire,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T00:04:19.442Z,1.0
+2617,Breath of Fire: Dragon Quarter,breath-of-fire-dragon-quarter,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T00:16:53.987Z,1.0
+2619,King's Bounty: Crossworlds,kings-bounty-crossworlds,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T00:17:58.327Z,1.0
+2620,Echoes Of Aetheria,echoes-of-aetheria,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T00:18:25.492Z,1.0
+2625,Expeditions: Conquistador,expeditions-conquistador,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T07:08:44.461Z,1.0
+2627,Lords of the Realm II,lords-of-the-realm-ii,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T00:20:16.130Z,1.0
+2630,Tales of Zestiria,tales-of-zestiria,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T00:22:35.075Z,1.0
+2634,NEO Scavenger,neo-scavenger,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T16:13:53.954Z,1.0
+2644,The World Ends with You: Final Remix,the-world-ends-with-you-final-remix,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:10:37.686Z,1.0
+2645,Ocean's Heart,oceans-heart,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:11:01.911Z,1.0
+2647,Eldritch,eldritch,13,3,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T17:21:23.833Z,1.0
+2651,Avengers Initiative,avengers-initiative,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T18:02:48.147Z,1.0
+2658,Fight The Dragon,fight-the-dragon,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T16:09:49.364Z,1.0
+2665,King Arthur: Knight's Tale,king-arthur-knights-tale,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T16:21:51.832Z,1.0
+2667,Pathologic Classic HD,pathologic-classic-hd,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T16:22:53.816Z,1.0
+2673,Castle In The Darkness,castle-in-the-darkness,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T17:05:43.086Z,1.0
+2679,Demigod,demigod,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T11:10:58.247Z,1.0
+2691,Avernum: Escape From the Pit,avernum-escape-from-the-pit,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T17:06:37.319Z,1.0
+2693,Din's Curse,dins-curse,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:35:55.118Z,1.0
+2707,Serpent in the Staglands,serpent-in-the-staglands,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-16T14:11:52.094Z,1.0
+2716,Ring Runner: Flight of the Sages,ring-runner-flight-of-the-sages,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T21:23:07.436Z,1.0
+2720,Drakensang,drakensang,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T15:22:26.296Z,1.0
+2724,Half Minute Hero: Super Mega Neo Climax Ultimate Boy,half-minute-hero-super-mega-neo-climax-ultimate-bo,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T17:10:24.542Z,1.0
+2725,RAVENMARK: Scourge of Estellion,ravenmark-scourge-of-estellion,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T17:10:44.149Z,1.0
+2738,Patrician III,patrician-iii,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T17:13:29.526Z,1.0
+2741,Avadon: The Black Fortress,avadon-the-black-fortress,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T17:13:54.129Z,1.0
+2749,Dungeon Defenders: Awakened,dungeon-defenders-awakened,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T17:16:04.688Z,1.0
+2751,The Real Texas,the-real-texas,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T17:16:51.498Z,1.0
+2755,King's Bounty: Warriors of the North,kings-bounty-warriors-of-the-north,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T17:18:26.368Z,1.0
+2769,Magicka,magicka,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:40:07.051Z,1.0
+2771,Drox Operative,drox-operative,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T18:03:15.238Z,1.0
+2778,The Red Solstice,the-red-solstice,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T11:04:29.431Z,1.0
+2779,Dead In Vinland,dead-in-vinland,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-16T14:51:24.883Z,1.0
+2780,Neon Chrome,neon-chrome,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T18:05:50.826Z,1.0
+2781,AirBuccaneers,airbuccaneers,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T18:06:15.142Z,1.0
+2786,The Curious Expedition,the-curious-expedition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T18:08:00.078Z,1.0
+2788,Blackguards 2,blackguards-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T18:08:44.252Z,1.0
+2790,"Runaway, A Road Adventure",runaway-a-road-adventure,13,2,2,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T18:12:03.479Z,1.0
+2793,Ceres,ceres,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T18:13:05.854Z,1.0
+2800,Thea: The Awakening,thea-the-awakening,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T18:13:27.892Z,1.0
+2802,SpellForce 3,spellforce-3,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T18:14:24.566Z,1.0
+2807,Iron Danger,iron-danger,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T04:30:03.625Z,1.0
+2811,Star Ocean: The Last Hope,star-ocean-tlh,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T18:21:56.148Z,1.0
+2819,Paper Sorcerer,paper-sorcerer,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T18:24:03.136Z,1.0
+2828,Dungeon Siege: Legends of Aranna,dungeon-siege-legends-of-aranna,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T18:26:24.840Z,1.0
+2837,Warlords Battlecry III,warlords-battlecry-iii,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T19:03:56.758Z,1.0
+2840,Minoria,minoria,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T14:02:23.186Z,1.0
+2843,King's Bounty: Dark Side,kings-bounty-dark-side,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T19:05:34.661Z,1.0
+2852,Dungeons - The Dark Lord,dungeons-the-dark-lord,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T19:07:56.867Z,1.0
+2854,Zanki Zero: Last Beginning,zanki-zero-last-beginning,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T19:08:46.115Z,1.0
+2868,UnderRail,underrail,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T19:10:11.426Z,1.0
+2870,Aarklash: Legacy,aarklash-legacy,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T19:11:25.177Z,1.0
+2881,Cyber Shadow,cyber-shadow,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T19:14:31.102Z,1.0
+2906,Inmost,inmost,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T19:24:08.061Z,1.0
+2934,Mighty Goose,mighty-goose,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T20:06:10.043Z,1.0
+2949,Blue Fire,blue-fire-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T20:09:02.833Z,1.0
+2963,Battletoads,battletoads,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T14:08:32.850Z,1.0
+2971,Worms Rumble,worms-rumble,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T20:16:51.433Z,1.0
+2978,Steel Rats,steel-rats,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T20:19:09.675Z,1.0
+3033,Boom Squad (itch),boom-squad-itch,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T21:24:44.927Z,1.0
+3035,hets,hets,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T21:25:53.216Z,1.0
+3036,Andromeda: There is no god up here,andromeda-there-is-no-god-up-here,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T21:26:19.131Z,1.0
+3038,Nonagon Infinity & The Opening of the Door,nonagon-infinity-the-opening-of-the-door,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T21:27:02.777Z,1.0
+3040,Cronus' Tomb 2,cronus-tomb-2,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T21:27:41.149Z,1.0
+3049,Pixel Man 2 Odyssey,pixel-man-2-odyssey,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:49:26.298Z,1.0
+3084,Shooting Range Online 2020,shooting-range-online-2020,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T21:39:11.058Z,1.0
+3092,Red Punch,red-punch,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-19T05:57:34.696Z,1.0
+3128,Tale Of The Dark Age,tale-of-the-dark-age,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T21:47:35.126Z,1.0
+3131,WitchSlayer,witchslayer,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T21:48:56.229Z,1.0
+3134,SUPER Cute Alien,super-cute-alien,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T21:50:02.627Z,1.0
+3143,Flamebearer,flamebearer,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T21:54:10.608Z,1.0
+3179,Born Of Stone,born-of-stone,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T20:53:44.340Z,1.0
+3195,Deathdealer (itch),deathdealer-itch,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T22:14:19.740Z,1.0
+3222,Knight Of The White,knight-of-the-white,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T22:18:00.622Z,1.0
+3237,Parsh,parsh,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T22:22:47.933Z,1.0
+3262,War of God,war-of-god,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T23:14:05.074Z,1.0
+3324,PRATSS' ADVENTURE,pratss-adventure,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T18:03:11.204Z,1.0
+3326,Acronia (alpha demo),acronia-alpha-demo,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T23:23:05.152Z,1.0
+3346,COMBO INFINITY,combo-infinity,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-20T19:59:35.184Z,1.0
+3358,Dearest Child,dearest-child,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-21T07:34:38.835Z,1.0
+3374,The Pancakes Official Game Show,the-pancakes-official-game-show,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:16:11.194Z,1.0
+3420,Soulbond,soulbond,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T00:22:05.386Z,1.0
+3435,Shadow Curse,shadow-curse,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T01:06:10.445Z,1.0
+3455,Adventures of Greencap,adventures-of-greencap,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T01:09:33.387Z,1.0
+3456,Fantasy Story,fantasy-story,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T01:10:18.631Z,1.0
+3464,Supreme Commander,supreme-commander,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T01:12:54.906Z,1.0
+3465,Medieval II: Total War Kingdoms,medieval-ii-total-war-kingdoms,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T01:13:18.184Z,1.0
+3466,Age of Empires II: Definitive Edition,age-of-empires-2-definitive-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T01:13:40.880Z,1.0
+3468,Shadow Tactics: Blades of the Shogun,shadow-tactics,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T01:14:32.157Z,1.0
+3479,Fire Emblem: Path of Radiance,fire-emblem-path-of-radiance,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T01:21:01.300Z,1.0
+3487,Disciples II: Gallean's Return,disciples-ii-galleans-return,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T01:38:14.902Z,1.0
+3488,Unity of Command: Stalingrad Campaign,unity-of-command-stalingrad-campaign,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T01:39:01.658Z,1.0
+3494,Shogun: Total War,shogun-total-war,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T01:50:57.872Z,1.0
+3496,Medieval: Total War - Viking Invasion,medieval-total-war-viking-invasion,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T01:51:49.196Z,1.0
+3499,Hearts of Iron 2 Complete,hearts-of-iron-2-complete,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T01:53:02.302Z,1.0
+3507,Sid Meier's Civilization IV: Colonization,sid-meiers-civilization-iv-colonization,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:04:22.656Z,1.0
+3509,Galactic Civilizations I: Ultimate Edition,galactic-civilizations-i-ultimate-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:13:00.664Z,1.0
+3510,Age of Empires,age-of-empires,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:13:18.115Z,1.0
+3513,Dangerous Waters,dangerous-waters,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T01:38:37.228Z,1.0
+3524,The Guild Gold Edition,the-guild-gold-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:17:33.827Z,1.0
+3527,Endless Space 2,endless-space-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:23:13.899Z,1.0
+3528,Crusader Kings II,crusader-kings-ii,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:23:34.122Z,1.0
+3541,Age of Empires III: Complete Collection,age-of-empires-iii-complete-collection,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:28:41.153Z,1.0
+3543,Order of Battle: World War II,order-of-battle-world-war-ii,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:18:22.635Z,1.0
+3547,Halo Wars: Definitive Edition,halo-wars-definitive-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:30:35.236Z,1.0
+3550,Napoleon: Total War Imperial Edition,napoleon-total-war-imperial-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:33:46.981Z,1.0
+3552,Empires: Dawn of the Modern World,empires-dawn-of-the-modern-world,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:34:37.813Z,1.0
+3555,Vietnam ‘65,vietnam-65,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:38:16.603Z,1.0
+3559,Napoleon: Total War,napoleon-total-war,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:39:40.652Z,1.0
+3560,Supreme Commander: Forged Alliance,supreme-commander-forged-alliance,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:40:04.783Z,1.0
+3561,Darkest Hour: A Hearts of Iron Game,darkest-hour-a-hearts-of-iron-game,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:41:22.934Z,1.0
+3564,Sengoku Jidai: Shadow of the Shogun,sengoku-jidai-shadow-of-the-shogun,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:42:37.710Z,1.0
+3566,Old World,old-world-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:43:08.741Z,1.0
+3567,Ground Control II: Operation Exodus,ground-control-ii-operation-exodus,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:43:29.697Z,1.0
+3568,Wargame Construction Set 3: Age of Rifles,wargame-construction-set-3-age-of-rifles,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:26:57.275Z,1.0
+3570,Total War: ATTILA,total-war-attila,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:40:22.940Z,1.0
+3571,Teardown,teardown-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:43:48.065Z,1.0
+3589,Worms Reloaded,worms-reloaded,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:51:15.006Z,1.0
+3592,Homeworld: Deserts of Kharak,homeworld-deserts-of-kharak,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T02:52:50.955Z,1.0
+3601,BATTLETECH,battletech,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T03:02:31.070Z,1.0
+3607,Earth 2150 Trilogy,earth-2150-trilogy,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T03:04:35.664Z,1.0
+3609,Battle Academy 2: Eastern Front,battle-academy-2-eastern-front,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T08:36:05.466Z,1.0
+3614,Stronghold: Crusader,stronghold-crusader,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T03:06:38.793Z,1.0
+3626,IL-2 Sturmovik Birds of Prey,wings-of-prey,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T03:10:29.745Z,1.0
+3627,Fire Emblem: Radiant Dawn,fire-emblem-radiant-dawn,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T19:12:16.896Z,1.0
+3629,Wargame: Red Dragon,wargame-red-dragon,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T03:10:53.969Z,1.0
+3631,Fights in Tight Spaces,fights-in-tight-spaces,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T03:11:36.612Z,1.0
+3635,Five Nights at Freddy's,five-nights-at-freddys,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T02:54:13.852Z,1.0
+3639,Knights of Honor,knights-of-honor,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T03:14:32.097Z,1.0
+3642,Evil Genius 2 World Domination,evil-genius-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T03:15:51.488Z,1.0
+3646,MoonBase Commander,moonbase-commander,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T03:17:28.590Z,1.0
+3651,Xenonauts,xenonauts,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T03:19:20.532Z,1.0
+3654,LEMNIS GATE,lemnis-gate,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T03:20:23.705Z,1.0
+3656,Command & Conquer 3: Kane's Wrath,command-conquer-3-kanes-wrath,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T04:02:47.062Z,1.0
+3657,Grey Goo,grey-goo,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T04:03:27.295Z,1.0
+3663,Battlefleet Gothic: Armada 2,battlefleet-gothic-armada-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T04:05:16.316Z,1.0
+3676,Total War: ROME II - Emperor Edition,total-war-rome-ii-emperor-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T04:10:55.844Z,1.0
+3681,Super MNC,super-mnc,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T04:12:08.083Z,1.0
+3682,Imperator: Rome,imperator-rome,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T04:12:26.725Z,1.0
+3690,Rebuild 3: Gangs of Deadsville,rebuild-3-gangs-of-deadsville,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T04:18:47.506Z,1.0
+3693,Total War Saga: Thrones of Britannia,total-war-saga-thrones-of-britannia,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T04:03:05.719Z,1.0
+3694,Battalion Wars 2,battalion-wars-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T04:09:36.764Z,1.0
+3706,Iron Harvest,iron-harvest,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T04:23:40.323Z,1.0
+3708,Age of Empires III: Definitive Edition,age-of-empires-iii-definitive-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T04:24:27.839Z,1.0
+3710,Worms World Party,worms-world-party,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T05:02:17.711Z,1.0
+3711,Project Winter,project-winter,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T05:08:09.536Z,1.0
+3718,Stellar Impact,stellar-impact,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T05:10:37.774Z,1.0
+3719,Space Colony,space-colony,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T05:02:40.315Z,1.0
+3725,Star Renegades,star-renegades,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T05:12:40.314Z,1.0
+3726,The Escapists 2,the-escapists-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T05:13:00.529Z,1.0
+3736,Cossacks 2: Napoleonic Wars,cossacks-2-napoleonic-wars,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T05:17:18.756Z,1.0
+3737,Earth 2160,earth-2160,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T05:17:40.825Z,1.0
+3739,Kessen 3,kessen-3,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T05:15:12.386Z,1.0
+3749,Warhammer: Mark of Chaos,warhammer-mark-of-chaos,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T05:19:49.640Z,1.0
+3750,Steel Division 2,steel-division-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T05:20:08.262Z,1.0
+3751,Worms Revolution,worms-revolution,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T05:20:27.283Z,1.0
+3761,Majesty 2,majesty-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:02:32.163Z,1.0
+3762,Grand Ages: Rome,grand-ages-rome,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:02:50.309Z,1.0
+3766,Convoy,convoy,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:04:05.819Z,1.0
+3767,Worms 3D,worms-3d,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:04:21.087Z,1.0
+3771,Re:ZERO -Starting Life in Another World- The Prophecy of the Throne,rezero-starting-life-in-another-world-the-prophecy,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T12:03:15.826Z,1.0
+3778,Impossible Creatures,impossible-creatures,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:06:16.842Z,1.0
+3780,Anarchy Online,anarchy-online,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:07:03.418Z,1.0
+3781,Gratuitous Space Battles,gratuitous-space-battles,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:07:15.451Z,1.0
+3792,Block N Load,block-n-load,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:11:03.429Z,1.0
+3796,March of the Eagles,march-of-the-eagles,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:12:40.319Z,1.0
+3798,UFO: Afterlight,ufo-afterlight,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:13:18.792Z,1.0
+3801,The Kings' Crusade,the-kings-crusade,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:12:19.420Z,1.0
+3802,Kessen 2,kessen-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T05:22:27.943Z,1.0
+3807,Overfall,overfall,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:15:43.459Z,1.0
+3809,Warlock - Master of the Arcane,warlock-master-of-the-arcane,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:16:22.650Z,1.0
+3812,Act of Aggression - Reboot Edition,act-of-aggression-reboot-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:18:04.922Z,1.0
+3816,Legends of Eisenwald,legends-of-eisenwald,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:20:15.902Z,1.0
+3819,Worms 4: Mayhem,worms-4-mayhem,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:56:12.014Z,1.0
+3821,To End All Wars,to-end-all-wars,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T06:58:49.316Z,1.0
+3834,Sanctum,sanctum,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T07:07:43.017Z,1.0
+3845,Pride of Nations,pride-of-nations,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T07:10:07.197Z,1.0
+3853,Order of War: Challenge,order-of-war-challenge,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T07:03:40.661Z,1.0
+3854,SENGOKU Anthology,sengoku,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T07:10:49.127Z,1.0
+3855,Making History: The Calm & the Storm,making-history-the-calm-the-storm,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T07:13:24.672Z,1.0
+3860,Steel Armor: Blaze of War,steel-armor-blaze-of-war,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T07:15:28.796Z,1.0
+3869,Taur,taur,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T07:19:29.136Z,1.0
+3873,Freaking Meatbags,freaking-meatbags,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T07:17:40.827Z,1.0
+3876,Excubitor,excubitor,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:02:16.260Z,1.0
+3879,Okhlos: Omega,okhlos-omega,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:03:25.593Z,1.0
+3881,Submarine Titans,submarine-titans,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:04:46.050Z,1.0
+3882,Bloodsports.TV,bloodsportstv,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:05:08.466Z,1.0
+3890,Order of War,order-of-war,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:07:15.981Z,1.0
+3892,Star Hammer: the Vanguard Prophecy,star-hammer-the-vanguard-prophecy,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:07:52.664Z,1.0
+3893,Panzer Tactics HD,panzer-tactics-hd,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:08:11.091Z,1.0
+3896,Cossacks 2: Battle for Europe,cossacks-2-battle-for-europe,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:09:01.059Z,1.0
+3898,Gratuitous Tank Battles,gratuitous-tank-battles,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:09:35.191Z,1.0
+3900,Armies of Exigo,armies-of-exigo,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:10:14.449Z,1.0
+3901,Siege Survival: Gloria Victis,siege-survival-gloria-victis,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:10:35.268Z,1.0
+3905,Home,home,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T20:17:46.505Z,1.0
+3909,Pandora: First Contact,pandora-first-contact,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T12:05:28.783Z,1.0
+3910,Blitzkrieg 3,blitzkrieg-3,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T12:05:58.020Z,1.0
+3911,Sword of the Stars: The Pit,sword-of-the-stars-the-pit,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T12:18:02.230Z,1.0
+3914,Space Rangers HD: A War Apart,space-rangers-hd-a-war-apart,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:13:22.338Z,1.0
+3918,Metal Fatigue,metal-fatigue,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:14:39.160Z,1.0
+3919,Blackguards,blackguards,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:14:59.896Z,1.0
+3924,"Warhammer 40,000: Sanctus Reach",warhammer-40000-sanctus-reach,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:16:50.703Z,1.0
+3927,UFO: Extraterrestrials Gold,ufo-extraterrestrials-gold,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T08:17:35.309Z,1.0
+3942,Space Empires V,space-empires-v,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T09:03:28.494Z,1.0
+3945,Pathway,pathway,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T09:04:59.317Z,1.0
+3946,911 Operator,911-operator,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T09:05:23.068Z,1.0
+3951,Fantasy Wars,fantasy-wars,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T09:07:18.064Z,1.0
+3956,FORCED SHOWDOWN,forced-showdown,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T09:10:09.870Z,1.0
+3959,Skyshine's BEDLAM,skyshines-bedlam,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T09:11:42.269Z,1.0
+3961,East India Company,east-india-company,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T09:12:31.862Z,1.0
+3966,Long Live The Queen,long-live-the-queen,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T09:14:39.534Z,1.0
+3967,Megamagic: Wizards of the Neon Age,megamagic-wizards-of-the-neon-age,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T09:15:01.107Z,1.0
+3968,Champions of Anteria,champions-of-anteria,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T09:15:26.192Z,1.0
+4000,Fight Night 2004,fight-night-2004,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-22T09:43:05.133Z,1.0
+4241,Dangerous High School Girls in Trouble!,dangerous-high-school-girls-in-trouble,13,1,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-05-01T02:06:12.574Z,1.0
+4253,Tekken 3,tekken-3,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T20:31:00.418Z,1.0
+4305,Titan Quest Anniversary Edition,titan-quest-anniversary-edition,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T20:31:25.212Z,1.0
+4314,Gothic Playable Teaser,gothic-playable-teaser,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T21:27:58.191Z,1.0
+4324,FINAL FANTASY XIII,final-fantasy-xiii,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T21:02:36.850Z,1.0
+4327,LEGO The Hobbit,lego-the-hobbit,13,1,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T21:03:42.543Z,1.0
+4368,METAL SLUG 3,metal-slug-3,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T21:44:26.090Z,1.0
+4379,MINOS (2026),minos-2026,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T08:36:11.296Z,1.0
+4385,Crawling Angels,crawling-angels,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T09:03:33.605Z,1.0
+4395,Heaven Does Not Respond,heaven-does-not-respond,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T09:06:57.677Z,1.0
+4404,Stalin vs. Martians 3,stalin-vs-martians-3,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T10:08:21.287Z,1.0
+4405,Star Trek: Supremacy,star-trek-supremacy,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T10:08:46.084Z,1.0
+4406,Atriarch,atriarch,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T10:09:16.079Z,1.0
+4416,Sintopia,sintopia,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T01:02:23.968Z,1.0
+4424,Heroes of Science and Fiction,heroes-of-science-and-fiction,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T21:29:25.754Z,1.0
+4449,NEKOPARA Vol. 4,nekopara-vol-4,13,0,2,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T09:16:32.273Z,1.0
+4487,Hand of Fate 2,hand-of-fate-2,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T21:29:25.285Z,1.0
+4504,Labyrinth of Galleria: The Moon Society,labyrinth-of-galleria-coven-of-dusk,13,2,1,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T21:30:10.936Z,1.0
+4510,Asheron's Call,asherons-call,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T22:07:48.954Z,1.0
+4515,Dragon Quest VII: Fragments of the Forgotten Past,dragon-quest-vii-fragments-of-the-forgotten-past,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-30T22:00:18.955Z,1.0
+4558,Dariusburst: Chronicle Saviours,dariusburst-chronicle-saviours,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T20:07:30.403Z,1.0
+4562,Neon Abyss,neon-abyss,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T20:14:08.797Z,1.0
+4564,Transcripted,transcripted,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T20:05:01.165Z,1.0
+4565,DEATHSMILES,deathsmiles,13,2,0,,high_age_no_external_check|recently_scored_unrated,2,yes,2026-04-29T20:18:34.246Z,1.0
+1471,Untitled Goose Game,untitled-goose-game,11,1,0,trivialized|defenceless_target,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T18:42:02.338Z,1.0
+1730,Rain on Your Parade,rain-on-your-parade,11,1,0,trivialized|defenceless_target,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T16:54:09.015Z,1.0
+2028,The Escapists,the-escapists,11,1,0,trivialized|defenceless_target,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T23:23:04.520Z,1.0
+2053,Neighbours from Hell Compilation,neighbours-from-hell-compilation,11,1,0,trivialized|defenceless_target,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T15:08:39.048Z,1.0
+2435,Twist demo,twist-demo,11,1,0,trivialized|defenceless_target,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-05-01T03:26:25.417Z,1.0
+4635,Disgaea PC,disgaea-pc,11,1,1,trivialized,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T22:01:15.529Z,1.0
+1695,Ken Follett's The Pillars of the Earth,the-pillars-of-the-earth,9,2,1,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T15:02:01.657Z,1.0
+1809,Herald: An Interactive Period Drama - Book I & II,herald-an-interactive-period-drama-book-i-ii,9,2,1,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T15:12:51.329Z,1.0
+1820,Kathy Rain,kathy-rain,9,2,1,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T16:11:39.791Z,1.0
+1851,Haunted,haunted,9,1,0,trivialized,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T10:07:11.282Z,1.0
+1949,Do Not Feed the Monkeys,do-not-feed-the-monkeys,9,1,1,defenceless_target,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T12:38:38.047Z,1.0
+1963,Gunpowder,gunpowder,9,1,0,trivialized,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T10:15:34.532Z,1.0
+2288,Guns'n'Carrots,gunsncarrots,9,1,0,trivialized,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T12:41:24.302Z,1.0
+2390,Knives (itch),knives-itch,9,1,0,defenceless_target,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T16:20:01.015Z,1.0
+2408,Assassin's Crepe: Just Desserts,assassins-crepe-just-desserts,9,1,0,trivialized,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T12:22:21.753Z,1.0
+2431,Kalevala,kalevala,9,1,2,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T12:53:28.481Z,1.0
+2569,Dungeons of Dredmor,dungeons-of-dredmor,9,1,0,trivialized,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T18:42:09.046Z,1.0
+2865,Looney Tunes World of Mayhem,looney-tunes-world-of-mayhem,9,1,0,trivialized,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T15:16:40.616Z,1.0
+3120,A Fox Game,a-fox-game,9,1,0,trivialized,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T10:06:54.866Z,1.0
+3147,SoapBoy,soapboy,9,1,0,trivialized,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-05-01T02:11:37.279Z,1.0
+3322,Stephanie and the Witch's Castle,stephanie-and-the-witchs-castle,9,1,0,trivialized,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T16:20:35.568Z,1.0
+4429,Hidden Cats vs Zombies 2,hidden-cats-vs-zombies-2,9,1,0,trivialized,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-05-01T02:11:58.144Z,1.0
+4442,Zombiotik,zombiotik,9,1,0,trivialized,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T21:29:26.117Z,1.0
+4480,UnMetal,unmetal,9,1,0,trivialized,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-05-01T02:56:50.995Z,1.0
+4481,Duck Game,duck-game,9,1,0,trivialized,modifier_active_no_external_check|recently_scored_unrated,2,yes,2026-04-30T21:29:54.769Z,1.0
+1004,Nex Machina,nex-machina,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T11:22:57.153Z,1.0
+1081,Monster Slayers,monster-slayers,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T10:06:20.091Z,1.0
+1102,Bastion,bastion,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-05-01T02:16:09.147Z,1.0
+1334,Natsuki Chronicles,natsuki-chronicles,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-05-01T03:19:25.938Z,1.0
+1462,Monster Hunter Stories,monster-hunter-stories,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-05-01T04:08:52.756Z,1.0
+1506,Anomaly: Warzone Earth,anomaly-warzone-earth,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T20:16:57.157Z,1.0
+1627,Fate (2005),fate,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T10:03:37.780Z,1.0
+1646,Wuppo,wuppo,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T12:37:12.810Z,1.0
+1716,Northgard,northgard,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T15:24:27.701Z,1.0
+1761,Solar Ash,solar-ash-kingdom,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T12:49:18.243Z,1.0
+1794,Sherlock Holmes: Crimes and Punishments,sherlock-holmes,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T10:11:53.389Z,1.0
+1798,Unruly Heroes,unruly-heroes,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T10:16:47.686Z,1.0
+1803,Project Zero 2: Wii Edition,project-zero-2-wii-edition,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T20:11:57.620Z,1.0
+1855,Wildfire,wildfire,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T12:28:56.707Z,1.0
+2004,Worms Blast,worms-blast,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T11:11:38.609Z,1.0
+2069,The Guest,the-guest,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T19:10:00.764Z,1.0
+2082,The Crow's Eye,the-crows-eye,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-05-01T00:13:56.710Z,1.0
+2284,princessize,princessize,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-05-01T02:10:11.118Z,1.0
+2372,The Tempering of Lockbright,the-tempering-of-lockbright,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T15:22:53.104Z,1.0
+2378,Subsystem,subsystem,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T16:05:48.768Z,1.0
+2488,The Legend of Heroes: Trails in the Sky the 3rd,the-legend-of-heroes-trails-in-the-sky-the-3rd,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T15:12:06.987Z,1.0
+2506,WildStar,wildstar,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T16:23:03.871Z,1.0
+2552,The Last Story,the-last-story,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T18:31:03.020Z,1.0
+2555,The Legend of Heroes: Trails in the Sky SC,legend-of-heroes-trails-in-the-sky-sc,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T18:30:19.305Z,1.0
+2574,Rune Factory: Frontier,rune-factory-frontier,7,2,1,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T19:07:00.177Z,1.0
+2621,Shadows of Adam,shadows-of-adam,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-05-01T00:18:45.233Z,1.0
+2689,Feudal Alloy,feudal-alloy,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-05-01T04:15:03.988Z,1.0
+2708,Eschalon: Book I,eschalon-book-i,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T12:25:47.966Z,1.0
+2776,Oceanhorn: Monster of Uncharted Seas,oceanhorn,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T09:45:40.952Z,1.0
+2794,Starpoint Gemini Warlords,starpoint-gemini-warlords,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T12:42:47.733Z,1.0
+3091,Alien Fighter Boy,alien-fighter-boy,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T14:10:23.601Z,1.0
+3206,Cardinal & Prentice: in the nick of time [Team Project],cardinal-prentice-in-the-nick-of-time-team-project,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-05-01T01:20:11.625Z,1.0
+3912,The Long Journey Home,the-long-journey-home,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T12:18:40.694Z,1.0
+3926,A Valley Without Wind 2,a-valley-without-wind-2,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T12:06:21.302Z,1.0
+4219,Need for Speed 3: Hot Pursuit,need-for-speed-3-hot-pursuit,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T12:41:01.444Z,1.0
+4415,Vampire Crawlers,vampire-crawlers,7,2,0,,low_age_with_content_score|recently_scored_unrated,2,yes,2026-04-30T21:13:55.942Z,1.0
+147,Her Story,her-story,9,1,1,,recently_scored_unrated,1,yes,2026-04-30T03:01:33.443Z,1.0
+433,Sam & Max: Episode 204 - Chariots of the Dogs,sam-max-204-chariots-of-the-dogs,9,1,1,,recently_scored_unrated,1,yes,2026-04-30T05:21:38.136Z,1.0
+724,Honkai Star Rail,honkai-star-rail,9,1,1,,recently_scored_unrated,1,yes,2026-04-29T21:33:18.338Z,1.0
+1549,80 Days,80-days,9,1,0,,recently_scored_unrated,1,yes,2026-05-01T00:03:49.367Z,1.0
+1626,Emily is Away Too,emily-is-away-too,9,0,0,,recently_scored_unrated,1,yes,2026-04-30T10:02:08.496Z,1.0
+1648,The Red Strings Club,the-red-strings-club,9,1,0,,recently_scored_unrated,1,yes,2026-04-30T12:37:35.167Z,1.0
+1690,The Magic Circle,the-magic-circle,9,1,1,,recently_scored_unrated,1,yes,2026-04-30T14:42:50.652Z,1.0
+1691,The Path,the-path,9,1,1,,recently_scored_unrated,1,yes,2026-04-30T02:10:00.077Z,1.0
+1830,Al Emmo and the Lost Dutchman's Mine,al-emmo-and-the-lost-dutchmans-mine,9,1,0,,recently_scored_unrated,1,yes,2026-04-30T12:07:16.686Z,1.0
+2032,A Normal Lost Phone,a-normal-lost-phone,9,0,1,,recently_scored_unrated,1,yes,2026-05-01T00:13:39.406Z,1.0
+2097,Contrast,contrast,9,0,1,,recently_scored_unrated,1,yes,2026-05-01T01:19:12.447Z,1.0
+2268,Fingle Free,fingle-free,9,0,1,,recently_scored_unrated,1,yes,2026-05-01T02:09:04.496Z,1.0
+2804,Sakura Wars,sakura-wars-2019,9,1,1,,recently_scored_unrated,1,yes,2026-04-21T18:20:18.164Z,1.0
+2824,Always Sometimes Monsters,always-sometimes-monsters,9,0,1,,recently_scored_unrated,1,yes,2026-04-21T18:24:53.123Z,1.0
+3389,Nakedboy,nakedboy,9,1,0,,recently_scored_unrated,1,yes,2026-04-30T15:20:36.529Z,1.0
+3492,Magic: The Gathering Arena,magic-the-gathering-arena,9,1,1,,recently_scored_unrated,1,yes,2026-04-22T01:50:11.003Z,1.0
+3517,The Sims: Livin' Large,the-sims-livin-large,9,0,1,,recently_scored_unrated,1,yes,2026-04-22T02:14:59.152Z,1.0
+3738,Phantom Brave,phantom-brave,9,1,1,,recently_scored_unrated,1,yes,2026-04-22T05:17:54.187Z,1.0
+4112,Beach Spikers,beach-spikers,9,0,1,,recently_scored_unrated,1,yes,2026-04-22T12:08:13.546Z,1.0
+4234,CLANNAD,clannad,9,1,1,,recently_scored_unrated,1,yes,2026-05-01T01:25:27.499Z,1.0
+4439,The Jackbox Party Pack 8,the-jackbox-party-pack-8,9,1,1,,recently_scored_unrated,1,yes,2026-04-30T21:29:11.530Z,1.0
+41,Cuphead,cuphead,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T03:37:37.814Z,1.0
+55,Super Meat Boy,super-meat-boy,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T02:35:38.783Z,1.0
+90,Slay the Spire,slay-the-spire,7,1,0,,recently_scored_unrated,1,yes,2026-04-07T15:07:38.587Z,1.0
+109,Trine 2: Complete Story,trine-2-complete-story,7,1,0,,recently_scored_unrated,1,yes,2026-04-29T23:31:22.365Z,1.0
+198,FINAL FANTASY VI,final-fantasy-vi,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T07:35:52.918Z,1.0
+200,Europa Universalis IV,europa-universalis-iv,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T00:44:01.554Z,1.0
+205,Oxygen Not Included,oxygen-not-included,7,1,0,,recently_scored_unrated,1,yes,2026-04-07T20:31:38.316Z,1.0
+220,Pony Island,pony-island,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T02:10:43.100Z,1.0
+230,Cave Story+,cave-story,7,1,0,,recently_scored_unrated,1,yes,2026-04-29T22:22:38.766Z,1.0
+232,Owlboy,owlboy,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T00:47:28.344Z,1.0
+239,Jetpack Joyride,jetpack-joyride,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T04:45:53.730Z,1.0
+255,New Super Mario Bros.,new-super-mario-bros,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T01:09:04.606Z,1.0
+281,Galactic Civilizations II: Ultimate Edition,galactic-civilizations-ii-ultimate-edition,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T01:36:52.349Z,1.0
+301,Supraland,supraland,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T02:02:28.076Z,1.0
+330,Grim Fandango,grim-fandango,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T03:19:09.886Z,1.0
+336,Command & Conquer,command-conquer-old,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T08:04:11.639Z,1.0
+350,West of Loathing,west-of-loathing,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T02:00:33.498Z,1.0
+367,Angry Birds Space,angry-birds-space,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T03:09:49.876Z,1.0
+382,Puzzle Quest: Challenge of the Warlords,puzzle-quest,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T02:01:50.279Z,1.0
+384,Thirty Flights of Loving,thirty-flights-of-loving,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T12:59:22.398Z,1.0
+390,Fire Emblem Fates: Conquest,fire-emblem-fates-conquest,7,1,0,,recently_scored_unrated,1,yes,2026-04-09T11:51:33.903Z,1.0
+393,Tales From Space: Mutant Blobs Attack,tales-from-space-mutant-blobs-attack,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T00:07:37.259Z,1.0
+415,Angry Birds Rio,angry-birds-rio,7,1,0,,recently_scored_unrated,1,yes,2026-04-29T22:26:29.548Z,1.0
+416,LocoRoco 2,sce-japan-studio,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T02:06:07.725Z,1.0
+417,Homeworld,homeworld,7,1,0,,recently_scored_unrated,1,yes,2026-04-29T22:08:53.158Z,1.0
+429,Desktop Dungeons,desktop-dungeons,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T04:11:44.702Z,1.0
+430,Framed,framed,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T02:07:24.265Z,1.0
+434,Bad Piggies,bad-piggies,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T03:19:28.233Z,1.0
+435,Chained Echoes,chained-echoes,7,1,0,,recently_scored_unrated,1,yes,2026-04-30T03:38:00.903Z,1.0
+446,Grindstone,grindstone-2,7,1,0,,recently_scored_unrated,1,no,2026-04-07T19:43:22.462Z,1.0
+465,Sid Meier's Alpha Centauri,sid-meiers-alpha-centauri,7,1,0,,recently_scored_unrated,1,no,2026-04-30T08:17:52.102Z,1.0
+469,HEX: Shards of Fate,hex-shards-of-fate,7,1,0,,recently_scored_unrated,1,no,2026-04-30T06:20:08.693Z,1.0
+472,BLACKHOLE,blackhole,7,1,0,,recently_scored_unrated,1,no,2026-04-30T02:12:28.183Z,1.0
+493,BADLAND 2,badland-2,7,1,0,,recently_scored_unrated,1,no,2026-04-07T18:37:06.424Z,1.0
+517,Jump Ultimate Stars,jump-ultimate-stars,7,1,0,,recently_scored_unrated,1,no,2026-04-30T04:53:07.655Z,1.0
+536,Ground Control,ground-control,7,1,0,,recently_scored_unrated,1,no,2026-04-29T23:15:34.306Z,1.0
+537,Tadpole Treble,tadpole-treble,7,1,0,,recently_scored_unrated,1,no,2026-04-30T04:30:40.377Z,1.0
+547,Microsoft Allegiance,microsoft-allegiance,7,1,0,,recently_scored_unrated,1,no,2026-04-30T04:22:48.310Z,1.0
+557,Mirror's Edge (Mobile),mirrors-edge-mobile,7,1,0,,recently_scored_unrated,1,no,2026-04-29T23:36:25.706Z,1.0
+586,Advance Wars 1+2: Re-Boot Camp,advance-wars-12-re-boot-camp,7,1,0,,recently_scored_unrated,1,no,2026-04-30T05:22:25.483Z,1.0
+590,Angry Birds 2,angry-birds-2,7,1,0,,recently_scored_unrated,1,no,2026-04-30T01:35:25.007Z,1.0
+591,Angry Birds Friends,angry-birds-friends,7,1,0,,recently_scored_unrated,1,no,2026-04-30T05:25:55.112Z,1.0
+596,ARMS,arms,7,1,0,,recently_scored_unrated,1,no,2026-04-29T20:57:26.419Z,1.0
+598,Asphalt 9: Legends,asphalt-9-legends,7,1,0,,recently_scored_unrated,1,no,2026-04-30T05:33:03.658Z,1.0
+615,Bloons TD 6,bloons-td-6,7,1,0,,recently_scored_unrated,1,no,2026-04-30T05:33:09.143Z,1.0
+629,Clash Mini (Public Beta Test),clash-mini-public-beta-test,7,1,0,,recently_scored_unrated,1,no,2026-04-30T05:46:57.947Z,1.0
+631,Coin Master,coin-master,7,1,0,,recently_scored_unrated,1,no,2026-04-30T05:47:21.702Z,1.0
+653,Doodle Jump,doodle-jump,7,1,0,,recently_scored_unrated,1,no,2026-04-30T05:53:04.909Z,1.0
+663,EA SPORTS FC 24,ea-sports-fc-24,7,1,0,,recently_scored_unrated,1,no,2026-04-30T10:31:18.172Z,1.0
+684,Fire Emblem Heroes,fire-emblem-heroes,7,1,0,,recently_scored_unrated,1,no,2026-04-30T06:01:36.627Z,1.0
+712,Harry Potter: Hogwarts Mystery,harry-potter-hogwarts-mystery,7,1,0,,recently_scored_unrated,1,no,2026-04-30T06:05:50.502Z,1.0
+738,Kirby and the Forgotten Land,kirby-and-the-forgotten-land,7,1,0,,recently_scored_unrated,1,no,2026-04-29T21:45:06.102Z,1.0
+746,Madden NFL 24,madden-nfl-24,7,1,0,,recently_scored_unrated,1,no,2026-04-30T10:31:11.576Z,1.0
+753,Mario Kart Tour,mario-kart-tour,7,1,0,,recently_scored_unrated,1,no,2026-04-30T06:12:53.231Z,1.0
+754,Mario Party Superstars,mario-party-superstars,7,1,0,,recently_scored_unrated,1,no,2026-04-30T06:13:15.565Z,1.0
+780,Need for Speed No Limits,need-for-speed-no-limits,7,1,0,,recently_scored_unrated,1,no,2026-04-29T22:03:50.129Z,1.0
+786,Octopath Traveler,project-octopath-traveler,7,1,0,,recently_scored_unrated,1,no,2026-04-30T06:36:58.677Z,1.0
+787,Old School RuneScape,old-school-runescape,7,1,0,,recently_scored_unrated,1,no,2026-04-30T06:36:44.204Z,1.0
+800,Plants vs. Zombies 2: It's About Time,plants-vs-zombies-2-free,7,1,0,,recently_scored_unrated,1,no,2026-04-09T06:44:31.136Z,1.0
+804,Pokémon GO,pokemon-go,7,1,0,,recently_scored_unrated,1,no,2026-04-29T22:15:34.894Z,1.0
+806,"Pokémon: Let's Go, Pikachu! and Eevee!",pokemontm-lets-go-pikachu-eevee,7,1,0,,recently_scored_unrated,1,no,2026-04-30T06:38:49.434Z,1.0
+808,Pokémon Scarlet and Violet,pokemon-scarletviolet,7,1,0,,recently_scored_unrated,1,no,2026-04-30T06:39:02.168Z,1.0
+810,Pokémon Unite,pokemon-unite,7,1,0,,recently_scored_unrated,1,no,2026-04-30T06:39:07.660Z,1.0
+839,slither.io,slitherio,7,1,0,,recently_scored_unrated,1,no,2026-04-30T07:09:15.888Z,1.0
+847,Splatoon 3,splatoon-3,7,1,0,,recently_scored_unrated,1,no,2026-04-30T02:35:45.467Z,1.0
+860,Summoners War,summoners-war,7,1,0,,recently_scored_unrated,1,no,2026-04-09T06:50:08.062Z,1.0
+866,Super Mario Run,super-mario-run,7,1,0,,recently_scored_unrated,1,no,2026-04-30T07:17:48.797Z,1.0
+867,Super Smash Bros. Ultimate,super-smash-bros-ultimate,7,1,0,,recently_scored_unrated,1,no,2026-04-30T07:18:06.254Z,1.0
+868,Talking Tom Gold Run,talking-tom-gold-run,7,1,0,,recently_scored_unrated,1,no,2026-04-30T07:16:52.499Z,1.0
+879,The Simpsons: Tapped Out,the-simpsons-tapped-out,7,1,0,,recently_scored_unrated,1,no,2026-04-30T07:20:26.071Z,1.0
+888,TOP WAR... But Real,top-war-but-real,7,1,0,,recently_scored_unrated,1,no,2026-04-30T07:22:30.661Z,1.0
+909,Yu-Gi-Oh! Duel Links,yu-gi-oh-duel-links,7,1,0,,recently_scored_unrated,1,no,2026-04-30T07:24:02.240Z,1.0
+914,AFK Arena,afk-arena,7,1,0,,recently_scored_unrated,1,no,2026-04-30T02:09:38.690Z,1.0
+918,Animal Well,animal-well,7,1,0,,recently_scored_unrated,1,no,2026-04-30T03:21:21.397Z,1.0
+922,Bayonetta Origins: Cereza and the Lost Demon,bayonetta-origins-cereza-and-the-lost-demon,7,1,0,,recently_scored_unrated,1,no,2026-04-30T04:09:25.053Z,1.0
+928,Bugsnax,bugsnax,7,1,0,,recently_scored_unrated,1,no,2026-04-29T21:22:42.003Z,1.0
+929,Cassette Beasts,cassette-beasts,7,1,0,,recently_scored_unrated,1,no,2026-04-09T13:18:38.025Z,1.0
+936,Dave the Diver,dave-the-diver,7,1,0,,recently_scored_unrated,1,no,2026-04-30T08:27:32.803Z,1.0
+939,Dredge,dredge,7,1,0,,recently_scored_unrated,1,no,2026-04-30T08:26:51.126Z,1.0
+940,Empires & Puzzles: RPG Quest,empires-puzzles-rpg-quest,7,1,0,,recently_scored_unrated,1,no,2026-04-30T08:27:52.241Z,1.0
+942,Guardian Tales,guardian-tales,7,1,0,,recently_scored_unrated,1,no,2026-04-29T20:06:24.582Z,1.0
+951,Lorelei and the Laser Eyes,lorelei-and-the-laser-eyes,7,1,0,,recently_scored_unrated,1,no,2026-04-30T00:57:47.447Z,1.0
+952,Luigi's Mansion 2 HD,luigis-mansion-2-hd,7,1,0,,recently_scored_unrated,1,no,2026-04-30T01:25:26.161Z,1.0
+972,Princess Peach: Showtime!,princess-peach-showtime,7,1,0,,recently_scored_unrated,1,no,2026-04-30T03:04:52.216Z,1.0
+975,Shantae and the Seven Sirens,shantae-and-the-seven-sirens,7,1,0,,recently_scored_unrated,1,no,2026-04-30T08:28:46.113Z,1.0
+980,Thank Goodness You're Here!,thank-goodness-youre-here,7,1,0,,recently_scored_unrated,1,no,2026-04-30T08:29:00.622Z,1.0
+981,The Plucky Squire,the-plucky-squire,7,1,0,,recently_scored_unrated,1,no,2026-04-30T08:35:19.287Z,1.0
+987,UFO 50,ufo-50,7,1,0,,recently_scored_unrated,1,no,2026-04-30T08:35:56.158Z,1.0
+991,Wargroove 2,wargroove-2,7,1,0,,recently_scored_unrated,1,no,2026-04-30T08:36:18.793Z,1.0
+1007,Gravity Circuit,gravity-circuit,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:49:11.944Z,1.0
+1029,Rayman Jungle Run,rayman-jungle-run,7,1,0,,recently_scored_unrated,1,no,2026-04-30T11:04:08.048Z,1.0
+1031,Crash Team Racing,ctr-crash-team-racing,7,1,0,,recently_scored_unrated,1,no,2026-04-30T11:04:47.231Z,1.0
+1040,Thief II: The Metal Age,thief-ii-the-metal-age,7,1,0,,recently_scored_unrated,1,no,2026-05-01T02:11:50.773Z,1.0
+1058,Monkey Island 2 Special Edition: LeChuck’s Revenge,monkey-island-2-se,7,1,0,,recently_scored_unrated,1,no,2026-05-01T02:11:51.717Z,1.0
+1075,Bug Princess,bug-princess,7,1,0,,recently_scored_unrated,1,no,2026-05-01T02:11:51.005Z,1.0
+1097,Rayman Fiesta Run,rayman-fiesta-run,7,0,0,,recently_scored_unrated,1,no,2026-04-30T11:06:26.319Z,1.0
+1125,Mega Man Legacy Collection / ロックマン クラシックス コレクション,mega-man-legacy-collection-2,7,1,0,,recently_scored_unrated,1,no,2026-04-30T13:08:15.786Z,1.0
+1126,Trials Evolution: Gold Edition,trials-evolution-gold-edition,7,1,0,,recently_scored_unrated,1,no,2026-05-01T03:02:31.905Z,1.0
+1128,Crimzon Clover: World Ignition,crimzon-clover-world-ignition-2,7,1,0,,recently_scored_unrated,1,no,2026-04-30T13:19:58.046Z,1.0
+1140,Zenzizenzic,zenzizenzic,7,1,0,,recently_scored_unrated,1,no,2026-05-01T03:05:41.429Z,1.0
+1154,Junk Jack,junk-jack,7,1,0,,recently_scored_unrated,1,no,2026-05-01T03:03:57.567Z,1.0
+1155,Mighty Switch Force! Hyper Drive Edition,mighty-switch-force-hyper-drive-edition,7,1,0,,recently_scored_unrated,1,no,2026-04-30T15:10:48.867Z,1.0
+1179,Giana Sisters: Twisted Dreams - Rise of the Owlverlord,giana-sisters-rise-of-the-owlverlord-2,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:12:42.641Z,1.0
+1183,Shatter,shatter,7,0,0,,recently_scored_unrated,1,no,2026-05-01T03:07:06.976Z,1.0
+1194,F1 2018,f1-2018,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:19:14.779Z,1.0
+1201,Aliens Go Home Run,aliens-go-home-run,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:19:54.805Z,1.0
+1204,RIFT,rift,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:20:02.550Z,1.0
+1238,Hyper Light Drifter,hyper-light-drifter,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:54:17.652Z,1.0
+1259,Terrian Saga: KR-17,terrian-saga-kr-17,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:55:07.654Z,1.0
+1262,Mr. Robot,mr-robot,7,1,0,,recently_scored_unrated,1,no,2026-04-30T03:37:00.242Z,1.0
+1320,Recettear: An Item Shop's Tale,recettear-an-item-shops-tale,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:44:20.216Z,1.0
+1321,Sonic Rush,sonic-rush,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:03:14.762Z,1.0
+1326,Realm of the Mad God,realm-of-the-mad-god,7,1,0,,recently_scored_unrated,1,no,2026-05-01T03:26:50.083Z,1.0
+1339,Splatoon 2: Octo Expansion,splatoon-2-octo-expansion,7,1,0,,recently_scored_unrated,1,no,2026-05-01T03:26:32.218Z,1.0
+1348,Waves,waves,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:26:40.885Z,1.0
+1357,Shovel Knight Dig,shovel-knight-dig,7,1,0,,recently_scored_unrated,1,no,2026-04-20T18:15:06.802Z,1.0
+1379,Everhood,everhood,7,1,0,,recently_scored_unrated,1,no,2026-04-30T08:37:57.956Z,1.0
+1380,Kero Blaster,kero-blaster,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:14:38.783Z,1.0
+1383,Them's Fightin' Herds,thems-fightin-herds,7,1,0,,recently_scored_unrated,1,no,2026-04-14T16:32:49.722Z,1.0
+1426,NBA 2K19,nba-2k19-2,7,1,0,,recently_scored_unrated,1,no,2026-04-30T10:31:32.070Z,1.0
+1432,Downwell,downwell,7,1,0,,recently_scored_unrated,1,no,2026-05-01T03:27:18.247Z,1.0
+1434,Rochard,rochard,7,1,0,,recently_scored_unrated,1,no,2026-04-30T08:37:27.668Z,1.0
+1467,Mushroom Wars,mushroom-wars,7,1,0,,recently_scored_unrated,1,no,2026-05-01T03:26:40.335Z,1.0
+1474,La-Mulana,la-mulana,7,1,0,,recently_scored_unrated,1,no,2026-05-01T03:27:26.141Z,1.0
+1480,Madden NFL 19,madden-nfl-19,7,1,0,,recently_scored_unrated,1,no,2026-04-30T10:31:25.863Z,1.0
+1489,Lovers in a Dangerous Spacetime,lovers-in-a-dangerous-spacetime,7,1,0,,recently_scored_unrated,1,no,2026-05-01T03:26:25.019Z,1.0
+1521,"Pokémon Sun, Moon",pokemon-sun,7,1,0,,recently_scored_unrated,1,no,2026-05-01T04:10:42.038Z,1.0
+1562,The Sexy Brutale,the-sexy-brutale,7,1,0,,recently_scored_unrated,1,no,2026-05-01T03:26:51.419Z,1.0
+1569,Pokémon Platinum,pokemon-platinum,7,1,0,,recently_scored_unrated,1,no,2026-05-01T04:09:29.599Z,1.0
+1575,The Life and Suffering of Sir Brante - Digital Content Bundle,the-life-and-suffering-of-sir-brante-digital-conte,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:08:23.031Z,1.0
+1583,Horace,horace,7,1,0,,recently_scored_unrated,1,no,2026-05-01T04:16:50.643Z,1.0
+1585,Creepy Castle,creepy-castle,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:13:59.922Z,1.0
+1592,Legend of Grimrock,legend-of-grimrock,7,1,0,,recently_scored_unrated,1,no,2026-04-30T03:01:45.945Z,1.0
+1594,"Invisible, Inc.",invisible-inc,7,1,0,,recently_scored_unrated,1,no,2026-04-30T06:10:41.004Z,1.0
+1600,Deltarune (itch),deltarune,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:30:58.536Z,1.0
+1616,Broken Age,broken-age,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:46:45.238Z,1.0
+1625,Quadrilateral Cowboy,quadrilateral-cowboy,7,1,0,,recently_scored_unrated,1,no,2026-04-30T10:02:27.244Z,1.0
+1630,The Blackwell Legacy,the-blackwell-legacy,7,1,0,,recently_scored_unrated,1,no,2026-04-30T08:28:53.017Z,1.0
+1638,Crown Trick,crown-trick,7,1,0,,recently_scored_unrated,1,no,2026-04-18T15:08:28.148Z,1.0
+1645,Candle: The Power of the Flame,candle,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:36:48.652Z,1.0
+1647,Genesis Noir,genesis-noir,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:23:02.781Z,1.0
+1662,The Eternal Cylinder,the-eternal-cylinder,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:52:30.197Z,1.0
+1668,Myst V: End of Ages,myst-v,7,1,0,,recently_scored_unrated,1,no,2026-04-30T13:04:17.743Z,1.0
+1678,Monster Sanctuary,monster-sanctuary,7,1,0,,recently_scored_unrated,1,no,2026-04-30T14:10:01.469Z,1.0
+1680,BADLAND: Game of the Year Edition,badland-game-of-the-year-edition,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:03:04.236Z,1.0
+1696,Tales of Monkey Island Complete Pack,tales-of-monkey-island-complete-pack,7,1,0,,recently_scored_unrated,1,no,2026-04-30T02:35:51.164Z,1.0
+1697,FRAMED Collection,framed-collection,7,1,0,,recently_scored_unrated,1,no,2026-04-30T15:02:50.806Z,1.0
+1700,Unravel Two,unravel-two,7,1,0,,recently_scored_unrated,1,no,2026-04-30T15:10:32.945Z,1.0
+1701,Flynn: Son of Crimson,flynn-son-of-crimson,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:09:23.698Z,1.0
+1710,Else Heart.Break(),else-heartbreak,7,1,0,,recently_scored_unrated,1,no,2026-04-30T15:18:50.525Z,1.0
+1721,Crashlands,crashlands,7,1,0,,recently_scored_unrated,1,no,2026-04-30T03:36:46.458Z,1.0
+1732,Mushroom 11,mushroom-11,7,1,0,,recently_scored_unrated,1,no,2026-04-30T05:49:22.042Z,1.0
+1740,Badland,badland,7,1,0,,recently_scored_unrated,1,no,2026-04-30T17:46:49.008Z,1.0
+1748,LEGO Marvel Super Heroes,lego-marvel,7,1,0,,recently_scored_unrated,1,no,2026-04-30T04:22:08.142Z,1.0
+1751,Luigi's Mansion,luigis-mansion,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:04:15.572Z,1.0
+1752,Blossom Tales: The Sleeping King,blossom-tales-the-sleeping-king,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:04:34.367Z,1.0
+1758,Lone Echo II,lone-echo-ii,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:21:01.259Z,1.0
+1772,Olija,olija,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:42:09.378Z,1.0
+1775,Slime-san,slime-san,7,1,0,,recently_scored_unrated,1,no,2026-04-30T19:10:40.938Z,1.0
+1788,Surge,surge,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:21:57.307Z,1.0
+1802,Cat Quest II,cat-quest-ii,7,1,0,,recently_scored_unrated,1,no,2026-05-01T00:21:53.343Z,1.0
+1822,Giana Sisters: Twisted Dreams,giana-sisters-twisted-dreams,7,1,0,,recently_scored_unrated,1,no,2026-04-30T08:38:04.659Z,1.0
+1828,The Awesome Adventures of Captain Spirit,the-awesome-adventures-of-capitan-spirit,7,1,0,,recently_scored_unrated,1,no,2026-04-29T23:13:15.156Z,1.0
+1842,Chronicle: RuneScape Legends,chronicle-runescape-legends,7,1,0,,recently_scored_unrated,1,no,2026-04-30T00:41:41.674Z,1.0
+1853,The Wild at Heart,the-wild-at-heart,7,1,0,,recently_scored_unrated,1,no,2026-04-30T11:17:31.322Z,1.0
+1862,WAKFU,wakfu,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:22:33.851Z,1.0
+1872,Super Cloudbuilt,super-cloudbuilt,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:22:06.090Z,1.0
+1873,Overture,overture,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:22:06.186Z,1.0
+1874,Bone: The Great Cow Race,bone-the-great-cow-race,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:40:54.456Z,1.0
+1875,Artifact,artifact,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:49:42.041Z,1.0
+1878,Nancy Drew: Warnings at Waverly Academy,nancy-drew-warnings-at-waverly-academy,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:20:43.114Z,1.0
+1879,Fester Mudd: Curse of the Gold - Episode 1,fester-mudd-curse-of-the-gold-episode-1-2,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:43:41.991Z,1.0
+1899,Star Control: Origins,star-control-origins-2017,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:22:32.650Z,1.0
+1901,The Girl of Glass: A Summer Bird's Tale,the-girl-of-glass-a-summer-birds-tale,7,1,0,,recently_scored_unrated,1,no,2026-04-30T00:43:16.602Z,1.0
+1904,The Samaritan Paradox,the-samaritan-paradox,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:22:46.776Z,1.0
+1908,Anodyne,anodyne,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:49:19.927Z,1.0
+1922,Deus Ex GO,deus-ex-go,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:49:11.198Z,1.0
+1926,Agent A,agent-a,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:33:58.215Z,1.0
+1935,Sam & Max: Episode 202 - Moai Better Blues,sam-max-202-moai-better-blues,7,1,0,,recently_scored_unrated,1,no,2026-04-30T10:02:45.512Z,1.0
+1974,Road Not Taken,road-not-taken,7,1,0,,recently_scored_unrated,1,no,2026-04-30T11:07:28.862Z,1.0
+1976,Nihilumbra,nihilumbra,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:26:09.032Z,1.0
+1977,Rusty Lake Roots,rusty-lake-roots,7,1,0,,recently_scored_unrated,1,no,2026-04-21T09:15:00.325Z,1.0
+1979,Scribblenauts Unlimited,scribblenauts-unlimited,7,0,0,,recently_scored_unrated,1,no,2026-04-30T11:06:42.072Z,1.0
+1982,Future Unfolding,future-unfolding,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:17:34.805Z,1.0
+1991,The Mooseman,the-mooseman,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:42:23.273Z,1.0
+1993,Uurnog Uurnlimited,uurnog-uurnlimited,7,1,0,,recently_scored_unrated,1,no,2026-04-30T11:12:40.142Z,1.0
+2008,Puzzle & Dragons Z + Super Mario Bros. Edition,puzzle-and-dragons-super-mario-bros-edition,7,1,0,,recently_scored_unrated,1,no,2026-04-30T19:06:14.010Z,1.0
+2011,Worms Crazy Golf,worms-crazy-golf,7,1,0,,recently_scored_unrated,1,no,2026-04-30T19:09:11.541Z,1.0
+2014,Operation: Tango,operation-tango,7,1,0,,recently_scored_unrated,1,no,2026-04-30T20:09:28.273Z,1.0
+2027,You Must Build A Boat,you-must-build-a-boat,7,1,0,,recently_scored_unrated,1,no,2026-04-30T20:11:15.918Z,1.0
+2031,J.U.L.I.A.: Among the Stars,julia-among-the-stars,7,1,0,,recently_scored_unrated,1,no,2026-04-21T10:10:47.140Z,1.0
+2034,Klang,klang,7,1,0,,recently_scored_unrated,1,no,2026-05-01T00:05:26.183Z,1.0
+2041,Doodle Kingdom,doodle-kingdom,7,1,0,,recently_scored_unrated,1,no,2026-04-30T01:35:11.131Z,1.0
+2068,Munin,munin,7,0,0,,recently_scored_unrated,1,no,2026-04-30T19:09:46.267Z,1.0
+2087,Doodle God,doodle-god,7,1,0,,recently_scored_unrated,1,no,2026-05-01T00:16:23.931Z,1.0
+2090,Kinetic Edge,kinetic-edge,7,0,0,,recently_scored_unrated,1,no,2026-04-30T13:15:00.896Z,1.0
+2104,Her Majesty's SPIFFING,her-majestys-spiffing,7,1,0,,recently_scored_unrated,1,no,2026-05-01T01:21:07.687Z,1.0
+2107,Dream,dream,7,1,0,,recently_scored_unrated,1,no,2026-04-29T20:43:59.294Z,1.0
+2109,Subject 13,subject-13,7,1,0,,recently_scored_unrated,1,no,2026-05-01T01:21:39.309Z,1.0
+2113,Dr. Mario World,dr-mario-world,7,1,0,,recently_scored_unrated,1,no,2026-05-01T01:22:46.212Z,1.0
+2134,Castle Dracula,castle-dracula,7,1,0,,recently_scored_unrated,1,no,2026-04-29T21:15:29.503Z,1.0
+2145,One Brutal Dungeon,one-brutal-dungeon,7,1,0,,recently_scored_unrated,1,no,2026-04-30T17:13:13.719Z,1.0
+2151,Alien Hive,alien-hive,7,1,0,,recently_scored_unrated,1,no,2026-05-01T01:24:24.424Z,1.0
+2157,Vectromirror,vectromirror,7,1,0,,recently_scored_unrated,1,no,2026-04-29T22:03:05.623Z,1.0
+2173,Kill the Plumber World,kill-the-plumber-world,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:05:23.720Z,1.0
+2180,Blast-A-Way,blast-a-way,7,1,0,,recently_scored_unrated,1,no,2026-05-01T02:03:50.615Z,1.0
+2200,Bridge Constructor Stunts!,bridge-constructor-stunts-2,7,1,0,,recently_scored_unrated,1,no,2026-05-01T02:05:00.235Z,1.0
+2211,Arizona Rose and the Pirates' Riddles Full,arizona-rose-and-the-pirates-riddles-full,7,1,0,,recently_scored_unrated,1,no,2026-05-01T02:06:44.686Z,1.0
+2254,Wild West Quest (Full),wild-west-quest-full,7,1,0,,recently_scored_unrated,1,no,2026-05-01T02:08:14.629Z,1.0
+2258,Nexus Tile,nexus-tile,7,0,0,,recently_scored_unrated,1,no,2026-05-01T02:08:34.454Z,1.0
+2287,Astrum Dare,astrum-dare,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:35:33.843Z,1.0
+2289,Code Romantic (itch),code-romantic-itch,7,1,0,,recently_scored_unrated,1,no,2026-05-01T02:10:26.011Z,1.0
+2329,25-in-1 Games - Gamebanjo,25-in-1-games-gamebanjo,7,1,0,,recently_scored_unrated,1,no,2026-04-30T13:14:21.447Z,1.0
+2362,Everyday Magic: potions to order,everyday-magic-potions-to-order,7,1,0,,recently_scored_unrated,1,no,2026-04-30T15:18:33.147Z,1.0
+2369,..at any cost,at-any-cost,7,1,0,,recently_scored_unrated,1,no,2026-04-19T11:42:13.355Z,1.0
+2371,Interactive Dynamic Kinetics,interactive-dynamic-kinetics,7,1,0,,recently_scored_unrated,1,no,2026-04-30T15:22:05.414Z,1.0
+2374,Mineswept,mineswept,7,1,0,,recently_scored_unrated,1,no,2026-04-30T15:23:14.606Z,1.0
+2380,Nekiri's Tail,nekiris-tail,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:09:12.873Z,1.0
+2384,Chameleon Colors,chameleon-colors,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:18:43.170Z,1.0
+2394,Vandermonde,vandermonde,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:20:10.976Z,1.0
+2410,Dying Hope,dying-hope,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:22:21.552Z,1.0
+2415,Unseen (GBoschiero),unseen-gboschiero,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:22:52.993Z,1.0
+2417,Pack Yak Bandit,pack-yak-bandit,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:22:55.239Z,1.0
+2420,TweetTweetDevour,tweettweetdevour,7,1,0,,recently_scored_unrated,1,no,2026-04-18T17:07:01.222Z,1.0
+2428,Miyumi and Friends in the Scarlett Mansion,miyumi-and-friends-in-the-scarlett-mansion,7,0,0,,recently_scored_unrated,1,no,2026-05-01T03:11:09.065Z,1.0
+2430,The Archives of Evil Dr BA,the-archives-of-evil-dr-ba,7,1,0,,recently_scored_unrated,1,no,2026-04-29T23:23:51.191Z,1.0
+2442,DungeonScape,dungeonscape,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:37:18.682Z,1.0
+2446,"Pokémon HeartGold, SoulSilver",pokemon-heartgold-version,7,1,0,,recently_scored_unrated,1,no,2026-04-30T13:03:31.639Z,1.0
+2447,Dragon Quest IX: Sentinels of the Starry Skies,dragon-quest-9-sentinels-of-the-starry-skies,7,1,0,,recently_scored_unrated,1,no,2026-04-18T20:51:05.172Z,1.0
+2468,Chaos Reborn,chaos-reborn,7,1,0,,recently_scored_unrated,1,no,2026-04-30T14:07:35.683Z,1.0
+2470,Ni no Kuni: Wrath of the White Witch,ni-no-kuni-wrath-of-the-white-witch,7,1,0,,recently_scored_unrated,1,no,2026-04-30T14:12:07.360Z,1.0
+2472,Dungeon Village,dungeon-village,7,1,0,,recently_scored_unrated,1,no,2026-04-30T14:14:51.489Z,1.0
+2476,Card Crawl,card-crawl,7,1,0,,recently_scored_unrated,1,no,2026-04-30T21:53:01.173Z,1.0
+2481,Persona Q: Shadow of the Labyrinth,persona-q-shadow-of-the-labyrinth,7,1,0,,recently_scored_unrated,1,no,2026-04-30T14:42:58.612Z,1.0
+2493,Monster Rancher 2,monster-rancher-2,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:20:25.826Z,1.0
+2494,Breath of Fire IV (2000),breath-of-fire-4,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:20:25.608Z,1.0
+2507,Chrono Trigger,chrono-trigger-1995,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:19:47.473Z,1.0
+2509,Age of Wonders Shadow Magic,age-of-wonders-shadow-magic,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:20:09.861Z,1.0
+2512,King's Bounty: Armored Princess,kings-bounty-armored-princess,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:54:26.158Z,1.0
+2517,Gemini Rue,gemini-rue,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:54:32.856Z,1.0
+2522,Ashes of the Singularity: Escalation,ashes-of-the-singularity-escalation,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:54:59.731Z,1.0
+2542,Roundguard,roundguard,7,1,0,,recently_scored_unrated,1,no,2026-04-30T17:47:50.731Z,1.0
+2543,Lunar: The Silver Star,lunar-the-silver-star,7,1,0,,recently_scored_unrated,1,no,2026-04-30T17:56:50.574Z,1.0
+2557,Grandia II Anniversary Edition,grandia-ii-anniversary-edition,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:41:33.997Z,1.0
+2566,A Tale in the Desert,tale-in-the-desert-a,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:41:48.422Z,1.0
+2568,Half Minute Hero: The Second Coming,half-minute-hero-the-second-coming,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:41:55.539Z,1.0
+2579,Weird Worlds: Return to Infinite Space,weird-worlds-return-to-infinite-space,7,1,0,,recently_scored_unrated,1,no,2026-04-30T19:13:08.666Z,1.0
+2586,The Metronomicon: Slay the Dance Floor,the-metronomicon,7,1,0,,recently_scored_unrated,1,no,2026-04-30T19:13:28.223Z,1.0
+2599,Avernum 2: Crystal Souls,avernum-2-crystal-souls,7,1,0,,recently_scored_unrated,1,no,2026-04-30T20:06:36.512Z,1.0
+2622,Lifeline,lifeline,7,1,0,,recently_scored_unrated,1,no,2026-05-01T00:19:06.683Z,1.0
+2628,Etrian Odyssey III: The Drowned City,etrian-odyssey-3-the-drowned-city,7,1,0,,recently_scored_unrated,1,no,2026-04-21T07:18:11.077Z,1.0
+2728,Ziggurat,ziggurat,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:20:53.342Z,1.0
+2737,Sorcerer King,sorcerer-king,7,1,0,,recently_scored_unrated,1,no,2026-04-21T17:13:06.603Z,1.0
+2762,Coromon,coromon,7,1,0,,recently_scored_unrated,1,no,2026-04-21T17:47:43.967Z,1.0
+2784,Sonic Chronicles: The Dark Brotherhood,sonic-chronicles-the-dark-brotherhood,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:39:01.971Z,1.0
+2798,Driftmoon,driftmoon,7,1,0,,recently_scored_unrated,1,no,2026-04-30T13:12:51.627Z,1.0
+2844,Medieval Dynasty,medieval-dynasty,7,1,0,,recently_scored_unrated,1,no,2026-04-21T19:05:54.054Z,1.0
+2846,Batora: Lost Haven,batora-lost-haven,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:17:56.567Z,1.0
+2878,Donkey Kong Jungle Beat,new-play-control-donkey-kong-jungle-beat,7,1,0,,recently_scored_unrated,1,no,2026-04-21T19:13:41.252Z,1.0
+2879,Rayman Mini,rayman-mini,7,1,0,,recently_scored_unrated,1,no,2026-04-21T19:14:06.907Z,1.0
+2882,Trine Enchanted Edition,trine-enchanted-edition,7,1,0,,recently_scored_unrated,1,no,2026-04-21T19:14:47.672Z,1.0
+2892,Splasher,splasher,7,1,0,,recently_scored_unrated,1,no,2026-04-21T19:18:42.782Z,1.0
+2900,Soul Bubbles,soul-bubbles,7,1,0,,recently_scored_unrated,1,no,2026-04-21T19:19:21.216Z,1.0
+2914,ClusterTruck,clustertruck,7,1,0,,recently_scored_unrated,1,no,2026-04-21T19:57:08.720Z,1.0
+2920,Pikuniku,pikuniku-2,7,1,0,,recently_scored_unrated,1,no,2026-05-01T03:16:17.707Z,1.0
+2931,Gateways,gateways,7,1,0,,recently_scored_unrated,1,no,2026-04-21T20:04:59.379Z,1.0
+2935,Rad Rodgers: World One,rad-rodgers-world-one,7,1,0,,recently_scored_unrated,1,no,2026-04-21T20:06:35.835Z,1.0
+2945,Earthworm Jim,earthworm-jim,7,1,0,,recently_scored_unrated,1,no,2026-04-21T20:08:37.821Z,1.0
+2955,Chronology,chronology,7,0,0,,recently_scored_unrated,1,no,2026-04-30T14:02:39.068Z,1.0
+2970,Ice Age 2: The Meltdown (GBA),ice-age-2-the-meltdown-gba,7,1,0,,recently_scored_unrated,1,no,2026-04-19T04:17:28.635Z,1.0
+2972,The Way,the-way,7,1,0,,recently_scored_unrated,1,no,2026-04-30T04:03:39.443Z,1.0
+2974,Sonic Heroes,sonic-heroes,7,1,0,,recently_scored_unrated,1,no,2026-04-21T20:17:38.694Z,1.0
+2980,102 Dalmatians: Puppies to the Rescue,102-dalmatians-puppies-to-the-rescue,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:52:44.598Z,1.0
+2985,JUJU,juju,7,1,0,,recently_scored_unrated,1,no,2026-04-21T20:20:53.384Z,1.0
+3030,The Adventures of Sam Carlisle: The Hunt for the Lost Treasure,the-adventures-of-sam-carlisle-the-hunt-for-the-2,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:23:35.590Z,1.0
+3034,Lunar Depot 38,lunar-depot-38,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:25:30.931Z,1.0
+3037,Mario 2Dyssey,mario-2dyssey,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:26:38.333Z,1.0
+3041,modbot,modbot,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:27:55.460Z,1.0
+3043,Mairo Maker [CANCELED],mairo-maker-canceled,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:34:34.084Z,1.0
+3044,Dungreed (Demo),dungreed-demo,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:34:58.835Z,1.0
+3045,Sakura no Gakkou,sakura-no-gakkou,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:35:16.004Z,1.0
+3059,Bossfight: Javier,bossfight-javier,7,1,0,,recently_scored_unrated,1,no,2026-04-15T21:58:29.928Z,1.0
+3061,Station-8,station-8,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:49:34.872Z,1.0
+3062,Cubes T.N.T.F,cubes-tntf,7,1,0,,recently_scored_unrated,1,no,2026-04-16T01:41:25.159Z,1.0
+3065,Space Shooters (Quaintman),space-shooters-quaintman,7,1,0,,recently_scored_unrated,1,no,2026-04-30T10:17:03.993Z,1.0
+3067,Wind Digger,wind-digger,7,1,0,,recently_scored_unrated,1,no,2026-04-29T21:32:12.645Z,1.0
+3075,Ninja Turdle - Coronavirus DLC,ninja-turdle-coronavirus-dlc,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:35:39.440Z,1.0
+3076,Hanging by a Copper Wire,hanging-by-a-copper-wire,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:35:53.302Z,1.0
+3077,The Shallow Knight,the-shallow-knight,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:36:04.149Z,1.0
+3078,Super Mario World Deluxe,super-mario-world-deluxe,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:36:26.089Z,1.0
+3080,Mayhem Madness,mayhem-madness,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:36:58.452Z,1.0
+3085,Rock Paper Scissors (mikesaladino),rock-paper-scissors-mikesaladino,7,1,0,,recently_scored_unrated,1,no,2026-04-30T10:08:51.374Z,1.0
+3087,Chibi Knight,chibi-knight,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:17:57.102Z,1.0
+3089,Misa Quest,misa-quest,7,1,0,,recently_scored_unrated,1,no,2026-04-30T10:11:35.348Z,1.0
+3095,Sci-Fi Robot Platformer,sci-fi-robot-platformer,7,1,0,,recently_scored_unrated,1,no,2026-04-30T14:42:50.578Z,1.0
+3098,LEX,lex,7,1,0,,recently_scored_unrated,1,no,2026-04-30T14:43:05.396Z,1.0
+3100,SnotMan,snotman,7,1,0,,recently_scored_unrated,1,no,2026-04-30T15:01:33.683Z,1.0
+3102,Fine Feathered Friends,fine-feathered-friends,7,1,0,,recently_scored_unrated,1,no,2026-04-30T15:01:32.542Z,1.0
+3105,Viking: Samurai Ninja,viking-samurai-ninja,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:19:50.977Z,1.0
+3109,Invisible Plattformer,invisible-plattformer,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:17:34.424Z,1.0
+3113,Soul (GameCoder Academy),soul-gamecoder-academy,7,1,0,,recently_scored_unrated,1,no,2026-05-01T00:14:42.111Z,1.0
+3114,Sakura Cell Warp or run,sakura-cell-warp-or-run,7,1,0,,recently_scored_unrated,1,no,2026-05-01T04:10:03.734Z,1.0
+3115,DIKTATURA !,diktatura,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:39:57.695Z,1.0
+3117,Will'o-wisp,willo-wisp,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:40:43.677Z,1.0
+3121,zomba,zomba,7,0,0,,recently_scored_unrated,1,no,2026-04-30T10:09:24.604Z,1.0
+3123,There is no time,there-is-no-time,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:45:51.878Z,1.0
+3124,DR. NINJO - Virus Killer,dr-ninjo-virus-killer,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:46:17.132Z,1.0
+3127,Goo,goo,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:47:11.998Z,1.0
+3129,Slimey Package,slimey-package,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:48:00.640Z,1.0
+3130,EliminateVirus,eliminatevirus,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:48:35.264Z,1.0
+3132,The Forest Thief,the-forest-thief,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:49:14.550Z,1.0
+3133,Flipside (HomeTeam GameDev),flipside-hometeam-gamedev,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:49:34.478Z,1.0
+3135,Kermit,kermit,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:50:22.966Z,1.0
+3136,DilloQuest,dilloquest,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:50:40.708Z,1.0
+3141,Dreamland (itch) (Nicholas.Papadoulakis),dreamland-itch-nicholaspapadoulakis,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:53:39.009Z,1.0
+3144,Plant Stranding,plant-stranding,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:54:40.588Z,1.0
+3149,Keep the Garden Alive,keep-the-garden-alive,7,1,0,,recently_scored_unrated,1,no,2026-04-21T18:05:28.209Z,1.0
+3154,Helium: Ludum Dare 46 Entry,helium-ludum-dare-46-entry,7,1,0,,recently_scored_unrated,1,no,2026-04-21T19:04:46.395Z,1.0
+3155,By Lantern's Light (Chez3),by-lanterns-light-chez3,7,1,0,,recently_scored_unrated,1,no,2026-04-21T19:09:32.190Z,1.0
+3159,The legend of the cheese craftmanship,the-legend-of-the-cheese-craftmanship,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:55:43.472Z,1.0
+3161,Steroid Squash,steroid-squash,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:56:08.074Z,1.0
+3162,Keep It Alive (payne325),keep-it-alive-payne325,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:56:23.028Z,1.0
+3163,IAPWAKAC,iapwakac,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:56:37.386Z,1.0
+3167,Blasty Boy,blasty-boy,7,1,0,,recently_scored_unrated,1,no,2026-04-21T22:03:23.665Z,1.0
+3174,Flag Game (seniorgameproject),flag-game-seniorgameproject,7,1,0,,recently_scored_unrated,1,no,2026-04-21T22:10:31.671Z,1.0
+3178,Petty Theft (Prototype),petty-theft-prototype,7,1,0,,recently_scored_unrated,1,no,2026-04-21T20:14:33.016Z,1.0
+3180,Magical Mirrors,magical-mirrors,7,1,0,,recently_scored_unrated,1,no,2026-04-21T21:10:29.346Z,1.0
+3183,Lost In A Mirror,lost-in-a-mirror,7,1,0,,recently_scored_unrated,1,no,2026-04-30T15:20:19.843Z,1.0
+3189,Lateral Inversion,lateral-inversion,7,1,0,,recently_scored_unrated,1,no,2026-04-21T22:12:10.803Z,1.0
+3190,Key Ninja,key-ninja,7,1,0,,recently_scored_unrated,1,no,2026-04-21T22:12:26.287Z,1.0
+3200,Sane,sane,7,1,0,,recently_scored_unrated,1,no,2026-04-18T14:57:39.341Z,1.0
+3201,frozenworld,frozenworld,7,0,0,,recently_scored_unrated,1,no,2026-04-30T17:02:52.912Z,1.0
+3202,Trabalho jogo -Mario Paper,trabalho-jogo-mario-paper,7,1,0,,recently_scored_unrated,1,no,2026-04-30T02:08:15.767Z,1.0
+3204,Kathy Defeats Misogyny,kathy-defeats-misogyny,7,1,0,,recently_scored_unrated,1,no,2026-04-21T11:16:34.304Z,1.0
+3209,Skrups The legend,skrups-the-legend,7,1,0,,recently_scored_unrated,1,no,2026-05-01T01:25:05.853Z,1.0
+3211,Confinement (JamesNippoc),confinement-jamesnippoc,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:42:22.546Z,1.0
+3213,DUNGEON (NojiGames),dungeon-nojigames,7,1,0,,recently_scored_unrated,1,no,2026-04-21T22:15:14.053Z,1.0
+3215,Avrora,avrora,7,1,0,,recently_scored_unrated,1,no,2026-04-21T22:15:49.416Z,1.0
+3217,Within Me,within-me,7,1,0,,recently_scored_unrated,1,no,2026-04-21T22:16:24.921Z,1.0
+3218,Puzzle Launch Demo,puzzle-launch-demo,7,1,0,,recently_scored_unrated,1,no,2026-04-21T22:16:41.207Z,1.0
+3219,Crystal Missile,crystal-missile,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:49:19.305Z,1.0
+3225,Candlelight Cowboy,candlelight-cowboy,7,1,0,,recently_scored_unrated,1,no,2026-04-21T14:17:01.994Z,1.0
+3226,Grelox,grelox,7,1,0,,recently_scored_unrated,1,no,2026-04-21T22:18:20.893Z,1.0
+3228,Orbotica,orbotica,7,1,0,,recently_scored_unrated,1,no,2026-04-21T22:18:56.856Z,1.0
+3236,Kero-Go!,kero-go,7,1,0,,recently_scored_unrated,1,no,2026-04-21T22:22:35.452Z,1.0
+3239,Soppa Ignario III - Early Access (Free To Play),soppa-ignario-iii-early-access-free-to-play,7,1,0,,recently_scored_unrated,1,no,2026-04-21T22:23:29.926Z,1.0
+3240,BRAVE WARRIOR,brave-warrior,7,1,0,,recently_scored_unrated,1,no,2026-04-21T22:23:44.792Z,1.0
+3241,Rush by Pineapple Software,rush-by-pineapple-software,7,1,0,,recently_scored_unrated,1,no,2026-04-21T22:24:00.952Z,1.0
+3244,Flee Runner,flee-runner,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:02:20.580Z,1.0
+3246,PIdentity Crisis,pidentity-crisis,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:03:31.282Z,1.0
+3247,Try Fitting In,try-fitting-in,7,0,0,,recently_scored_unrated,1,no,2026-05-01T00:07:49.491Z,1.0
+3248,Wreck Digger Demo,wreck-digger-demo,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:09:19.174Z,1.0
+3249,SPRINGBOT - Mars Attack!,springbot-mars-attack,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:09:33.986Z,1.0
+3251,Breathless Rush,breathless-rush,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:10:06.623Z,1.0
+3252,Barry Platypus,barry-platypus,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:10:26.040Z,1.0
+3253,Swords and Platforms (VicPitic),swords-and-platforms-vicpitic,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:10:39.961Z,1.0
+3257,Questcrawler,questcrawler,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:11:50.467Z,1.0
+3258,The Last Roll,the-last-roll,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:12:13.518Z,1.0
+3261,Infected Cube,infected-cube,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:13:43.812Z,1.0
+3265,Essence Shatter,essence-shatter,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:15:26.837Z,1.0
+3266,Pepperona (igrocs),pepperona-igrocs,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:15:49.004Z,1.0
+3268,Timothy and the Tower of Mu (PGMMV demo),timothy-and-the-tower-of-mu-pgmmv-demo,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:16:27.323Z,1.0
+3269,Hellcat Liv,hellcat-liv,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:16:42.398Z,1.0
+3271,A Ways Down,a-ways-down,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:17:18.633Z,1.0
+3272,Cuberat Adventure,cuberat-adventure,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:17:33.929Z,1.0
+3275,INSIDE YOU,inside-you,7,1,0,,recently_scored_unrated,1,no,2026-05-01T04:05:48.885Z,1.0
+3276,Trouble In the Tableau,trouble-in-the-tableau,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:12:46.185Z,1.0
+3277,Cheese Wars (Goldie Gamez),cheese-wars-goldie-gamez,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:13:10.521Z,1.0
+3278,Boss Riot (tutorial fight),boss-riot-tutorial-fight,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:49:34.430Z,1.0
+3287,Ewu The Game,ewu-the-game,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:44:53.403Z,1.0
+3288,A Platform Game.,a-platform-game,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:17:54.405Z,1.0
+3290,Horn Escape,horn-escape,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:18:33.292Z,1.0
+3291,Ides Of March,ides-of-march,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:18:55.549Z,1.0
+3295,Untitled Platformer,untitled-platformer-2,7,1,0,,recently_scored_unrated,1,no,2026-04-30T04:29:41.173Z,1.0
+3296,Cyber Trail,cyber-trail,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:50:02.931Z,1.0
+3297,The Marvelous Adventures of Dart,the-marvelous-adventures-of-dart,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:50:25.575Z,1.0
+3303,a Roguelike,a-roguelike,7,1,0,,recently_scored_unrated,1,no,2026-04-19T04:17:46.017Z,1.0
+3304,Leukocyte Virus Crusher for Android,leukocyte-virus-crusher-for-android,7,1,0,,recently_scored_unrated,1,no,2026-04-30T15:01:32.581Z,1.0
+3306,Super Basic Man,super-basic-man,7,1,0,,recently_scored_unrated,1,no,2026-05-01T02:04:43.391Z,1.0
+3307,JumperMan,jumperman,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:19:44.935Z,1.0
+3309,Świnki Trzy #ZostańWDomuRóbGry,swinki-trzy-zostanwdomurobgry,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:20:36.491Z,1.0
+3312,Proelium no Cutremari,proelium-no-cutremari,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:21:29.440Z,1.0
+3313,Odbudowa Auuu!,odbudowa-auuu,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:21:50.633Z,1.0
+3314,Kunai (itch) (DeadPieGamer),kunai-itch-deadpiegamer,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:22:07.435Z,1.0
+3315,Heroica,heroica,7,1,0,,recently_scored_unrated,1,no,2026-04-21T23:22:22.589Z,1.0
+3321,Mineformer,mineformer,7,1,0,,recently_scored_unrated,1,no,2026-04-30T16:18:57.866Z,1.0
+3327,DesRepair,desrepair,7,1,0,,recently_scored_unrated,1,no,2026-05-01T02:05:15.434Z,1.0
+3328,Invasión Insana (enzo_costilla),invasion-insana-enzo_costilla,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:02:37.644Z,1.0
+3329,Robo_recall-the platformer,robo_recall-the-platformer,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:02:55.504Z,1.0
+3331,Awakened from the Dark,awakened-from-the-dark,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:04:01.564Z,1.0
+3334,Castle in Darkness,castle-in-darkness,7,1,0,,recently_scored_unrated,1,no,2026-05-01T02:08:49.004Z,1.0
+3335,Gameplay Prototype,gameplay-prototype,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:05:11.822Z,1.0
+3342,The Curse Of Zigoris (itch),the-curse-of-zigoris-itch,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:05:56.334Z,1.0
+3345,Karot Fetus,karot-fetus,7,1,0,,recently_scored_unrated,1,no,2026-04-30T18:42:03.184Z,1.0
+3347,QUBE GAME,qube-game,7,1,0,,recently_scored_unrated,1,no,2026-04-20T20:02:04.683Z,1.0
+3352,Magus Rod - Alpha demo,magus-rod-alpha-demo,7,1,0,,recently_scored_unrated,1,no,2026-05-01T00:03:08.442Z,1.0
+3355,Keep the flame alive v1.2,keep-the-flame-alive-v12,7,1,0,,recently_scored_unrated,1,no,2026-05-01T00:15:35.613Z,1.0
+3356,Insense Time!,insense-time,7,1,0,,recently_scored_unrated,1,no,2026-04-21T07:03:28.268Z,1.0
+3361,Reach Future Sky,reach-future-sky,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:07:41.519Z,1.0
+3362,Lava Rising 2.0,lava-rising-20,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:07:56.893Z,1.0
+3364,Jump Joy (Beta),jump-joy-beta,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:08:27.674Z,1.0
+3366,Jump Zombie,jump-zombie,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:09:01.913Z,1.0
+3368,Curse of the Crescent Isle,curse-of-the-crescent-isle,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:09:40.376Z,1.0
+3369,UpdateSpiritofPharaoh,updatespiritofpharaoh,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:09:58.086Z,1.0
+3373,Hunting Adventure,hunting-adventure,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:15:49.010Z,1.0
+3376,It Alive,it-alive,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:16:04.878Z,1.0
+3378,CODE B12,code-b12,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:16:50.054Z,1.0
+3382,SworkKicker,sworkkicker,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:18:12.295Z,1.0
+3383,The Golden Knight,the-golden-knight,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:18:32.984Z,1.0
+3386,Magnet (ZPiDER),magnet-zpider,7,0,0,,recently_scored_unrated,1,no,2026-04-30T14:04:15.355Z,1.0
+3387,Pirabbit,pirabbit,7,1,0,,recently_scored_unrated,1,no,2026-04-30T14:04:40.152Z,1.0
+3390,Heart Kicker,heart-kicker,7,1,0,,recently_scored_unrated,1,no,2026-04-21T09:10:21.045Z,1.0
+3391,Heart String,heart-string,7,1,0,,recently_scored_unrated,1,no,2026-04-21T09:15:42.102Z,1.0
+3392,Postcard Ninja,postcard-ninja,7,1,0,,recently_scored_unrated,1,no,2026-04-30T17:55:49.764Z,1.0
+3395,Gluttony,gluttony,7,1,0,,recently_scored_unrated,1,no,2026-04-21T17:09:39.086Z,1.0
+3396,ALRO,alro,7,1,0,,recently_scored_unrated,1,no,2026-04-30T03:05:51.577Z,1.0
+3398,Me And My Bat,me-and-my-bat,7,1,0,,recently_scored_unrated,1,no,2026-04-30T03:06:24.409Z,1.0
+3399,Save Blobby,save-blobby,7,1,0,,recently_scored_unrated,1,no,2026-04-21T08:02:16.564Z,1.0
+3400,ROBOY (RiverGiantGames),roboy-rivergiantgames,7,1,0,,recently_scored_unrated,1,no,2026-04-30T03:37:21.532Z,1.0
+3401,Runner 2049,runner-2049,7,1,0,,recently_scored_unrated,1,no,2026-04-19T11:22:47.375Z,1.0
+3403,Blob.Ai,blobai,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:19:52.753Z,1.0
+3405,Keep Meat Alive,keep-meat-alive,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:20:26.281Z,1.0
+3407,Oblivious Olivia,oblivious-olivia,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:21:05.466Z,1.0
+3409,Bounty Journey,bounty-journey,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:21:45.574Z,1.0
+3411,TroubleShoot,troubleshoot,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:22:40.390Z,1.0
+3412,Duck Tails,duck-tails,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:22:58.172Z,1.0
+3413,The ninja box,the-ninja-box,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:23:21.162Z,1.0
+3414,Prometheus (Shapkofil),prometheus-shapkofil,7,1,0,,recently_scored_unrated,1,no,2026-04-22T00:23:37.893Z,1.0
+3416,Block Pusher (itch) (pixipit),block-pusher-itch-pixipit,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:02:19.486Z,1.0
+3417,Time is of the Essence,time-is-of-the-essence,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:02:45.281Z,1.0
+3419,Fire Keeper (DrinkingKvasir),fire-keeper-drinkingkvasir,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:03:28.744Z,1.0
+3421,Protect the little one,protect-the-little-one,7,1,0,,recently_scored_unrated,1,no,2026-05-01T00:12:53.854Z,1.0
+3422,Narps,narps,7,1,0,,recently_scored_unrated,1,no,2026-05-01T00:13:10.995Z,1.0
+3425,Satellite (itch) (armchairhalo435),satellite-itch-armchairhalo435,7,1,0,,recently_scored_unrated,1,no,2026-04-21T07:53:29.089Z,1.0
+3427,ALOP - A lot of players [Multiplayer ONLINE],alop-a-lot-of-players-multiplayer-online,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:03:49.415Z,1.0
+3429,Slinger Boy,slinger-boy,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:04:17.063Z,1.0
+3430,Virus attack (ElValle),virus-attack-elvalle,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:04:36.488Z,1.0
+3432,Bogu'Arena,boguarena,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:05:17.103Z,1.0
+3434,Headhunter (itch),headhunter-itch,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:05:49.205Z,1.0
+3437,Raea Roo Game,raea-roo-game,7,1,0,,recently_scored_unrated,1,no,2026-04-30T06:38:55.384Z,1.0
+3439,Shorty El's Adventure,shorty-els-adventure,7,1,0,,recently_scored_unrated,1,no,2026-04-30T09:46:29.225Z,1.0
+3442,Dodge! (NonSenseiii),dodge-nonsenseiii,7,1,0,,recently_scored_unrated,1,no,2026-04-21T08:20:25.665Z,1.0
+3444,Spirits (itch) (Schweini007),spirits-itch-schweini007,7,1,0,,recently_scored_unrated,1,no,2026-04-30T14:02:59.377Z,1.0
+3445,Temple Jump - Prepare to Fall Edition,temple-jump-prepare-to-fall-edition,7,1,0,,recently_scored_unrated,1,no,2026-04-21T08:23:16.075Z,1.0
+3446,Mountain Climbers,mountain-climbers,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:06:29.839Z,1.0
+3447,Coins are BAD,coins-are-bad,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:06:45.588Z,1.0
+3448,Unreal Runner,unreal-runner,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:07:05.227Z,1.0
+3450,DigiScape,digiscape,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:07:46.076Z,1.0
+3453,I Can't Jump,i-cant-jump,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:08:51.485Z,1.0
+3454,CAPE (BIGBOITREE),cape-bigboitree,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:09:13.136Z,1.0
+3459,Cookie's Treasure Hunt,cookies-treasure-hunt,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:11:15.334Z,1.0
+3460,Dont Fall! (Full Version),dont-fall-full-version,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:11:36.578Z,1.0
+3461,Alfred's Return,alfreds-return,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:11:48.223Z,1.0
+3474,MUL.MASH.TAB.BA.GAL.GAL,mulmashtabbagalgal,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:16:46.993Z,1.0
+3477,StarCraft: Remastered,starcraft-remastered,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:18:03.119Z,1.0
+3483,Master of Orion 2: Battle at Antares,master-of-orion-2-battle-at-antares,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:36:31.408Z,1.0
+3491,Civilization IV: Warlords,civilization-iv-warlords,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:40:20.985Z,1.0
+3500,Duskers,duskers,7,1,0,,recently_scored_unrated,1,no,2026-04-22T01:53:28.653Z,1.0
+3506,Anno 2070,anno-2070,7,1,0,,recently_scored_unrated,1,no,2026-04-22T02:04:03.893Z,1.0
+3511,Battle Realms,battle-realms,7,1,0,,recently_scored_unrated,1,no,2026-04-22T02:13:35.667Z,1.0
+3521,Duelyst,duelyst,7,1,0,,recently_scored_unrated,1,no,2026-04-22T02:16:32.893Z,1.0
+3526,Sins of a Solar Empire: Rebellion,sins-of-a-solar-empire-rebellion,7,1,0,,recently_scored_unrated,1,no,2026-04-22T02:19:00.691Z,1.0
+3532,Distant Worlds: Universe,distant-worlds-universe,7,1,0,,recently_scored_unrated,1,no,2026-04-22T02:25:03.633Z,1.0
+3539,Sid Meier's Civilization: Beyond Earth,sid-meiers-civilization-beyond-earth,7,1,0,,recently_scored_unrated,1,no,2026-04-22T02:27:59.446Z,1.0
+3557,Atlas Reactor,atlas-reactor,7,1,0,,recently_scored_unrated,1,no,2026-04-22T02:39:01.740Z,1.0
+3577,Europa Universalis: Rome - Gold Edition,europa-universalis-rome-gold-edition,7,1,0,,recently_scored_unrated,1,no,2026-04-22T02:45:53.946Z,1.0
+3582,Fractured Space,fractured-space,7,1,0,,recently_scored_unrated,1,no,2026-04-22T02:48:13.265Z,1.0
+3588,Go Home Dinosaurs!,go-home-dinosaurs,7,1,0,,recently_scored_unrated,1,no,2026-04-22T02:50:52.154Z,1.0
+3590,Revenge of the Titans,revenge-of-the-titans,7,1,0,,recently_scored_unrated,1,no,2026-04-22T02:51:44.650Z,1.0
+3593,Frozen Cortex,frozen-cortex,7,1,0,,recently_scored_unrated,1,no,2026-04-22T02:49:47.304Z,1.0
+3595,Midnight Protocol,midnight-protocol,7,1,0,,recently_scored_unrated,1,no,2026-04-22T02:53:15.118Z,1.0
+3604,Offworld Trading Company,offworld-trading-company,7,1,0,,recently_scored_unrated,1,no,2026-04-22T03:03:30.114Z,1.0
+3617,Bejeweled Twist,bejeweled-twist,7,1,0,,recently_scored_unrated,1,no,2026-04-22T03:07:56.089Z,1.0
+3618,Hitman GO,hitman-go,7,1,0,,recently_scored_unrated,1,no,2026-04-30T08:36:46.505Z,1.0
+3621,Forager,forager,7,1,0,,recently_scored_unrated,1,no,2026-04-22T03:08:42.393Z,1.0
+3641,Endless Space - Collection,endless-space-emperor-edition,7,1,0,,recently_scored_unrated,1,no,2026-04-22T03:15:21.275Z,1.0
+3647,RISK: Factions,risk-factions,7,1,0,,recently_scored_unrated,1,no,2026-04-22T03:17:51.719Z,1.0
+3659,The Colonists,the-colonists,7,1,0,,recently_scored_unrated,1,no,2026-04-22T04:04:02.311Z,1.0
+3660,Rock of Ages 2: Bigger & Boulder,rock-of-ages-2-bigger-boulder,7,1,0,,recently_scored_unrated,1,no,2026-04-22T04:04:22.827Z,1.0
+3662,Nexus - The Jupiter Incident,nexus-the-jupiter-incident,7,1,0,,recently_scored_unrated,1,no,2026-04-22T04:05:04.098Z,1.0
+3666,Cleopatra,cleopatra,7,1,0,,recently_scored_unrated,1,no,2026-04-22T04:06:13.978Z,1.0
+3669,Railway Empire,railway-empire,7,1,0,,recently_scored_unrated,1,no,2026-04-22T04:06:52.715Z,1.0
+3672,GoD Factory: Wingmen,god-factory-wingmen,7,1,0,,recently_scored_unrated,1,no,2026-04-22T04:08:23.393Z,1.0
+3673,Polaris Sector,polaris-sector,7,1,0,,recently_scored_unrated,1,no,2026-04-22T04:08:48.772Z,1.0
+3686,Greed Corp,greed-corp,7,1,0,,recently_scored_unrated,1,no,2026-04-22T04:14:09.589Z,1.0
+3699,Children of the Nile: Enhanced Edition,children-of-the-nile-enhanced-edition,7,1,0,,recently_scored_unrated,1,no,2026-04-22T04:21:13.884Z,1.0
+3701,Stronghold Kingdoms,stronghold-kingdoms,7,1,0,,recently_scored_unrated,1,no,2026-04-22T04:22:02.451Z,1.0
+3707,Project Hospital,project-hospital,7,1,0,,recently_scored_unrated,1,no,2026-04-22T04:24:03.838Z,1.0
+3712,Worms 4,worms-4,7,1,0,,recently_scored_unrated,1,no,2026-04-22T05:08:31.351Z,1.0
+3715,Kingdom: Classic,kingdom-classic,7,1,0,,recently_scored_unrated,1,no,2026-04-22T05:09:44.119Z,1.0
+3728,X3: Terran Conflict,x3-terran-conflict,7,1,0,,recently_scored_unrated,1,no,2026-04-22T05:13:48.992Z,1.0
+3734,Nebuchadnezzar,nebuchadnezzar,7,1,0,,recently_scored_unrated,1,no,2026-04-22T05:16:35.326Z,1.0
+3735,Port Royale 4,port-royale-4,7,1,0,,recently_scored_unrated,1,no,2026-04-22T05:16:55.147Z,1.0
+3742,Fieldrunners 2,fieldrunners-2,7,1,0,,recently_scored_unrated,1,no,2026-04-22T05:15:29.135Z,1.0
+3753,Worms Clan Wars,worms-clan-wars,7,1,0,,recently_scored_unrated,1,no,2026-04-22T05:21:03.411Z,1.0
+3755,MouseCraft,mousecraft,7,1,0,,recently_scored_unrated,1,no,2026-04-22T05:21:43.178Z,1.0
+3768,Massive Assault Network 2,massive-assault-network-2,7,1,0,,recently_scored_unrated,1,no,2026-04-22T06:04:45.726Z,1.0
+3769,Flotilla,flotilla,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:02:40.683Z,1.0
+3775,PixelJunk Monsters Ultimate,pixeljunk-monsters-hd,7,1,0,,recently_scored_unrated,1,no,2026-04-22T06:05:26.762Z,1.0
+3787,The Last Federation,the-last-federation,7,1,0,,recently_scored_unrated,1,no,2026-04-22T06:08:59.434Z,1.0
+3793,Call to Power II,call-to-power-ii,7,1,0,,recently_scored_unrated,1,no,2026-04-22T06:11:24.221Z,1.0
+3795,Anno 2205,anno-2205,7,1,0,,recently_scored_unrated,1,no,2026-04-22T06:12:05.088Z,1.0
+3815,Emergency: Fighters for Life,emergency-fighters-for-life,7,1,0,,recently_scored_unrated,1,no,2026-04-22T06:19:52.266Z,1.0
+3817,Crazy Machines 3,crazy-machines-3,7,1,0,,recently_scored_unrated,1,no,2026-04-22T06:21:40.073Z,1.0
+3820,Kingdoms and Castles,kingdoms-and-castles,7,1,0,,recently_scored_unrated,1,no,2026-04-22T06:58:10.712Z,1.0
+3822,Europa Universalis III: Divine Wind,europa-universalis-iii-divine-wind,7,1,0,,recently_scored_unrated,1,no,2026-04-22T07:03:06.626Z,1.0
+3823,Elven Legacy,elven-legacy,7,1,0,,recently_scored_unrated,1,no,2026-04-22T07:03:20.779Z,1.0
+3825,Bionic Dues,bionic-dues,7,1,0,,recently_scored_unrated,1,no,2026-04-22T07:04:25.181Z,1.0
+3827,The Banner of the Maid,the-banner-of-the-maid,7,1,0,,recently_scored_unrated,1,no,2026-04-22T07:05:01.494Z,1.0
+3829,Squids Odyssey,squids,7,1,0,,recently_scored_unrated,1,no,2026-04-22T07:05:39.266Z,1.0
+3835,StarDrive 2,stardrive-2,7,1,0,,recently_scored_unrated,1,no,2026-04-22T07:07:59.625Z,1.0
+3838,Bravada,bravada,7,1,0,,recently_scored_unrated,1,no,2026-04-22T06:20:52.407Z,1.0
+3840,Unspottable,unspottable,7,1,0,,recently_scored_unrated,1,no,2026-04-22T07:08:54.097Z,1.0
+3846,Fate of the World,fate-of-the-world,7,1,0,,recently_scored_unrated,1,no,2026-04-22T07:10:25.632Z,1.0
+3861,The Solitaire Conspiracy,the-solitaire-conspiracy,7,1,0,,recently_scored_unrated,1,no,2026-04-22T07:15:58.697Z,1.0
+3863,A Druid's Duel,a-druids-duel,7,1,0,,recently_scored_unrated,1,no,2026-04-22T07:16:36.391Z,1.0
+3883,Zeus Quest - The Rebirth of Earth,zeus-quest-the-rebirth-of-earth,7,1,0,,recently_scored_unrated,1,no,2026-04-22T08:05:39.858Z,1.0
+3884,Duels of the Planeswalkers Gold Deck Bundle,duels-of-the-planeswalkers-gold-deck-bundle,7,1,0,,recently_scored_unrated,1,no,2026-04-22T08:06:05.089Z,1.0
+3889,Train Valley,train-valley,7,1,0,,recently_scored_unrated,1,no,2026-04-22T08:08:09.551Z,1.0
+3891,Madden NFL 22,madden-nfl-22,7,1,0,,recently_scored_unrated,1,no,2026-04-30T10:25:19.113Z,1.0
+3902,Before We Leave,before-we-leave,7,1,0,,recently_scored_unrated,1,no,2026-04-22T08:11:18.306Z,1.0
+3907,Commander: Conquest of the Americas,commander-conquest-of-the-americas,7,1,0,,recently_scored_unrated,1,no,2026-04-22T08:12:42.106Z,1.0
+3913,Age of Empires II HD,age-of-empires-ii-hd,7,1,0,,recently_scored_unrated,1,no,2026-04-22T08:13:05.738Z,1.0
+3917,Spacecom,spacecom,7,1,0,,recently_scored_unrated,1,no,2026-04-22T08:14:18.997Z,1.0
+3931,Shad'O,shado,7,1,0,,recently_scored_unrated,1,no,2026-04-22T08:19:05.928Z,1.0
+3935,PixelJunk Nom Nom Galaxy,pixeljunk-nom-nom-galaxy,7,1,0,,recently_scored_unrated,1,no,2026-04-22T08:41:31.731Z,1.0
+3936,Elven Legacy: Ranger,elven-legacy-ranger,7,1,0,,recently_scored_unrated,1,no,2026-04-22T08:41:56.548Z,1.0
+3940,Cubemen 2,cubemen-2,7,1,0,,recently_scored_unrated,1,no,2026-04-22T08:44:21.345Z,1.0
+3943,Scribblenauts Unmasked: A DC Comics Adventure,scribblenauts-unmasked-a-dc-comics-adventure,7,1,0,,recently_scored_unrated,1,no,2026-04-22T09:03:52.222Z,1.0
+3957,Weedcraft Inc,weedcraft-inc,7,1,0,,recently_scored_unrated,1,no,2026-04-22T09:10:35.198Z,1.0
+3958,X: Beyond the Frontier,x-beyond-the-frontier,7,1,0,,recently_scored_unrated,1,no,2026-04-22T09:11:22.611Z,1.0
+3964,Oil Rush,oil-rush,7,1,0,,recently_scored_unrated,1,no,2026-04-22T09:13:56.299Z,1.0
+3969,Tony Hawk's Pro Skater 3,tony-hawks-pro-skater-3,7,1,0,,recently_scored_unrated,1,no,2026-04-30T12:26:45.452Z,1.0
+3978,NBA 2K17,nba-2k17,7,1,0,,recently_scored_unrated,1,no,2026-04-30T10:31:38.068Z,1.0
+3989,F1 2019,f1-2019,7,1,0,,recently_scored_unrated,1,no,2026-04-22T09:41:56.073Z,1.0
+3990,Grand Prix 3,grand-prix-3,7,1,0,,recently_scored_unrated,1,no,2026-04-30T05:52:43.637Z,1.0
+3993,DiRT Rally,dirt-rally,7,1,0,,recently_scored_unrated,1,no,2026-04-22T09:44:06.337Z,1.0
+4003,Assetto Corsa,assetto-corsa,7,1,0,,recently_scored_unrated,1,no,2026-04-22T10:04:29.733Z,1.0
+4012,FIFA 11,fifa-11,7,1,0,,recently_scored_unrated,1,no,2026-04-22T10:13:50.450Z,1.0
+4016,GT Legends,gt-legends,7,1,0,,recently_scored_unrated,1,no,2026-04-22T10:15:19.435Z,1.0
+4018,Madden NFL 2001,madden-nfl-2001,7,1,0,,recently_scored_unrated,1,no,2026-04-22T10:13:31.905Z,1.0
+4049,Lonely Mountains: Downhill,lonely-mountains-downhill,7,1,0,,recently_scored_unrated,1,no,2026-04-22T10:26:07.219Z,1.0
+4053,NHL 20,nhl-20,7,1,0,,recently_scored_unrated,1,no,2026-04-22T11:03:31.584Z,1.0
+4055,AaAaAA!!! - A Reckless Disregard for Gravity,aaaaaa-a-reckless-disregard-for-gravity,7,1,0,,recently_scored_unrated,1,no,2026-04-22T11:04:14.549Z,1.0
+4060,MLB 15: The Show,mlb-15-the-show,7,1,0,,recently_scored_unrated,1,no,2026-04-22T11:06:44.157Z,1.0
+4066,Bowl Bound College Football,bowl-bound-college-football,7,1,0,,recently_scored_unrated,1,no,2026-04-22T11:08:35.368Z,1.0
+4091,GRID Autosport,grid-autosport,7,1,0,,recently_scored_unrated,1,no,2026-04-22T11:20:00.097Z,1.0
+4096,FIFA 13,fifa-13,7,1,0,,recently_scored_unrated,1,no,2026-04-30T10:25:25.469Z,1.0
+4101,art of rally,art-of-rally,7,1,0,,recently_scored_unrated,1,no,2026-04-22T12:03:31.297Z,1.0
+4105,Golf Story,golf-story,7,1,0,,recently_scored_unrated,1,no,2026-04-22T12:04:55.770Z,1.0
+4113,Wii Sports,wii-sports,7,1,0,,recently_scored_unrated,1,no,2026-04-30T04:04:09.019Z,1.0
+4118,FIFA Street (2012),fifa-street-2012,7,1,0,,recently_scored_unrated,1,no,2026-04-22T12:10:27.882Z,1.0
+4126,MotoGP 14,motogp-14,7,1,0,,recently_scored_unrated,1,no,2026-04-22T12:13:05.135Z,1.0
+4128,EA SPORTS NHL 18,ea-sports-nhl-18,7,1,0,,recently_scored_unrated,1,no,2026-04-22T12:13:52.994Z,1.0
+4133,Pacer,formula-fusion,7,1,0,,recently_scored_unrated,1,no,2026-04-22T11:19:07.494Z,1.0
+4141,Richard Burns Rally,richard-burns-rally,7,1,0,,recently_scored_unrated,1,no,2026-04-22T12:16:20.580Z,1.0
+4158,OddBallers,oddballers,7,1,0,,recently_scored_unrated,1,no,2026-04-22T12:53:43.335Z,1.0
+4159,Valentino Rossi The Game,valentino-rossi-the-game,7,1,0,,recently_scored_unrated,1,no,2026-04-22T12:54:43.571Z,1.0
+4161,Brian Lara International Cricket 2007,brian-lara-international-cricket-2007,7,1,0,,recently_scored_unrated,1,no,2026-04-22T09:04:42.573Z,1.0
+4162,Poker Night at the Inventory,poker-night-at-the-inventory,7,1,0,,recently_scored_unrated,1,no,2026-04-22T12:55:20.753Z,1.0
+4224,Mario Kart: Double Dash,mario-kart-double-dash,7,0,0,,recently_scored_unrated,1,no,2026-04-30T15:23:39.537Z,1.0
+4235,Umurangi Generation,umurangi-generation,7,1,0,,recently_scored_unrated,1,no,2026-04-30T20:30:35.240Z,1.0
+4240,Starbound,starbound,7,1,0,,recently_scored_unrated,1,no,2026-04-30T20:30:35.286Z,1.0
+4245,Rat On A Skateboard,rat-on-a-skateboard,7,1,0,,recently_scored_unrated,1,no,2026-04-29T21:15:01.591Z,1.0
+4281,Shovel Knight: Plague of Shadows,shovel-knight-plague-of-shadows,7,1,0,,recently_scored_unrated,1,no,2026-05-01T02:12:05.084Z,1.0
+4295,Asphalt 5,asphalt-5,7,1,0,,recently_scored_unrated,1,no,2026-04-28T22:13:14.075Z,1.0
+4318,Robocraft,robocraft,7,1,0,,recently_scored_unrated,1,no,2026-04-30T20:31:41.997Z,1.0
+4321,Clicker Heroes,clicker-heroes,7,1,0,,recently_scored_unrated,1,no,2026-04-30T20:31:50.679Z,1.0
+4334,Octodad: Dadliest Catch,octodad-dadliest-catch,7,1,0,,recently_scored_unrated,1,no,2026-04-30T21:05:22.861Z,1.0
+4342,LEGO DC Super-Villains,lego-dc-super-villains,7,1,0,,recently_scored_unrated,1,no,2026-04-30T21:06:40.118Z,1.0
+4349,Edna & Harvey: The Breakout,edna-harvey-the-breakout,7,1,0,,recently_scored_unrated,1,no,2026-04-30T21:07:17.697Z,1.0
+4351,Sparkle 2 Evo,sparkle-2-evo-2,7,1,0,,recently_scored_unrated,1,no,2026-04-29T04:14:43.971Z,1.0
+4363,PAC-MAN CHAMPIONSHIP EDITION 2,pac-man-championship-edition-2,7,1,0,,recently_scored_unrated,1,no,2026-04-29T07:04:32.350Z,1.0
+4369,DiRT 5,dirt-5,7,1,0,,recently_scored_unrated,1,no,2026-04-29T07:23:45.477Z,1.0
+4374,KAO the Kangaroo: Round 2,kao-the-kangaroo-round-2,7,1,0,,recently_scored_unrated,1,no,2026-04-30T21:12:59.679Z,1.0
+4381,Fortune Seller,fortune-seller,7,1,0,,recently_scored_unrated,1,no,2026-04-30T21:14:10.516Z,1.0
+4382,Cursed Words: The Word Game That Isn't,cursed-words-the-word-game-that-isnt,7,0,0,,recently_scored_unrated,1,no,2026-04-30T21:14:26.647Z,1.0
+4383,Darwin's Paradox!,darwins-paradox-2,7,1,0,,recently_scored_unrated,1,no,2026-04-29T09:03:01.736Z,1.0
+4387,Shifting To The Backrooms,shifting-to-the-backrooms,7,1,0,,recently_scored_unrated,1,no,2026-04-30T21:14:42.055Z,1.0
+4390,Wireworks,wireworks,7,1,0,,recently_scored_unrated,1,no,2026-04-29T21:59:37.011Z,1.0
+4392,planet of lana 2 children of the leaf,planet-of-lana-2-children-of-the-leaf,7,1,0,,recently_scored_unrated,1,no,2026-04-29T22:00:17.264Z,1.0
+4394,CiniCross,cinicross,7,1,0,,recently_scored_unrated,1,no,2026-04-29T09:06:30.991Z,1.0
+4397,D1AL-ogue,d1al-ogue,7,1,0,,recently_scored_unrated,1,no,2026-04-29T21:59:53.949Z,1.0
+4399,Noosphere (2025),noosphere-2025,7,1,0,,recently_scored_unrated,1,no,2026-04-29T22:00:35.245Z,1.0
+4403,The Sandbox 2,sandbox-2,7,1,0,,recently_scored_unrated,1,no,2026-04-29T10:02:59.675Z,1.0
+4410,The Spring Project,the-spring-project,7,0,0,,recently_scored_unrated,1,no,2026-04-30T21:10:11.342Z,1.0
+4414,Heroes of Might & Magic: Olden Era,heroes-of-might-magic-olden-era,7,1,0,,recently_scored_unrated,1,no,2026-04-30T21:13:37.887Z,1.0
+4418,All Will Fall,all-will-fall,7,1,0,,recently_scored_unrated,1,no,2026-04-30T21:29:18.502Z,1.0
+4425,Doomstacker,doomstacker,7,1,0,,recently_scored_unrated,1,no,2026-04-29T22:01:47.606Z,1.0
+4427,Dosa Divas,dosa-divas,7,1,0,,recently_scored_unrated,1,no,2026-04-29T22:02:07.225Z,1.0
+4433,Epic Party Quest,epic-party-quest,7,1,0,,recently_scored_unrated,1,no,2026-05-01T04:06:01.888Z,1.0
+4450,My Aunt is a Witch,my-aunt-is-a-witch,7,1,0,,recently_scored_unrated,1,no,2026-04-30T11:24:06.535Z,1.0
+4462,Plague of Athens VR,plague-of-athens-vr,7,1,0,,recently_scored_unrated,1,no,2026-04-30T21:29:41.858Z,1.0
+4464,Aviators (2024),aviators-2024,7,1,0,,recently_scored_unrated,1,no,2026-04-29T14:36:39.018Z,1.0
+4472,Amanda the Adventurer,amanda-the-adventurer,7,1,0,,recently_scored_unrated,1,no,2026-04-29T22:04:52.913Z,1.0
+4475,Group 4 Vision,group-4-vision,7,1,0,,recently_scored_unrated,1,no,2026-04-29T22:04:27.803Z,1.0
+4479,The Next Penelope,the-next-penelope,7,1,0,,recently_scored_unrated,1,no,2026-04-30T21:29:48.348Z,1.0
+4516,Etrian Odyssey Nexus,etrian-odyssey-nexus,7,1,0,,recently_scored_unrated,1,no,2026-04-30T22:00:17.579Z,1.0
+4521,Fallen Enchantress: Legendary Heroes,fallen-enchantress-legendary-heroes,7,1,0,,recently_scored_unrated,1,no,2026-04-30T22:00:24.806Z,1.0
+4526,Card Hunter,card-hunter,7,1,0,,recently_scored_unrated,1,no,2026-04-30T22:00:24.709Z,1.0
+4535,F1 Championship Season 2000,f1-championship-season-2000,7,1,0,,recently_scored_unrated,1,no,2026-04-29T22:16:53.801Z,1.0
+4536,Joggernauts,joggernauts,7,1,0,,recently_scored_unrated,1,no,2026-04-29T22:17:17.523Z,1.0
+4538,Inazuma Eleven 3: Team Ogre Attacks!,inazuma-eleven-3-team-ogre-attacks,7,1,0,,recently_scored_unrated,1,no,2026-04-29T22:17:40.770Z,1.0
+4555,Out There: Omega Edition,out-there-edition,7,1,0,,recently_scored_unrated,1,no,2026-04-29T20:04:42.762Z,1.0
+4595,Kena: Scars of Kosmora,kena-scars-of-kosmora,7,1,0,,recently_scored_unrated,1,no,2026-04-30T21:29:04.641Z,1.0
+4599,The Adventures of Elliot: The Millennium Tales,the-adventures-of-elliot-the-millenium-tales,7,1,0,,recently_scored_unrated,1,no,2026-04-30T21:29:09.840Z,1.0
+4613,Ever Oasis,ever-oasis,7,1,0,,recently_scored_unrated,1,no,2026-04-30T22:00:52.957Z,1.0
+4623,Solasta: Crown of the Magister,solasta-crown-of-the-magister,7,1,0,,recently_scored_unrated,1,no,2026-04-30T22:01:08.321Z,1.0
+4625,Reigns,reigns,7,1,0,,recently_scored_unrated,1,no,2026-04-30T22:01:08.137Z,1.0
+4628,Shining Soul II,shining-soul-ii,7,1,0,,recently_scored_unrated,1,no,2026-04-30T22:01:14.702Z,1.0
+4632,The Alliance Alive HD Remastered,the-alliance-alive-hd-remastered,7,1,0,,recently_scored_unrated,1,no,2026-04-30T22:01:20.971Z,1.0
+4634,Space Pirates and Zombies,space-pirates-and-zombies,7,1,0,,recently_scored_unrated,1,no,2026-04-30T22:01:08.133Z,1.0
+4741,"Cube Jumper (Yodan50, [SG] Nick)",cube-jumper-yodan50-sg-nick,7,0,0,,recently_scored_unrated,1,no,2026-04-30T20:06:02.029Z,1.0
+4745,Obscuro,obscuro,7,1,0,,recently_scored_unrated,1,no,2026-04-30T20:07:09.850Z,1.0
+4747,OnOff (trkz_design),onoff-trkz_design,7,1,0,,recently_scored_unrated,1,no,2026-04-30T20:07:40.679Z,1.0
+4750,Untitled Game (rookjohnson1),untitled-game-rookjohnson1,7,1,0,,recently_scored_unrated,1,no,2026-04-30T20:08:34.385Z,1.0
+4788,Snowflake's Chance (itch),snowflakes-chance-itch,7,1,0,,recently_scored_unrated,1,no,2026-04-30T23:22:15.636Z,1.0
+4789,Between Two Worlds (Ghazia),between-two-worlds-ghazia,7,1,0,,recently_scored_unrated,1,no,2026-04-30T23:22:21.673Z,1.0
+4792,Launch Codes (mark.nixon),launch-codes-marknixon,7,1,0,,recently_scored_unrated,1,no,2026-04-30T23:22:21.612Z,1.0
+4800,Crash or live,crash-or-live,7,1,0,,recently_scored_unrated,1,no,2026-04-30T23:22:51.747Z,1.0
+4805,Slamming Slimes,slamming-slimes,7,1,0,,recently_scored_unrated,1,no,2026-04-30T23:22:58.048Z,1.0

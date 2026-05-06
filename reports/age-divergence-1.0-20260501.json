@@ -1,0 +1,784 @@
+{
+  "methodologyVersion": "1.0",
+  "generatedAt": "2026-05-01T06:54:42.411Z",
+  "summary": {
+    "totalGames": 3488,
+    "dualRated": 12,
+    "singleRated": 2110,
+    "unrated": 1366,
+    "aligned": 1267,
+    "lumikinStricter": 257,
+    "lumikinPermissive": 598,
+    "mixed": 0
+  },
+  "topDivergences": [
+    {
+      "gameId": 938,
+      "name": "Dragon City",
+      "slug": "dragon-city",
+      "lumikinAge": 17,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 11,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 11,
+      "drivers": {
+        "r41Score": 3,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 1438,
+      "name": "Aztez",
+      "slug": "aztez",
+      "lumikinAge": 17,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 11,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 11,
+      "drivers": {
+        "r41Score": 3,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 2682,
+      "name": "Remnant: From the Ashes",
+      "slug": "remnant-from-the-ashes",
+      "lumikinAge": 17,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 11,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 11,
+      "drivers": {
+        "r41Score": 3,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 4275,
+      "name": "Final Fight",
+      "slug": "final-fight",
+      "lumikinAge": 17,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 11,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 11,
+      "drivers": {
+        "r41Score": 3,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 112,
+      "name": "The Legend of Zelda: Ocarina of Time",
+      "slug": "the-legend-of-zelda-ocarina-of-time",
+      "lumikinAge": 13,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 7,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 7,
+      "drivers": {
+        "r41Score": 2,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 377,
+      "name": "Fire Emblem: The Blazing Blade",
+      "slug": "fire-emblem",
+      "lumikinAge": 13,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 7,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 7,
+      "drivers": {
+        "r41Score": 2,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 898,
+      "name": "War Robots",
+      "slug": "war-robots",
+      "lumikinAge": 17,
+      "esrbAge": 10,
+      "pegiAge": null,
+      "deltaEsrb": 7,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 7,
+      "drivers": {
+        "r41Score": 3,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 986,
+      "name": "Tunic",
+      "slug": "tunic",
+      "lumikinAge": 13,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 7,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 7,
+      "drivers": {
+        "r41Score": 2,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 1009,
+      "name": "Burnout Revenge",
+      "slug": "burnout-revenge",
+      "lumikinAge": 17,
+      "esrbAge": 10,
+      "pegiAge": null,
+      "deltaEsrb": 7,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 7,
+      "drivers": {
+        "r41Score": 3,
+        "r42Score": 0,
+        "modifiers": [
+          "trivialized",
+          "defenceless_target"
+        ]
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 1012,
+      "name": "Einhander",
+      "slug": "einhander",
+      "lumikinAge": 13,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 7,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 7,
+      "drivers": {
+        "r41Score": 2,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 1160,
+      "name": "Valkyria Chronicles",
+      "slug": "valkyria-chronicles",
+      "lumikinAge": 13,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 7,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 7,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 1225,
+      "name": "Star of Providence",
+      "slug": "monolith",
+      "lumikinAge": 13,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 7,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 7,
+      "drivers": {
+        "r41Score": 2,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 1487,
+      "name": "Thunder Force IV",
+      "slug": "thunder-force-iv",
+      "lumikinAge": 13,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 7,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 7,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 2729,
+      "name": "Dragon Ball Z: The Legacy of Goku II",
+      "slug": "dragon-ball-z-the-legacy-of-goku-ii",
+      "lumikinAge": 13,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 7,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 7,
+      "drivers": {
+        "r41Score": 2,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 2959,
+      "name": "Strider 2 (1999)",
+      "slug": "strider-2-1999",
+      "lumikinAge": 13,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 7,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 7,
+      "drivers": {
+        "r41Score": 2,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 3747,
+      "name": "World War II Online",
+      "slug": "world-war-ii-online",
+      "lumikinAge": 13,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 7,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 7,
+      "drivers": {
+        "r41Score": 2,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 3857,
+      "name": "Anomaly Defenders",
+      "slug": "anomaly-defenders",
+      "lumikinAge": 13,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 7,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 7,
+      "drivers": {
+        "r41Score": 2,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 4576,
+      "name": "G Darius (1998)",
+      "slug": "g-darius-1998",
+      "lumikinAge": 13,
+      "esrbAge": 6,
+      "pegiAge": null,
+      "deltaEsrb": 7,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 7,
+      "drivers": {
+        "r41Score": 2,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 503,
+      "name": "ROBLOX",
+      "slug": "roblox",
+      "lumikinAge": 13,
+      "esrbAge": 10,
+      "pegiAge": 7,
+      "deltaEsrb": 3,
+      "deltaPegi": 6,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 6,
+      "drivers": {
+        "r41Score": 2,
+        "r42Score": 1,
+        "modifiers": []
+      },
+      "ratingCoverage": "dual_rated",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 508,
+      "name": "Among Us",
+      "slug": "among-us",
+      "lumikinAge": 13,
+      "esrbAge": 10,
+      "pegiAge": 7,
+      "deltaEsrb": 3,
+      "deltaPegi": 6,
+      "divergenceClass": "lumikin_stricter",
+      "magnitude": 6,
+      "drivers": {
+        "r41Score": 2,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "dual_rated",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 1610,
+      "name": "Stories Untold",
+      "slug": "stories-untold",
+      "lumikinAge": 7,
+      "esrbAge": 17,
+      "pegiAge": null,
+      "deltaEsrb": -10,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 10,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 1724,
+      "name": "Tacoma",
+      "slug": "tacoma",
+      "lumikinAge": 7,
+      "esrbAge": 17,
+      "pegiAge": null,
+      "deltaEsrb": -10,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 10,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 1,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 1882,
+      "name": "Everybody's Gone to the Rapture",
+      "slug": "everybodys-gone-to-the-rapture",
+      "lumikinAge": 7,
+      "esrbAge": 17,
+      "pegiAge": null,
+      "deltaEsrb": -10,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 10,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 1889,
+      "name": "Tell Me Why",
+      "slug": "tell-me-why",
+      "lumikinAge": 7,
+      "esrbAge": 17,
+      "pegiAge": null,
+      "deltaEsrb": -10,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 10,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 1995,
+      "name": "Relicta",
+      "slug": "relicta",
+      "lumikinAge": 7,
+      "esrbAge": 17,
+      "pegiAge": null,
+      "deltaEsrb": -10,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 10,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 1999,
+      "name": "Distraint: Deluxe Edition",
+      "slug": "distraint-deluxe-edition",
+      "lumikinAge": 7,
+      "esrbAge": 17,
+      "pegiAge": null,
+      "deltaEsrb": -10,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 10,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 2508,
+      "name": "Gnosia",
+      "slug": "gnosia",
+      "lumikinAge": 7,
+      "esrbAge": 17,
+      "pegiAge": null,
+      "deltaEsrb": -10,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 10,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 4130,
+      "name": "Poker Night 2",
+      "slug": "poker-night-2",
+      "lumikinAge": 7,
+      "esrbAge": 17,
+      "pegiAge": null,
+      "deltaEsrb": -10,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 10,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 4506,
+      "name": "Phoenix Wright: Ace Attorney - Dual Destinies",
+      "slug": "ace-attorney-dual-destinies",
+      "lumikinAge": 7,
+      "esrbAge": 17,
+      "pegiAge": null,
+      "deltaEsrb": -10,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 10,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 279,
+      "name": "The Longest Journey",
+      "slug": "the-longest-journey",
+      "lumikinAge": 9,
+      "esrbAge": 17,
+      "pegiAge": null,
+      "deltaEsrb": -8,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 8,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 1,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 1531,
+      "name": "STEINS;GATE ELITE",
+      "slug": "steinsgate-elite",
+      "lumikinAge": 9,
+      "esrbAge": 17,
+      "pegiAge": null,
+      "deltaEsrb": -8,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 8,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 1,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 1906,
+      "name": "Roundabout",
+      "slug": "roundabout",
+      "lumikinAge": 9,
+      "esrbAge": 17,
+      "pegiAge": null,
+      "deltaEsrb": -8,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 8,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 1,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 40,
+      "name": "What Remains of Edith Finch",
+      "slug": "what-remains-of-edith-finch",
+      "lumikinAge": 7,
+      "esrbAge": 13,
+      "pegiAge": null,
+      "deltaEsrb": -6,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 6,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 107,
+      "name": "Grim Fandango Remastered",
+      "slug": "grim-fandango-remastered",
+      "lumikinAge": 7,
+      "esrbAge": 13,
+      "pegiAge": null,
+      "deltaEsrb": -6,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 6,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 140,
+      "name": "Night in the Woods",
+      "slug": "night-in-the-woods",
+      "lumikinAge": 7,
+      "esrbAge": 13,
+      "pegiAge": null,
+      "deltaEsrb": -6,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 6,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 149,
+      "name": "Hearthstone",
+      "slug": "hearthstone",
+      "lumikinAge": 7,
+      "esrbAge": 13,
+      "pegiAge": null,
+      "deltaEsrb": -6,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 6,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 206,
+      "name": "DRAGON QUEST XI: Echoes of an Elusive Age",
+      "slug": "dragon-quest-xi",
+      "lumikinAge": 7,
+      "esrbAge": 13,
+      "pegiAge": null,
+      "deltaEsrb": -6,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 6,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 246,
+      "name": "StarCraft II: Wings of Liberty",
+      "slug": "starcraft-ii-wings-of-liberty",
+      "lumikinAge": 7,
+      "esrbAge": 13,
+      "pegiAge": null,
+      "deltaEsrb": -6,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 6,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 269,
+      "name": "Thimbleweed Park",
+      "slug": "thimbleweed-park",
+      "lumikinAge": 7,
+      "esrbAge": 13,
+      "pegiAge": null,
+      "deltaEsrb": -6,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 6,
+      "drivers": {
+        "r41Score": 2,
+        "r42Score": 1,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    },
+    {
+      "gameId": 285,
+      "name": "The Silent Age",
+      "slug": "the-silent-age",
+      "lumikinAge": 7,
+      "esrbAge": 13,
+      "pegiAge": null,
+      "deltaEsrb": -6,
+      "deltaPegi": null,
+      "divergenceClass": "lumikin_permissive",
+      "magnitude": 6,
+      "drivers": {
+        "r41Score": 1,
+        "r42Score": 0,
+        "modifiers": []
+      },
+      "ratingCoverage": "single_rated_esrb",
+      "methodologyVersion": "1.0"
+    }
+  ],
+  "byContentType": {
+    "violenceDriven": 2060,
+    "sexualDriven": 51,
+    "modifierDriven": 79
+  }
+}

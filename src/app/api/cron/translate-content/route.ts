@@ -17,10 +17,10 @@ const LANGUAGE_NAMES: Record<Locale, string> = {
   es: 'Spanish (Latin American)',
 }
 
-// 60 games in batches of 5 × 4 parallel locale calls × ~5s each ≈ 60s — well inside the 300s wall.
-const MAX_GAMES_PER_RUN = 60
-const BATCH_SIZE        = 5
-const BUDGET_MS         = 220_000
+// 150 games in batches of 15 × 1 multi-locale call (~8s) ≈ 80s — well inside the 300s wall.
+const MAX_GAMES_PER_RUN = 150
+const BATCH_SIZE        = 15
+const BUDGET_MS         = 260_000
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -35,23 +35,26 @@ type TranslatableContent = {
 
 type TranslationResult = TranslatableContent
 
-// ─── Bedrock translator ───────────────────────────────────────────────────────
+// ─── Translator — all missing locales in one Gemini call ─────────────────────
 
-async function translateToLocale(
+async function translateToLocales(
   content: TranslatableContent,
-  locale: Locale,
-  attempt = 0
-): Promise<TranslationResult | null> {
+  locales: Locale[],
+): Promise<Partial<Record<Locale, TranslationResult>>> {
   const toTranslate: Partial<TranslatableContent> = {}
   for (const [k, v] of Object.entries(content)) {
     if (v && v.trim()) toTranslate[k as keyof TranslatableContent] = v
   }
-  if (Object.keys(toTranslate).length === 0) return null
+  if (Object.keys(toTranslate).length === 0) return {}
 
-  const prompt = `Translate the following game review content from English to ${LANGUAGE_NAMES[locale]}.
+  const localeList = locales.map(l => LANGUAGE_NAMES[l]).join(', ')
+  const localeKeys = locales.map(l => `"${l}"`).join(', ')
+
+  const prompt = `Translate the following game review content from English into ${localeList}.
 
 Rules:
-- Return ONLY a valid JSON object with the same keys as the input
+- Return ONLY a valid JSON object with locale codes as top-level keys: ${localeKeys}
+- Each value is an object with the same keys as the input
 - Keep the parent-friendly, informative tone
 - Do NOT translate game titles, character names, brand names, or developer/publisher names — keep those exactly as-is
 - Do not add explanations or markdown — just the JSON object
@@ -60,25 +63,31 @@ Input:
 ${JSON.stringify(toTranslate, null, 2)}`
 
   try {
-    const text      = await callGeminiText(prompt)
+    const text = await callGeminiText(prompt)
     const jsonMatch = text.match(/\{[\s\S]*\}/)
     if (!jsonMatch) {
-      console.error(`[translate] No JSON in response for ${locale}:`, text.slice(0, 200))
-      return null
+      console.error('[translate] No JSON in response:', text.slice(0, 200))
+      return {}
     }
 
-    const parsed = JSON.parse(jsonMatch[0]) as Partial<TranslationResult>
-    return {
-      executiveSummary:  parsed.executiveSummary  ?? null,
-      benefitsNarrative: parsed.benefitsNarrative ?? null,
-      risksNarrative:    parsed.risksNarrative    ?? null,
-      parentTip:         parsed.parentTip         ?? null,
-      parentTipBenefits: parsed.parentTipBenefits ?? null,
-      bechdelNotes:      parsed.bechdelNotes      ?? null,
+    const parsed = JSON.parse(jsonMatch[0]) as Partial<Record<Locale, Partial<TranslationResult>>>
+    const out: Partial<Record<Locale, TranslationResult>> = {}
+    for (const locale of locales) {
+      const r = parsed[locale]
+      if (!r) continue
+      out[locale] = {
+        executiveSummary:  r.executiveSummary  ?? null,
+        benefitsNarrative: r.benefitsNarrative ?? null,
+        risksNarrative:    r.risksNarrative    ?? null,
+        parentTip:         r.parentTip         ?? null,
+        parentTipBenefits: r.parentTipBenefits ?? null,
+        bechdelNotes:      r.bechdelNotes      ?? null,
+      }
     }
+    return out
   } catch (err) {
-    console.error(`[translate] Error for locale ${locale}:`, err)
-    return null
+    console.error('[translate] Error:', err)
+    return {}
   }
 }
 
@@ -101,8 +110,6 @@ export async function GET(req: Request) {
   let errors = 0
 
   // Fetch games that are missing at least one locale translation.
-  // Outer loop is now games (not locales) so all locales run in parallel per game,
-  // giving each locale equal throughput instead of sv exhausting the time budget.
   const pending = await db
     .select({
       gameId:           games.id,
@@ -170,11 +177,10 @@ export async function GET(req: Request) {
     }
 
     console.log(`[translate] ${row.slug} → ${missing.join(', ')}`)
-    const results = await Promise.all(
-      missing.map(async locale => ({ locale, result: await translateToLocale(content, locale) }))
-    )
+    const results = await translateToLocales(content, missing)
 
-    for (const { locale, result } of results) {
+    for (const locale of missing) {
+      const result = results[locale]
       if (!result) { errors++; continue }
       await db.insert(gameTranslations).values({
         gameId:            row.gameId,

@@ -203,9 +203,9 @@ result: pass/fail/na
 notes: one sentence explanation
 
 ## CALIBRATION EXAMPLES
-Minecraft: B1=38, B2=16, B3=6 | R1=4, R2=2, R3=4 → curascore 75, 120 min/day
-Fortnite: B1=19, B2=10, B3=13 | R1=18, R2=13, R3=11 → curascore 42, 30 min/day
-Brawl Stars: B1=14, B2=9, B3=11 | R1=23, R2=18, R3=12 → curascore 30, 15 min/day
+Minecraft: B1=38, B2=16, B3=6 | R1=4, R2=2, R3=4 → LumiScore 75, 120 min/day
+Fortnite: B1=19, B2=10, B3=13 | R1=18, R2=13, R3=11 → LumiScore 42, 30 min/day
+Brawl Stars: B1=14, B2=9, B3=11 | R1=23, R2=18, R3=12 → LumiScore 30, 15 min/day
 
 ## GAME TO REVIEW
 Title: ${g.title}
@@ -237,10 +237,10 @@ R2 Monetization (0–3 each): ${R2_FIELDS.join(', ')}
 R3 Social risk (0–3 each): ${R3_FIELDS.join(', ')}
 
 CALIBRATION:
-Zelda BotW:  B1=42, B2=18, B3=10 | R1=2,  R2=0,  R3=2  → curascore 82
-Minecraft:   B1=38, B2=16, B3=6  | R1=4,  R2=2,  R3=4  → curascore 75
-Fortnite:    B1=19, B2=10, B3=13 | R1=18, R2=13, R3=11 → curascore 42
-Brawl Stars: B1=14, B2=9,  B3=11 | R1=23, R2=18, R3=12 → curascore 30`
+Zelda BotW:  B1=42, B2=18, B3=10 | R1=2,  R2=0,  R3=2  → LumiScore 82
+Minecraft:   B1=38, B2=16, B3=6  | R1=4,  R2=2,  R3=4  → LumiScore 75
+Fortnite:    B1=19, B2=10, B3=13 | R1=18, R2=13, R3=11 → LumiScore 42
+Brawl Stars: B1=14, B2=9,  B3=11 | R1=23, R2=18, R3=12 → LumiScore 30`
 }
 
 function gameBlock(g: GameRow): string {
@@ -416,7 +416,7 @@ async function runDebate(game: GameRow, currentCurascore: number): Promise<{ new
   const { bds, ris, curascore } = computeDebateCurascore(finalScores)
   const swing = curascore - currentCurascore
 
-  const transcript = `=== Round 1 ===\nADVOCATE:\n${scoresBlock(r1adv.scores)}\nReasoning: ${r1adv.reasoning}\n\nCRITIC:\n${scoresBlock(r1crit.scores)}\nReasoning: ${r1crit.reasoning}\n\n=== Round 2 ===\nADVOCATE:\n${scoresBlock(r2adv.scores)}\nReasoning: ${r2adv.reasoning}\n\nCRITIC:\n${scoresBlock(r2crit.scores)}\nReasoning: ${r2crit.reasoning}\n\n=== Final (40% advocate / 60% critic) ===\n${scoresBlock(finalScores)}\nCurascore: ${curascore}  BDS: ${bds.toFixed(3)}  RIS: ${ris.toFixed(3)}`
+  const transcript = `=== Round 1 ===\nADVOCATE:\n${scoresBlock(r1adv.scores)}\nReasoning: ${r1adv.reasoning}\n\nCRITIC:\n${scoresBlock(r1crit.scores)}\nReasoning: ${r1crit.reasoning}\n\n=== Round 2 ===\nADVOCATE:\n${scoresBlock(r2adv.scores)}\nReasoning: ${r2adv.reasoning}\n\nCRITIC:\n${scoresBlock(r2crit.scores)}\nReasoning: ${r2crit.reasoning}\n\n=== Final (40% advocate / 60% critic) ===\n${scoresBlock(finalScores)}\nLumiScore: ${curascore}  BDS: ${bds.toFixed(3)}  RIS: ${ris.toFixed(3)}`
 
   // Skip if swing is too large (likely hallucination)
   if (Math.abs(swing) > MAX_AUTO_SWING) {

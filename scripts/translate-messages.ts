@@ -50,11 +50,6 @@ const targetLocales = langArg
   ? langArg.split(',').map(l => l.trim()).filter(l => SUPPORTED_LOCALES.includes(l))
   : SUPPORTED_LOCALES
 
-// ─── Bedrock setup ────────────────────────────────────────────────────────────
-
-const BEDROCK_MODEL = 'global.anthropic.claude-haiku-4-5-20251001-v1:0'
-const BEDROCK_URL   = `https://bedrock-runtime.us-east-1.amazonaws.com/model/${BEDROCK_MODEL}/invoke`
-
 // ─── Flatten/unflatten helpers ────────────────────────────────────────────────
 
 type JsonObj = Record<string, unknown>
@@ -117,36 +112,8 @@ ${JSON.stringify(strings, null, 2)}
 
 Output: localized JSON with the same keys, copy that sounds like it was written by a native speaker.`
 
-  const res = await fetch(BEDROCK_URL, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${process.env.AWS_BEARER_TOKEN_BEDROCK}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      anthropic_version: 'bedrock-2023-05-31',
-      max_tokens: 4096,
-      messages: [{ role: 'user', content: prompt }],
-    }),
-  })
-
-  if (!res.ok) {
-    const errText = await res.text()
-    throw Object.assign(new Error(`Bedrock ${res.status}: ${errText}`), { status: res.status })
-  }
-
-  const data = await res.json()
-  const text: string = data.content?.[0]?.text ?? ''
-
-  // Strip any accidental markdown fences
-  const cleaned = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim()
-
-  try {
-    return JSON.parse(cleaned)
-  } catch {
-    console.error(`  [parse error] raw response:\n${text.slice(0, 500)}`)
-    throw new Error(`Failed to parse Haiku JSON response for ${targetLang}`)
-  }
+  // TODO: migrate to callGeminiText from @/lib/vertex-ai
+  throw new Error('translate-messages: Bedrock removed. Migrate to Vertex AI before running.')
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────

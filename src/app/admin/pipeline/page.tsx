@@ -94,10 +94,17 @@ export default async function PipelinePage() {
     .leftJoin(gameScores, eq(gameScores.gameId, games.id))
     .where(isNull(gameScores.curascore))
 
-  const [undebatedGames] = await db
+  const [debateCandidates] = await db
     .select({ count: sql<number>`count(*)` })
     .from(gameScores)
-    .where(and(isNotNull(gameScores.curascore), isNull(gameScores.debateRounds)))
+    .innerJoin(games, eq(games.id, gameScores.gameId))
+    .where(and(
+      isNotNull(gameScores.curascore),
+      isNull(gameScores.debateRounds),
+      isNotNull(games.metacriticScore),
+      sql`${games.metacriticScore} >= 50`,
+      sql`ABS(${gameScores.curascore} - ${games.metacriticScore}) >= 25`,
+    ))
 
   const translationRows = await db
     .select({ locale: gameTranslations.locale, count: sql<number>`count(*)` })
@@ -143,7 +150,7 @@ export default async function PipelinePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <Stat label="Games total"          value={Number(totalGames.count)} />
             <Stat label="Unreviewed"           value={Number(unreviewedGames.count)} alert={Number(unreviewedGames.count) > 100} />
-            <Stat label="Undebated"            value={Number(undebatedGames.count)} alert={Number(undebatedGames.count) > 50} />
+            <Stat label="Debate candidates"     value={Number(debateCandidates.count)} alert={Number(debateCandidates.count) > 500} />
             <Stat label="Experiences total"    value={Number(totalExperiences.count)} />
             <Stat label="Exp. unreviewed"      value={Number(unreviewedExperiences.count)} alert={Number(unreviewedExperiences.count) > 20} />
             <Stat label="sv translations"      value={translationCoverage['sv'] ?? 0} sub={`/ ${scoredTotal}`} />

@@ -43,7 +43,7 @@ export default async function MethodologyPage({
     year: 'numeric', month: 'long', day: 'numeric',
   })
 
-  const pdfPath = `/lumikin-methodology-v${entry.version}.pdf`
+  const pdfPath = entry.pdfAvailable ? `/lumikin-methodology-v${entry.version}.pdf` : null
 
   return (
     <div className={`${lora.variable} bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100`}>
@@ -68,14 +68,18 @@ export default async function MethodologyPage({
             <a href="#changelog" className="underline underline-offset-2 hover:no-underline hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors">
               Changelog
             </a>
-            <span className="text-zinc-300 dark:text-zinc-700">·</span>
-            <a
-              href={pdfPath}
-              download
-              className="underline underline-offset-2 hover:no-underline hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors"
-            >
-              Download PDF
-            </a>
+            {pdfPath && (
+              <>
+                <span className="text-zinc-300 dark:text-zinc-700">·</span>
+                <a
+                  href={pdfPath}
+                  download
+                  className="underline underline-offset-2 hover:no-underline hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors"
+                >
+                  Download PDF
+                </a>
+              </>
+            )}
           </div>
         </div>
 

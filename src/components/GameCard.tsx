@@ -34,6 +34,16 @@ const PLATFORM_ABBREV: Record<string, string> = {
 }
 function abbreviatePlatform(p: string): string { return PLATFORM_ABBREV[p] ?? p }
 
+const PLATFORM_SLUG: Record<string, string> = {
+  'PlayStation 5': 'playstation', 'PlayStation 4': 'playstation',
+  'PlayStation 3': 'playstation', 'PlayStation 2': 'playstation',
+  'Xbox Series S/X': 'xbox', 'Xbox One': 'xbox', 'Xbox 360': 'xbox',
+  'Nintendo Switch': 'nintendo-switch',
+  'iOS': 'ios', 'Android': 'android',
+  'PC': 'pc', 'macOS': 'pc', 'Linux': 'pc',
+}
+function platformSlug(p: string): string | null { return PLATFORM_SLUG[p] ?? null }
+
 function pct(value: number | null | undefined): string {
   return `${Math.round((value ?? 0) * 100)}%`
 }
@@ -633,11 +643,24 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
       {/* ── 1b. PLATFORMS ─────────────────────────────────────────────────────── */}
       {game.platforms.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
-          {game.platforms.map(p => (
-            <span key={p} className="text-xs font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-700/60 border border-slate-200 dark:border-slate-600/60 px-2.5 py-0.5 rounded-full">
-              {abbreviatePlatform(p)}
-            </span>
-          ))}
+          {game.platforms.map(p => {
+            const slug = platformSlug(p)
+            const chipClass = "text-xs font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-700/60 border border-slate-200 dark:border-slate-600/60 px-2.5 py-0.5 rounded-full"
+            return slug ? (
+              <Link
+                key={p}
+                href={`/${locale}/platform/${slug}`}
+                className={`${chipClass} hover:border-indigo-400 hover:text-indigo-600 dark:hover:border-indigo-500 dark:hover:text-indigo-400 transition-colors`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {abbreviatePlatform(p)}
+              </Link>
+            ) : (
+              <span key={p} className={chipClass}>
+                {abbreviatePlatform(p)}
+              </span>
+            )
+          })}
         </div>
       )}
 

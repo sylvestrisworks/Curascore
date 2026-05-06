@@ -1,0 +1,10 @@
+Skäl,Källa,Verifiering,Sidor
+Alternativ sida med korrekt kanonisk tagg,Webbplats,Misslyckades,5048
+Sida med omdirigering,Webbplats,Misslyckades,2883
+Server-fel (5xx),Webbplats,Misslyckades,87
+Dubblett utan att användaren valt en kanonisk sida,Webbplats,Har inte startats,621
+Blockerad av robots.txt,Webbplats,Har inte startats,26
+Hittades inte (404),Webbplats,Har inte startats,1
+Upptäckt – inte indexerad för närvarande,Googles system,Har inte startats,3107
+Dubblett: Google har valt en annan kanonisk sida än användaren,Googles system,Har inte startats,687
+Genomsökt – inte indexerad för närvarande,Googles system,Har inte startats,655

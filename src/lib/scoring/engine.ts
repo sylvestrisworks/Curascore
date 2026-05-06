@@ -26,7 +26,7 @@ export function calculateGameScores(review: ReviewInput): GameScoresResult {
     ? Math.round((2 * benefits.bds * safety) / denom * 100)
     : 0
 
-  const ageFloor = computeAgeFloor(review.violenceLevel, review.sexualContent, {
+  const ageFloor = computeAgeFloor(review.violenceLevel, review.sexualContent, review.fearHorror, {
     trivialized:       review.trivialized,
     defencelessTarget: review.defencelessTarget,
     mixedSexualViolent: review.mixedSexualViolent,

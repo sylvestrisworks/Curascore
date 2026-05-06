@@ -131,6 +131,36 @@ Each item scored 0–3 where 0 = not present, 1 = mild/optional, 2 = significant
 
 **Scoring:** Sum of R4.1–R4.5. Max 15.
 
+### Age-Floor Policy (R4.1, R4.2, R4.5 → recommendedMinAge)
+
+Three of the five R4 dimensions produce a numeric minimum-age recommendation. R4.3 (language) and R4.4 (substance references) inform the parent narrative and tips but do not set an age floor — they are contextual and do not map cleanly to developmental age thresholds.
+
+| Dimension | Score 0 | Score 1 | Score 2 | Score 3 |
+|-----------|---------|---------|---------|---------|
+| R4.1 Violence | 0 | 7 | 13 | 17 |
+| R4.2 Sexual content | 0 | 9 | 13 | 17 |
+| R4.5 Fear/horror | 0 | 7 | 10 | 13 |
+
+**`recommendedMinAge` = max(R4.1 floor, R4.2 floor, R4.5 floor), then apply context modifier bumps.**
+
+**Rationale for score-1 asymmetry:**
+- R4.1 score 1 → 7: PEGI 7 explicitly permits "non-realistic violence in a child-friendly context." Fantasy combat is broadly understood by 7-year-olds.
+- R4.5 score 1 → 7: PEGI 7 also explicitly covers "a game may be considered frightening." Mild tension and mild horror track the same developmental threshold as cartoon violence.
+- R4.2 score 1 → 9: Mild suggestive or romantic content requires social and relational scaffolding that is not reliably present until approximately age 9. The asymmetry is developmental, not a moral judgment.
+
+**Rationale for fear cap at 13 (not 17):**
+Intense horror without graphic sexual or explicit violence content (score 3 on R4.5 alone) places a game at the ESRB Teen / PEGI 16 boundary. The adult threshold (17) is reserved for games where graphic violence or explicit sexual content is the primary driver. A pure horror atmosphere — however intense — does not independently warrant an adult floor.
+
+**Context modifiers** apply only to the violence (R4.1) and sexual (R4.2) dimensions. Each active modifier adds +2 to the floor of the affected dimension, capped at 17. Fear is assessed directly in R4.5 and has no context modifiers.
+
+| Modifier | Applies to | Condition |
+|----------|-----------|-----------|
+| `trivialized` | R4.1, R4.2 | Violence or sexual content played for laughs or with no shown consequences |
+| `defenceless_target` | R4.1 only | Violence against non-combatants, surrendered, or helpless characters |
+| `mixed_sexual_violent` | R4.1 + R4.2 | Sexual and violent content combined in the same scene; requires both R4.1 > 0 and R4.2 > 0 |
+
+Modifiers are additive and stack within a dimension.
+
 ---
 
 ## PART C: REPRESENTATION & IDEOLOGY (display only — does not affect time recommendation)
@@ -195,7 +225,7 @@ Where:
 - R2 weighted = R2 raw score / 24 (monetization pressure, normalized to 0–1)
 - R3 weighted = R3 raw score / 18 (social/emotional risk, normalized to 0–1)
 
-R4 (content risk) does NOT feed into the time recommendation — it's a separate parental judgment about content appropriateness.
+R4 (content risk) does NOT feed into the time recommendation — it is handled separately. R4.1, R4.2, and R4.5 produce the `recommendedMinAge` via the Age-Floor Policy (see §Age-Floor Policy above). R4.3 and R4.4 are informational only.
 
 **RIS ranges from 0.00 to 1.00.**
 
@@ -468,7 +498,8 @@ Note: Minecraft Bedrock with Marketplace would score differently on R2 due to IA
 
 ## Versioning
 
-- v0.1 — Initial draft (April 2026)
+- v0.1 / Methodology 1.0 — Initial draft (April 2026)
+- v0.2 / Methodology 1.1 — May 2026: Age-Floor Policy formalised; R4.5 (fear/horror) added as third age-floor dimension alongside R4.1 and R4.5. Fear floors: 0→0, 1→7, 2→10, 3→13. Games with `fearHorror ≥ 1` may receive a higher `recommendedMinAge` than under v1.0. Triggered by divergence analysis: games like *What Remains of Edith Finch* (R4.5=2, floor was 7, now 10) were systematically underaged because psychological/horror content was scored but ignored in floor computation.
 - All weights and thresholds are provisional pending validation
 - Rubric is designed to be transparent and publicly documented
-- Community and academic feedback will drive v0.2
+- Community and academic feedback will drive v0.3

@@ -190,9 +190,9 @@ function buildReviewPrompt(g: GameRow): string {
     'notes: one sentence explanation',
     '',
     '## CALIBRATION EXAMPLES',
-    'Minecraft: B1=38, B2=16, B3=6 | R1=4, R2=2, R3=4 → curascore 75, 120 min/day',
-    'Fortnite: B1=19, B2=10, B3=13 | R1=18, R2=13, R3=11 → curascore 42, 30 min/day',
-    'Brawl Stars: B1=14, B2=9, B3=11 | R1=23, R2=18, R3=12 → curascore 30, 15 min/day',
+    'Minecraft: B1=38, B2=16, B3=6 | R1=4, R2=2, R3=4 → LumiScore 75, 120 min/day',
+    'Fortnite: B1=19, B2=10, B3=13 | R1=18, R2=13, R3=11 → LumiScore 42, 30 min/day',
+    'Brawl Stars: B1=14, B2=9, B3=11 | R1=23, R2=18, R3=12 → LumiScore 30, 15 min/day',
     '',
     '## GAME TO REVIEW',
     `Title: ${g.title}`,
@@ -241,12 +241,12 @@ async function writeNotifications(gameId: number, gameTitle: string, old: OldSco
   if (isFirst) {
     type  = 'first_score'
     title = `${gameTitle} has been rated`
-    body  = `LumiKin just published its first rating: Curascore ${next.curascore}. Recommended: ${next.timeRecommendation.minutes} min/day.`
+    body  = `LumiKin just published its first rating: LumiScore ${next.curascore}. Recommended: ${next.timeRecommendation.minutes} min/day.`
   } else {
     type  = scoreDiff >= 0 ? 'score_up' : 'score_down'
     title = `${gameTitle} rating updated`
     const parts: string[] = []
-    if (Math.abs(scoreDiff) >= 5) parts.push(`Curascore ${scoreDiff > 0 ? '+' : ''}${scoreDiff} (${old!.curascore} → ${next.curascore})`)
+    if (Math.abs(scoreDiff) >= 5) parts.push(`LumiScore ${scoreDiff > 0 ? '+' : ''}${scoreDiff} (${old!.curascore} → ${next.curascore})`)
     if (timeChange) parts.push(`Time: ${old!.timeRecommendationMinutes} → ${next.timeRecommendation.minutes} min/day`)
     if (ageChange)  parts.push(`Age: ${old!.recommendedMinAge}+ → ${next.recommendedMinAge}+`)
     body = parts.join(' · ')

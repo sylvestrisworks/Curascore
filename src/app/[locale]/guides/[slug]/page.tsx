@@ -10,7 +10,7 @@ import { CalendarDays, Tag } from 'lucide-react'
 
 export const revalidate = 3600
 
-type Props = { params: Promise<{ slug: string }> }
+type Props = { params: Promise<{ locale: string; slug: string }> }
 
 const CATEGORY_LABELS: Record<string, string> = {
   'screen-time': 'Screen Time',
@@ -25,7 +25,7 @@ function formatDate(iso?: string) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
+  const { slug, locale } = await params
   const guide = await sanityClient?.fetch(guideBySlugQuery, { slug }).catch(() => null) ?? null
   if (!guide) return { title: 'Guide not found — LumiKin' }
 
@@ -35,11 +35,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: `/guides/${slug}` },
+    alternates: { canonical: `/${locale}/guides/${slug}` },
     openGraph: {
       title,
       description,
-      url: `/guides/${slug}`,
+      url: `/${locale}/guides/${slug}`,
       images: guide.coverImage?.asset
         ? [{ url: urlFor(guide.coverImage)!.width(1200).height(630).auto('format').url() }]
         : undefined,

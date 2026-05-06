@@ -3,7 +3,7 @@
  *
  * AI evaluation pipeline for UGC platform experiences (Roblox + Fortnite Creative).
  *   - Finds platform_experiences with no experience_scores entry
- *   - Calls Claude via Bedrock with a platform-specific scoring rubric
+ *   - Calls Gemini via Vertex AI with a platform-specific scoring rubric
  *   - Saves scores to experience_scores table
  *
  * Run via GitHub Actions on a schedule.
@@ -135,10 +135,10 @@ The time recommendation is derived from risk intensity, then modulated upward by
 - **monetizationScore**: Robux pressure built into the experience: pay-to-win, exclusive gated items, social spending comparison.
 - **privacyRisk**: Experience actively prompts children to share real name, age, location, or external links.
 
-**Do not output a time recommendation or curascore — the engine derives both from your dimensional scores.**
+**Do not output a time recommendation or LumiScore — the engine derives both from your dimensional scores.**
 
 ## CALIBRATION EXAMPLES
-| Experience | What it is | Key scores | Curascore |
+| Experience | What it is | Key scores | LumiScore |
 |---|---|---|---|
 | Tower of Hell | Pure skill obstacle course, no chat, no monetization | creativity 0, social 1, learning 1 / dopamine 1, stranger 0, monetization 0 | ~72 |
 | Adopt Me | Pet simulator, trading, large open world | creativity 1, social 2, learning 0 / dopamine 2, stranger 2, monetization 2 | ~42 |
@@ -186,12 +186,12 @@ Every map gets two independent profiles: a Benefits Profile (what the child deve
 - **monetizationScore**: V-Buck pressure built into the map — cosmetic requirements, pay-to-win map items, social comparison of skins.
 - **privacyRisk**: Map prompts players to share real info or join external Discord/social accounts.
 
-**Do not output a time recommendation or curascore — the engine derives both from your dimensional scores.**
+**Do not output a time recommendation or LumiScore — the engine derives both from your dimensional scores.**
 
 ## CALIBRATION EXAMPLES
 Reference: Fortnite Battle Royale itself scores 42 on LumiKin.
 
-| Map type | What it is | Key scores | Curascore |
+| Map type | What it is | Key scores | LumiScore |
 |---|---|---|---|
 | Zone Wars | Rotating storm, skill practice, competitive | creativity 0, social 1, learning 2 / dopamine 2, stranger 1, monetization 0 | ~44 |
 | Box Fight / Aim Trainer | Aim trainer, structured duels, no real creativity | creativity 0, social 1, learning 2 / dopamine 1, stranger 1, monetization 0 | ~48 |

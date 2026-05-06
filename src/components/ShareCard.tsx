@@ -175,7 +175,7 @@ export default function ShareButton({ data }: { data: GameCardProps }) {
         backgroundColor: '#ffffff',
       })
       const link = document.createElement('a')
-      link.download = `${data.game.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-curascore.png`
+      link.download = `${data.game.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-lumiscore.png`
       link.href = canvas.toDataURL('image/png')
       link.click()
     } catch (err) {

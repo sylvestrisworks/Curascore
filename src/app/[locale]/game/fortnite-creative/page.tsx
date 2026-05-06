@@ -161,7 +161,7 @@ export default async function FortniteCreativeHubPage({ searchParams }: Props) {
                 <span className="text-[11px] font-semibold bg-blue-500/25 text-blue-200 border border-blue-400/30 px-2 py-0.5 rounded-full tracking-wide uppercase">Platform</span>
                 {platformScore?.curascore != null && (
                   <span className={`text-[11px] font-bold bg-white/10 border border-white/20 px-2 py-0.5 rounded-full ${curascoreText(platformScore.curascore)}`}>
-                    Curascore {platformScore.curascore}
+                    LumiScore {platformScore.curascore}
                   </span>
                 )}
               </div>

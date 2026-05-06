@@ -17,6 +17,7 @@ import { eq, isNull, isNotNull } from 'drizzle-orm'
 import { db } from '../src/lib/db'
 import { gameScores, reviews, games } from '../src/lib/db/schema'
 import { computeAgeFloor } from '../src/lib/scoring/age-floors'
+import { CURRENT_METHODOLOGY_VERSION } from '../src/lib/methodology'
 
 async function main() {
   // Fetch all game_scores that have a linked review with R4 data
@@ -28,6 +29,7 @@ async function main() {
       currentMinAge:     gameScores.recommendedMinAge,
       violenceLevel:     reviews.violenceLevel,
       sexualContent:     reviews.sexualContent,
+      fearHorror:        reviews.fearHorror,
       trivialized:       reviews.trivialized,
       defencelessTarget: reviews.defencelessTarget,
       mixedSexualViolent: reviews.mixedSexualViolent,
@@ -43,7 +45,7 @@ async function main() {
   console.log(`\nBackfilling age floors for ${total} game_scores rows...\n`)
 
   for (const row of rows) {
-    const floor = computeAgeFloor(row.violenceLevel, row.sexualContent, {
+    const floor = computeAgeFloor(row.violenceLevel, row.sexualContent, row.fearHorror, {
       trivialized:        row.trivialized,
       defencelessTarget:  row.defencelessTarget,
       mixedSexualViolent: row.mixedSexualViolent,
@@ -63,8 +65,9 @@ async function main() {
     await db
       .update(gameScores)
       .set({
-        recommendedMinAge: floor.recommendedMinAge,
-        ageFloorReason:    floor.ageFloorReason,
+        recommendedMinAge:  floor.recommendedMinAge,
+        ageFloorReason:     floor.ageFloorReason,
+        methodologyVersion: CURRENT_METHODOLOGY_VERSION,
       })
       .where(eq(gameScores.id, row.scoreId))
 

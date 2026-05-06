@@ -10,7 +10,7 @@ import { CalendarDays, User } from 'lucide-react'
 
 export const revalidate = 3600
 
-type Props = { params: Promise<{ slug: string }> }
+type Props = { params: Promise<{ locale: string; slug: string }> }
 
 function formatDate(iso?: string) {
   if (!iso) return ''
@@ -18,7 +18,7 @@ function formatDate(iso?: string) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
+  const { slug, locale } = await params
   const post = await sanityClient?.fetch(postBySlugQuery, { slug }).catch(() => null) ?? null
   if (!post) return { title: 'Post not found — LumiKin' }
 
@@ -28,11 +28,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: `/blog/${slug}` },
+    alternates: { canonical: `/${locale}/blog/${slug}` },
     openGraph: {
       title,
       description,
-      url: `/blog/${slug}`,
+      url: `/${locale}/blog/${slug}`,
       images: post.coverImage?.asset
         ? [{ url: urlFor(post.coverImage)!.width(1200).height(630).auto('format').url() }]
         : undefined,

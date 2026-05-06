@@ -219,13 +219,39 @@ These adjustments do not stack.
 
 | Factor | Examples |
 |---|---|
-| Violence level | None → mild cartoon → moderate realistic → graphic |
-| Sexual content | None → mild suggestive → moderate themes → explicit |
-| Language | None → mild → moderate profanity → extreme/frequent |
-| Substance references | None → mild references → depicted without consequence → depicted positively |
-| Fear and horror | None → mild tension → moderate scares → intense horror |
+| Violence level (R4.1) | None → mild cartoon → moderate realistic → graphic |
+| Sexual content (R4.2) | None → mild suggestive → moderate themes → explicit |
+| Language (R4.3) | None → mild → moderate profanity → extreme/frequent |
+| Substance references (R4.4) | None → mild references → depicted without consequence → depicted positively |
+| Fear and horror (R4.5) | None → mild tension → moderate scares → intense horror |
 
 **Display:** R4 scores are shown as a content advisory alongside the ESRB/PEGI rating on game pages, not as a component of the overall LumiScore.
+
+### Age-Floor Policy
+
+Three of the five R4 dimensions produce a numeric `recommendedMinAge` for each game: violence (R4.1), sexual content (R4.2), and fear/horror (R4.5). Language (R4.3) and substance references (R4.4) inform the parent narrative and tips but do not set an age floor — they are contextual rather than developmentally threshold-linked.
+
+| Dimension | Score 0 | Score 1 | Score 2 | Score 3 |
+|---|---|---|---|---|
+| R4.1 Violence | 0 | 7 | 13 | 17 |
+| R4.2 Sexual content | 0 | 9 | 13 | 17 |
+| R4.5 Fear / horror | 0 | 7 | 10 | 13 |
+
+**Formula:** `recommendedMinAge = max(violenceFloor, sexualFloor, fearFloor)`, then context modifiers are applied.
+
+**Score-1 asymmetry.** Violence and fear both step to 7 at score 1 because PEGI 7 explicitly permits "non-realistic violence in a child-friendly context" and "a game may be considered frightening". Mild romantic or suggestive content (sexual score 1) steps to 9 instead, because relational scaffolding for that material is not reliably present until approximately age 9. The asymmetry is developmental, not moral.
+
+**Fear caps at 13.** Intense horror without graphic sexual or explicit violence content (R4.5 = 3 alone) places a game at the ESRB Teen / PEGI 16 boundary, not the adult boundary. The adult floor (17) is reserved for games where graphic violence or explicit sexual content is the primary driver. A pure horror atmosphere — however intense — does not independently warrant an adult floor.
+
+### R4 context modifiers
+
+Context modifiers apply only to the violence (R4.1) and sexual (R4.2) dimensions and add **+2 to the affected dimension's floor, capped at 17**. Fear is assessed directly in R4.5 and has no modifiers. Modifiers are additive and stack within a dimension.
+
+| Modifier | Applies to | Condition |
+|---|---|---|
+| `trivialized` | R4.1, R4.2 | Violence or sexual content played for laughs or with no shown consequences |
+| `defenceless_target` | R4.1 only | Violence against non-combatants, surrendered, or helpless characters |
+| `mixed_sexual_violent` | R4.1 + R4.2 | Sexual and violent content combined in the same scene; requires both R4.1 > 0 and R4.2 > 0 |
 
 ## Update and Versioning Policy
 
@@ -249,4 +275,5 @@ The scoring weights, dimension definitions, scoring scales, and tier thresholds 
 
 | Version | Date | Summary |
 |---|---|---|
+| 1.1 (current) | 2026-05-01 | Age-Floor Policy formalised. R4.5 (fear/horror) added as a third age-floor dimension alongside R4.1 (violence) and R4.2 (sexual content). Fear floors: 0→0, 1→7, 2→10, 3→13 (capped at 13 — intense horror alone does not warrant an adult floor). Context modifiers (`trivialized`, `defenceless_target`, `mixed_sexual_violent`) introduced for the violence and sexual dimensions. Triggered by divergence analysis: psychological-horror titles such as *What Remains of Edith Finch* (R4.5 = 2) were systematically underaged under v1.0 because fear was scored but ignored in floor computation. Games with `fearHorror ≥ 1` may receive a higher `recommendedMinAge` than under v1.0; BDS, RIS, LumiScore, and time recommendations are unchanged. |
 | [1.0](/methodology?version=1.0) | 2026-04-26 | Initial published methodology. All weights, dimensions, and tier thresholds as described in this document. |

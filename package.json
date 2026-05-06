@@ -12,11 +12,13 @@
     "db:seed": "tsx scripts/seed-reviews.ts",
     "db:compliance": "tsx scripts/infer-compliance.ts",
     "pdf:methodology": "tsx scripts/generate-methodology-pdf.ts",
+    "divergence-scan": "node --env-file=.env node_modules/tsx/dist/cli.cjs scripts/divergence-scan.ts",
     "test": "vitest"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.82.0",
     "@auth/drizzle-adapter": "^1.11.1",
+    "@google-cloud/storage": "^7.19.0",
     "@google/genai": "^1.48.0",
     "@icons-pack/react-simple-icons": "^13.13.0",
     "@mdx-js/loader": "^3.1.1",

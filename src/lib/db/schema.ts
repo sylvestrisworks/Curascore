@@ -2,8 +2,18 @@
 
 import {
   pgTable, text, integer, real, timestamp, boolean,
-  varchar, jsonb, serial, uniqueIndex, index, primaryKey, bigint, date
+  varchar, jsonb, serial, uniqueIndex, index, primaryKey, bigint, date,
+  customType,
 } from 'drizzle-orm/pg-core';
+
+// Drizzle's built-in jsonb() calls JSON.stringify in mapToDriverValue, which
+// double-encodes values when postgres.js also serializes them via unsafe().
+// This custom type passes the value through as-is so postgres.js handles
+// JSONB serialization correctly (confirmed by _test-jsonb-variants.ts).
+const jsonbPassthrough = <T>() => customType<{ data: T; driverData: T }>({
+  dataType: () => 'jsonb',
+  toDriver: (val: T) => val,
+})
 
 // ============================================
 // GAME METADATA (from RAWG/IGDB + our enrichment)
@@ -23,8 +33,8 @@ export const games = pgTable('games', {
   developer: varchar('developer', { length: 255 }),
   publisher: varchar('publisher', { length: 255 }),
   releaseDate: timestamp('release_date'),
-  genres: jsonb('genres').$type<string[]>().default([]),
-  platforms: jsonb('platforms').$type<string[]>().default([]),
+  genres:    jsonbPassthrough<string[]>()('genres').default([]),
+  platforms: jsonbPassthrough<string[]>()('platforms').default([]),
   esrbRating: varchar('esrb_rating', { length: 10 }),  // E, E10, T, M, AO
   pegiRating: integer('pegi_rating'),                   // 3, 7, 12, 16, 18
 

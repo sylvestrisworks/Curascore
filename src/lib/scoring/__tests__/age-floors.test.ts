@@ -33,20 +33,43 @@ describe('base floors — sexual content (R4.2)', () => {
   })
 })
 
-describe('score 1 asymmetry', () => {
-  test('violence 1 < sexual 1  (7 vs 9)', () => {
-    expect(computeAgeFloor(1, 0).recommendedMinAge).toBe(7)
-    expect(computeAgeFloor(0, 1).recommendedMinAge).toBe(9)
+describe('base floors — fear/horror (R4.5)', () => {
+  test('score 0 → age 0', () => {
+    expect(computeAgeFloor(0, 0, 0).recommendedMinAge).toBe(0)
   })
-  test('at score 2+ both dimensions are equal', () => {
-    expect(computeAgeFloor(2, 0).recommendedMinAge).toBe(computeAgeFloor(0, 2).recommendedMinAge)
-    expect(computeAgeFloor(3, 0).recommendedMinAge).toBe(computeAgeFloor(0, 3).recommendedMinAge)
+  test('score 1 → age 7  (PEGI 7 mild horror / frightening content carve-out)', () => {
+    expect(computeAgeFloor(0, 0, 1).recommendedMinAge).toBe(7)
+  })
+  test('score 2 → age 10  (moderate scares/disturbing imagery — PEGI 12 territory)', () => {
+    expect(computeAgeFloor(0, 0, 2).recommendedMinAge).toBe(10)
+  })
+  test('score 3 → age 13  (intense horror caps at ESRB T / PEGI 16, not adult)', () => {
+    expect(computeAgeFloor(0, 0, 3).recommendedMinAge).toBe(13)
+  })
+})
+
+describe('score-1 asymmetry across all three dimensions', () => {
+  test('violence 1 = fear 1 (both 7)', () => {
+    expect(computeAgeFloor(1, 0, 0).recommendedMinAge).toBe(7)
+    expect(computeAgeFloor(0, 0, 1).recommendedMinAge).toBe(7)
+  })
+  test('sexual 1 (9) > violence 1 (7) = fear 1 (7)', () => {
+    expect(computeAgeFloor(0, 1, 0).recommendedMinAge).toBe(9)
+  })
+  test('at score 2+ violence and sexual are equal; fear is lower', () => {
+    expect(computeAgeFloor(2, 0, 0).recommendedMinAge).toBe(computeAgeFloor(0, 2, 0).recommendedMinAge)
+    expect(computeAgeFloor(0, 0, 2).recommendedMinAge).toBe(10)  // fear caps lower
+  })
+  test('at score 3 violence = sexual = 17; fear caps at 13', () => {
+    expect(computeAgeFloor(3, 0, 0).recommendedMinAge).toBe(17)
+    expect(computeAgeFloor(0, 3, 0).recommendedMinAge).toBe(17)
+    expect(computeAgeFloor(0, 0, 3).recommendedMinAge).toBe(13)
   })
 })
 
 // ─── max() across dimensions ──────────────────────────────────────────────────
 
-describe('max() across dimensions', () => {
+describe('max() across violence and sexual', () => {
   test('violence 2, sexual 2 → 13  (tie)', () => {
     expect(computeAgeFloor(2, 2).recommendedMinAge).toBe(13)
   })
@@ -61,27 +84,52 @@ describe('max() across dimensions', () => {
   })
 })
 
+describe('max() including fear dimension', () => {
+  test('fear 2 alone → 10', () => {
+    expect(computeAgeFloor(0, 0, 2).recommendedMinAge).toBe(10)
+  })
+  test('fear 2, violence 2 → 13 (violence wins)', () => {
+    expect(computeAgeFloor(2, 0, 2).recommendedMinAge).toBe(13)
+  })
+  test('fear 3, violence 1 → 13 (fear and violence tie)', () => {
+    expect(computeAgeFloor(1, 0, 3).recommendedMinAge).toBe(13)
+  })
+  test('fear 2, sexual 1 → 10 (fear beats sexual-1 floor of 9)', () => {
+    expect(computeAgeFloor(0, 1, 2).recommendedMinAge).toBe(10)
+  })
+  test('fear 3 cannot override violence 3 (both 17 vs 13 → violence wins)', () => {
+    expect(computeAgeFloor(3, 0, 3).recommendedMinAge).toBe(17)
+  })
+  test('What Remains of Edith Finch case: v=1, s=0, fear=2 → 10 (was 7 before v1.1)', () => {
+    expect(computeAgeFloor(1, 0, 2).recommendedMinAge).toBe(10)
+  })
+})
+
 // ─── Modifiers — trivialized ──────────────────────────────────────────────────
 
 describe('modifier: trivialized', () => {
   test('violence 1 + trivialized → 7 + 2 = 9', () => {
-    expect(computeAgeFloor(1, 0, { trivialized: true }).recommendedMinAge).toBe(9)
+    expect(computeAgeFloor(1, 0, 0, { trivialized: true }).recommendedMinAge).toBe(9)
   })
   test('sexual 1 + trivialized → 9 + 2 = 11', () => {
-    expect(computeAgeFloor(0, 1, { trivialized: true }).recommendedMinAge).toBe(11)
+    expect(computeAgeFloor(0, 1, 0, { trivialized: true }).recommendedMinAge).toBe(11)
   })
   test('violence 2 + trivialized → 13 + 2 = 15', () => {
-    expect(computeAgeFloor(2, 0, { trivialized: true }).recommendedMinAge).toBe(15)
+    expect(computeAgeFloor(2, 0, 0, { trivialized: true }).recommendedMinAge).toBe(15)
   })
   test('violence 3 + trivialized → capped at 17', () => {
-    expect(computeAgeFloor(3, 0, { trivialized: true }).recommendedMinAge).toBe(17)
+    expect(computeAgeFloor(3, 0, 0, { trivialized: true }).recommendedMinAge).toBe(17)
   })
   test('trivialized with score 0 has no effect', () => {
-    expect(computeAgeFloor(0, 0, { trivialized: true }).recommendedMinAge).toBe(0)
+    expect(computeAgeFloor(0, 0, 0, { trivialized: true }).recommendedMinAge).toBe(0)
   })
   test('trivialized bumps both dimensions when both > 0', () => {
     // v=1 → 7+2=9, s=1 → 9+2=11 → max=11
-    expect(computeAgeFloor(1, 1, { trivialized: true }).recommendedMinAge).toBe(11)
+    expect(computeAgeFloor(1, 1, 0, { trivialized: true }).recommendedMinAge).toBe(11)
+  })
+  test('trivialized does NOT bump fear dimension', () => {
+    // fear=2 base=10, violence=0 → trivialized has no violence/sexual to bump → floor stays 10
+    expect(computeAgeFloor(0, 0, 2, { trivialized: true }).recommendedMinAge).toBe(10)
   })
 })
 
@@ -89,17 +137,17 @@ describe('modifier: trivialized', () => {
 
 describe('modifier: defencelessTarget', () => {
   test('violence 1 + defencelessTarget → 7 + 2 = 9', () => {
-    expect(computeAgeFloor(1, 0, { defencelessTarget: true }).recommendedMinAge).toBe(9)
+    expect(computeAgeFloor(1, 0, 0, { defencelessTarget: true }).recommendedMinAge).toBe(9)
   })
   test('violence 2 + defencelessTarget → 13 + 2 = 15', () => {
-    expect(computeAgeFloor(2, 0, { defencelessTarget: true }).recommendedMinAge).toBe(15)
+    expect(computeAgeFloor(2, 0, 0, { defencelessTarget: true }).recommendedMinAge).toBe(15)
   })
   test('defencelessTarget does NOT affect sexual content dimension', () => {
     // v=0, s=2 + defencelessTarget → sexual floor unchanged (13), violence floor still 0
-    expect(computeAgeFloor(0, 2, { defencelessTarget: true }).recommendedMinAge).toBe(13)
+    expect(computeAgeFloor(0, 2, 0, { defencelessTarget: true }).recommendedMinAge).toBe(13)
   })
   test('defencelessTarget with violence 0 has no effect', () => {
-    expect(computeAgeFloor(0, 0, { defencelessTarget: true }).recommendedMinAge).toBe(0)
+    expect(computeAgeFloor(0, 0, 0, { defencelessTarget: true }).recommendedMinAge).toBe(0)
   })
 })
 
@@ -107,16 +155,16 @@ describe('modifier: defencelessTarget', () => {
 
 describe('modifier: mixedSexualViolent', () => {
   test('v=1, s=1 + mixed → v=7+2=9, s=9+2=11 → max=11', () => {
-    expect(computeAgeFloor(1, 1, { mixedSexualViolent: true }).recommendedMinAge).toBe(11)
+    expect(computeAgeFloor(1, 1, 0, { mixedSexualViolent: true }).recommendedMinAge).toBe(11)
   })
   test('v=2, s=2 + mixed → v=13+2=15, s=13+2=15 → 15', () => {
-    expect(computeAgeFloor(2, 2, { mixedSexualViolent: true }).recommendedMinAge).toBe(15)
+    expect(computeAgeFloor(2, 2, 0, { mixedSexualViolent: true }).recommendedMinAge).toBe(15)
   })
   test('mixedSexualViolent does not apply when violence = 0', () => {
-    expect(computeAgeFloor(0, 2, { mixedSexualViolent: true }).recommendedMinAge).toBe(13)
+    expect(computeAgeFloor(0, 2, 0, { mixedSexualViolent: true }).recommendedMinAge).toBe(13)
   })
   test('mixedSexualViolent does not apply when sexual = 0', () => {
-    expect(computeAgeFloor(2, 0, { mixedSexualViolent: true }).recommendedMinAge).toBe(13)
+    expect(computeAgeFloor(2, 0, 0, { mixedSexualViolent: true }).recommendedMinAge).toBe(13)
   })
 })
 
@@ -125,23 +173,23 @@ describe('modifier: mixedSexualViolent', () => {
 describe('modifier stacking', () => {
   test('trivialized + defencelessTarget on violence → +4', () => {
     // v=1 base=7, +2+2=+4 → 11
-    expect(computeAgeFloor(1, 0, { trivialized: true, defencelessTarget: true }).recommendedMinAge).toBe(11)
+    expect(computeAgeFloor(1, 0, 0, { trivialized: true, defencelessTarget: true }).recommendedMinAge).toBe(11)
   })
   test('trivialized + mixedSexualViolent on violence → +4', () => {
     // v=1, s=1: v_bump=2+2=4 → 7+4=11; s_bump=2+2=4 → 9+4=13 → max=13
-    expect(computeAgeFloor(1, 1, { trivialized: true, mixedSexualViolent: true }).recommendedMinAge).toBe(13)
+    expect(computeAgeFloor(1, 1, 0, { trivialized: true, mixedSexualViolent: true }).recommendedMinAge).toBe(13)
   })
   test('all three modifiers with v=2, s=2', () => {
     // v_bump = 2(trivialized) + 2(defenceless) + 2(mixed) = 6 → 13+6=19 → capped 17
     // s_bump = 2(trivialized) + 2(mixed) = 4 → 13+4=17 → 17
     // max(17, 17) = 17
-    expect(computeAgeFloor(2, 2, { trivialized: true, defencelessTarget: true, mixedSexualViolent: true }).recommendedMinAge).toBe(17)
+    expect(computeAgeFloor(2, 2, 0, { trivialized: true, defencelessTarget: true, mixedSexualViolent: true }).recommendedMinAge).toBe(17)
   })
   test('all three modifiers with v=1, s=1 → capped correctly', () => {
     // v_bump = 2+2+2 = 6 → 7+6=13 → not capped
     // s_bump = 2+2 = 4 → 9+4=13
     // max(13, 13) = 13
-    expect(computeAgeFloor(1, 1, { trivialized: true, defencelessTarget: true, mixedSexualViolent: true }).recommendedMinAge).toBe(13)
+    expect(computeAgeFloor(1, 1, 0, { trivialized: true, defencelessTarget: true, mixedSexualViolent: true }).recommendedMinAge).toBe(13)
   })
 })
 
@@ -149,10 +197,13 @@ describe('modifier stacking', () => {
 
 describe('modifier cap at 17', () => {
   test('v=3 + all modifiers still returns 17', () => {
-    expect(computeAgeFloor(3, 3, { trivialized: true, defencelessTarget: true, mixedSexualViolent: true }).recommendedMinAge).toBe(17)
+    expect(computeAgeFloor(3, 3, 0, { trivialized: true, defencelessTarget: true, mixedSexualViolent: true }).recommendedMinAge).toBe(17)
   })
   test('cap value matches AGE_FLOOR_CONFIG.MODIFIER_CAP', () => {
     expect(AGE_FLOOR_CONFIG.MODIFIER_CAP).toBe(17)
+  })
+  test('fear score 3 never exceeds its 13 cap regardless of other inputs', () => {
+    expect(computeAgeFloor(0, 0, 3).recommendedMinAge).toBe(13)
   })
 })
 
@@ -165,11 +216,17 @@ describe('null and undefined inputs', () => {
   test('undefined scores treated as 0', () => {
     expect(computeAgeFloor(undefined, undefined).recommendedMinAge).toBe(0)
   })
+  test('null fearHorror treated as 0', () => {
+    expect(computeAgeFloor(0, 0, null).recommendedMinAge).toBe(0)
+  })
   test('null modifiers treated as false', () => {
-    expect(computeAgeFloor(2, 0, { trivialized: null }).recommendedMinAge).toBe(13)
+    expect(computeAgeFloor(2, 0, 0, { trivialized: null }).recommendedMinAge).toBe(13)
+  })
+  test('omitted fearHorror defaults to 0', () => {
+    expect(computeAgeFloor(2, 2).recommendedMinAge).toBe(13)
   })
   test('omitted modifiers object defaults to no bumps', () => {
-    expect(computeAgeFloor(2, 2).recommendedMinAge).toBe(13)
+    expect(computeAgeFloor(2, 2, 0).recommendedMinAge).toBe(13)
   })
 })
 
@@ -185,16 +242,28 @@ describe('ageFloorReason string', () => {
   test('R4.2 only', () => {
     expect(computeAgeFloor(0, 1).ageFloorReason).toBe('R4.2=1')
   })
-  test('both dimensions', () => {
+  test('R4.5 only', () => {
+    expect(computeAgeFloor(0, 0, 2).ageFloorReason).toBe('R4.5=2')
+  })
+  test('R4.1 + R4.2 (no fear)', () => {
     expect(computeAgeFloor(1, 2).ageFloorReason).toBe('R4.1=1 + R4.2=2')
   })
+  test('R4.1 + R4.5 (no sexual)', () => {
+    expect(computeAgeFloor(1, 0, 2).ageFloorReason).toBe('R4.1=1 + R4.5=2')
+  })
+  test('all three R4 dimensions', () => {
+    expect(computeAgeFloor(1, 1, 1).ageFloorReason).toBe('R4.1=1 + R4.2=1 + R4.5=1')
+  })
   test('with modifiers', () => {
-    const { ageFloorReason } = computeAgeFloor(2, 0, { trivialized: true, defencelessTarget: true })
+    const { ageFloorReason } = computeAgeFloor(2, 0, 0, { trivialized: true, defencelessTarget: true })
     expect(ageFloorReason).toBe('R4.1=2 + trivialized + defenceless_target')
   })
   test('mixedSexualViolent appears in reason', () => {
-    const { ageFloorReason } = computeAgeFloor(1, 1, { mixedSexualViolent: true })
+    const { ageFloorReason } = computeAgeFloor(1, 1, 0, { mixedSexualViolent: true })
     expect(ageFloorReason).toContain('mixed_sexual_violent')
+  })
+  test('fear score 0 does not appear in reason', () => {
+    expect(computeAgeFloor(1, 0, 0).ageFloorReason).toBe('R4.1=1')
   })
 })
 
@@ -209,10 +278,18 @@ describe('config invariants', () => {
   test('violence score 1 (7) is lower than sexual score 1 (9)', () => {
     expect(AGE_FLOOR_CONFIG.violence[1]).toBeLessThan(AGE_FLOOR_CONFIG.sexual[1])
   })
-  test('floors are monotonically non-decreasing', () => {
+  test('fear score 1 (7) equals violence score 1 (7)', () => {
+    expect(AGE_FLOOR_CONFIG.fear[1]).toBe(AGE_FLOOR_CONFIG.violence[1])
+  })
+  test('fear score 3 (13) is lower than violence/sexual score 3 (17)', () => {
+    expect(AGE_FLOOR_CONFIG.fear[3]).toBeLessThan(AGE_FLOOR_CONFIG.violence[3])
+    expect(AGE_FLOOR_CONFIG.fear[3]).toBeLessThan(AGE_FLOOR_CONFIG.sexual[3])
+  })
+  test('all three dimension floors are monotonically non-decreasing', () => {
     for (let i = 1; i < 4; i++) {
       expect(AGE_FLOOR_CONFIG.violence[i]).toBeGreaterThanOrEqual(AGE_FLOOR_CONFIG.violence[i - 1])
       expect(AGE_FLOOR_CONFIG.sexual[i]).toBeGreaterThanOrEqual(AGE_FLOOR_CONFIG.sexual[i - 1])
+      expect(AGE_FLOOR_CONFIG.fear[i]).toBeGreaterThanOrEqual(AGE_FLOOR_CONFIG.fear[i - 1])
     }
   })
 })
