@@ -654,6 +654,9 @@ export default function GameCard({ game, scores, review, darkPatterns, complianc
           {scores.timeRecommendationMinutes != null && (
             <div className="flex items-center justify-center gap-2">
               <Clock size={20} strokeWidth={2.5} className="text-emerald-500 shrink-0" />
+              <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
+                {t('upTo')}
+              </span>
               <span className="text-2xl font-black text-slate-800 dark:text-slate-100 tabular-nums">
                 {scores.timeRecommendationMinutes}
               </span>
